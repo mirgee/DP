@@ -283,11 +283,69 @@ Artificial Intelligence Center, FEE, CTU Prague
 % \addcontentsline{toc}{chapter}{Introduction}
 
 
-\chapter{First Chapter}
+\chapter{Classical EEG signal analysis methods}
 
-\section{Section}
+\section{EEG signal}
+Nature, processes in the brain, way of measuring, limitations, complications
+
+\section{Nonlinear system analysis}
+Attractors, Poincare plots, recurrence plots, Lyapunov coefficients, fractal dimension, Hurst exponent, etc.
+
+\section{Frequency domain}
+Wavelets, sliding window
+
+\section{Deep learning}
+Results in applying deep learning to EEG signal analysis
+
+\chapter{CNNs and CapsNets}
+
+\section{CNNs}
+\subsection{History}
+
+The classical approach to image pattern recognition consists of the following stages:
+\begin{description}
+  \item[preprocessing:] supressing unwanted distortions and noise, enhancement beneficient for further processing,
+  \item[object segmetation:] separating disparate objects from the background,
+  \item[feature extraction:] gathering relevant information about the properties of the objects, removing irrelevant variations,
+  \item[classification:] categorizing segmented objects based on obtained features into classes.
+\end{description}
+
+The preprocessing step may require additional assumptions about the data or further processing, which are potentially too restrictive or too broad. Getting around this limitation requires dealing with complications such as high dimensionality of the input (number of pixels) and desirability of invariance towards a number of allowable distortions and geometrical transformations.
+
+Artificial neural networks in combination with gradient-based learning are one possible solution to the problem. By gradually optimizing a set of weights based on a training data set using a differentiable error function, they provide a framework for learning a suitable set of assumptions automatically from the data.
+
+One of the oldest neural network architectures, fully connected multi-layer perceptron (FC-MLP), can be used for image pattern recognition. However, it has the following drawbacks:
+\begin{description}
+  \item[parameter explosion:] the number of parameters of such network is exponential in the number of layers, increasing the capacity of the network and therefore need for more data,
+  \item[no invariance:] no invariance even with respect to common geometrical transformation such as translation, rotation and scaling,
+  \item[ignoring input topology:] natural images exhibit strong local structure and high correlation between intensities of neighboring pixels, but FC-MLPs are unstructed - inputs can be presented in any order.
+\end{description}
+
+The first convolutional neural network, dubbed LeNet-5, was proposed as a solution to this problem in 1999 by Y. LeCun \cite{lecun1999}.
+
+\subsection{Description}
+
+Bearing resemblence to visual processing in biological organisms \footnote{As early as in 1968, D. H. Hubel and T.N. Wiesel discovered that some cells (called simple cells) in the macaque primary visual cortex (V1) with small receptive fields (shared by neighboring neurons) are sensitive to straight lines and edges of light of particular orientation, and other cells (called complex cells) with larger receptive fields further in the visual cortex also respond to straight lines and edges, but with invariance to translation \cite{Hubel1968}.}
+
+Features: shared weights, 3D volumes of neurons, local connectivity
+
+\subsection{Applications}
 
 
-% \bibliographystyle{plain}
-% \bibliography{refs}
+\section{CapsNets}
+
+
+\chapter{Experiments}
+
+\section{Dataset}
+Size of our dataset, conditions during trials, labels, etc.
+
+\section{Results}
+
+
+\chapter*{Conclusion}
+
+
+\bibliographystyle{plain}
+\bibliography{refs}
 \end{document}
