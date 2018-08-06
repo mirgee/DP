@@ -1,0 +1,293 @@
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[11pt,czech,american]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=4cm,bmargin=3cm,lmargin=3cm,rmargin=2cm,headheight=0.8cm,headsep=1cm,footskip=0.5cm}
+\pagestyle{headings}
+\setcounter{secnumdepth}{3}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{wrapfig}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{svg}
+\usepackage{outlines}
+\usepackage[normalem]{ulem}
+\usepackage{dirtytalk}
+% \usepackage{subcaption}
+% \usepackage{subfigure}
+
+\makeatletter
+\newenvironment{lyxlist}[1]
+{\begin{list}{}
+{\settowidth{\labelwidth}{#1}
+ \setlength{\leftmargin}{\labelwidth}
+ \addtolength{\leftmargin}{\labelsep}
+ \renewcommand{\makelabel}[1]{##1\hfil}}}
+{\end{list}}
+
+\usepackage[varg]{txfonts}
+
+\usepackage{indentfirst}
+
+\clubpenalty=9500
+
+\widowpenalty=9500
+
+\hyphenation{CDFA HARDI HiPPIES IKEM InterTrack MEGIDDO MIMD MPFA DICOM ASCLEPIOS MedInria}
+
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\code}{\texttt}
+
+\newtheorem{thm}{Theorem} % [section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{conj}{Conjecture}
+\newtheorem{dfn}{Definition}
+
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+% \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\def\code#1{\texttt{#1}}
+
+\newcommand{\bd}[1]{\mathbf{#1}}
+\newcommand{\RR}{\mathbb{R}}      
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\ZZP}{\mathbb{Z}+^}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\col}[1]{\left[\begin{matrix} #1 \end{matrix} \right]}
+\newcommand{\comb}[2]{\binom{#1^2 + #2^2}{#1+#2}}
+\newcommand{\Tau}{\mathrm{T}}
+
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+
+\def\documentdate{\today}
+
+\pagestyle{empty}
+
+
+\noindent \begin{center}
+\begin{minipage}[c]{3cm}%
+\noindent \begin{center}
+\includegraphics[width=3cm,height=3cm,keepaspectratio]{Images/TITLE/cvut}
+\par\end{center}%
+\end{minipage}%
+\begin{minipage}[c]{0.6\linewidth}%
+\begin{center}
+\textsc{\large{}Czech Technical University in Prague}{\large{}}\\
+{\large{}Faculty of Nuclear Sciences and Physical Engineering}
+\par\end{center}%
+\end{minipage}%
+\begin{minipage}[c]{3cm}%
+\noindent \begin{center}
+\includegraphics[width=3cm,height=3cm,keepaspectratio]{Images/TITLE/fjfi}
+\par\end{center}%
+\end{minipage}
+\par\end{center}
+
+\vspace{3cm}
+
+
+\begin{center}
+\textbf{\huge{}English Title}
+\par\end{center}{\huge \par}
+
+\vspace{1cm}
+
+
+\selectlanguage{czech}%
+\begin{center}
+\textbf{\huge{}Czech Title}
+\par\end{center}{\huge \par}
+
+\selectlanguage{american}%
+\vspace{2cm}
+
+
+\begin{center}
+{\large{}Diploma thesis}
+\par\end{center}{\large \par}
+
+\vfill{}
+
+\begin{lyxlist}{MMMMMMMMM}
+\begin{singlespace}
+\item [{Author:}] \textbf{Miroslav Kovář}
+\item [{Supervisor:}] \textbf{M.Sc. M.A. Sebastián Basterrech, Ph.D.}
+\end{singlespace}
+
+% \item [{Language~advisor:}] \textbf{Mgr. Jméno Učitelky Angličtiny}
+\begin{singlespace}
+\item [{Academic~year:}]2018/2019\end{singlespace}
+
+\end{lyxlist}
+\newpage{}
+
+~\newpage{}
+
+~
+
+\vfill{}
+
+
+\begin{center}
+- Zadání práce -
+\par\end{center}
+
+\vfill{}
+
+
+~\newpage{}
+
+~
+
+\vfill{}
+
+
+\begin{center}
+- Zadání práce (zadní strana) -
+\par\end{center}
+
+\vfill{}
+
+
+~\newpage{}
+
+\noindent \emph{\Large{}Acknowledgment:}{\Large \par}
+
+\noindent Some acknoledgment here.
+
+\vfill
+
+\noindent \emph{\Large{}Author's declaration:}{\Large \par}
+
+\noindent I declare that this research project is entirely
+my own work and I have listed all the used sources in the bibliography.
+
+\bigskip{}
+
+
+\noindent Prague, \documentdate\hfill{}Miroslav Kovář
+
+\vspace{2cm}
+
+
+\newpage{}
+
+~\newpage{}
+
+\selectlanguage{czech}%
+\begin{onehalfspace}
+\noindent \emph{Název práce:}
+
+\noindent \textbf{Czech Title}
+\end{onehalfspace}
+
+\bigskip{}
+
+
+\noindent \emph{Autor:} Miroslav Kovář
+
+\bigskip{}
+
+
+\noindent \emph{Obor:} Aplikace přírodních věd \bigskip{}
+
+
+\noindent \emph{Zaměření:} Matematická informatika
+
+\bigskip{}
+
+
+\noindent \emph{Druh práce:} Diplomová práce
+
+\bigskip{}
+
+
+\noindent \emph{Vedoucí práce:} M.Sc. M.A. Sebastián Basterrech, Ph.D.,
+Artificial Intelligence Center, FEE, CTU Prague
+
+\bigskip{}
+
+
+% \noindent \emph{Konzultant:} doc. RNDr. Jméno Konzultanta, CSc., pracoviště
+% konzultanta. Pouze pokud konzultant byl jmenován.
+
+\bigskip{}
+
+
+\noindent \emph{Abstrakt:} \bigskip{}
+
+
+\noindent \emph{Klíčová slova:} 
+
+\selectlanguage{american}%
+\vfill{}
+~
+
+\begin{onehalfspace}
+\noindent \emph{Title:}
+
+\noindent \textbf{English Title}
+\end{onehalfspace}
+
+\bigskip{}
+
+
+\noindent \emph{Author:} Miroslav Kovář
+
+\bigskip{}
+
+
+\noindent \emph{Abstract:} 
+
+\bigskip{}
+
+
+\noindent \emph{Key words:} 
+
+%keywords in alphabetical order separated by commas
+
+\newpage{}
+
+~\newpage{}
+
+\pagestyle{plain}
+
+\tableofcontents{}
+
+\newpage{}
+
+
+\chapter*{Introduction}
+
+% \addcontentsline{toc}{chapter}{Introduction}
+
+
+\chapter{First Chapter}
+
+\section{Section}
+
+
+% \bibliographystyle{plain}
+% \bibliography{refs}
+\end{document}
