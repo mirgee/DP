@@ -288,6 +288,15 @@ Artificial Intelligence Center, FEE, CTU Prague
 \section{EEG signal}
 Nature, processes in the brain, way of measuring, limitations, complications
 
+Electroencephalography (EEG) is a noninvasive method of measuring fluctuations of electric potentials near the skull caused by synchronized firing of neurons in the upper cortical layers. Electroencephalogram is a record of these fluctuations measured over a period of time. \cite{nunez2006}
+
+Although EEG has significantly lower spatial resolution in comparison with other diagnostic techniques such as functional magnetic resonance sampling (fMRI) and magnetoencephalography (MEG) \cite{srinivasan1999} and enables measuring only neural activity near the cortical surface, as a depression diagnostic tool, it has numerous benefits. Importantly, its significantly lower costs \cite{vespa1999} \cite{hamalainen1993}, high portability, and ease of operation imply increased availability to the patients \cite{schultz2012}. Moreover, it is perfectly noninvasive, which means less complications such as claustrophopia or anxiety \cite{murphy1997}.
+
+Although the science of EEG signal analysis as a diagnostic tool brings compelling clinical promise as a result of the aforementioned benefits, it also presents multiple conceptual challenges. 
+
+%TODO: Read Kaplan and expand this section
+Most importantly, EEG signals are known to have characteristics that are transient, nonstationary and nonlinear \cite{kaplan2005}. Moreover, different patterns appear at multiple scales, from slow cortical potentials at less than 1 Hz, to $\alpha$-potentials at 8-16 Hz, and since many of these patterns do not repeat relative to a stimulus, a successful classifier must be able to detect a pattern regardless of its starting time.
+
 \section{Nonlinear system analysis}
 Attractors, Poincare plots, recurrence plots, Lyapunov coefficients, fractal dimension, Hurst exponent, etc.
 
@@ -321,18 +330,38 @@ One of the oldest neural network architectures, fully connected multi-layer perc
   \item[ignoring input topology:] natural images exhibit strong local structure and high correlation between intensities of neighboring pixels, but FC-MLPs are unstructed - inputs can be presented in any order.
 \end{description}
 
-The first convolutional neural network, dubbed LeNet-5, was proposed as a solution to this problem in 1999 by Y. LeCun \cite{lecun1999}.
+Although the main idea dates back 1980 with K. Fukushima's neocognitron \cite{fukushima1982}, the back-propagation algorithm was not known at the time. The first convolutional architecture successfuly applied on an image pattern recognition problem by attempting to solve the aforementioned problems, dubbed LeNet-5, was proposed in 1998 by Y. LeCun, L. Bottou, Y. Bengio and P. Haffner \cite{LeCun1998}.
 
 \subsection{Description}
 
-Bearing resemblence to visual processing in biological organisms \footnote{As early as in 1968, D. H. Hubel and T.N. Wiesel discovered that some cells (called simple cells) in the macaque primary visual cortex (V1) with small receptive fields (shared by neighboring neurons) are sensitive to straight lines and edges of light of particular orientation, and other cells (called complex cells) with larger receptive fields further in the visual cortex also respond to straight lines and edges, but with invariance to translation \cite{Hubel1968}.}
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/lenet-5.png} }
+  \caption{LeNet-5 architecture \cite{lecun1999}.}
+\label{fig:lenet-5}
+\end{figure}
 
-Features: shared weights, 3D volumes of neurons, local connectivity
+Bearing resemblence to visual processing in biological organisms \footnote{As early as in 1968, D. H. Hubel and T.N. Wiesel discovered that some cells (called simple cells) in cat's primary visual cortex (V1) with small receptive fields (shared by neighboring neurons) are sensitive to straight lines and edges of light of particular orientation, and other cells (called complex cells) with larger receptive fields further in the visual cortex also respond to straight lines and edges, but with invariance to translation \cite{Hubel1968}.}, LeNet-5 proposed the following design principles to enforce \emph{shift, scale and distortion invariance}: \cite{lecun1999}
+\begin{description}
+  \item[local receptive fields:] each neuron in a layer receives input from a small neighborhood in the previous layer,
+  \item[shared weights:] each layer is composed of neurons organized in planes within which each neuron have the same weight vector (feature map),
+  \item[spatial subsampling:] adding a subsampling layers, which reduce the resolution of the previous layer by averaging or taking the maximal value of neighboring pixels in the previous layer.
+\end{description}
+
+\emph{Local receptive fields} enable the network to synthesize filters that produce strong response to elementary salient features in the early layers (such as lines, edges and corners in a visual input, and equivalence in other modalities), and then learn to combine them in the subsequent layers to produce higher-order feature detectors. 
+
+\emph{Shared weights} principle exploits the fact that translation-invariant features have the property that one feature detector can be used accross the entire image. Since neural units in a layer with differing receptive fields possess the same feature map, the same feature detecting operation (convolution with feature map kernel followed by additive bias and a application of a non-linear function) is performed on differing parts of the image. A single convolutional layer is composed of multiple feature detecting planes.
+
+\emph{Spatial subsumpling} is purposed to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.'' \cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance. Although this simple solution performs well in many practical situations, it has multiple drawbacks, as mentioned in section \ref{sec:capsnets} (relative representation of features is not encoded in the feature map representation)
+
 
 \subsection{Applications}
+Maybe mention an example of how LeNet-5 was improved on subsequently (AlexNet, ResNet, etc.)
 
 
-\section{CapsNets}
+\section{CapsNets} \label{sec:capsnets}
+Does it make sense trying them? I found a only a few successful implementations. Maybe it would be better to try those after we have some results already, because it seems risky - we might end up with nothing.
 
 
 \chapter{Experiments}
