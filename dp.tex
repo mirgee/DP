@@ -292,13 +292,94 @@ Electroencephalography (EEG) is a noninvasive method of measuring fluctuations o
 
 Although EEG has significantly lower spatial resolution in comparison with other diagnostic techniques such as functional magnetic resonance sampling (fMRI) and magnetoencephalography (MEG) \cite{srinivasan1999} and enables measuring only neural activity near the cortical surface, as a depression diagnostic tool, it has numerous benefits. Importantly, its significantly lower costs \cite{vespa1999} \cite{hamalainen1993}, high portability, and ease of operation imply increased availability to the patients \cite{schultz2012}. Moreover, it is perfectly noninvasive, which means less complications such as claustrophopia or anxiety \cite{murphy1997}.
 
-Although the science of EEG signal analysis as a diagnostic tool brings compelling clinical promise as a result of the aforementioned benefits, it also presents multiple conceptual challenges. 
+Although the science of EEG signal analysis as a diagnostic tool brings compelling clinical promise as a result of the aforementioned benefits, it also presents multiple technical and conceptual challenges. 
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/stationarycomparison.png} }
+  \caption{A comparison of stationary and non-stationary time series. (Courtesy: Protonk)}
+\label{fig:statnonstatcomp}
+
+\end{figure}
+\begin{dfn}[\cite{priestley1988}]
+  A series $\{X_t\}_{t \in \ZZ}$ is called \textbf{stationary}, if $\{X_t\}_{t \in \ZZ}$ for any set of times $t_1, t_2, \dots, t_n$ and any $k \in \mathrm{N}$, $P[X_{t_1}, X_{t_2}, \dots, X_{t_n}] = P[X_{t_1+k}, X_{t_2+k}, \dots, X_{t_n+k}]$, i.e. the joint probability distribution of $\{X_t\}_{t \in \ZZ}$ is not a function of time. It is called \textbf{non-stationary}, if it is not stationary.
+\end{dfn}
+
+\begin{dfn}[\cite{bickel1996}]
+   A series $\{X_t\}_{t \in \ZZ}$ is called (noisy chaotic) \textbf{non-linear}, if it satisfies the relation
+   \begin{align}
+     X_t = f(X_{t-1}) + \epsilon_t
+   \end{align}
+   for a general $f : \RR \rightarrow \RR$.
+\end{dfn}
 
 %TODO: Read Kaplan and expand this section
-Most importantly, EEG signals are known to have characteristics that are transient, nonstationary and nonlinear \cite{kaplan2005}. Moreover, different patterns appear at multiple scales, from slow cortical potentials at less than 1 Hz, to $\alpha$-potentials at 8-16 Hz, and since many of these patterns do not repeat relative to a stimulus, a successful classifier must be able to detect a pattern regardless of its starting time.
+EEG signals are prone to be infected with \emph{noise} due to imperfect isolation from surrounding environment. They are known to be \emph{transient, non-Gaussian, non-stationary and nonlinear} \cite{kaplan2005} \cite{stam2005}. Since some patterns do not activate relative to a stimulus, a successful classifier must be able to detect a pattern \emph{regardless of its starting time}, or find one. And finally, EEG records are relatively high dimensional - 16 electrodes sampling at 256 Hz result 4096 data points par second.
 
-\section{Nonlinear system analysis}
+Moreover, due to the phenomenon of neural oscillations, patterns may appear in multiple frequency bands, from slow cortical potentials of $\delta$-waves at 0.5-4 Hz, to high $\gamma$ frequency band at 70-150 Hz. 
+
+Patterns of oscillatory activity in various frequency band have been linked to various mental states \cite{canolty2006} \cite{buzsaki2004} and diseases such as epilepsy \cite{shusterman2008}, tremor \cite{mcauley2000}, Parkinson's disease and depression \cite{llinas1999}. Many of the diseases, including depression, share common oscillatory patterns known as thalamocortical dysrythmia, characterized by descrease in normal resting-state $\alpha$ (8-12 Hz) activity slowing down to $\theta$ (4-8 Hz) frequencies, accompanied by increase in $\beta$ and $\gamma$ (25-50 Hz) activity. \cite{vanneste2018}
+
+\section{Non-linear time series analysis}
+Modern neuroscientific work suggests that the most plausible research target for explaining the brain dynamics are the assemblies of coupled and synchronously active neurons, and since majority of those assemblies are describable by non-linear differential equations, it is common to apply principles derived from nonlinear dynamics to characterize these neuronal systems.\cite{kaplan2005} In this section, we will describe some of those principles.
+
 Attractors, Poincare plots, recurrence plots, Lyapunov coefficients, fractal dimension, Hurst exponent, etc.
+
+\begin{dfn}[\cite{kantz2004}]
+  Let $\mathbf{x} \in \RR^m$ be an $m \in NN$ dimensional state space vector dependent on time. A deterministic \textbf{dynamical system} is described by a set of $m$ first-order differential equations
+  \begin{align}
+    \frac{d}{dt}\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t)), \qquad t \in \RR
+  \end{align}
+\end{dfn}
+
+In other words, a dynamical system is a model that determines the evolution of a system only given by the initial state, and current state is a function of the previous state. Hence, a total description of a dynamical system is given by the initial state and a set of equations. A non-linear dynamical system is a system where the differential equations describing its dynamics are non-linear. Unlike in a linear system, changes in the initial state of a non-dynamical system are allowed to have a non-linear relationship to the state space trajectory of the system. \cite{kaplan2005}
+
+\subsection{Attractor}
+\begin{dfn}[\cite{kantz2004}]
+  A dynamical system is called dissipative, when it is the case that
+  \begin{align}
+    E[\mathrm{div} \mathbf{f}] < 1
+  \end{align}
+\end{dfn}
+
+In other words, average space space volume (containing the initial state) is contracted as the system evolves.
+
+Dissipative dynamical system have the property that a set of initial states (of positive measure) will converge to a subspace of the overall state space. This subspace is a geometrical object called an \textbf{attractor}. Example of four basic attractors can be seen on Figure \ref{fig:attractors}.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/attractors.png} }
+  \caption{Visualization of four common attractor types (units are arbitrary). Left to right, top to bottom:
+    \emph{Point attractor} is the only type of attractor of linear deterministic dissipative systems.
+    \emph{Limit cycle} corresponds to a peridic system.
+    \emph{Torus attractor} corresponds to a quasi-periodic system, resulting (in this example) from a superposition of two periodic oscillations.
+    \emph{Chaotic} (strange) \emph{attractor}, characterized by strong dependence on the original conditions. (\cite{stam2005})}
+\label{fig:attractors}
+\end{figure}
+
+Since most physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are complex, and exhibit what is known as \emph{fractal geometry}. For our purposes, this means they can be characterized as having quantifiable self-similarity.\footnote{Cantor set being a canonical example of self-similarity.} An example of a self-similar attractor is shown on Figure \ref{fig:self-similarity}.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/self-similarity.png}}
+  \caption{Noise-reduced visualization of successive enlargements of highly self-similar attractor. (\cite{kantz2004})}
+\label{fig:self-similarity}
+\end{figure}
+
+One possible approach to non-linear time series analysis consists of the following steps: \cite{stam2005}
+\begin{enumerate}
+  \item reconstruction of the dynamics of given system from recorded data,
+  \item characterization of the reconstructed attractor,
+  \item checking validity of the results with surrogate data testing.
+\end{enumerate}
+
+In the following text, we will describe multiple techniques of characterizing the properties of attractors (and hence ways of describing the dynamics of the dynamical system).
+
+\subsection{Recurrence plot}
+Recurrence plot is a method of characterizing the attractor underlying a chaotic process.
 
 \section{Frequency domain}
 Wavelets, sliding window
