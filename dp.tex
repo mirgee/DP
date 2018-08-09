@@ -74,6 +74,7 @@
 \newcommand{\comb}[2]{\binom{#1^2 + #2^2}{#1+#2}}
 \newcommand{\Tau}{\mathrm{T}}
 
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
 
 \makeatother
 
@@ -378,11 +379,22 @@ One possible approach to non-linear time series analysis consists of the followi
 
 In the following text, we will describe multiple techniques of characterizing the properties of attractors (and hence ways of describing the dynamics of the dynamical system).
 
-\subsection{Recurrence plot}
-Recurrence plot is a method of characterizing the attractor underlying a chaotic process.
+\subsection{Delay embedding}
+How to choose the correct delay embedding, method of delays\dots
 
-\section{Frequency domain}
-Wavelets, sliding window
+\subsection{Recurrence plot}
+When presented with a task of finding regularities in seemingly chaotic data, one possible approach is analysing at least approximate repetitions of simple patterns, which can be further used for reconstruction of more complicated rules. Recurrence plot is a method of visualizing obtained state-space trajectory segments in relation to each other to achieve this goal. Furthermore, it can be used to test necessary conditions for validity of dynamical parameters derivable from a non-linear time series such as the information dimension, entropy, Lyapunov exponents, dimension spectrum, etc. The information contained in recurrence plots is not easily obtainable by other known methods. \cite{eckmann1987}
+
+\begin{dfn}[\cite{eckmann1987}]
+  Let $N$ be the length of given time series, $\mathbf{s}_i$ for $i \in \{1,2,\dots,N \}$ be a $i$-th delay vector of any integer embedding dimension, $\norm{\cdot}$ a norm, $\Theta(\cdot)$ a Heaviside step function, and $\epsilon \in \RR_0^+$ a tolerance parameter. Then, \textbf{recurrence plot} is the matrix
+  \begin{align}
+    M_{ij} = \Theta(\epsilon - \norm{ \textbf{s}_i - \textbf{s}_j }) \, .
+  \end{align}
+\end{dfn}
+
+In other words, $M_{ij}$ is a symmetric\footnote{Although this is true for our definition, it may not be true for an alternative definition using a more general topology instead of a norm.} binary $N x N$ matrix, where $M_{ij} = 1$ when $i$-th and $j$-th points of the reconstructed trajectory enter each other's $\epsilon$ neighborhood.
+
+The essential drawback of recurrence plot is their size - it is quadratic in the length of the time series. A simple way of reducing its dimension is to partition the time series into disjoined segments, and let $M_{ij}$ represent the distance between those two segments. This approach is called a \textbf{meta-recurrence plot}. \cite{kantz2004}
 
 \section{Deep learning}
 Results in applying deep learning to EEG signal analysis
