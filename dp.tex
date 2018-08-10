@@ -360,7 +360,18 @@ Dissipative dynamical system have the property that a set of initial states (of 
 \label{fig:attractors}
 \end{figure}
 
-Since most physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are complex, and exhibit what is known as \emph{fractal geometry}. For our purposes, this means they can be characterized as having quantifiable self-similarity.\footnote{Cantor set being a canonical example of self-similarity.} An example of a self-similar attractor is shown on Figure \ref{fig:self-similarity}.
+Since most physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are complex, and exhibit what is known as \emph{fractal geometry} (an example of a self-similar attractor is shown on Figure \ref{fig:self-similarity}).
+. For our purposes, this means they can be characterized as having quantifiable self-similarity.\footnote{Cantor set being a canonical example of self-similarity.} However, the following definition will be useful:
+
+\begin{dfn}[\cite{falconer2004}]
+  Let $F$ be any non-empty bounded subset of $\RR^n$, and let $N_\epsilon(F)$ be the smallest number of sets of diameter at most $\epsilon$ which can cover $F$. Then, the \textbf{box-counting dimension} (also known as Minkowski–Bouligand dimension) is defined as
+  \begin{align}
+    d_F = \lim_{\epsilon \rightarrow 0} \frac{\log N_\epsilon(F)}{\log{\frac{1}{\epsilon}}} \, ,
+  \end{align}
+  if it exists.
+\end{dfn}
+
+Intuitively, the number of mesh cubes of side $\epsilon$ intersecting $F$ gives an indication about how irregular the set is when inspected at scale $\epsilon$, and the box-counting dimension reflects ``how rapidly'' the irregularities develop as $\epsilon \rightarrow 0$. \cite{falconer2004} 
 
 \begin{figure} 
 \centering
@@ -370,17 +381,59 @@ Since most physiogenerated signals are chaotic, their analysis is concerned prim
 \label{fig:self-similarity}
 \end{figure}
 
-One possible approach to non-linear time series analysis consists of the following steps: \cite{stam2005}
+\subsection{Embedding}
+One possible approach to non-linear time series analysis consists of the following steps: 
 \begin{enumerate}
   \item reconstruction of the dynamics of given system from recorded data,
   \item characterization of the reconstructed attractor,
-  \item checking validity of the results with surrogate data testing.
+  \item checking validity of the results with surrogate data testing. \cite{stam2005}
 \end{enumerate}
 
-In the following text, we will describe multiple techniques of characterizing the properties of attractors (and hence ways of describing the dynamics of the dynamical system).
+In the following text, we will describe multiple techniques of characterizing the properties of attractors (and hence ways of describing the dynamics of the dynamical system) using these steps.
 
-\subsection{Delay embedding}
-How to choose the correct delay embedding, method of delays\dots
+In order to reconstruct the dynamics of given system from recorded data, it is necessary to deal with the fact that our data, however rich, rarely represent complete information about the studied system. In the case of EEG signals, the complete state of the system at any moment is determined by many variables, and the sensors are only able to collect traces of their cumulative effects (and noise). The process known as \emph{state} (phase) \emph{space reconstruction via the method of time delays} is a way of reconstructing the attractor of given dynamical system from single (or multiple) sequences of scalar measurements.
+
+The following result from 1936 was important for theoretical understanding of time delay embeddings:
+\begin{thm}[Whitney embedding theorem, \cite{whitney1936}]\label{thm:whitney}
+  Every $n$-dimensional differentiable manifold can be embedded in $\RR^{2n}$.
+\end{thm}
+
+N. H. Packard has proposed in \cite{packard1980} a process by which a time series of measurements sampled at regular intervals can be embededded into a $n$-dimensional space in such a way that the series of reconstructed vectors is representative of the dynamics of the system. A year later, in \cite{takens1981}, F. Takens has proved theoretically, using Whitney's result, that the reconstructed attractor has the same dynamical properties (entropy, dimension, Lyapunov spectrum) as attractor of the original system.
+
+Takens delay embedding theorem is an important result of non-linear time series analysis and can be stated as follows:
+\begin{thm}[\cite{takens1981}] \label{thm:takens}
+  Let $M$ be a compact\footnote{This theorem can be proved for $M$ non-compact provided less restrictions are imposed on $s$.} manifold specifying the state space of a deterministic dynamical system of dimension $n \in \NN$, $s : M \rightarrow \RR, s \in C^2$ a smooth measurement function, $f : M \rightarrow M, f \in C^2$ a smooth diffeomorphic state evolution function with a strange attractor of box-counting dimension $d_A$, and let $k > 2d_A$. Then a map $\phi : M \rightarrow \RR^k$, defined by
+  \begin{align}
+    \phi(x) = (s(\mathbf{x}), s(f(\mathbf{x})), \dots, s(f^{k-1}(\mathbf{x})))
+  \end{align}
+  is an embedding.
+\end{thm}
+
+In what follows, we will describe how these results can be applied in practice. Let us have a time series of scalar measurements of a quantity depending on the current state of the system:
+\begin{align}
+  s_n = s(\mathbf{x}(n \Delta t)) + \eta_n \, ,
+\end{align}
+where $\mathbf{x}$ is a state space vector, $s(\cdot)$ is a measurement function and $\eta_n$ is a measurement noise.
+
+Then, the time delay reconstruction is then simply formed by the following vectors:
+\begin{align}
+  \textbf{s}_n = (s_{n-(m-1)\tau}, s_{n-(m-2)\tau},\dots,s_{n-\tau}, s_n) \, ,
+\end{align}
+
+for $n > (m-1)\tau$. \cite{kantz2004} 
+
+Of course, this method requires proper choice of parameters $m$ and $\tau$. From Theorem \ref{thm:takens} follows that vectors $\{\mathbf{s}_n\}$ are difeomorphic to the attractor $A$ of the system $M$ if $m$ is sufficiently large, specifically $m > 2d_A$ (note that $d_A$ may be much smaller than $\dim M$). On the other hand, $m$ adds redundancy, makes successive alogorithms less efficient. Moreover, the total time delay $m\tau$ is limited by the recording time. 
+
+There are multiple methods of choosing the parameters. We will start with a description of an algorithm for determining the minimal sufficient embedding dimension $m$. It uses concept known as \emph{false nearest neighbors}.
+
+(TODO: False nearest neighbors? The problem is I don't know if I need to go deep into this topic because we may simply end up using meta-recurrence plots. We may try computing non linear analysis parameters and train a NN classifier on them and compare (which seems more reasonable than CapsNets). I like the idea.)
+
+(TODO: Mutual information algorithm for $\tau$)
+
+(TODO: Mention spatial embedding. Is it worth using for EEG analysis? Pro: it achieves considerable reduction. Con: we may lose valuable information.)
+
+\subsection{Measures of non-linear interdependency}
+Phase synchronization, synchronization measures - we can use them to quantify interactions between brain regions. May be useful.
 
 \subsection{Recurrence plot}
 When presented with a task of finding regularities in seemingly chaotic data, one possible approach is analysing at least approximate repetitions of simple patterns, which can be further used for reconstruction of more complicated rules. Recurrence plot is a method of visualizing obtained state-space trajectory segments in relation to each other to achieve this goal. Furthermore, it can be used to test necessary conditions for validity of dynamical parameters derivable from a non-linear time series such as the information dimension, entropy, Lyapunov exponents, dimension spectrum, etc. The information contained in recurrence plots is not easily obtainable by other known methods. \cite{eckmann1987}
@@ -394,10 +447,14 @@ When presented with a task of finding regularities in seemingly chaotic data, on
 
 In other words, $M_{ij}$ is a symmetric\footnote{Although this is true for our definition, it may not be true for an alternative definition using a more general topology instead of a norm.} binary $N x N$ matrix, where $M_{ij} = 1$ when $i$-th and $j$-th points of the reconstructed trajectory enter each other's $\epsilon$ neighborhood.
 
-The essential drawback of recurrence plot is their size - it is quadratic in the length of the time series. A simple way of reducing its dimension is to partition the time series into disjoined segments, and let $M_{ij}$ represent the distance between those two segments. This approach is called a \textbf{meta-recurrence plot}. \cite{kantz2004}
+The essential drawback of recurrence plot is their size - it is quadratic in the length of the time series. A simple way of reducing its dimension is to partition the time series into disjoined segments, and let $M_{ij}$ represent the distance between those two segments. This is known as \textbf{meta-recurrence plot}. \cite{kantz2004} (TODO: Find a justification for using them.)
 
-\section{Deep learning}
-Results in applying deep learning to EEG signal analysis
+(TODO: Cross-recurrence plots may be useful? Only between two series. Joint recurrence plots may be used to detect phase synchronization.)
+
+\section{Applications}
+Results in applying classical methods and deep learning to EEG signal analysis
+
+The number of studies applying methods of non-linear time series analysis for clinical depression diagnosis is limited. Abnormalities in sleep EEG have been found, as well as increased predictablity of waking EEG. \cite{nandrino1994}
 
 \chapter{CNNs and CapsNets}
 
