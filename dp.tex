@@ -456,10 +456,27 @@ Results in applying classical methods and deep learning to EEG signal analysis
 
 The number of studies applying methods of non-linear time series analysis for clinical depression diagnosis is limited. Abnormalities in sleep EEG have been found, as well as increased predictablity of waking EEG. \cite{nandrino1994}
 
-\chapter{CNNs and CapsNets}
+\chapter{Convolutional Neural Networks}
 
-\section{CNNs}
-\subsection{History}
+\section{Mathematical background}
+Very briefly (everyone knows): fully connected, gradient based learning (backpropagation), convolution, equivariance, invariance.
+
+\begin{dfn}[Discrete convolution]
+  Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a functional defined as
+  \begin{align}
+    (I*K)(i,j) = \sum_m \sum_n I(m,n) K(i-m, j-n) \, .
+  \end{align}
+\end{dfn}
+
+TODO: In machine learning libraries, however \dots
+
+\begin{dfn}[Equivariance]
+  
+\end{dfn}
+
+TODO: In other words, \dots 
+
+\section{History}
 
 The classical approach to image pattern recognition consists of the following stages:
 \begin{description}
@@ -482,7 +499,7 @@ One of the oldest neural network architectures, fully connected multi-layer perc
 
 Although the main idea dates back 1980 with K. Fukushima's neocognitron \cite{fukushima1982}, the back-propagation algorithm was not known at the time. The first convolutional architecture successfuly applied on an image pattern recognition problem by attempting to solve the aforementioned problems, dubbed LeNet-5, was proposed in 1998 by Y. LeCun, L. Bottou, Y. Bengio and P. Haffner \cite{LeCun1998}.
 
-\subsection{Description}
+\section{Description}
 
 \begin{figure} 
 \centering
@@ -499,20 +516,48 @@ Bearing resemblence to visual processing in biological organisms \footnote{As ea
   \item[spatial subsampling:] adding a subsampling layers, which reduce the resolution of the previous layer by averaging or taking the maximal value of neighboring pixels in the previous layer.
 \end{description}
 
-\emph{Local receptive fields} enable the network to synthesize filters that produce strong response to elementary salient features in the early layers (such as lines, edges and corners in a visual input, and equivalence in other modalities), and then learn to combine them in the subsequent layers to produce higher-order feature detectors. 
+\subsection{Local receptive fields}
+\emph{Local receptive fields} enable the network to synthesize filters that produce strong response to elementary salient features in the early layers (such as lines, edges and corners in a visual input, and their equivalents in other modalities), and then learn to combine them in the subsequent layers to produce higher-order feature detectors.
 
-\emph{Shared weights} principle exploits the fact that translation-invariant features have the property that one feature detector can be used accross the entire image. Since neural units in a layer with differing receptive fields possess the same feature map, the same feature detecting operation (convolution with feature map kernel followed by additive bias and a application of a non-linear function) is performed on differing parts of the image. A single convolutional layer is composed of multiple feature detecting planes.
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.5\textwidth]{Images/receptive_field.png} }
+  \caption{Receptive field. \cite{goodfellow2016}}
+\label{fig:receptive_field}
+\end{figure}
 
-\emph{Spatial subsumpling} is purposed to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.'' \cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance. Although this simple solution performs well in many practical situations, it has multiple drawbacks, as mentioned in section \ref{sec:capsnets} (relative representation of features is not encoded in the feature map representation)
+For a visual explanation of the concept of receptive field, see Figure \ref{fig:receptive_field}. The locality of of those receptive fields implies sparser connectivity, and hence more efficient computations in comparison with fully connected neural networks. A fully connected neural network with no hidden layers with $m$ inputs and $n$ outputs has $m \times n$ weight parameters, and the correspoding feed forward pass (matrix multiplication) is of $O(m \times n)$ time complexity per input. If the number of connections per output unit is limited to $k < m$, the achieved runtime is $O(k \times n)$, where $k$ is usally in practice several orders of magintude smaller than $m$. \cite{goodfellow2016}
 
+In shallow neural networks, locality of receptive fields implies locality of ``influence'' of each input unit on the output. In deep neural networks, on the other hand, units in the deeper layers can be indirectly connected to some or all units of the input, thus enabling them to achieve aforementioned effect of combining more complex features from simpler ones.
 
-\subsection{Applications}
-Maybe mention an example of how LeNet-5 was improved on subsequently (AlexNet, ResNet, etc.)
+\subsection{Shared weights}
+With \emph{shared weights}, neural units in a layer with differing receptive fields have the same feature map and the same feature detecting operation (convolution with feature map kernel followed by additive bias and a application of a non-linear function) is performed on differing parts of the image (see Figure \ref{fig:shared_weights}). A single convolutional layer is composed of multiple feature detecting planes.
 
+Shared weights principle exploits the fact that in natural images, a function of small number of neighboring pixels can be useful in multiple parts of the image. For example, an edge detector can be used accross the entire image to detect edges in the first layer, an object detector can then be used to detect presence of edges in particular arrangements in the next layer, etc.
 
-\section{CapsNets} \label{sec:capsnets}
+Although it does not reduce the time complexity of the feedforward pass, it does reduce the memory requirements. If the kernel size is $k$, $m$ the number of inputs, $n$ the number of outputs, the number of parameters per layer is $k$ instead of $m \times n$ (per feature detecting plane) in a fully connected case. Since $k$ is usually in practice several orders of magnitude smaller than $m$, and usually $m$ and $n$ are comparable in size, the memory savings are highly significant. \cite{goodfellow2016}
+
+One of the drawbacks of classical CNNs is that although convolution in combination with weight sharing causes layer output to be equivariant to translation of the input, this is not the case for scaling and rotation. Moreover, equivariance to input may not be always desirable. Consider a case of face detection, where all training and test images are centered. Then, the relative positions of individual features are important, and it may be favorable to fix feature detectors (and thus weights) to certain locations in the image.
+
+\subsection{Spatial subsampling}
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.5\textwidth]{Images/shared_weights.png} }
+  \caption{Shared weights. \cite{goodfellow2016}}
+\label{fig:shared_weights}
+\end{figure}
+
+\emph{Spatial subsumpling} is purposed to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.'' \cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance - roughly speaking, an ``approximate'' translation invariance. Although this simple solution performs well in many practical situations, it has multiple drawbacks. 
+
+TODO: relative representation of features is not encoded in the feature map representation.
+
+\section{Applications}
+Maybe mention an example of how LeNet-5 was improved on subsequently (AlexNet, ResNet, etc.)? But this changes all the time\dots
+
+\section{CapsNets?} \label{sec:capsnets}
 Does it make sense trying them? I found a only a few successful implementations. Maybe it would be better to try those after we have some results already, because it seems risky - we might end up with nothing.
-
 
 \chapter{Experiments}
 
