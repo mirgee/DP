@@ -450,10 +450,20 @@ The essential drawback of recurrence plot is their size - it is quadratic in the
 
 (TODO: Cross-recurrence plots may be useful? Only between two series. Joint recurrence plots may be used to detect phase synchronization.)
 
-\section{Applications}
-Results in applying classical methods and deep learning to EEG signal analysis
+\section{Applications in disease diagnosis}
+Although non-linear dynamical analysis of EEG signal has been successfully applied to many psychological and psychiatric conditions, such as insomnia, schizophrenia, epilepsy, dementia, Alzheimer's disease, the number of studies applying methods of non-linear time series analysis for clinical depression diagnosis is relatively limited. \cite{rodriguez2015}
 
-The number of studies applying methods of non-linear time series analysis for clinical depression diagnosis is limited. Abnormalities in sleep EEG have been found, as well as increased predictablity of waking EEG. \cite{nandrino1994}
+It has been found that the EEG dynamics of depressed patients exhibit more predictability than those of non-depressed ones, with this indicator receding after treatment. \cite{nandrino1994} \cite{pezard1996}
+
+Another study analyzed sleep EEGs of depressed and control subjects, and found significantly decreased values of Lyapunov exponents in a sleep stage IV in depressed relative to control. \cite{roschke1995}
+
+In 2012, Ahmadlou et al. decomposed 5 EEG channels recorded from frontal lobes of healthy and depressed patients using wavelet filter banks, measured their complexity using Higuchi's fractal dimension, subsequently used ANOVA to discover the most meaningful differences between the groups, and trained a probabilistic neural network classifier, achieving 91.3\% classification accuracy on limited amount of data. This research suggested potential of frontal lobe signal assymetry as a measure for depression. \cite{ahmadlou2012}
+
+In the same year, Hosseinifard et al. extracted Higuchi's correlation dimension, Lyapunov exponents and Higuchi's fractal dimension from 4 EEG channels of 90 patients split evenly between depressed and non-depressed subjects, achieving 90\% accuracy using a linear regression classifier. \cite{hosseinifard2013}
+
+In 2013, Bachmann et al. compared two non-linear analysis methods, spectral assymetry index (SASI) and Higuchi's fractal dimension (HFD), for depression diagnosis, on 34 subjects split evenly between depressed and control group. SASI achieved true detection rate in 88\% in depressives and 82\% in the controls, while HFD provided true detection rate of 94\% in the depressives and 76\% in the controls. \cite{bachmann2013}
+
+TODO: Sleep disorder diagnosis is also relevant for us for the close connection of depression with disturbed sleep and insomnia \cite{}.
 
 \chapter{Convolutional Neural Networks}
 
@@ -484,6 +494,23 @@ For the following, the reader needs to understand the term \textbf{equivariance}
 \end{dfn}
 
 For our purposes, we can view $G$ as a group of transformations, and then equivariance as a commutative property of a function with regards to the transformations. In other words, computing the function and then applying the transformation has the same effect as applying the transformation and then computing the function.
+
+TODO: This probably does not need to be here
+\textbf{Gradient descent} is a first order iterative method of finding an extremum a differentiable function $f : \RR \rightarrow \RR^n$, $f \in C^1$, based on continually moving a point in its domain in the direction of negative of its gradient at that point, until the absolute value of the gradient is below a certain threshold; see Algorithm \ref{alg:gd}
+
+\begin{algorithm}
+  % \caption{Counterfactual Regret Minimization with chance sampling. \cite{cfr_intro}}
+  \label{alg:gd}
+\begin{algorithmic}[1]
+  \State Initialize random $x_0 \in D(f)$
+  \State $n \gets 0$
+  \While{$|\nabla_{x_n} f| < \text{threshold}$}
+  \State $x_{n+1} = x_n - \epsilon \nabla_{x_n} f$
+  \EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Stochastic gradient descent}\dots
 
 \section{History}
 
@@ -551,6 +578,7 @@ One of the drawbacks of classical CNNs is that although convolution in combinati
 
 \subsection{Pooling}
 \begin{figure} 
+
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{Images/shared_weights.png} }
@@ -565,13 +593,22 @@ The final output activations of a convolutional layer are computed in subsequent
   \item a spatial subsampling (pooling) operation is applied.
 \end{enumerate}
 
-One of the main reasons for applying a non-linearity is to make the network capable of modelling non-linear functions. Common activation functions include rectified linear $\max(0,x)$, sigmoid $\frac{1}{1+\exp(-x)}$, hyperbolic tangent $\tanh$, and many others. They have varying properties making them useful in different situations. We will not explore them further here.
+The rationale behind applying a non-linearity is it makes the network capable of modelling non-linear functions. Common activation functions include rectified linear $\max(0,x)$, sigmoid $\frac{1}{1+\exp(-x)}$, hyperbolic tangent $\tanh$, and many others. They have varying properties making them useful in different situations. We will not explore them further here.
 
-\emph{Pooling} operation splits the neural units into disjoint sets of multiple adjacent activations and computes a summary statistic per such set and outputs the result. Thus the spatial dimension of output is decreased relative to input (subsampling).
+\emph{Pooling} operation splits the neural units into sets of multiple adjacent activations and computes a summary statistic, such as the maximum element (max pooling) or the average (average pooling), per such set and outputs the result. If the stride between the sets is greater than one, the spatial dimension of output is decreased relative to input (subsampling).
 
-The purpose of spatial subsampling is to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.'' \cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance - roughly speaking, an ``approximate'' translation invariance. Although this simple solution performs well in many practical situations, it has multiple drawbacks. 
+The purpose of spatial subsampling is to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.'' \cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance - roughly speaking, an ``approximate'' translation invariance.
 
-TODO: relative representation of features is not encoded in the feature map representation.
+Although the combination of convolution and pooling performs well in many practical situations, it has multiple drawbacks. For example, the learned representations are not rotation invariant and thus, to mitigate this, the capacity of the network has to be increased and the training dataset must be enhanced to contain examples of rotated features, often extending the amount of data necessary and training time. A number of alternative approaches were suggested in the litarature.\footnote{For instance, Hinton's \emph{CapsNet}, described e.g. in \cite{sabour2017}, is an attempt to transform the manifold of images of similar shape (which is highly non-linear in the space of pixel intensities) to a space where it is globally linear by the way of using so called capsules instead of traditional convolutional layers.} For another example of a limitation, see Figure \ref{fig:drawbacks}.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/drawbacks.png} }
+  \caption{Examples of drawbacks of the pooling operation. Max pooling discards all except the maximum element, and valuable information may thus be lost. Average pooling considers all the values, and the information about their contrast is reduced. Moreover, extreme values may have undesired effects on the result. \cite{yu2014}}
+\label{fig:drawbacks}
+\end{figure}
+
 
 \section{Applications}
 Maybe mention an example of how LeNet-5 was improved on subsequently (AlexNet, ResNet, etc.)? But this changes all the time\dots
