@@ -315,7 +315,6 @@ Although the science of EEG signal analysis as a diagnostic tool brings compelli
    for a general $f : \RR \rightarrow \RR$.
 \end{dfn}
 
-%TODO: Read Kaplan and expand this section
 EEG signals are prone to be infected with \emph{noise} due to imperfect isolation from surrounding environment. They are known to be \emph{transient, non-Gaussian, non-stationary and nonlinear} \cite{kaplan2005} \cite{stam2005}. Since some patterns do not activate relative to a stimulus, a successful classifier must be able to detect a pattern \emph{regardless of its starting time}, or find one. And finally, EEG records are relatively high dimensional - 16 electrodes sampling at 256 Hz result 4096 data points par second.
 
 Moreover, due to the phenomenon of neural oscillations, patterns may appear in multiple frequency bands, from slow cortical potentials of $\delta$-waves at 0.5-4 Hz, to high $\gamma$ frequency band at 70-150 Hz. 
@@ -459,22 +458,32 @@ The number of studies applying methods of non-linear time series analysis for cl
 \chapter{Convolutional Neural Networks}
 
 \section{Mathematical background}
-Very briefly (everyone knows): fully connected, gradient based learning (backpropagation), convolution, equivariance, invariance.
+TODO: Do we really need this section???
+Very briefly (everyone knows): fully connected, gradient based learning (backpropagation), invariance.
 
-\begin{dfn}[Discrete convolution]
+\begin{dfn}
   Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a functional defined as
   \begin{align}
     (I*K)(i,j) = \sum_m \sum_n I(m,n) K(i-m, j-n) \, .
   \end{align}
 \end{dfn}
 
-TODO: In machine learning libraries, however \dots
+Note that some machine learning libraries (such as Tensorflow) implement \textbf{cross-correlation} instead of convolution, but preserving the term convolution for the operation. Cross-correlation corresponds to convolution with kernel rotated by 90 degrees:
+\begin{align}
+  (I*K)(i,j) = \sum_m \sum_n I(m,n) K(i+m, j+n) \, .
+\end{align}
+Unlike convolution, cross-correlation is not commutative, but this property is not required for neural network applications.
 
-\begin{dfn}[Equivariance]
-  
+For the following, the reader needs to understand the term \textbf{equivariance}. 
+\begin{dfn}[\cite{pitts2013}]
+  Let $G$ be a group and $X$, $Y$ its G-sets. Then $F:X \rightarrow Y$ is called an \textbf{equivariant function} if
+  \begin{align}
+    F(g(x)) = g(F(x))
+  \end{align}
+  for all $G$ actions $g$ and $x \in X$.
 \end{dfn}
 
-TODO: In other words, \dots 
+For our purposes, we can view $G$ as a group of transformations, and then equivariance as a commutative property of a function with regards to the transformations. In other words, computing the function and then applying the transformation has the same effect as applying the transformation and then computing the function.
 
 \section{History}
 
@@ -540,7 +549,7 @@ Although it does not reduce the time complexity of the feedforward pass, it does
 
 One of the drawbacks of classical CNNs is that although convolution in combination with weight sharing causes layer output to be equivariant to translation of the input, this is not the case for scaling and rotation. Moreover, equivariance to input may not be always desirable. Consider a case of face detection, where all training and test images are centered. Then, the relative positions of individual features are important, and it may be favorable to fix feature detectors (and thus weights) to certain locations in the image.
 
-\subsection{Spatial subsampling}
+\subsection{Pooling}
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
@@ -549,7 +558,18 @@ One of the drawbacks of classical CNNs is that although convolution in combinati
 \label{fig:shared_weights}
 \end{figure}
 
-\emph{Spatial subsumpling} is purposed to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.'' \cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance - roughly speaking, an ``approximate'' translation invariance. Although this simple solution performs well in many practical situations, it has multiple drawbacks. 
+The final output activations of a convolutional layer are computed in subsequent stages:
+\begin{enumerate}
+  \item linear unit activations are computed via the convolution operation,
+  \item a non-linear activation function is applied to the activations,
+  \item a spatial subsampling (pooling) operation is applied.
+\end{enumerate}
+
+One of the main reasons for applying a non-linearity is to make the network capable of modelling non-linear functions. Common activation functions include rectified linear $\max(0,x)$, sigmoid $\frac{1}{1+\exp(-x)}$, hyperbolic tangent $\tanh$, and many others. They have varying properties making them useful in different situations. We will not explore them further here.
+
+\emph{Pooling} operation splits the neural units into disjoint sets of multiple adjacent activations and computes a summary statistic per such set and outputs the result. Thus the spatial dimension of output is decreased relative to input (subsampling).
+
+The purpose of spatial subsampling is to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.'' \cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance - roughly speaking, an ``approximate'' translation invariance. Although this simple solution performs well in many practical situations, it has multiple drawbacks. 
 
 TODO: relative representation of features is not encoded in the feature map representation.
 
