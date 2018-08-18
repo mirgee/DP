@@ -75,6 +75,7 @@
 \newcommand{\Tau}{\mathrm{T}}
 
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\interfootnotelinepenalty=10000 % ! THIS MAY CAUSE TROUBLE !
 
 \makeatother
 
@@ -109,7 +110,7 @@
 
 
 \begin{center}
-\textbf{\huge{}English Title}
+\textbf{\huge{}Non-linear dynamical analysis of EEG for depression diagnosis (using convolutional neural networks)}
 \par\end{center}{\huge \par}
 
 \vspace{1cm}
@@ -117,7 +118,7 @@
 
 \selectlanguage{czech}%
 \begin{center}
-\textbf{\huge{}Czech Title}
+\textbf{\huge{}Nelineární dynamická analýza EEG pro diagnózu deprese (pomocí konvolučních neuronových sítí)}
 \par\end{center}{\huge \par}
 
 \selectlanguage{american}%
@@ -200,7 +201,7 @@ my own work and I have listed all the used sources in the bibliography.
 \begin{onehalfspace}
 \noindent \emph{Název práce:}
 
-\noindent \textbf{Czech Title}
+\noindent \textbf{Nelineární dynamická analýza EEG pro diagnózu deprese (pomocí konvolučních neuronových sítí)}
 \end{onehalfspace}
 
 \bigskip{}
@@ -248,7 +249,7 @@ Artificial Intelligence Center, FEE, CTU Prague
 \begin{onehalfspace}
 \noindent \emph{Title:}
 
-\noindent \textbf{English Title}
+\noindent \textbf{Non-linear dynamical analysis of EEG for depression diagnosis (using convolutional neural networks)}
 \end{onehalfspace}
 
 \bigskip{}
@@ -280,9 +281,17 @@ Artificial Intelligence Center, FEE, CTU Prague
 
 
 \chapter*{Introduction}
+Depression is one of the most common brain disorders - it affacts 121-300 million people worldwide, and this number is expected to increase in the future \cite{rodriguez2015} \cite{whodepression}. Although effective treatments are known, World Health Organization estimates that fewer than half of those affected receive those treatments. Major barriers include insufficient resources, lack of properly trained practitioners, inaccurate assessment and misdiagnosis. \cite{whodepression} 
+
+For these reasons, it is important that affordable, fast, accurate, and easy to use methods for its diagnosis are developed. Although electroencephalography (EEG) \footnote{In this work, we will use the same abreviation for electroencephalography (recording method) and electroencephalographam (the recorded data) where the distinction is apparent from the context.} may be one such method thanks to its comparatively low-cost and easy recording process, comparatively little research has been focused on this area. Non-linear dynamical analysis in particular has been proven very effective at diagnosing mental disorders, and this work is aimed at contributing to this important and relatively new topic.
+
+In \textbf{Chapter 1}, we present some of the classical theory and methods of non-linear dynamical analysis and chaos theory, with focus on the terms used in the following text.
+
+In \textbf{Chapter 2}, we introduce the basic concepts and terminology used in design and evaluation of convolutional neural networks.
+
+In \textbf{Chapter 3}, we describe the methods proposed, experiments performed, and results obtained.
 
 % \addcontentsline{toc}{chapter}{Introduction}
-
 
 \chapter{Classical EEG signal analysis methods}
 
@@ -324,10 +333,10 @@ Patterns of oscillatory activity in various frequency band have been linked to v
 \section{Non-linear time series analysis}
 Modern neuroscientific work suggests that the most plausible research target for explaining the brain dynamics are the assemblies of coupled and synchronously active neurons, and since majority of those assemblies are describable by non-linear differential equations, it is common to apply principles derived from nonlinear dynamics to characterize these neuronal systems.\cite{kaplan2005} In this section, we will describe some of those principles.
 
-Attractors, Poincare plots, recurrence plots, Lyapunov coefficients, fractal dimension, Hurst exponent, etc.
+TODO: Attractors, Poincare plots, recurrence plots, Lyapunov coefficients, fractal dimension, Hurst exponent, etc.
 
 \begin{dfn}[\cite{kantz2004}]
-  Let $\mathbf{x} \in \RR^m$ be an $m \in NN$ dimensional state space vector dependent on time. A deterministic \textbf{dynamical system} is described by a set of $m$ first-order differential equations
+  Let $\mathbf{x} \in \RR^m$ be an $m \in \NN$ dimensional state space vector dependent on time. A deterministic \textbf{dynamical system} is described by a set of $m$ first-order differential equations
   \begin{align}
     \frac{d}{dt}\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t)), \qquad t \in \RR
   \end{align}
@@ -431,6 +440,7 @@ There are multiple methods of choosing the parameters. We will start with a desc
 
 (TODO: Mention spatial embedding. Is it worth using for EEG analysis? Pro: it achieves considerable reduction. Con: we may lose valuable information.)
 
+(TODO: Other non-linear statistics that we will use: Lyapunov coeff., Higuchi's fractal dimension, DFA, sample entropy, Hurst exponents, correlation dimension, \dots)
 \subsection{Measures of non-linear interdependency}
 Phase synchronization, synchronization measures - we can use them to quantify interactions between brain regions. May be useful.
 
@@ -463,13 +473,14 @@ In the same year, Hosseinifard et al. extracted Higuchi's correlation dimension,
 
 In 2013, Bachmann et al. compared two non-linear analysis methods, spectral assymetry index (SASI) and Higuchi's fractal dimension (HFD), for depression diagnosis, on 34 subjects split evenly between depressed and control group. SASI achieved true detection rate in 88\% in depressives and 82\% in the controls, while HFD provided true detection rate of 94\% in the depressives and 76\% in the controls. \cite{bachmann2013}
 
-TODO: Sleep disorder diagnosis is also relevant for us for the close connection of depression with disturbed sleep and insomnia \cite{}.
+Sleep disorder diagnosis may also relevant to this work for the very close connection of depression with disturbed sleep and insomnia \cite{nutt2008}. The first study emplying techniques of non-linear analysis on human EEG was published in 1985 and dealt with sleep recordings. \cite{babloyantz1985} This early success sparked intensive research focus on applying non-linear analysis to sleep data, thus generating relatively large amount of results. 
+
+Many studies focused of extracting Lyapunov exponents of EEGs measured during various sleep stages. The general pattern that emerged was that deep sleep stages exhibit lower complexity evidenced by lower dimensionality lower values of the largest Lyapunov exponent \cite{stam2005}.
 
 \chapter{Convolutional Neural Networks}
 
 \section{Mathematical background}
 TODO: Do we really need this section???
-Very briefly (everyone knows): fully connected, gradient based learning (backpropagation), invariance.
 
 \begin{dfn}
   Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a functional defined as
@@ -484,6 +495,13 @@ Note that some machine learning libraries (such as Tensorflow) implement \textbf
 \end{align}
 Unlike convolution, cross-correlation is not commutative, but this property is not required for neural network applications.
 
+\begin{dfn}
+  Let $f$ be arbitrary function, and $\mathcal{D}$ its degradation operator. We say $f$ is \textbf{invariant} under $\mathcal{D}$ if
+  \begin{align}
+    \mathcal{D}(f) \equiv f \, .
+  \end{align}
+\end{dfn}
+
 For the following, the reader needs to understand the term \textbf{equivariance}. 
 \begin{dfn}[\cite{pitts2013}]
   Let $G$ be a group and $X$, $Y$ its G-sets. Then $F:X \rightarrow Y$ is called an \textbf{equivariant function} if
@@ -495,17 +513,21 @@ For the following, the reader needs to understand the term \textbf{equivariance}
 
 For our purposes, we can view $G$ as a group of transformations, and then equivariance as a commutative property of a function with regards to the transformations. In other words, computing the function and then applying the transformation has the same effect as applying the transformation and then computing the function.
 
-TODO: This probably does not need to be here
-\textbf{Gradient descent} is a first order iterative method of finding an extremum a differentiable function $f : \RR \rightarrow \RR^n$, $f \in C^1$, based on continually moving a point in its domain in the direction of negative of its gradient at that point, until the absolute value of the gradient is below a certain threshold; see Algorithm \ref{alg:gd}
+TODO: This is probably too basic to be here
+
+\textbf{Gradient descent} is a first order iterative method of finding an extremum a differentiable function $f : \RR \rightarrow \RR^n$, $f \in C^1$, based on continually moving a point in its domain in the direction of negative of its gradient at that point, until the absolute value of the gradient (or the step size) is below a certain threshold. See Algorithm \ref{alg:gd}.
 
 \begin{algorithm}
-  % \caption{Counterfactual Regret Minimization with chance sampling. \cite{cfr_intro}}
+  \caption{Gradient descent algorithm.}
   \label{alg:gd}
 \begin{algorithmic}[1]
   \State Initialize random $x_0 \in D(f)$
   \State $n \gets 0$
-  \While{$|\nabla_{x_n} f| < \text{threshold}$}
+  \State step\_size $\gets 1$  
+  \While{step\_size $ < \text{threshold}$ and $n < $ iters\_limit}
   \State $x_{n+1} = x_n - \epsilon \nabla_{x_n} f$
+  \State step\_size $\gets |x_{n+1} - x_n|$ 
+  \State $n \gets n + 1$
   \EndWhile
 \end{algorithmic}
 \end{algorithm}
@@ -620,6 +642,9 @@ Does it make sense trying them? I found a only a few successful implementations.
 
 \section{Dataset}
 Size of our dataset, conditions during trials, labels, etc.
+
+\section{Method}
+Describing the experiments
 
 \section{Results}
 
