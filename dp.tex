@@ -430,9 +430,11 @@ Then, the time delay reconstruction is then simply formed by the following vecto
 
 for $n > (m-1)\tau$. \cite{kantz2004} 
 
+The purpose of this embedding process is to unfold the observed scalar projection of the origin system back to a multivariate state space which is representative of the original system. Theorem \ref{thm:takens} ensures that when $m$ is chosen such that $m > 2d_A$, then the vector $\textbf{s}_n$ is a true embedding of the underlying attractor (note only sufficiency of the result).
+
 Of course, this method requires proper choice of parameters $m$ and $\tau$. From Theorem \ref{thm:takens} follows that vectors $\{\mathbf{s}_n\}$ are difeomorphic to the attractor $A$ of the system $M$ if $m$ is sufficiently large, specifically $m > 2d_A$ (note that $d_A$ may be much smaller than $\dim M$). On the other hand, $m$ adds redundancy, makes successive alogorithms less efficient. Moreover, the total time delay $m\tau$ is limited by the recording time. 
 
-There are multiple methods of choosing the parameters. We will start with a description of an algorithm for determining the minimal sufficient embedding dimension $m$. It uses concept known as \emph{false nearest neighbors}.
+There are multiple methods of choosing the parameters. We will start with a description of an algorithm for determining the minimal sufficient embedding dimension $m$, known as \emph{false nearest neighbors} algorithm.
 
 (TODO: False nearest neighbors? The problem is I don't know if I need to go deep into this topic because we may simply end up using meta-recurrence plots. We may try computing non linear analysis parameters and train a NN classifier on them and compare (which seems more reasonable than CapsNets). I like the idea.)
 
@@ -441,6 +443,11 @@ There are multiple methods of choosing the parameters. We will start with a desc
 (TODO: Mention spatial embedding. Is it worth using for EEG analysis? Pro: it achieves considerable reduction. Con: we may lose valuable information.)
 
 (TODO: Other non-linear statistics that we will use: Lyapunov coeff., Higuchi's fractal dimension, DFA, sample entropy, Hurst exponents, correlation dimension, \dots)
+
+\subsection{False nearest neighbors}
+The false nearest neighbors algorithm is based on simple topological insight. If the embedding dimension $m$ is too small, some points that are close to each other in dimension $m+1$ (see Fig. \cite{}). Neighboring points satisfying this property are called \emph{false neighbors}.
+
+
 \subsection{Measures of non-linear interdependency}
 Phase synchronization, synchronization measures - we can use them to quantify interactions between brain regions. May be useful.
 
@@ -469,7 +476,7 @@ Another study analyzed sleep EEGs of depressed and control subjects, and found s
 
 In 2012, Ahmadlou et al. decomposed 5 EEG channels recorded from frontal lobes of healthy and depressed patients using wavelet filter banks, measured their complexity using Higuchi's fractal dimension, subsequently used ANOVA to discover the most meaningful differences between the groups, and trained a probabilistic neural network classifier, achieving 91.3\% classification accuracy on limited amount of data. This research suggested potential of frontal lobe signal assymetry as a measure for depression. \cite{ahmadlou2012}
 
-In the same year, Hosseinifard et al. extracted Higuchi's correlation dimension, Lyapunov exponents and Higuchi's fractal dimension from 4 EEG channels of 90 patients split evenly between depressed and non-depressed subjects, achieving 90\% accuracy using a linear regression classifier. \cite{hosseinifard2013}
+In the same year, Hosseinifard et al. extracted Higuchi's correlation dimension, Lyapunov exponents and Higuchi's fractal dimension from 4 EEG channels of 90 patients split evenly between depressed and non-depressed subjects, achieving 90\% accuracy using a logistic regression classifier. \cite{hosseinifard2013}
 
 In 2013, Bachmann et al. compared two non-linear analysis methods, spectral assymetry index (SASI) and Higuchi's fractal dimension (HFD), for depression diagnosis, on 34 subjects split evenly between depressed and control group. SASI achieved true detection rate in 88\% in depressives and 82\% in the controls, while HFD provided true detection rate of 94\% in the depressives and 76\% in the controls. \cite{bachmann2013}
 
