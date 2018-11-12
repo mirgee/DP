@@ -110,7 +110,7 @@
 
 
 \begin{center}
-\textbf{\huge{}Non-linear dynamical analysis of EEG for depression diagnosis (using convolutional neural networks)}
+  \textbf{\huge{}Biomarker Analysis of Psychiatric Patients using EEG Signal Analysis and Machine Learning}
 \par\end{center}{\huge \par}
 
 \vspace{1cm}
@@ -118,7 +118,7 @@
 
 \selectlanguage{czech}%
 \begin{center}
-\textbf{\huge{}Nelineární dynamická analýza EEG pro diagnózu deprese (pomocí konvolučních neuronových sítí)}
+\textbf{\huge{}Analýza biomarkerů psychiatrických pacientů pomocí analýzy EEG signálu a strojového učení}
 \par\end{center}{\huge \par}
 
 \selectlanguage{american}%
@@ -201,7 +201,7 @@ my own work and I have listed all the used sources in the bibliography.
 \begin{onehalfspace}
 \noindent \emph{Název práce:}
 
-\noindent \textbf{Nelineární dynamická analýza EEG pro diagnózu deprese (pomocí konvolučních neuronových sítí)}
+\noindent \textbf{Analýza biomarkerů psychiatrických pacientů pomocí analýzy EEG signálu a strojového učení}
 \end{onehalfspace}
 
 \bigskip{}
@@ -249,7 +249,7 @@ Artificial Intelligence Center, FEE, CTU Prague
 \begin{onehalfspace}
 \noindent \emph{Title:}
 
-\noindent \textbf{Non-linear dynamical analysis of EEG for depression diagnosis (using convolutional neural networks)}
+\noindent \textbf{Biomarker Analysis of Psychiatric Patients using EEG Signal Analysis and Machine Learning}
 \end{onehalfspace}
 
 \bigskip{}
@@ -293,7 +293,7 @@ In \textbf{Chapter 3}, we describe the methods proposed, experiments performed, 
 
 % \addcontentsline{toc}{chapter}{Introduction}
 
-\chapter{Classical EEG signal analysis methods}
+\chapter{Non-linear time series analysis}
 
 \section{EEG signal}
 Nature, processes in the brain, way of measuring, limitations, complications
@@ -330,10 +330,8 @@ Moreover, due to the phenomenon of neural oscillations, patterns may appear in m
 
 Patterns of oscillatory activity in various frequency band have been linked to various mental states \cite{canolty2006} \cite{buzsaki2004} and diseases such as epilepsy \cite{shusterman2008}, tremor \cite{mcauley2000}, Parkinson's disease and depression \cite{llinas1999}. Many of the diseases, including depression, share common oscillatory patterns known as thalamocortical dysrythmia, characterized by descrease in normal resting-state $\alpha$ (8-12 Hz) activity slowing down to $\theta$ (4-8 Hz) frequencies, accompanied by increase in $\beta$ and $\gamma$ (25-50 Hz) activity. \cite{vanneste2018}
 
-\section{Non-linear time series analysis}
+\section{Theory}
 Modern neuroscientific work suggests that the most plausible research target for explaining the brain dynamics are the assemblies of coupled and synchronously active neurons, and since majority of those assemblies are describable by non-linear differential equations, it is common to apply principles derived from nonlinear dynamics to characterize these neuronal systems.\cite{kaplan2005} In this section, we will describe some of those principles.
-
-TODO: Attractors, Poincare plots, recurrence plots, Lyapunov coefficients, fractal dimension, Hurst exponent, etc.
 
 \begin{dfn}[\cite{kantz2004}]
   Let $\mathbf{x} \in \RR^m$ be an $m \in \NN$ dimensional state space vector dependent on time. A deterministic \textbf{dynamical system} is described by a set of $m$ first-order differential equations
@@ -389,7 +387,7 @@ Intuitively, the number of mesh cubes of side $\epsilon$ intersecting $F$ gives 
 \label{fig:self-similarity}
 \end{figure}
 
-\subsection{Embedding}
+\subsection{Embedding} \label{sec:embedding}
 One possible approach to non-linear time series analysis consists of the following steps: 
 \begin{enumerate}
   \item reconstruction of the dynamics of given system from recorded data,
@@ -436,21 +434,50 @@ Of course, this method requires proper choice of parameters $m$ and $\tau$. From
 
 There are multiple methods of choosing the parameters. We will start with a description of an algorithm for determining the minimal sufficient embedding dimension $m$, known as \emph{false nearest neighbors} algorithm.
 
-(TODO: False nearest neighbors? The problem is I don't know if I need to go deep into this topic because we may simply end up using meta-recurrence plots. We may try computing non linear analysis parameters and train a NN classifier on them and compare (which seems more reasonable than CapsNets). I like the idea.)
-
-(TODO: Mutual information algorithm for $\tau$)
-
-(TODO: Mention spatial embedding. Is it worth using for EEG analysis? Pro: it achieves considerable reduction. Con: we may lose valuable information.)
-
-(TODO: Other non-linear statistics that we will use: Lyapunov coeff., Higuchi's fractal dimension, DFA, sample entropy, Hurst exponents, correlation dimension, \dots)
+(TODO: Mention spatial embedding. Is it worth using for EEG analysis? Pro: it does feature extraction for us. Con: we may lose valuable information.)
 
 \subsection{False nearest neighbors}
 The false nearest neighbors algorithm is based on simple topological insight. If the embedding dimension $m$ is too small, some points that are close to each other in dimension $m+1$ (see Fig. \cite{}). Neighboring points satisfying this property are called \emph{false neighbors}.
 
+(TODO: Mutual information algorithm for $\tau$)
 
-\subsection{Measures of non-linear interdependency}
-Phase synchronization, synchronization measures - we can use them to quantify interactions between brain regions. May be useful.
+\section{Non-linear measures}
+\subsection{Lyapunov exponents}
+Lyapunov exponents can be used to quantify sensitivity of a dynamical system to initial conditions. Consider a small sphere of similar initial conditions in the phase space of the attractor. As the the system evolves, this sphere expands at exponentially in all the $m$ directions at rates given by the spectrum of Lyapunov exponents. Hence, $m$ dimensional system has exactly $m$ Lyapunov exponents and the average rate of separation between two points in the phase space with similar initial conditions can be characterized by the largest Lyapunov exponent. A sigle positive exponents is a sufficient indication of chaos. 
 
+In order to compute entire Lyapunov spectrum, it is necessary to measure the rate of separation along the appropriate Lyapunov directions. This requirement, however, is unnecessary for computation of only the Largest lyapunov exponent, as its direction dominates growth. Hence, the largest Lyapunov exponent $\lambda_1$ can be defined as
+
+\begin{align}\label{eq:lyap}
+  d(t) = C e^{\lambda_1 t}, 
+\end{align}
+
+where $d$ is a function of the average divergence, and $C$ is a factor normalizing for the initial separation.
+
+\subsection{Correlation dimension}
+Correlation dimension is a characteristic measure which describes complexity of the geometry of chaotic attractors.
+
+Correlation sum $C(r)$ is defined as the fraction of points in the phase space whose distance is smaller than $r$:
+\begin{align} \label{eq:corrsum}
+  C(r) = \frac{2}{N(N-1)} \sum_{i<j} \Phi(r-\norm{\textbf{s}_i - \textbf{s}_j}).
+\end{align}
+
+If $C(r)$ decreases according to the power law with $r \rightarrow 0$ such that $C(r) \approx r^D$, then $D$ is called the correlation dimension, formally defined as
+
+\begin{align} \label{eq:corrdim}
+  CD = \lim_{r \rightarrow 0} \frac{\log C(r)}{r}.
+\end{align}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/corrdim.png} }
+  \caption{Computation of the correlation dimension \cite{stam2005}. TODO: Add description.}
+\label{fig:corrdim}
+\end{figure}
+
+\section{Visual characterization of the dynamical system}
+\subsection{Phase space plot}
+\subsection{Poincare plot}
 \subsection{Recurrence plot}
 When presented with a task of finding regularities in seemingly chaotic data, one possible approach is analysing at least approximate repetitions of simple patterns, which can be further used for reconstruction of more complicated rules. Recurrence plot is a method of visualizing obtained state-space trajectory segments in relation to each other to achieve this goal. Furthermore, it can be used to test necessary conditions for validity of dynamical parameters derivable from a non-linear time series such as the information dimension, entropy, Lyapunov exponents, dimension spectrum, etc. The information contained in recurrence plots is not easily obtainable by other known methods. \cite{eckmann1987}
 
@@ -467,7 +494,7 @@ The essential drawback of recurrence plot is their size - it is quadratic in the
 
 (TODO: Cross-recurrence plots may be useful? Only between two series. Joint recurrence plots may be used to detect phase synchronization.)
 
-\section{Applications in disease diagnosis}
+\section{Applications in disease diagnosis}\label{sec:applications}
 Although non-linear dynamical analysis of EEG signal has been successfully applied to many psychological and psychiatric conditions, such as insomnia, schizophrenia, epilepsy, dementia, Alzheimer's disease, the number of studies applying methods of non-linear time series analysis for clinical depression diagnosis is relatively limited. \cite{rodriguez2015}
 
 It has been found that the EEG dynamics of depressed patients exhibit more predictability than those of non-depressed ones, with this indicator receding after treatment. \cite{nandrino1994} \cite{pezard1996}
@@ -648,16 +675,73 @@ Does it make sense trying them? I found a only a few successful implementations.
 \chapter{Experiments}
 
 \section{Dataset}
-Size of our dataset, conditions during trials, labels, etc.
+The EEG recordings were performed by and obtained from the Czech National Institute of Mental Health. The dataset comprises total of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58). Geriatric Depession Scale questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression). 
 
-\section{Method}
-Describing the experiments
+The experiment lasted 4 weeks. At the beginning of week 1, each subject's depression score was measured, their EEG signal was recorded, and, based on the measurement and patient's history, prescription of up to 4 drugs was made. After 4 weeks, depression score was remeasured and EEG signal recorded again.
+
+During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz). 99 subjects EEG signal was measured at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz.
+
+\section{Preprocessing}
+Recordings of insufficient duration were not used for further analysis. The threshold was selected to be 60 s, resulting in exclusion of 26 recordings from the total of 266.
+
+All signals were highpass filtered with 0.5 Hz frequency and lowpass filtered with 70 Hz frequency. Our hypothesis is that such filter should not affect signals of our interest, since neural oscillations are known to lie inside the unmodified frequency band.
+  
+Lastly, recordings of $f_s = 1000$ Hz were downsampled to $250$ Hz using the Fourier method.
+
+\section{Feature extraction}
+Based on multiple studies successfully applying non-linear dynamical analysis on the problem of psychological disorder diagnosis mentioned in Section \ref{sec:applications}, we decided to extract the following non-linear features, quantifying the amount chaos and complexity of the signal.
+
+In the first experiment, we used time-delay embedding (see Section \ref{sec:embedding}), resulting in 5 x 19 features for each measurement.  
+
+\subsection{Largest Lyapunov exponent}
+Largest Lyapunov exponent (LLE) was computed using the Rosenstein's algorithm \cite{Rosenstein1993}. This algorithm was found to be robust to noise and the choice of lag and embedding dimension.
+
+First, it reconstructs phase space trajectory using the method of delays described in Section \ref{sec:embedding}. The lag is selected as the value for which the autocorrelation function drops to below $1-1/e$ of its initial value. Then, for each point on the reconstructed trajectory $\textbf{s}_n$, a nearest neighbor $\textbf{s}_{\hat{n}}$ is found as
+\begin{align*}
+  d_n(0) = \min_{\hat{n} \neq n}{\norm{\textbf{s}_n - \textbf{s}_{\hat{n}}}}, 
+\end{align*}
+
+where, additionaly, the nearest neighbors have temporal separation greater then the reciprocal of the mean frequency of the power spectrum of the time series, so that they can be safely considered to be nearby initial conditions for different trajectories (this separation, however, is restricted to be at most $1/4$ of the time series length). The mean rate of separation between the nearest neighbors is then an unbiased estimator for the LLE (TODO: Find citation for this claim.)
+
+From the definition of the LLE \ref{eq:lyap}, the algorithm proceeds by assuming that each pair of nearest neighbors diverge approximately at the rate given by the LLE:
+
+\begin{align*}
+  d_n(i) \approx d_n(0)e^{\lambda_1 n \Delta t}. 
+\end{align*}
+
+By taking the logarithm of both sides,
+
+\begin{align*}
+  \ln d_n(i) \approx \ln d_n(0) + \lambda_1 n \Delta t, 
+\end{align*}
+
+we obtain a set of lines (one for each index $n$), whose slope is an approximation of the largest Lyapunov exponent. Hence, the value of $\lambda_1$ is approximated as the slope of least squares fitted line through the mean log divergence $\overline{d}$,
+
+\begin{align*}
+  \overline{d}(i) = \langle \ln d_n (i) \rangle.
+\end{align*}
+
+\subsection{Correlation dimension}
+The simplest version of the Grassberger-Procaccia algorithm was used to compute the correlation dimension. \cite{grassberger1983} The value of the correlation integral $C(r)$ from the definition \ref{eq:corrsum} is computed for multiple values of $r$ in range from $0.1*\sigma$ to $0.5*\sigma$, where $\sigma$ is the standard deviation of the time series, and a least squares straight line is plotted through the plot of $\ln C(r)$ against $\ln r$. Correlation dimension is approximated as the slope of the line.
+
+\subsection{Sample entropy}
+\subsection{Detrended fluctuation analysis}
+\subsection{Hurst exponent}
+
+\section{Unsupervised analysis of before / after treatment differences}
+As the first step of our analysis, we conducted an investigation of the differences in the non-linear measures computed from the signals obtained before and after treatment.
+
+To this goal, we started by simply plotting each measure's mean value over channels for the recording before and after administration of drugs for all patients (see Fig.). Moreover, we performed two-sided Kolmogorov-Smirnov test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same.
+
+We found that for each measure except correlation dimension, its average over channels, although differring between subjects, is remarkably stable for all patients accross measurements. This means that except for correlation dimension, information about any change between measurements was not caputered by the computed non-linear measures.
+
+Moreover, we found that for all measures, either for mean value or all channels, we cannot reject the hypothesis that the computed values are drawn from the same distribution. This is true even when patients responding and not responding to treatment are considered separately.
+
+Apart from computing the mean, principal component analysis was used to reduce the number of dimensions of the 19 dimensional feature vectors. By visually inspecting projections into 2, 3 (2/3D plot)  and 4 dimensions (a heatmap), we were unable to find any separation boundary between before and after group. \footnote{And neither for male / female, responding / non-responding, age < 40 / age > 50 groups, and in groups based on depression scores.}.
 
 \section{Results}
 
-
 \chapter*{Conclusion}
-
 
 \bibliographystyle{plain}
 \bibliography{refs}
