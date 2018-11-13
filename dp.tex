@@ -731,14 +731,55 @@ The simplest version of the Grassberger-Procaccia algorithm was used to compute 
 \section{Unsupervised analysis of before / after treatment differences}
 As the first step of our analysis, we conducted an investigation of the differences in the non-linear measures computed from the signals obtained before and after treatment.
 
-To this goal, we started by simply plotting each measure's mean value over channels for the recording before and after administration of drugs for all patients (see Fig.). Moreover, we performed two-sided Kolmogorov-Smirnov test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same.
+To this goal, we started by simply plotting each measure's mean value over channels for the recording before and after administration of drugs for all patients. Moreover, we performed two-sided Kolmogorov-Smirnov test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same.
 
-We found that for each measure except correlation dimension, its average over channels, although differring between subjects, is remarkably stable for all patients accross measurements. This means that except for correlation dimension, information about any change between measurements was not caputered by the computed non-linear measures.
+We found that for each measure except correlation dimension, its average over channels, although differring between subjects, is remarkably stable for all patients accross measurements. This means that except for correlation dimension, information about any change between measurements was not caputered by the computed non-linear measures (see Figure \ref{fig:lyap_all}, \ref{fig:corrdim_all}).
 
 Moreover, we found that for all measures, either for mean value or all channels, we cannot reject the hypothesis that the computed values are drawn from the same distribution. This is true even when patients responding and not responding to treatment are considered separately.
 
-Apart from computing the mean, principal component analysis was used to reduce the number of dimensions of the 19 dimensional feature vectors. By visually inspecting projections into 2, 3 (2/3D plot)  and 4 dimensions (a heatmap), we were unable to find any separation boundary between before and after group. \footnote{And neither for male / female, responding / non-responding, age < 40 / age > 50 groups, and in groups based on depression scores.}.
+Apart from computing the mean, principal component analysis was used to reduce the number of dimensions of the 19 dimensional feature vectors. By visually inspecting projections into 2, 3 (2/3D plot)  and 4 dimensions (a heatmap), we were unable to find any separation boundary between before and after group. \footnote{And neither for male / female, responding / non-responding, age < 40 / age > 50 groups, and in groups based on depression scores.} (see Figure \ref{fig:pca2d}, \ref{fig:pca3d}, \ref{fig:heatmap}).
 
+Also, by looking at the subjects above 90th percentile of euclidean distance between before and after vectors in the projected space, we were unable to find any regularity. Subjects in those groups seem to be drawn randomly from the dataset.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/lyap_all.png} }
+  \caption{}
+\label{fig:lyap_all}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/corrdim_all.png} }
+  \caption{}
+\label{fig:corrdim_all}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/pca2d.png} }
+  \caption{}
+\label{fig:pca2d}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/pca3d.png} }
+  \caption{}
+\label{fig:pca3d}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.4\textwidth]{Images/heatmap.png} }
+  \caption{}
+\label{fig:heatmap}
+\end{figure}
 \section{Results}
 
 \chapter*{Conclusion}
