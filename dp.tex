@@ -294,10 +294,16 @@ In \textbf{Chapter 3}, we describe the methods proposed, experiments performed, 
 % \addcontentsline{toc}{chapter}{Introduction}
 
 \chapter{Non-linear time series analysis}
+The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The most simple of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description.
+
+Those examples represent two classes of processes existent before the rise of non-linear dynamics: \cite{andreas2000}
+\begin{description}
+  \item[Deterministic process]: periodic (or quasi-periodic), fully describable by its Fourier spectrum.
+  \item[Stochasitc process]: influenced by forces unpredictable under all circumstances.
+\end{description}
+Non-linear dynamical analysis studies a third class of processes, which are irregular, non-periodic, yet still deterministic. Every non-periodic, deterministic process is non-linear (bot not necessarily the other way around). Existence of these processes was known already in mid-19th century to J. C. Maxwell, but the field began to be developed only with the rising feasibility of numerical simulations, peaking in 1980s. \cite{andreas2000}
 
 \section{EEG signal}
-Nature, processes in the brain, way of measuring, limitations, complications
-
 Electroencephalography (EEG) is a noninvasive method of measuring fluctuations of electric potentials near the skull caused by synchronized firing of neurons in the upper cortical layers. Electroencephalogram is a record of these fluctuations measured over a period of time. \cite{nunez2006}
 
 Although EEG has significantly lower spatial resolution in comparison with other diagnostic techniques such as functional magnetic resonance sampling (fMRI) and magnetoencephalography (MEG) \cite{srinivasan1999} and enables measuring only neural activity near the cortical surface, as a depression diagnostic tool, it has numerous benefits. Importantly, its significantly lower costs \cite{vespa1999} \cite{hamalainen1993}, high portability, and ease of operation imply increased availability to the patients \cite{schultz2012}. Moreover, it is perfectly noninvasive, which means less complications such as claustrophopia or anxiety \cite{murphy1997}.
@@ -330,44 +336,60 @@ Moreover, due to the phenomenon of neural oscillations, patterns may appear in m
 
 Patterns of oscillatory activity in various frequency band have been linked to various mental states \cite{canolty2006} \cite{buzsaki2004} and diseases such as epilepsy \cite{shusterman2008}, tremor \cite{mcauley2000}, Parkinson's disease and depression \cite{llinas1999}. Many of the diseases, including depression, share common oscillatory patterns known as thalamocortical dysrythmia, characterized by descrease in normal resting-state $\alpha$ (8-12 Hz) activity slowing down to $\theta$ (4-8 Hz) frequencies, accompanied by increase in $\beta$ and $\gamma$ (25-50 Hz) activity. \cite{vanneste2018}
 
-\section{Theory}
-Modern neuroscientific work suggests that the most plausible research target for explaining the brain dynamics are the assemblies of coupled and synchronously active neurons, and since majority of those assemblies are describable by non-linear differential equations, it is common to apply principles derived from nonlinear dynamics to characterize these neuronal systems.\cite{kaplan2005} In this section, we will describe some of those principles.
+\section{Limitations in application to EEG}
 
-\begin{dfn}[\cite{kantz2004}]
-  Let $\mathbf{x} \in \RR^m$ be an $m \in \NN$ dimensional state space vector dependent on time. A deterministic \textbf{dynamical system} is described by a set of $m$ first-order differential equations
+Some authors suggests that the since most plausible research target for explaining the brain dynamics are the assemblies of coupled and synchronously active neurons, and since majority of those assemblies are describable by non-linear differential equations, principles derived from nonlinear dynamics are applicable to characterization of these neuronal systems. \cite{kaplan2005} 
+
+The approach of estimating a finite embedding dimension, however, has been doubted by some of the most prominent figures in the field of non-linear dynamical analysis, such as the originators of Grassberger-Procaccia algorithm. There is very little evidence for the seemingly improbable hypothesis that such complex system with many extrinsic influences and interactions, such as the brain, would exhibit a level of comlexity comparable to e.g. a Lorenz system. Presumably, the the observed estimates of low dimension are due to artifacts or limited data size. \cite{grassberger1986climatic} \cite{procaccia1988complex}. However, as we will see in Section \ref{sec:applications}, the techniqes derived from these theories still provide some useful information and are successfully applied in many practical situations. Therefore, it seems to be the case that indeed, brain dynamics are much more complex than we are forced to assume based on the theory, but non-linear dynamical analysis still manages to capture some of its important aspects.
+
+\section{Dynamical systems}
+
+\begin{dfn}[\cite{andreas2000}]
+  Assume that state of a system can be fully described by a finite set of $m$ variabes, such that each state corresponds to a point $\mathbf{x} \in M$, where $M$ is a $m$-dimensional differentiable manifold. Then we will call $M$ a (true) \textbf{state space} or, equivalently, a (true) \textbf{phase space}, and $m$ its (true) \textbf{dimension}.
+\end{dfn}
+
+Although in this study, we will only consider Euclidean $M$, the true state space is needs not necessarily be Euclidean. For example, if some of the state variables are angles, the state space exhibits toroidal topology. However, any topological manifold is locally Euclidean \cite{lee2010introduction} and, since, in EEG signal analysis both $M$ and $m$ are unknown, we have no alternative but to work in Euclidean $M$.
+
+\begin{dfn}[\cite{andreas2000}]
+  Let $\mathbf{x} \in \RR^m$ be an $m \in \NN$ dimensional state (phase) space vector dependent on time, and $\mathbf{F}$ a smooth vector field in $\RR^m$. A \textbf{deterministic dynamical system}\footnote{In this work, we are going to assume that brain is a deterministic dynamical system, and that any stochastic component is small and does not change non-linear properties of the system. Thus, by the term dynamical system, we will always mean a deterministic dynamical system.} is described by a set of $m$ differential equations
   \begin{align}
-    \frac{d}{dt}\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t)), \qquad t \in \RR
+    \frac{d}{dt}\mathbf{x}(t) = \mathbf{F}(\mathbf{x}(t)), \qquad t \in \RR.
   \end{align}
 \end{dfn}
 
-In other words, a dynamical system is a model that determines the evolution of a system only given by the initial state, and current state is a function of the previous state. Hence, a total description of a dynamical system is given by the initial state and a set of equations. A non-linear dynamical system is a system where the differential equations describing its dynamics are non-linear. Unlike in a linear system, changes in the initial state of a non-dynamical system are allowed to have a non-linear relationship to the state space trajectory of the system. \cite{kaplan2005}
+In general, any system with temporally changing state is dynamic. A \emph{deterministic} dynamical system is describable by a model giving precise transition of a system from one state to another in time. This means that total description of system's evolution in its phase space (its \emph{trajectory}) is given by the initial state and a set of equations (if $\mathbf{F}$ satisfies certain reasonable properties). With \emph{stochastic} dynamical systems, such mapping is not possible, since these transitions are not given precisely.
 
-\subsection{Attractor}
+A non-linear dynamical system is a system where the differential equations describing its dynamics are non-linear. Unlike in a linear system, changes in the initial state of a non-dynamical system are allowed to have a non-linear relationship to the state space trajectory of the system. \cite{kaplan2005}
+
+It is important to note the obvious fact that in the case of EEG signal analysis, it is not possible to measure the true state of the system $\mathbf{x}(t)$. In fact, the observed variables are only a function of the true state of the system, $s(\mathbf{x}(t))$ for some (generally non-invertible) measurement function $s: \RR^m \rightarrow \RR^{m'}$, where $m' \ll m$. Morover, the time between subsequent measurements is limited by a sampling frequency and the values of the variables themselves are taken and stored with a limited precision.
+
+(TODO: Add a few examples (Lorenz, Rossler, Mackey-Glass). Create my own plots instead of reusing.)
+
+\section{Attractor}
+Depending on the properties of $\mathbf{F}$, there are several possibilities of how the system might evolve when as $t \rightarrow \inf$. In the following, we will focus on dissipative dynamical systems.
 \begin{dfn}[\cite{kantz2004}]
   A dynamical system is called dissipative, when it is the case that
   \begin{align}
-    E[\mathrm{div} \mathbf{f}] < 1
+    E[\mathrm{div} \mathbf{F}] < 0,
   \end{align}
+  where the expectation is taken over the state space $M$. In other words, average state space volume of a set of initial conditions of non-zero measure is contracted as the system evolves. (TODO: How precise is this statement? Is it equivalent to the equation?)
 \end{dfn}
 
-In other words, average space space volume (containing the initial state) is contracted as the system evolves.
-
-Dissipative dynamical system have the property that a set of initial states (of positive measure) will converge to a subspace of the overall state space. This subspace is a geometrical object called an \textbf{attractor}. Example of four basic attractors can be seen on Figure \ref{fig:attractors}.
+For these systems, after sufficient passage of time, all future states will continue evolving on a bounded, time-invariant subset of $M$. This subset is a geometrical object called an \textbf{attractor}. Example of four basic attractors can be seen on Figure \ref{fig:attractors}.
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{Images/attractors.png} }
   \caption{Visualization of four common attractor types (units are arbitrary). Left to right, top to bottom:
-    \emph{Point attractor} is the only type of attractor of linear deterministic dissipative systems.
-    \emph{Limit cycle} corresponds to a peridic system.
-    \emph{Torus attractor} corresponds to a quasi-periodic system, resulting (in this example) from a superposition of two periodic oscillations.
-    \emph{Chaotic} (strange) \emph{attractor}, characterized by strong dependence on the original conditions. (\cite{stam2005})}
+    \emph{Point attractor} is the only type of attractor of linear deterministic dissipative systems. It consist of a single final state to which all points from the corresponding region of attraction evolve to.
+    \emph{Limit cycle} corresponds to a periodic dynamical system. It is formed by set of states visited periodically, consituting a trajectory through the state space.
+    \emph{Torus attractor} corresponds to a quasi-periodic dynamical system, resulting (in this example) from a superposition of two periodic oscillations.
+    \emph{Chaotic} (strange) \emph{attractor}, characteristic of dynamical systems with extending (instead of shrinking) volumes in \emph{some} directions. Corresponding dynamical system may appear stochastic, yet still is completely deterministic. \cite{andreas2000} (\cite{stam2005})}
 \label{fig:attractors}
 \end{figure}
 
-Since most physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are complex, and exhibit what is known as \emph{fractal geometry} (an example of a self-similar attractor is shown on Figure \ref{fig:self-similarity}).
-. For our purposes, this means they can be characterized as having quantifiable self-similarity.\footnote{Cantor set being a canonical example of self-similarity.} However, the following definition will be useful:
+Since most physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are relatively complex, characteristic of dynamical systems with extending volumes in some directions. This property results fast divergence of two initial states, one of which has nonzero component in the direction of growth, i.e. sensitive dependence on the initial conditions. However, since atractors are bounded, the divergence eventually stops and the two trajectories fold together. This continuous expansion and folding may create an attractor with a \emph{fractal structure} (an example of a self-similar attractor is shown on Figure \ref{fig:self-similarity}). \cite{andreas2000} For our purposes it is sufficient to say that this means that these attractors can be characterized as having (quantifiable) self-similarity.\footnote{Cantor set being a canonical example of self-similarity.} However, the following definition will be useful:
 
 \begin{dfn}[\cite{falconer2004}]
   Let $F$ be any non-empty bounded subset of $\RR^n$, and let $N_\epsilon(F)$ be the smallest number of sets of diameter at most $\epsilon$ which can cover $F$. Then, the \textbf{box-counting dimension} (also known as Minkowski–Bouligand dimension) is defined as
@@ -387,7 +409,7 @@ Intuitively, the number of mesh cubes of side $\epsilon$ intersecting $F$ gives 
 \label{fig:self-similarity}
 \end{figure}
 
-\subsection{Embedding} \label{sec:embedding}
+\section{Embedding} \label{sec:embedding}
 One possible approach to non-linear time series analysis consists of the following steps: 
 \begin{enumerate}
   \item reconstruction of the dynamics of given system from recorded data,
@@ -436,7 +458,7 @@ There are multiple methods of choosing the parameters. We will start with a desc
 
 (TODO: Mention spatial embedding. Is it worth using for EEG analysis? Pro: it does feature extraction for us. Con: we may lose valuable information.)
 
-\subsection{False nearest neighbors}
+\section{False nearest neighbors}
 The false nearest neighbors algorithm is based on simple topological insight. If the embedding dimension $m$ is too small, some points that are close to each other in dimension $m+1$ (see Fig. \cite{}). Neighboring points satisfying this property are called \emph{false neighbors}.
 
 (TODO: Mutual information algorithm for $\tau$)
