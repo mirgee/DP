@@ -449,15 +449,17 @@ There are two common approaches to the problem of state space reconstruction:
   \item [Spatial embedding]: each time series corresponds to a coordinate of the state space vector.
 \end{description}
 
-Time delay embedding was first introduced into the field of non-linear dynamical system analysis by N. H. Packard in 1980 (although it was already being used in different fields in 1950s \cite{andreas2000}). Studying the Rossler system, Packard noticed that by sampling a single coordinate, he was able to obtain a faithful phase-space representation of the original system by simply using a value of a coordinate with its values at two previous times. \cite{packard1980} Indeed, since only a single sequence of scalar measurements is available, our only option for constructing the vectors $\mathbf{s}_n$ is by using values recorded at multiple different times. Packard's technique, however, can be useful in general.
+Int the following text, we will focus on the first one.
+
+It had been already known since 1936, that every $n$-dimensional differentiable manifold can be embedded in $\RR^{2n+1}$, and that the set of such embeddings is open and dense in the space of generic smooth maps, which is known as Whitney's theorem. \cite{thm:whitney} \footnote{The second part of the theorem is a consequence of the fact that two hyperplanes with dimensions $d_1$ and $d_2$ in $m$-dimensional space are likely to intersect if $d_1 + d_2 \geq m$.}) In other words, $2n+1$ independent measurements of a $n$-dimensional system can be uniquely mapped to a $2n+1$ dimensional space, hence each such $2n+1$ dimensional vector identifies identifies state of the system perfecly, this reconstructing the true state space.
+
+Time delay embedding is a technique of state space reconstruction, which achieves the same goal, but with a single measured quantity. Itwas first introduced into the field of non-linear dynamical system analysis by N. H. Packard in 1980 (although it was already being used in different fields in 1950s \cite{andreas2000}). Studying the Rossler system, Packard noticed that by sampling a single coordinate, he was able to obtain a faithful phase-space representation of the original system by simply using a value of a coordinate with its values at two previous times. \cite{packard1980} Indeed, since only a single sequence of scalar measurements is available, our only option for constructing the vectors $\mathbf{s}_n$ is by using values recorded at multiple different times. Packard's technique, however, can be useful in general. 
 
 In particular, for each time $t$, we define an embedding window $\tau_w$, and use measurements obtained at times $t'$ for $t-\tau_w \leq t' \leq t$. To this goal, we use $m$ measurements, $\tau$ elements apart. Here, $\tau$ is called \emph{lag} or \emph{time delay}, and is measured in number of samples\footnote{Some authors use the time units $\tau \Delta t$, where $\Delta t = 1/f_s$ is the sampling period.}. Using the notation of \ref{eq:measurements}, the time delay reconstruction is then formed by the following vectors:
 \begin{align}
   \textbf{s}_n = (s_{n-(m-1)\tau}, s_{n-(m-2)\tau},\dots,s_{n-\tau}, s_n) \, ,
 \end{align}
 for $n > (m-1)\tau$. \cite{kantz2004} 
-
-(TODO: Explain intuitively why this might work. Good: \cite{casdagli1991state})
 
 A year after Packard's discovery, in \cite{takens1981}, F. Takens has proved theoretically that the attractor reconstructed using this method may have the same dynamical properties (entropy, dimension, Lyapunov spectrum) as attractor of the original system under some conditions. Takens delay embedding theorem is an important result of non-linear time series analysis and can be stated as follows:
 \begin{thm}[\cite{takens1981}] \label{thm:takens}
@@ -468,7 +470,9 @@ A year after Packard's discovery, in \cite{takens1981}, F. Takens has proved the
   for which $\Phi$ is an embedding is an open and dense set in the space of maps satisfying the assumptions above.
 \end{thm}
 
-This theorem, although of theoretical importance, is not necessarily useful in practice, since even dense sets can have measure zero. Moreover, it is restricted to smooth manifolds. An improvement came ten years later, when T. Sauer both generalized Takens' result as follows (in a simplified form):
+This idea has a simile in the existence theorems in the theory of differential equations, which say that a unique solution exists for each $x(t), \dot{x}(t), \ddot{x}(t), \dots$. For example, in many body dynamics under Newtonian gravitation, knowledge of a body's position and momentum is sufficient to uniquely determine its future dynamics. \cite{ScholarpediaReconstruction}
+
+Taken's theorem, although of theoretical importance, is not necessarily useful in practice, since even dense sets can have measure zero. Moreover, it is restricted to smooth manifolds. An improvement came ten years later, when T. Sauer both generalized Takens' result as follows (in a simplified form):
 \begin{thm}[Sauer, \cite{sauer1991}] \label{thm:sauer}
   Let $A$ be a compact fractal with box-counting dimension $d_A$, and let $A$ be a subset of a $m$-dimensional manifold. Then
   \begin{align*}
@@ -478,9 +482,7 @@ This theorem, although of theoretical importance, is not necessarily useful in p
 
 In conclusion, Theorem \ref{thm:takens} and Theorem \ref{thm:sauer} together ensure that when $m$ is chosen such that $m > d_A$i (which may be a considerable reduction in dimension compared to $m \geq 2d+1$), then the vector $\textbf{s}_n$ is a true embedding of the underlying attractor for almost any $\tau$ (note only sufficiency of the resulti - $\textbf{s}_n$ may be an embedding even for smaller $m$).
 
-A fascinating consequence of Theorem \ref{thm:sauer} when applied to a sequence of measurements recorded from a physical system is that a successfully reconstructed attractor does not describe the time series, but the system itself. In the words of Theiler: ``''
-
-(Earlier, in 1936, Whitney showed that every $n$-dimensional differentiable manifold can be embedded in $\RR^{2n+1}$, and that the set of such embeddings is open and dense in the space of smooth maps. \cite{thm:whitney} \footnote{The second part of the theorem is a consequence of the fact that two hyperplanes with dimensions $d_1$ and $d_2$ in $m$-dimensional space are likely to intersect if $d_1 + d_2 \geq m$.})
+A fascinating consequence of Theorem \ref{thm:sauer} when applied to a sequence of measurements recorded from a physical system is that a successfully reconstructed attractor does not describe the time series, but the system itself. In the words of Theiler: ``If one believes that the brain (say) is a deterministic system, then it may be possible to study the brain by looking at the electrical output of a single neuron. This example is an ambitious one, but the point is that the delay-time embedding makes it possible for one to analyze the self-organizing behavior of a complex dynamical system without knowing the full state at any given time''. \cite{theiler1990estimating}
 
 \subsection{The effects of noise}
 Although these theoretical results are important to know about, they all make practically unrealistic assumptions, such as infinite amount of data and infinite measurement precisions, and absence of noise. Moreover, practical applications present further challanges, such as presence of noise.
@@ -488,20 +490,19 @@ Although these theoretical results are important to know about, they all make pr
 (TODO: Expand.)
 
 \subsection{The choice of time delay}
-(TODO: add result from \cite{Kantz1997} either here or to experiments section about rising entropy with higher $\tau$. Deterministic behavior can be observed only when $\tau_w$ is smaller than the time scale of the foldings naturally produced as result of time embedding.)
+A careful reader might have noted that the results of theorems in Section \ref{sec:method-of-delays} do not depend on the value of the delay $\tau$. Embeddings with the same value of the embedding dimension $m$, but different values of $\tau$ are theoretically equivalent. In practice, however, some theoretically sound time delay reconstructions may fail to be embeddings. Although some researchers propose that the only important parameter is the length of the embedding window $\tau_w = \tau (m-1)$ \cite{kugiumtzis1996state}, as we will see, the choice of time delay has effects independent of the choice of embedding dimension, and vice versa.
 
-(For highly chaotic systems with large Lyapunov exponents (see Section \ref{sec:lyap}) and large dimension, projection to a low dimensional time series causes explosion in the noise amplification. As a result, this imposes limits on short term predictablity and state space reconstruction may become impossible. Such systems should be treated as operationally stochastic. \cite{casdagli1991state})
-
-(NOTES: Picking the correct embedding parameters $\tau$ and $m$ is a huge field. For highly chaotic systems, autocorrelation decays fast \cite{kantz2004}. Lower bound for $\tau$ is $1 - \frac{\sigma_{\text{noise}}}{\sigma_{\text{signal}}}$.)
-A careful reader might have noted that the results of theorems in Section \ref{sec:method-of-delays} do not depend on the value of the delay $\tau$. Embeddings with the same value of the embedding dimension $m$, but different values of $\tau$ are theoretically equivalent. In practice, however, some theoretically sound time delay reconstructions may fail to be embeddings. For example, the embedding may fail to be a one-to-one map due to finite precision, or presence of noise in the data. Therefore, the proper choice of $\tau$ is of utmost importance. (Maybe partly due to its absence in the theoretical framework, no rigorous method of estimating $\tau$ exists. TODO: Before claiming this, read \cite{casdagli1991state} or their other papers.) Some researchers believe that the important parameter is the length of the embedding window $\tau_w = \tau (m-1)$.)
-
+For example:
 \begin{enumerate}
+  \item The embedding may fail to be a one-to-one map due to finite precision, or presence of noise in the data. \cite{andreas2000}
+  \item Highly chaotic systems with large Lyapunov exponents (see Section \ref{sec:lyap}) and large dimension, projection to a low dimensional time series causes explosion in the noise amplification. As a result, this imposes limits on short term predictablity and state space reconstruction may become impossible. Such systems should be treated as operationally stochastic. \cite{casdagli1991state}
+  \item It was shown that increasing $\tau$ leads to rise in entropy. \cite{Kantz1997}
+  \item Deterministic behavior can be observed only when $\tau_w$ is smaller than the time scale of the foldings naturally produced as result of time embedding.
   \item If the values of $\tau$ are \emph{too small} in comparison to the typical time scales of the series (measured e.g. by mean period), then the successive elements of reconstructed state space vectors become almost equal. This effect is often called \emph{redundance}. Since $s_t \approx s_{t + \tau}$, the reconstructed attractor will concentrate along the main diagonal (see Fig. ). Moreover, in this case, the effect of noise is amplified. \cite{casdagli1991state}
-
-  \item If the values of $\tau$ are \emph{too large}, the successive elements in the reconstructed vector are almost independent. This effect, called \emph{irrelevance} or \emph{overfolding} is even magnified if the underlying attractor is chaotic, since deterministic correlations between states are lost even at very small time scales, i.e. even measurements performed at time $t$ and $t + \tau$ for very small $\tau$ may be already unrelated. The reconstructed attractor will form a seemingly random clound in $\RR^m$ - thus the reconstructed attractor may appear complex, even if the true attractor is simple.
+  \item If the values of $\tau$ are \emph{too large}, the successive elements in the reconstructed vector are almost independent. This effect, called \emph{irrelevance} or \emph{overfolding} is even magnified if the underlying attractor is chaotic, since deterministic correlations between states are lost even at very small time scales, i.e. even measurements performed at time $t$ and $t + \tau$ for very small $\tau$ may be already unrelated. The reconstructed attractor will form a seemingly random clound in $\RR^m$ - thus the reconstructed attractor may appear complex, even if the true attractor is simple. 
 \end{enumerate}
 
-Hence, picking the proper value of $\tau$ is a balancing act between redundance and irrelevance.
+In summary, picking the proper value of $\tau$ is a balancing act between redundance and irrelevance. It is important to minimize excessive foldings, and extreme closeness between adjacent points on the trajectory (ideally, the distances between points is same in the reconstructed as in the true space).
 
 (TODO: Add some figures.)
 
@@ -516,6 +517,8 @@ From the above, we know that for the optimal choice of time delay, we may want t
 
 Computing the autocorrelation function is not only useful for examining the stationarity of the time series, but it also gives a geometrical insight into the shape of the attractor: if we approximate the cloud of reconstructed vectors $\mathbf{s}_n \in \RR^m$ by an ellipsoid, lengths of its semi-axis are given by the square root of the eigenvalues of its auto-covariance matrix. In two dimensions, zero of the covariance matrix corresponds to those eigenvalues being equal, i.e. $s_t$ and $s_{t-\tau}$ being completely uncorrelated. \cite{kantz2004} An obvious objection is that correlation between $s_t$ and $s_{t-\tau}$ says nothing about correlation between $s_t$ and $s_{t-2\tau}$, etc. Thus, this method is generally useful only for two-dimensional reconstructions.
 
+Autocorrelation also provides a lower bound for $\tau$ in the following sense. If the data is noisy, vectors formed by time delay embedding procedure are practically meaningless, if the variation of the signal in the time covered in the time window $\tau_w = (m-1)\tau$ is less the the variation of noise. This means that $\tau$ should be selected such that $A(\tau) > A(0) - \sigma^2_{\text{noise}}/\sigma^2_{\text{signal}}$. \cite{kantz2004}
+
 \subsubsection{Mutual information}
 Another commonly used method is to use the first minimum of the \emph{time delayed mutual information}. \cite{fraser1986independent} 
 
@@ -526,23 +529,59 @@ Another commonly used method is to use the first minimum of the \emph{time delay
   \end{align*}
 \end{dfn}
 
-Although this approach yields coordinates independent in a more general sense than simple linear independence provided by the autocorrelation function, the same criticism applies: minimum dependence between $s_t$ and $s_{t-\tau}$ says nothing about dependencies between other coordinates. Again, using this method is justifiable only for two-dimensional reconstructions. However, delayed mutual information has been generalized for multiple dimensions by its proponent A. M. Fraser \cite{fraser1989reconstructing} using multidimensional distributions into a concept he called \emph{redundancy}.
+Although this approach yields coordinates independent in a more general sense than simple linear independence provided by the autocorrelation function, the same criticism applies: minimum dependence between $s_t$ and $s_{t-\tau}$ says nothing about dependencies between other coordinates. Again, using this method is justifiable only for two-dimensional reconstructions. However, delayed mutual information has been generalized for multiple dimensions by its proponent A. M. Fraser using multidimensional distributions into a concept he called \emph{redundancy}, which basically measures the degree to which the reconstructed vectors accumulate around the bisectrix of the embedding space. \cite{fraser1989reconstructing} 
 
 Another criticism of delayed mutual information that some systems exhibit slowly decaying mutual information which has no minima. \cite{martinerie1992mutual} 
 
-Moreover, both approaches described above address the issue of irrelevance, but not that of redundance. (This leads some authors to suggest another criterion to minimisation of mutual information. TODO: Should I talk about this?)
+Moreover, both approaches described above address the issue of irrelevance, but not that of redundance. In fact, based mostly on empirical, rather than the most time delay estimation techniques optimize for the following criteria \footnote{However, additional criteria may arise depending on the particular application.}: \cite{kugiumtzis1996state} 
+\begin{enumerate}
+  \item The reconstructed attractor must be expanded from the diagonal.
+  \item The components of the reconstructed vector $\mathbf{s}_n$ must be uncorrelated.
+\end{enumerate}
 
-(TODO: Talk about criticisms. Other methods. How some people try to make the attractor as wide away from the diagonals as possible. Where have I seen it? The winow proponent paper.)
+Those criteria are noticably similar, and bias towards larger estimates of $\tau$. This leads many authors to suggest more advanced techniques.
+
+(TODO: Maybe talk about techniques we didn't use, or we will yet try.)
 
 \subsection{The choice of embedding dimension}
 
-(Reconstruction via the method of delays requires proper choice of parameters $m$ and $\tau$. From Theorem \ref{thm:takens} follows that vectors $\{\mathbf{s}_n\}$ are difeomorphic to the attractor $A$ of the system $M$ if $m$ is sufficiently large, specifically $m > 2d_A$ (hower, the reconstruction may be an embedding even for smaller $m$). On the other hand, $m$ adds redundancy and makes successive alogorithms less efficient (TODO: Elaborate.). Moreover, the total time delay $m\tau$ is limited by the recording time.)
+\subsubsection{False nearest neighbors}
+Since the dynamics $\textbf{F}$ are assumed to be a \emph{smooth} vector field and the attractor $A$ is a \emph{compact} set in the phase space, its members acquire near neighbors, which should be subject to similar evolution. Therefore, these neighbors should remain close to each other after a short interval of time (even though chaos may introduce exponential divergence between them). This is a useful fact, which can be used, for example, to predict future evolution of a trajectory, or a computation of Lyapunov exponents. The \textbf{false nearest neighbors} algorithm uses them for estimation of embedding dimension. \cite{kennel1992determining}
 
-There are multiple methods of choosing the parameters. We will start with a description of an algorithm for determining the minimal sufficient embedding dimension $m$, known as \textbf{false nearest neighbors} algorithm.
+The main idea is to use the transition from dimension $m$ to dimension $m+1$ in the embedding procedure to differentiate between ``true'' and ``false'' neighbors. If the embedding dimension $m$ is too small, some members of $A$ that are close to each other may not be neighbors in the true state space, simply because the true state space is projected down to a smaller space (see Fig. \cite{}). These members are \emph{false neighbors}, all other neighbors are \emph{true}. When the attractor is fully unfolded into large enough dimension and is properly embedded, all neighbors will be true.
 
-The false nearest neighbors algorithm is based on simple topological insight. If the embedding dimension $m$ is too small, some points that are close to each other in dimension $m+1$ (see Fig. \cite{}). Neighboring points satisfying this property are called \emph{false neighbors}.
+Let use denote by $y^{(r)}(n)$ the $r$-th nearest neighbor of $y(n)$. Then, let $R_m^2(n,r)$ denote the square Euclidean distance between $y(n)$ and its neighbor:
+\begin{align*}
+  R_m^2(n,r) = \sum_{k=0}^{m-1}[ x(n+k\tau) - x^{(r)}(n+k\tau) ]^2
+\end{align*}
 
-(For very small $\tau$, there is a there is a typical underestimation of m. Such a $\tau$ forces the attractor to lie near the diagonal in Rm. Increasing m by one has little effect on the geometry of the attractor as it will still lie near the diagonal of Rm+1. All the points will apparently look as true neighbors leading to a wrong conclusion. \cite{kugiumtzis1996state})
+Then, any near neigbor for which the distance increase after transition from dimension $m$ to dimension $m+1$ is large in comparison to the initial distance is marked as false:
+\begin{align*}
+  \left[ \frac{R_m^2(n,r) - R_{m+1}^2(n,r)}{R_m^2(n,r)} \right]^{1/2} = \frac{ x(n+k\tau) - x^{(r)}(n+k\tau) }{R_m(n,r)} > R_{\text{tol}},
+\end{align*}
+where $R_{\text{tol}} \in \RR$ is some threashold. The $m$ for which the relative proportion of false neigbors to all neigbors reaches zero is the embedding dimension suggested by this criterion.
+
+This criterion, by itself, is not sufficient for determining proper embedding dimension. When applied to limited amount of white noise data, it erroneously suggested embedding the noise into a low dimensional attractor. This happens because that even though a state may be a nearest neigbor, it is not necessarily temporally close, and thus the assumptions above do not hold. The experiments performed by Kennel et al. show for such states it is usually $R_m(n,r) \approx R_A$, where $R_A$ is radius of the attractor. Furthermore, for increasing amount of data, the embedding dimension suggested by this criterion also increased - behavior not observed for relatively small dimensional attractors. \cite{kennel1992determining} 
+
+Therefore, Kennel et al. propose another criterion in addition to the one above. Since false neighbors which are near, but temporally distant, are usually stretched to the extremeties of the attractor with transition from $m$ to $m+1$, they suggest marking all near neighbors satisfying
+\begin{align*}
+  \frac{R_{m+1}(n,r)}{R_A} > A_{\text{tol}}
+\end{align*}
+as false, where $R_A$ may be computed as, for example 
+\begin{align*}
+  R_A = \frac{1}{N} \sum_{n=1}^{N} \left[ x(n) - \overline{x} \right]^2.
+\end{align*}
+
+Although this technique is commonly used, it is not without its drawbacks. An obvious point is that altough it is true that distance between neigbors in unfolded attractor should not grow with increase in dimension, the inverse is not necessarily true, i.e. stable distance between near neighbors with increase in dimension does not guarantee that these neighbors are true. 
+
+Moreover, in practice, it has been found that the results of this method are sensitive not only to the tolerance parameters $R_{\text{tol}}$ and $A_{\text{tol}}$, but also to the lag as well. \cite{kugiumtzis1996state} In this sense, they are somewhat arbitrary unless stable across different choices of $\tau$.
+
+Also, this method tends to underestimate $m$ for very small $\tau$. Small $\tau$ forces the attractor to lie near the diagonal in $\RR^m$ and further increasing $m$ imposes very little effect on the geometry of the attractor. In effect, most points will appear as true neighbors leading to a wrong conclusion. \cite{kugiumtzis1996state}
+
+Lastly, in presence of measurement noise, the proportion of false neigbors may increase after transition to a higher dimension, since even identical vectors will diverge. \cite{kantz2004}
+
+\subsubsection{Average nearest neighbors}
+(TODO: Average nearest neighbors.)
 
 \section{Non-linear measures}
 \subsection{Lyapunov exponents} \label{sec:lyap}
@@ -577,6 +616,14 @@ If $C(r)$ decreases according to the power law with $r \rightarrow 0$ such that 
   \caption{Computation of the correlation dimension \cite{stam2005}. TODO: Add description.}
 \label{fig:corrdim}
 \end{figure}
+
+\begin{align*}[\cite{theiler1990estimating}]
+  \text{bulk} \approx \text{size}^{\text{dimension}}
+\end{align*}
+
+\begin{align*}[\cite{theiler1990estimating}]
+  \text{dimension} = \lim_{\text{size} \rightarrow 0} \frac{\log \text{bulk}}{\log \text{size}}
+\end{align*} 
 
 \section{Visual characterization of the dynamical system}
 \subsection{Phase space plot}
