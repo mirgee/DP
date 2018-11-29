@@ -414,6 +414,9 @@ Intuitively, the number of mesh cubes of side $\epsilon$ intersecting $F$ gives 
 \label{fig:self-similarity}
 \end{figure}
 
+\subsection{Startionarity}
+(TODO: Define (non)stationarity.)
+
 \section{State space reconstruction} \label{sec:state-space-reconstruction}
 
 Broadly, one possible approach to non-linear time series analysis consists of the following steps: 
@@ -498,15 +501,21 @@ For example:
   \item Highly chaotic systems with large Lyapunov exponents (see Section \ref{sec:lyap}) and large dimension, projection to a low dimensional time series causes explosion in the noise amplification. As a result, this imposes limits on short term predictablity and state space reconstruction may become impossible. Such systems should be treated as operationally stochastic. \cite{casdagli1991state}
   \item It was shown that increasing $\tau$ leads to rise in entropy. \cite{Kantz1997}
   \item Deterministic behavior can be observed only when $\tau_w$ is smaller than the time scale of the foldings naturally produced as result of time embedding.
-  \item If the values of $\tau$ are \emph{too small} in comparison to the typical time scales of the series (measured e.g. by mean period), then the successive elements of reconstructed state space vectors become almost equal. This effect is often called \emph{redundance}. Since $s_t \approx s_{t + \tau}$, the reconstructed attractor will concentrate along the main diagonal (see Fig. ). Moreover, in this case, the effect of noise is amplified. \cite{casdagli1991state}
-  \item If the values of $\tau$ are \emph{too large}, the successive elements in the reconstructed vector are almost independent. This effect, called \emph{irrelevance} or \emph{overfolding} is even magnified if the underlying attractor is chaotic, since deterministic correlations between states are lost even at very small time scales, i.e. even measurements performed at time $t$ and $t + \tau$ for very small $\tau$ may be already unrelated. The reconstructed attractor will form a seemingly random clound in $\RR^m$ - thus the reconstructed attractor may appear complex, even if the true attractor is simple. 
+  \item If the values of $\tau$ are \emph{too small} in comparison to the typical time scales of the series (measured e.g. by mean period), then the successive elements of reconstructed state space vectors become almost equal. This effect is often called \emph{redundance}. Since $s_t \approx s_{t + \tau}$, the reconstructed attractor will concentrate along the main diagonal (see Fig. \ref{fig:delay}, left hand side). Moreover, in this case, the effect of noise is amplified. \cite{casdagli1991state}
+  \item If the values of $\tau$ are \emph{too large}, the successive elements in the reconstructed vector are almost independent. This effect, called \emph{irrelevance} or \emph{overfolding} is even magnified if the underlying attractor is chaotic, since deterministic correlations between states are lost even at very small time scales, i.e. even measurements performed at time $t$ and $t + \tau$ for very small $\tau$ may be already unrelated. The reconstructed attractor will form a seemingly random clound in $\RR^m$ - thus the reconstructed attractor may appear complex, even if the true attractor is simple (see Fig. \ref{fig:delay}, right hand side). 
 \end{enumerate}
 
 In summary, picking the proper value of $\tau$ is a balancing act between redundance and irrelevance. It is important to minimize excessive foldings, and extreme closeness between adjacent points on the trajectory (ideally, the distances between points is same in the reconstructed as in the true space).
 
-(TODO: Add some figures.)
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1\textwidth]{Images/delay.png} }
+  \caption{Time delay reconstructions of the Lorenz attractor for different values of $\tau$. Figure on the left hand side shows choice of small $\tau$ and represents the case of redundance - the states concentrate along the main diagonal. Figure in the middle shows a successful reconstruction (although not an embedding, for which $m \geq 3$ is required). Figure on the right hand side shows a choice of large $\tau$ and represents the case of irrelevance - the reconstruction lacks apparent structure. (\cite{andreas2000})}
+\label{fig:delay}
+\end{figure}
 
-\subsubsection{Autocorrelation}
+\subsubsection{Autocorrelation} \label{sec:acorr}
 From the above, we know that for the optimal choice of time delay, we may want to study correlation of the elements of the reconstructed vectors $\mathbf{s}_n$. Thus, a natural method of estimating the time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a certain value (such as $0$ or $A(0)/e$). \cite{albano1993reliability}
 \begin{dfn}[\cite{kantz2004}]
   \textbf{Autocorrelation} $A : \RR \rightarrow \RR$ for time delay $\tau$ is given by
@@ -584,16 +593,76 @@ Lastly, in presence of measurement noise, the proportion of false neigbors may i
 (TODO: Average nearest neighbors.)
 
 \section{Non-linear measures}
+In this section, we will study quantities invariant under embedding. These can be further use to characterize the dynamics of deterministic dynamical systems.
 \subsection{Lyapunov exponents} \label{sec:lyap}
-Lyapunov exponents can be used to quantify sensitivity of a dynamical system to initial conditions. Consider a small sphere of similar initial conditions in the phase space of the attractor. As the the system evolves, this sphere expands at exponentially in all the $m$ directions at rates given by the spectrum of Lyapunov exponents. Hence, $m$ dimensional system has exactly $m$ Lyapunov exponents and the average rate of separation between two points in the phase space with similar initial conditions can be characterized by the largest Lyapunov exponent. A sigle positive exponents is a sufficient indication of chaos. 
+The characteristic property of chaotic systems is their sensitivity to initial conditions - similar causes need not have similar effects. Consequently, even small uncertainty in the current state of the system (due to, at best, with limited storage space) results in virtual impossibility of predicting future state of the sytem more than a short amount of time into the future, since uncertainty in the initial state is expanded at exponential rate with passage of time by the chaotic dynamics for the predicted future states (see Fig. ).
 
-In order to compute entire Lyapunov spectrum, it is necessary to measure the rate of separation along the appropriate Lyapunov directions. This requirement, however, is unnecessary for computation of only the Largest lyapunov exponent, as its direction dominates growth. Hence, the largest Lyapunov exponent $\lambda_1$ can be defined as
+Lyapunov exponents can be used to quantify this sensitivity. Consider a small sphere of initial conditions $B_r(\mathbf{x})$ for a state $\mathbf{x}$ in the phase space, $r$ infinitesimal, and $\mathbf{x}_n \in B_r(\mathbf{x})$. To study the evolution of states in this ball,  we can use a linear approximation of $\mathbf{F}$. Let us assume, for simplicity, that $\mathbf{x}_{n+1} = \mathbf{F}(\mathbf{x}_n)$. Then for infinitesimal divergences $\delta \mathbf{x}_n$, $\delta \mathbf{x}_{n+1}$, we have
+\begin{align*}
+  \delta \mathbf{x}_{n+1} = T^{(n)} \delta \mathbf{x}_n,
+\end{align*}
+for a tangent map $T^{(n)}$, where
+\begin{align*}
+  (T^{(n)})_{ik} = \frac{\partial F_i(\mathbf{x}_n)}{\partial x_{n+k}}.
+\end{align*}
 
-\begin{align}\label{eq:lyap}
-  d(t) = C e^{\lambda_1 t}, 
+Product of these tangent maps for subsequent states along a trajectory can be written as a product of two rotations and a diagonal matrix:
+\begin{align*}
+  \prod_{n=1}^{N} T^{(n)} = R_d T_{diag} R_b.
+\end{align*}
+
+Then, the Lyapunov exponents can be defined as \cite{grassberger1991nonlinear}
+\begin{align*}
+  \lambda_i = \lim_{n \rightarrow \infty} \frac{1}{N} \log (T_{diag})_{ii}.
+\end{align*}
+
+In other words, as the system evolves, $B_r(\mathbf{x})$ expands (or contracts) exponentially in $m$ directions defining semiaxes of a sphere, where length of each semiaxis corresponds to the rate of expansion (or contraction) in the corresponding direction. The average lengths of these semiaxis for $\mathbf{x}$ over the entire state space are exactly Lyapunov exponents. Hence, $m$ dimensional system has exactly $m$ Lyapunov exponents, collectively called its \emph{Lyapunov spectrum}.
+
+Computation of the Lyapunov spectrum for analyticial given $\mathbf{F}$ is straightforward using the definition above. But for dynamics given implicitly in a time series is difficult. It is commonly agreed that estimating Lyapunov exponents is even more difficult than esimating correlation dimension \cite{andreas2000}, although they have been successfully employed in EEG analysis. \cite{roschke1995, hosseinifard2013, stam2005} It has been claimed by P. Grassberger et al. that any application of these measures to physical systems should be interpreted with caution, mainly because all physical measurements are corrupted by noise, and reliable separation of signal is not always possible. \cite{grassberger1991nonlinear} They suggest that when emplying these techniques, the goal should not be to estabilish to strongest form of determinism, but to use them to ask whether determinism can be ruled out at all.
+
+Since the direction of the largest Lyapunov exponent dominates growth, we can say that the average rate of separation between two points in the phase space with similar initial conditions can be characterized by the largest Lyapunov exponent. As a consequence, it is unnecessary to compute the entire Lyapunov spectrum - which would require identifying appropriate Lyapunov directions - if our goal is to find a global property of the system characterizing the degree of average instability and unpredictability. It is sufficient to measure the average rate of separation. \cite{Rosenstein1993} 
+
+Hence, let us define $\norm {\mathbf{s}_{n_1} - \mathbf{s}_{n_2}} = d(0) \ll 1$ as an initial distance between two nearby points in the state space, and $d(i) = \norm { \mathbf{s}_{n_1 + i} - \mathbf{s}_{n_2 + i}}$. Then, the largest Lyapunov exponent $\lambda_1$ can be approximated as
+\begin{align} \label{eq:lyap}
+  d(i) = d(0) e^{\lambda_1 (i \Delta t)}, \quad d(i) \ll 1, \quad i \rightarrow \infty, \quad d(0) \rightarrow 0,
 \end{align}
+where $\Delta t$ is sampling time of the time series.  
 
-where $d$ is a function of the average divergence, and $C$ is a factor normalizing for the initial separation.
+The Lyapunov exponents carry the units of an inverse time - $1/\lambda_1$ gives a typical time scale for the divergence or convergence of nearby trajectories. \cite{kantz2004} Equivalently, $1/\lambda_1$ is (on average) an upper bound on predictability in the system. \cite{andreas2000} Also equivalently, they also can be seen as quantification of the degree of chaos in the system; a sigle positive exponents is a sufficient indication of presence of chaos. \cite{Rosenstein1993}
+
+(TODO: Say what different values of $\lambda_1$ say about the system.)
+
+In the following, we will describe \emph{Rosenstein's algorithm} for computation of the largest Lyapunov exponent. \cite{Rosenstein1993} This algorithm was found to be relatively robust to noise, values of the embedding parameters and limited amount of data.
+
+First, state space is reconstructed using time delay embedding (see Section \ref{sec:embedding}). The suggested method of time delay selection is the autocorrelation method (see Section \ref{sec:acorr}).
+
+For each point on the trajectory $\mathbf{s}_n$, the algorithm locates the nearest neighbor $\mathbf{s}_{\hat{n}}$, such that their distance in the embedded space is minimized:
+\begin{align*}
+  d_n(0) = \min_{n \neq \hat{n}} \norm { \mathbf{s}_n - \mathbf{s}_{\hat{n}} }.
+\end{align*}
+
+As an approximation, we want to assume $\mathbf{s}_n$ and $\mathbf{s}_{\hat{n}}$ to be nearby initial conditions, but at the same time, we know they lie on the same trajectory. Hence, we will impose a condition on their temporal separation:
+\begin{align*}
+  \frac{1}{4} \text{ time series length} > \left| n - \hat{n} \right| > \text{mean period of the time series}.
+\end{align*}
+
+Then, assuming the $n$-th pair of nearest neighbors diverge exponentially at a rate given by the largest Lyapunov exponent, we have
+\begin{align*}
+  d_n(i) \approx d_n(0) e^{\lambda_1(i \Delta t)}.
+\end{align*}
+
+By taking logarithm of both sides, we obtain
+
+\begin{align*}
+  \ln d_n(i) \approx \ln d_n(0) + \lambda_1 (i \Delta t).
+\end{align*}
+
+This represents a set of lines, one for each point on the reconstructed trajectory, each with a slope roughly proportional to $\lambda_1$. So, the algorithm approximates the largest Lyapunov exponent by least squares fit to the average line
+\begin{align*}
+  y(i) = \frac{1}{\Delta t} \langle \ln d_n(i) \rangle,
+\end{align*}
+
+where the average $\langle \cdot \rangle$ is over $n$. Note that the sampling period $\Delta t$ plays no role - one can decide to set $\Delta t = 1$ and work with units of time series indeces instead of seconds interchangeably. Relatedly, we can even rescale or shift the data, since Lyapunov exponents are invariant under any smooth invertible map.
 
 \subsection{Correlation dimension}
 Correlation dimension is a characteristic measure which describes complexity of the geometry of chaotic attractors.
@@ -853,7 +922,7 @@ First, it reconstructs phase space trajectory using the method of delays describ
 
 where, additionaly, the nearest neighbors have temporal separation greater then the reciprocal of the mean frequency of the power spectrum of the time series, so that they can be safely considered to be nearby initial conditions for different trajectories (this separation, however, is restricted to be at most $1/4$ of the time series length). The mean rate of separation between the nearest neighbors is then an unbiased estimator for the LLE (TODO: Find citation for this claim.)
 
-From the definition of the LLE \ref{eq:lyap}, the algorithm proceeds by assuming that each pair of nearest neighbors diverge approximately at the rate given by the LLE:
+From the definition of the LLE, the algorithm proceeds by assuming that each pair of nearest neighbors diverge approximately at the rate given by the LLE:
 
 \begin{align*}
   d_n(i) \approx d_n(0)e^{\lambda_1 n \Delta t}. 
