@@ -370,7 +370,7 @@ It is important to note the obvious fact that in the case of EEG signal analysis
 
 (TODO: Add a few examples (Lorenz, Rossler, Mackey-Glass). Create my own plots instead of reusing.)
 
-\section{Attractor}
+\section{Attractor} \label{sec:attractor}
 Depending on the properties of $\mathbf{F}$, there are several possibilities of how the system might evolve when as $t \rightarrow \inf$. In the following, we will focus on dissipative dynamical systems.
 \begin{dfn}[\cite{kantz2004}]
   A dynamical system is called dissipative, when it is the case that
@@ -414,8 +414,8 @@ Intuitively, the number of mesh cubes of side $\epsilon$ intersecting $F$ gives 
 \label{fig:self-similarity}
 \end{figure}
 
-\subsection{Startionarity}
-(TODO: Define (non)stationarity.)
+\subsection{Startionarity} \label{sec:stationarity}
+(TODO: Define (non)stationarity. We can use the test in \cite{isliker1993test} to select the most stationary part of the recordings!)
 
 \section{State space reconstruction} \label{sec:state-space-reconstruction}
 
@@ -488,11 +488,11 @@ In conclusion, Theorem \ref{thm:takens} and Theorem \ref{thm:sauer} together ens
 A fascinating consequence of Theorem \ref{thm:sauer} when applied to a sequence of measurements recorded from a physical system is that a successfully reconstructed attractor does not describe the time series, but the system itself. In the words of Theiler: ``If one believes that the brain (say) is a deterministic system, then it may be possible to study the brain by looking at the electrical output of a single neuron. This example is an ambitious one, but the point is that the delay-time embedding makes it possible for one to analyze the self-organizing behavior of a complex dynamical system without knowing the full state at any given time''. \cite{theiler1990estimating}
 
 \subsection{The effects of noise}
-Although these theoretical results are important to know about, they all make practically unrealistic assumptions, such as infinite amount of data and infinite measurement precisions, and absence of noise. Moreover, practical applications present further challanges, such as presence of noise.
+Although these theoretical results are important to know about, they all make practically unrealistic assumptions, such as infinite amount of data and infinite measurement precision, and absence of noise. Moreover, practical applications present further challanges, such as presence of noise.
 
 (TODO: Expand.)
 
-\subsection{The choice of time delay}
+\subsection{The choice of time delay} \label{sec:delay}
 A careful reader might have noted that the results of theorems in Section \ref{sec:method-of-delays} do not depend on the value of the delay $\tau$. Embeddings with the same value of the embedding dimension $m$, but different values of $\tau$ are theoretically equivalent. In practice, however, some theoretically sound time delay reconstructions may fail to be embeddings. Although some researchers propose that the only important parameter is the length of the embedding window $\tau_w = \tau (m-1)$ \cite{kugiumtzis1996state}, as we will see, the choice of time delay has effects independent of the choice of embedding dimension, and vice versa.
 
 For example:
@@ -528,7 +528,7 @@ Computing the autocorrelation function is not only useful for examining the stat
 
 Autocorrelation also provides a lower bound for $\tau$ in the following sense. If the data is noisy, vectors formed by time delay embedding procedure are practically meaningless, if the variation of the signal in the time covered in the time window $\tau_w = (m-1)\tau$ is less the the variation of noise. This means that $\tau$ should be selected such that $A(\tau) > A(0) - \sigma^2_{\text{noise}}/\sigma^2_{\text{signal}}$. \cite{kantz2004}
 
-\subsubsection{Mutual information}
+\subsubsection{Mutual information} \label{sec:dmi}
 Another commonly used method is to use the first minimum of the \emph{time delayed mutual information}. \cite{fraser1986independent} 
 
 \begin{dfn}[\cite{kantz2004}]
@@ -554,7 +554,7 @@ Those criteria are noticably similar, and bias towards larger estimates of $\tau
 
 \subsection{The choice of embedding dimension}
 
-\subsubsection{False nearest neighbors}
+\subsubsection{False nearest neighbors} \label{sec:fnn}
 Since the dynamics $\textbf{F}$ are assumed to be a \emph{smooth} vector field and the attractor $A$ is a \emph{compact} set in the phase space, its members acquire near neighbors, which should be subject to similar evolution. Therefore, these neighbors should remain close to each other after a short interval of time (even though chaos may introduce exponential divergence between them). This is a useful fact, which can be used, for example, to predict future evolution of a trajectory, or a computation of Lyapunov exponents. The \textbf{false nearest neighbors} algorithm uses them for estimation of embedding dimension. \cite{kennel1992determining}
 
 The main idea is to use the transition from dimension $m$ to dimension $m+1$ in the embedding procedure to differentiate between ``true'' and ``false'' neighbors. If the embedding dimension $m$ is too small, some members of $A$ that are close to each other may not be neighbors in the true state space, simply because the true state space is projected down to a smaller space (see Fig. \cite{}). These members are \emph{false neighbors}, all other neighbors are \emph{true}. When the attractor is fully unfolded into large enough dimension and is properly embedded, all neighbors will be true.
@@ -570,7 +570,7 @@ Then, any near neigbor for which the distance increase after transition from dim
 \end{align*}
 where $R_{\text{tol}} \in \RR$ is some threashold. The $m$ for which the relative proportion of false neigbors to all neigbors reaches zero is the embedding dimension suggested by this criterion.
 
-This criterion, by itself, is not sufficient for determining proper embedding dimension. When applied to limited amount of white noise data, it erroneously suggested embedding the noise into a low dimensional attractor. This happens because that even though a state may be a nearest neigbor, it is not necessarily temporally close, and thus the assumptions above do not hold. The experiments performed by Kennel et al. show for such states it is usually $R_m(n,r) \approx R_A$, where $R_A$ is radius of the attractor. Furthermore, for increasing amount of data, the embedding dimension suggested by this criterion also increased - behavior not observed for relatively small dimensional attractors. \cite{kennel1992determining} 
+This criterion, by itself, is not sufficient for determining proper embedding dimension. When applied to limited amount of white noise data, it erroneously suggested embedding the noise into a low dimensional attractor. This happens because even though a state may be a nearest neigbor, it is not necessarily temporally close, and thus the assumptions above do not hold. The experiments performed by Kennel et al. show for such states it is usually $R_m(n,r) \approx R_A$, where $R_A$ is radius of the attractor. Furthermore, for increasing amount of data, the embedding dimension suggested by this criterion also increased - behavior not observed for relatively small dimensional attractors. \cite{kennel1992determining} 
 
 Therefore, Kennel et al. propose another criterion in addition to the one above. Since false neighbors which are near, but temporally distant, are usually stretched to the extremeties of the attractor with transition from $m$ to $m+1$, they suggest marking all near neighbors satisfying
 \begin{align*}
@@ -589,8 +589,8 @@ Also, this method tends to underestimate $m$ for very small $\tau$. Small $\tau$
 
 Lastly, in presence of measurement noise, the proportion of false neigbors may increase after transition to a higher dimension, since even identical vectors will diverge. \cite{kantz2004}
 
-\subsubsection{Average nearest neighbors}
-(TODO: Average nearest neighbors.)
+\subsubsection{Average false neighbors} \label{sec:afn}
+(TODO: Average false neighbors.) \cite{Cao1997}
 
 \section{Non-linear measures}
 In this section, we will study quantities invariant under embedding. These can be further use to characterize the dynamics of deterministic dynamical systems.
@@ -632,6 +632,7 @@ The Lyapunov exponents carry the units of an inverse time - $1/\lambda_1$ gives 
 
 (TODO: Say what different values of $\lambda_1$ say about the system.)
 
+\subsubsection{Rosenstein's algorithm} \label{sec:rosenstein}
 In the following, we will describe \emph{Rosenstein's algorithm} for computation of the largest Lyapunov exponent. \cite{Rosenstein1993} This algorithm was found to be relatively robust to noise, values of the embedding parameters and limited amount of data.
 
 First, state space is reconstructed using time delay embedding (see Section \ref{sec:embedding}). The suggested method of time delay selection is the autocorrelation method (see Section \ref{sec:acorr}).
@@ -659,10 +660,18 @@ By taking logarithm of both sides, we obtain
 
 This represents a set of lines, one for each point on the reconstructed trajectory, each with a slope roughly proportional to $\lambda_1$. So, the algorithm approximates the largest Lyapunov exponent by least squares fit to the average line
 \begin{align*}
-  y(i) = \frac{1}{\Delta t} \langle \ln d_n(i) \rangle,
+  d(i) = \frac{1}{\Delta t} \langle \ln d_n(i) \rangle,
 \end{align*}
 
 where the average $\langle \cdot \rangle$ is over $n$. Note that the sampling period $\Delta t$ plays no role - one can decide to set $\Delta t = 1$ and work with units of time series indeces instead of seconds interchangeably. Relatedly, we can even rescale or shift the data, since Lyapunov exponents are invariant under any smooth invertible map.
+
+Another prominent and widely used algorithm for estimation of the largest Lyapunov exponent is Wolf's algorithm \cite{wolf1985determining}, but due to its instability and the impossibility of distinguishing exponential divergence, it cannot be recommended. \cite{kantz2004}
+
+NOTES:
+As we have mentioned already, the projection involved in the measurement may make distances shrink apparently for short times, although they grow in the true state space. \cite{kantz2004} Moreover, in the true state space distances do not grow everywhere on the attractor with the same rate, and locally they may even shrink. LLE is average of those local divergence rates. Influence of noise can be minimised by using an appropriate averaging statistics.
+
+\subsubsection{Kantz's algorithm}
+Independently, at the same time as Rosenstein, H. Kantz developed a very similar algorithm, with slightly better properties. \cite{kantz1994robust}
 
 \subsection{Correlation dimension}
 Correlation dimension is a characteristic measure which describes complexity of the geometry of chaotic attractors.
@@ -693,6 +702,8 @@ If $C(r)$ decreases according to the power law with $r \rightarrow 0$ such that 
 \begin{align*}[\cite{theiler1990estimating}]
   \text{dimension} = \lim_{\text{size} \rightarrow 0} \frac{\log \text{bulk}}{\log \text{size}}
 \end{align*} 
+
+\subsection{Data requirements} \label{sec:requirements}
 
 \section{Visual characterization of the dynamical system}
 \subsection{Phase space plot}
@@ -901,51 +912,58 @@ The experiment lasted 4 weeks. At the beginning of week 1, each subject's depres
 During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz). 99 subjects EEG signal was measured at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz.
 
 \section{Preprocessing}
-Recordings of insufficient duration were not used for further analysis. The threshold was selected to be 60 s, resulting in exclusion of 26 recordings from the total of 266.
+Recordings of $f_s = 1000$ Hz were downsampled to $250$ Hz using the Fourier method to avoid confounding effects.
+
+Recordings of insufficient duration were not used for further analysis. To balance the data requirements (see Section \ref{sec:requirements}) and stationarity (see Section \ref{sec:stationarity}, the threshold was selected to be 60 s (15 000 datapoints per time series), resulting in exclusion of 26 recordings from the total of 266.
 
 All signals were highpass filtered with 0.5 Hz frequency and lowpass filtered with 70 Hz frequency. Our hypothesis is that such filter should not affect signals of our interest, since neural oscillations are known to lie inside the unmodified frequency band.
   
-Lastly, recordings of $f_s = 1000$ Hz were downsampled to $250$ Hz using the Fourier method.
+It has been observed that simple average filtering does not influence the reconstruction considerably. \cite{Rohrbacker2009}
 
-\section{Feature extraction}
-Based on multiple studies successfully applying non-linear dynamical analysis on the problem of psychological disorder diagnosis mentioned in Section \ref{sec:applications}, we decided to extract the following non-linear features, quantifying the amount chaos and complexity of the signal.
+\section{Stationarity}
+Stationarity was evaluated on multiple time scales using the stationarity test described in Section \ref{sec:stationarity}. For results, see Table .
 
-In the first experiment, we used time-delay embedding (see Section \ref{sec:embedding}), resulting in 5 x 19 features for each measurement.  
+\section{State space reconstruction}
+\subsection{Surrogate data}
+(TODO: Describe process of generating surrogate data.)
 
-\subsection{Largest Lyapunov exponent}
-Largest Lyapunov exponent (LLE) was computed using the Rosenstein's algorithm \cite{Rosenstein1993}. This algorithm was found to be robust to noise and the choice of lag and embedding dimension.
+\subsection{Time delay}
+In order to estimate the time delay, we first explored 3D reconstructions for various values of delay, and the autocorrelation (see Section \ref{sec:acorr}) and delayed mutual information (see Section \ref{sec:dmi}) functions. 
 
-First, it reconstructs phase space trajectory using the method of delays described in Section \ref{sec:embedding}. The lag is selected as the value for which the autocorrelation function drops to below $1-1/e$ of its initial value. Then, for each point on the reconstructed trajectory $\textbf{s}_n$, a nearest neighbor $\textbf{s}_{\hat{n}}$ is found as
-\begin{align*}
-  d_n(0) = \min_{\hat{n} \neq n}{\norm{\textbf{s}_n - \textbf{s}_{\hat{n}}}}, 
-\end{align*}
+Typical plots of autocorrelation and delayed mutual information can be seen on Fig. - similar behavior was observed across channels and patients. As expected from construction of the surrogate data, their plots look identical to those for original data. Delayed mutual information lacks perceptible minima, so this test yields no useful or reliable estimates of $\tau$. The red line on the autocorrelation plot shows the value $1-1/e$. Delays suggested by this test suggest values of $\tau$ in range 2-4.
 
-where, additionaly, the nearest neighbors have temporal separation greater then the reciprocal of the mean frequency of the power spectrum of the time series, so that they can be safely considered to be nearby initial conditions for different trajectories (this separation, however, is restricted to be at most $1/4$ of the time series length). The mean rate of separation between the nearest neighbors is then an unbiased estimator for the LLE (TODO: Find citation for this claim.)
+As expected, the reconstructed attractors for small delays cluster along the main diagonal, and get increasingly random with larger $\tau$. However, it is difficult to judge on the degree of folding in those reconstruction from these plots, mainly due to large number of data samples.
 
-From the definition of the LLE, the algorithm proceeds by assuming that each pair of nearest neighbors diverge approximately at the rate given by the LLE:
+Moreover, as explained in Section \ref{sec:delay}, these techniques should be used only as inspection tools, not as reliable guides for selection of $\tau$. The ultimate goal of the reconstruction is to obtain as accurate values of the non-linear parameters as possible, and thus selection of the optimal embedding parameters may differ for each of them. (TODO: Find some studies doing this also. Is there a way to justify this theoretically?) Thus, for example, in order to select the proper embedding parameters for computation of the largest Lyapunov exponent, we inspected the scaling regions for multiple values of $m$, $\tau$, Theiler window (TODO: Add description of Theiler window to \ref{sec:rosenstein}), and other parameters, and picked those with the longest scaling regions, since the length of the scaling regions is proportional to the certainty of the estimate. \cite{kennel1992determining}
 
-\begin{align*}
-  d_n(i) \approx d_n(0)e^{\lambda_1 n \Delta t}. 
-\end{align*}
+In the Section \ref{sec:lle-exp}, we will show the effects of increasing $\tau$ on the average divergence.
 
-By taking the logarithm of both sides,
+(TODO: Should I implement some better methods? MI and acorr are not practical for EEG and other high dimensional systems.)
 
-\begin{align*}
-  \ln d_n(i) \approx \ln d_n(0) + \lambda_1 n \Delta t, 
-\end{align*}
+\subsection{Embedding dimension}
+For estimating the embedding dimension, we used combination of False Nearest Neighbors (FNN) algorithm described in Section \ref{sec:fnn} and Average False Neighbors (AFN) described in Section \ref{sec:afn}.
 
-we obtain a set of lines (one for each index $n$), whose slope is an approximation of the largest Lyapunov exponent. Hence, the value of $\lambda_1$ is approximated as the slope of least squares fitted line through the mean log divergence $\overline{d}$,
+After some experimentation, the parameters for FNN were $A_{\text{tol}} = 0.5$ and $R_{\text{tol}} = 3$. (TODO: Plot for different values.) The percentage of FNN's identified by the first te almost always plateaus for about $m=10$. The second test, however, is more sensitive to the tolerance value, and percentage of false neighbors reported by this test first quickly drops, and then starts raising. This behavior suggests noise corruption. \cite{kennel1992determining} As suggested by Kennel et al. \cite{kennel1992determining}, we used both criteria in conjuction to obtain the optimal value as suggested by FNN algorithm. (TODO: Report average $m$ computed this way)
 
-\begin{align*}
-  \overline{d}(i) = \langle \ln d_n (i) \rangle.
-\end{align*}
+The $E_1$ statistic of AFN usually stops increasing for the same value as reported by FNN, thus the results of those two algorithms are in accordance. From Fig. , we can see that the $E_2$ statistic, which should be used for distinguishing stochastic and deterministic data \cite{Cao1997}, behaves almost identically for both original and surrogate time series'. This is an indication of nondeterminism of our data. 
 
-\subsection{Correlation dimension}
+However, this effect is amplified for $\tau > 1$, as the reader can see in Fig. . Although the first criterion of FNN and $E_1$ of behave similiarly to the case $\tau=1$, the second test of FNN never reports anywhere near zero percent of FNNs, and $E_2$ statistic of AFN invariably osciales close to $1$, indicating nondeterminism. This is true both for original and surrogate data.
+
+Also, we plotted the value of correlation dimension against $m$. The maximum agrees with the values of $m$ obtained by FNN and AFN. However, it does not saturate or even converge, but instead drops. (TODO: Why?)
+
+\section{Largest Lyapunov exponents} \label{sec:lle-exp}
+Largest Lyapunov exponent (LLE) was computed using the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}. Fig. shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau=1$. In Fig. , where $\tau=1$, we observe oscillations in the average divergence over time. This behavior is typical for noise \cite{Rosenstein1993}, but, as noted in section \ref{sec:rosenstein}, may occur due to measurement projection. Also, even if the largest Lyapunov exponent is positive, in dissipative systems (i.e. those possessing an attractor, see Section \ref{sec:attractor}) the sum of all Lyapunov exponents is negative, and thus, even on average, states will diverge in some directions (TODO: Add some comments about this to theoretical sections. Find citations.). These effects can be compensated for by using proper averaging statistics \cite{kantz2004}, and so we would expect Kantz's algorithm slightly alleviate this effect.
+
+Moreover, we observe very similar behavior of the average divergence for the surrogate data, which, together with the observations made in previous sections, gives rise to the hypothesis of lack of chaos in the data. We tested this hypothesis statistically in Section \ref{sec:surrogate}.
+
+\section{Correlation dimension}
 The simplest version of the Grassberger-Procaccia algorithm was used to compute the correlation dimension. \cite{grassberger1983} The value of the correlation integral $C(r)$ from the definition \ref{eq:corrsum} is computed for multiple values of $r$ in range from $0.1*\sigma$ to $0.5*\sigma$, where $\sigma$ is the standard deviation of the time series, and a least squares straight line is plotted through the plot of $\ln C(r)$ against $\ln r$. Correlation dimension is approximated as the slope of the line.
 
-\subsection{Sample entropy}
-\subsection{Detrended fluctuation analysis}
-\subsection{Hurst exponent}
+\section{Sample entropy}
+\section{Detrended fluctuation analysis}
+\section{Hurst exponent}
+
+\section{Surrogate analysis}
 
 \section{Unsupervised analysis of before / after treatment differences}
 As the first step of our analysis, we conducted an investigation of the differences in the non-linear measures computed from the signals obtained before and after treatment.
