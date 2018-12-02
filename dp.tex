@@ -911,6 +911,16 @@ The experiment lasted 4 weeks. At the beginning of week 1, each subject's depres
 
 During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz). 99 subjects EEG signal was measured at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz.
 
+A typical recoding can be seen on Fig. \ref{fig:data}.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/data.png} }
+  \caption{}
+\label{fig:data}
+\end{figure}
+
 \section{Preprocessing}
 Recordings of $f_s = 1000$ Hz were downsampled to $250$ Hz using the Fourier method to avoid confounding effects.
 
@@ -921,7 +931,20 @@ All signals were highpass filtered with 0.5 Hz frequency and lowpass filtered wi
 It has been observed that simple average filtering does not influence the reconstruction considerably. \cite{Rohrbacker2009}
 
 \section{Stationarity}
-Stationarity was evaluated on multiple time scales using the stationarity test described in Section \ref{sec:stationarity}. For results, see Table .
+Stationarity was evaluated on multiple time scales using the stationarity test described in Section \ref{sec:stationarity}. For results, see Table \ref{tab:stat}.
+
+\begin{table}[tbp] 
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Duration\textbackslash Av. p-value} & \textbf{Original} & \textbf{Surrogate} \\ \hline
+10 s                                         &                   &                    \\ \hline
+30 s                                         &                   &                    \\ \hline
+60 s                                         &                   &                    \\ \hline
+\end{tabular}
+\caption{Results of stationarity tests.}
+\label{tab:stat}
+\end{table}
 
 \section{State space reconstruction}
 \subsection{Surrogate data}
@@ -930,31 +953,95 @@ Stationarity was evaluated on multiple time scales using the stationarity test d
 \subsection{Time delay}
 In order to estimate the time delay, we first explored 3D reconstructions for various values of delay, and the autocorrelation (see Section \ref{sec:acorr}) and delayed mutual information (see Section \ref{sec:dmi}) functions. 
 
-Typical plots of autocorrelation and delayed mutual information can be seen on Fig. - similar behavior was observed across channels and patients. As expected from construction of the surrogate data, their plots look identical to those for original data. Delayed mutual information lacks perceptible minima, so this test yields no useful or reliable estimates of $\tau$. The red line on the autocorrelation plot shows the value $1-1/e$. Delays suggested by this test suggest values of $\tau$ in range 2-4.
+Typical plots of autocorrelation and delayed mutual information can be seen on Fig. \ref{fig:dmi-acorr} - similar behavior was observed across channels and patients. As expected from construction of the surrogate data, their plots look identical to those for original data. Delayed mutual information lacks perceptible minima, so this test yields no useful or reliable estimates of $\tau$. The red line on the autocorrelation plot shows the value $1-1/e$. Delays suggested by this test suggest values of $\tau$ in range 2-4. (TODO: Add precise statistics.)
 
-As expected, the reconstructed attractors for small delays cluster along the main diagonal, and get increasingly random with larger $\tau$. However, it is difficult to judge on the degree of folding in those reconstruction from these plots, mainly due to large number of data samples.
+Fig. \ref{fig:recon} shows reconstructed attractors for various time delay $\tau$. As expected, the reconstructed attractors for small delays cluster along the main diagonal, and get increasingly random with larger $\tau$. However, it is difficult to judge on the degree of folding in those reconstruction from these plots, mainly due to large number of data samples.
 
-Moreover, as explained in Section \ref{sec:delay}, these techniques should be used only as inspection tools, not as reliable guides for selection of $\tau$. The ultimate goal of the reconstruction is to obtain as accurate values of the non-linear parameters as possible, and thus selection of the optimal embedding parameters may differ for each of them. (TODO: Find some studies doing this also. Is there a way to justify this theoretically?) Thus, for example, in order to select the proper embedding parameters for computation of the largest Lyapunov exponent, we inspected the scaling regions for multiple values of $m$, $\tau$, Theiler window (TODO: Add description of Theiler window to \ref{sec:rosenstein}), and other parameters, and picked those with the longest scaling regions, since the length of the scaling regions is proportional to the certainty of the estimate. \cite{kennel1992determining}
+Moreover, as explained in Section \ref{sec:delay}, these techniques should be used only as inspection tools, not as reliable guides for selection of $\tau$. The ultimate goal of the reconstruction is to obtain as accurate values of the non-linear parameters as possible, and thus selection of the optimal embedding parameters may differ for each of them. (TODO: Find some studies doing this also. Is there a way to justify this theoretically?) Thus, for example, in order to select the proper embedding parameters for computation of the largest Lyapunov exponent, we inspected the scaling regions for multiple values of $m$, $\tau$, Theiler window (TODO: Add description of Theiler window to \ref{sec:rosenstein}), and other parameters, and picked those with the longest scaling regions (since the length of the scaling regions is proportional to the certainty of the estimate \cite{kennel1992determining}).
 
 In the Section \ref{sec:lle-exp}, we will show the effects of increasing $\tau$ on the average divergence.
 
 (TODO: Should I implement some better methods? MI and acorr are not practical for EEG and other high dimensional systems.)
 
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/dmi_acorr.png} }
+  \caption{Delayed mutual information and autocorrelation as functions of $\tau$. The red line shows threshold value for autocorrelation of $1-1/e$.}
+\label{fig:dmi-acorr}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/recon.png} }
+  \caption{3D time delay reconstructions for various values of $\tau$.}
+\label{fig:recon}
+\end{figure}
+
 \subsection{Embedding dimension}
 For estimating the embedding dimension, we used combination of False Nearest Neighbors (FNN) algorithm described in Section \ref{sec:fnn} and Average False Neighbors (AFN) described in Section \ref{sec:afn}.
 
-After some experimentation, the parameters for FNN were $A_{\text{tol}} = 0.5$ and $R_{\text{tol}} = 3$. (TODO: Plot for different values.) The percentage of FNN's identified by the first te almost always plateaus for about $m=10$. The second test, however, is more sensitive to the tolerance value, and percentage of false neighbors reported by this test first quickly drops, and then starts raising. This behavior suggests noise corruption. \cite{kennel1992determining} As suggested by Kennel et al. \cite{kennel1992determining}, we used both criteria in conjuction to obtain the optimal value as suggested by FNN algorithm. (TODO: Report average $m$ computed this way)
+After some experimentation, the parameters for FNN were $A_{\text{tol}} = 0.5$ and $R_{\text{tol}} = 3$. (TODO: Plot for different values.) The percentage of FNN's identified by the first te almost always plateaus for about $m=10$. The second test, however, is more sensitive to the tolerance value, and percentage of false neighbors reported by this test first quickly drops, and then starts raising. This behavior suggests noise corruption. \cite{kennel1992determining} As suggested by Kennel et al. \cite{kennel1992determining}, we used both criteria in conjuction to obtain the optimal value as suggested by FNN algorithm, and the results are significantly lower than those usually used in the literature for EEG data (TODO: Report average $m$ computed this way, add citation).
 
-The $E_1$ statistic of AFN usually stops increasing for the same value as reported by FNN, thus the results of those two algorithms are in accordance. From Fig. , we can see that the $E_2$ statistic, which should be used for distinguishing stochastic and deterministic data \cite{Cao1997}, behaves almost identically for both original and surrogate time series'. This is an indication of nondeterminism of our data. 
+The $E_1$ statistic of AFN usually stops increasing for the same value as reported by FNN, thus the results of those two algorithms are in accordance. From Fig. \ref{fig:fnn-afn}, we can see that the $E_2$ statistic, which should be used for distinguishing stochastic and deterministic data \cite{Cao1997}, behaves almost identically for both original and surrogate time series'. This is an indication of nondeterminism of our data. 
 
-However, this effect is amplified for $\tau > 1$, as the reader can see in Fig. . Although the first criterion of FNN and $E_1$ of behave similiarly to the case $\tau=1$, the second test of FNN never reports anywhere near zero percent of FNNs, and $E_2$ statistic of AFN invariably osciales close to $1$, indicating nondeterminism. This is true both for original and surrogate data.
+However, this effect is amplified for $\tau > 1$, as the reader can see in Fig. \ref{fig:fnn-afn-osc}. Although the first criterion of FNN and $E_1$ of behave similiarly to the case $\tau=1$, the second test of FNN never reports anywhere near zero percent of FNNs, and $E_2$ statistic of AFN invariably oscillates around $1$, indicating nondeterminism. This is true both for original and surrogate data.
 
-Also, we plotted the value of correlation dimension against $m$. The maximum agrees with the values of $m$ obtained by FNN and AFN. However, it does not saturate or even converge, but instead drops. (TODO: Why?)
+Also, we plotted the value of correlation dimension against $m$ for various values of $\tau$ (see Fig. \ref{fig:em-corrdim}). The maximum agrees with the values of $m$ obtained by FNN and AFN for $\tau=1$. However, it remains largely unchanged for higher values of $\tau$. Moreover, in contrast to expectation, it does not saturate or even converge, but instead drops. (TODO: Why?)
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/fnn_afn.png} }
+  \caption{The results for False Nearest Neighbors and Average False Neighbors.}
+\label{fig:fnn-afn}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/fnn_afn_osc.png} }
+  \caption{FNN and AFN for $\tau = 4$ using the same data as in Figure \ref{fig:fnn-afn}. }
+\label{fig:fnn-afn-osc}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/em_corrdim.png} }
+  \caption{Correlation dimension for $\tau$ as function of the embedding dimension $m$.}
+\label{fig:em-corrdim}
+\end{figure}
 
 \section{Largest Lyapunov exponents} \label{sec:lle-exp}
-Largest Lyapunov exponent (LLE) was computed using the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}. Fig. shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau=1$. In Fig. , where $\tau=1$, we observe oscillations in the average divergence over time. This behavior is typical for noise \cite{Rosenstein1993}, but, as noted in section \ref{sec:rosenstein}, may occur due to measurement projection. Also, even if the largest Lyapunov exponent is positive, in dissipative systems (i.e. those possessing an attractor, see Section \ref{sec:attractor}) the sum of all Lyapunov exponents is negative, and thus, even on average, states will diverge in some directions (TODO: Add some comments about this to theoretical sections. Find citations.). These effects can be compensated for by using proper averaging statistics \cite{kantz2004}, and so we would expect Kantz's algorithm slightly alleviate this effect.
+Largest Lyapunov exponent (LLE) was computed using the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}. We chose Theiler window length of 10 (40 ms), as the results were similar for values 10, 50, 100, 1000.
 
-Moreover, we observe very similar behavior of the average divergence for the surrogate data, which, together with the observations made in previous sections, gives rise to the hypothesis of lack of chaos in the data. We tested this hypothesis statistically in Section \ref{sec:surrogate}.
+Fig. \ref{fig:lle} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau=1$ for the original time series and surrogate data.
+
+In Fig. \ref{fig:lle-osc}, showing the divergence plot of the original time series for $\tau=4$, we observe oscillations in the average divergence over time. This behavior is typical for noise \cite{Rosenstein1993}, but, as noted in section \ref{sec:rosenstein}, may occur due to measurement projection. Also, even if the largest Lyapunov exponent is positive, in dissipative systems (i.e. those possessing an attractor, see Section \ref{sec:attractor}) the sum of all Lyapunov exponents is negative, and thus, even on average, states will diverge in some directions (TODO: Add some comments about this to theoretical sections. Find citations.). These effects can be compensated for by using proper averaging statistics \cite{kantz2004}, and so we would expect Kantz's algorithm slightly alleviate this effect.
+
+We observe very similar behavior of the average divergence for the surrogate data. This, together with the observations made in previous sections, gives rise to the hypothesis of lack of chaos in the data. We tested the hypothesis of linear Gaussian process in Section \ref{sec:surrogate-analysis}.
+
+Supposing, in spite of the indications of nondeterminism, that it is reasonable to attempt compute the largest Lyapunov exponents, interpret and compare the obtained values, what is the optimal embedding dimension for this particular reconstruction? Using FNN and AFN as guides, $m=6$ is the optimal value. However, subjectively examining the divergence plot in Fig. \ref{fig:lle}, this choice of $m$ exhibits shorter scaling region than higher values of $m$, e.g. $m=10$. On the other hand, with higher embedding dimensions scaling region progressively disappears. Again, similar behavior is observed for most recordings - the scaling regions are longest for values of $m$ slightly higher than the one reported by FNN and AFN, plateauing for values $i < 15$.
+
+Hence, based solely on length of the scaling regions, we might decide to use $m$ higher than those suggested by FNN and AFN. Notice that for $m=5$, i.e. for a value closed to the one suggested by FNN and AFN, the scaling region appears to be steeper, thus indicating more exponential rate of divergence, and is thus more consistent with the hypothesis of a chaotic system. For this reason, for the purpose of further analysis, we used $\tau=1$, values of $m$ suggested by FNN and AFN algorithms increased by one, and scaling regions of $i<15$.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/lle.png} }
+  \caption{Average divergence for $\tau=1$.}
+\label{fig:lle}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/lle_osc.png} }
+  \caption{Average divergence for $\tau=4$.}
+\label{fig:lle-osc}
+\end{figure}
 
 \section{Correlation dimension}
 The simplest version of the Grassberger-Procaccia algorithm was used to compute the correlation dimension. \cite{grassberger1983} The value of the correlation integral $C(r)$ from the definition \ref{eq:corrsum} is computed for multiple values of $r$ in range from $0.1*\sigma$ to $0.5*\sigma$, where $\sigma$ is the standard deviation of the time series, and a least squares straight line is plotted through the plot of $\ln C(r)$ against $\ln r$. Correlation dimension is approximated as the slope of the line.
@@ -963,7 +1050,15 @@ The simplest version of the Grassberger-Procaccia algorithm was used to compute 
 \section{Detrended fluctuation analysis}
 \section{Hurst exponent}
 
-\section{Surrogate analysis}
+\section{Surrogate analysis} \label{sec:surrogate-analysis}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.5\textwidth]{Images/surr_test.png} }
+  \caption{Example distribution of the largest Lyapunov exponent for surrogate data and the original.}
+\label{fig:surr-test}
+\end{figure}
 
 \section{Unsupervised analysis of before / after treatment differences}
 As the first step of our analysis, we conducted an investigation of the differences in the non-linear measures computed from the signals obtained before and after treatment.
