@@ -1,6 +1,6 @@
 %% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
-\documentclass[11pt,czech,american]{book}
+\documentclass[11pt,czech,american,dvipsnames]{book}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper]{geometry}
@@ -24,6 +24,15 @@
 \usepackage{dirtytalk}
 % \usepackage{subcaption}
 % \usepackage{subfigure}
+
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage{xcolor}  % Coloured text etc.
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\add}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\setlength{\marginparwidth}{1.75cm}
 
 \makeatletter
 \newenvironment{lyxlist}[1]
@@ -475,7 +484,7 @@ A year after Packard's discovery, in \cite{takens1981}, F. Takens has proved the
 
 This idea has a simile in the existence theorems in the theory of differential equations, which say that a unique solution exists for each $x(t), \dot{x}(t), \ddot{x}(t), \dots$. For example, in many body dynamics under Newtonian gravitation, knowledge of a body's position and momentum is sufficient to uniquely determine its future dynamics. \cite{ScholarpediaReconstruction}
 
-Taken's theorem, although of theoretical importance, is not necessarily useful in practice, since even dense sets can have measure zero. Moreover, it is restricted to smooth manifolds. An improvement came ten years later, when T. Sauer both generalized Takens' result as follows (in a simplified form):
+Taken's theorem, although of theoretical importance, is not necessarily useful in practice, since even dense sets can have measure zero. Moreover, it is restricted to smooth manifolds. An add came ten years later, when T. Sauer both generalized Takens' result as follows (in a simplified form):
 \begin{thm}[Sauer, \cite{sauer1991}] \label{thm:sauer}
   Let $A$ be a compact fractal with box-counting dimension $d_A$, and let $A$ be a subset of a $m$-dimensional manifold. Then
   \begin{align*}
@@ -516,7 +525,7 @@ In summary, picking the proper value of $\tau$ is a balancing act between redund
 \end{figure}
 
 \subsubsection{Autocorrelation} \label{sec:acorr}
-From the above, we know that for the optimal choice of time delay, we may want to study correlation of the elements of the reconstructed vectors $\mathbf{s}_n$. Thus, a natural method of estimating the time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a certain value (such as $0$ or $A(0)/e$). \cite{albano1993reliability}
+From the above, we know that for the optimal choice of time delay, we may want to study correlation of the elements of the reconstructed vectors $\mathbf{s}_n$. Thus, a natural method of estimating the time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a certain value (such as $0$ or $A(0)/e$). \cite{albano1993reliability} \change{We need better notation for this}
 \begin{dfn}[\cite{kantz2004}]
   \textbf{Autocorrelation} $A : \RR \rightarrow \RR$ for time delay $\tau$ is given by
   \begin{align*}
@@ -606,7 +615,7 @@ for a tangent map $T^{(n)}$, where
   (T^{(n)})_{ik} = \frac{\partial F_i(\mathbf{x}_n)}{\partial x_{n+k}}.
 \end{align*}
 
-Product of these tangent maps for subsequent states along a trajectory can be written as a product of two rotations and a diagonal matrix:
+Product of these tangent maps for subsequent states along a trajectory can be written as a product of two rotations and a diagonal matrix: \unsure{Isn't there a theorem for that?}
 \begin{align*}
   \prod_{n=1}^{N} T^{(n)} = R_d T_{diag} R_b.
 \end{align*}
@@ -948,20 +957,40 @@ Stationarity was evaluated on multiple time scales using the stationarity test d
 
 \section{State space reconstruction}
 \subsection{Surrogate data}
-(TODO: Describe process of generating surrogate data.)
+\add[inline]{Describe process of generating surrogate data.}
 
 \subsection{Time delay}
-In order to estimate the time delay, we first explored 3D reconstructions for various values of delay, and the autocorrelation (see Section \ref{sec:acorr}) and delayed mutual information (see Section \ref{sec:dmi}) functions. 
+In order to estimate the time delay, we used the following techniques:
+\begin{enumerate}
+  \item Reconstruction plots
+  \item Autocorrelation $A(\tau)$ (see Section \ref{sec:acorr})
+  \item Delayed mutual information $\mathcal{I}(\tau)$ (see Section \ref{sec:dmi})
+  \item Average displacement from diagonal (ADFD) (see Section )
+  \item PCA reconstructions comparison (see Section )
+  \item Integral local deformation (ILD) (see Section )
+\end{enumerate}
 
-Typical plots of autocorrelation and delayed mutual information can be seen on Fig. \ref{fig:dmi-acorr} - similar behavior was observed across channels and patients. As expected from construction of the surrogate data, their plots look identical to those for original data. Delayed mutual information lacks perceptible minima, so this test yields no useful or reliable estimates of $\tau$. The red line on the autocorrelation plot shows the value $1-1/e$. Delays suggested by this test suggest values of $\tau$ in range 2-4. (TODO: Add precise statistics.)
+The results of the first four techniques were fairly consistent across channels and patients, with suggested delays usually in range 3-5. \add{Add precise statistics.} Note however, that those are the simpler techniques from our selection. The results of the other techniques were highly varied, yet usually estimate much higher values.
+
+In the following, we will present an analysis of time series of $FP1$ electrode of patient one, trial one. 
 
 Fig. \ref{fig:recon} shows reconstructed attractors for various time delay $\tau$. As expected, the reconstructed attractors for small delays cluster along the main diagonal, and get increasingly random with larger $\tau$. However, it is difficult to judge on the degree of folding in those reconstruction from these plots, mainly due to large number of data samples.
 
-Moreover, as explained in Section \ref{sec:delay}, these techniques should be used only as inspection tools, not as reliable guides for selection of $\tau$. The ultimate goal of the reconstruction is to obtain as accurate values of the non-linear parameters as possible, and thus selection of the optimal embedding parameters may differ for each of them. (TODO: Find some studies doing this also. Is there a way to justify this theoretically?) Thus, for example, in order to select the proper embedding parameters for computation of the largest Lyapunov exponent, we inspected the scaling regions for multiple values of $m$, $\tau$, Theiler window (TODO: Add description of Theiler window to \ref{sec:rosenstein}), and other parameters, and picked those with the longest scaling regions (since the length of the scaling regions is proportional to the certainty of the estimate \cite{kennel1992determining}).
+Typical plots of autocorrelation and delayed mutual information can be seen on Fig. \ref{fig:dmi-acorr} - similar behavior was observed across channels and patients. As expected from construction of the surrogate data, their plots look identical to those for original data. Delayed mutual information lacks perceptible minima, so this test yields no useful or reliable estimates of $\tau$. The red line on the autocorrelation plot shows the value $1-1/e$. 
+
+Fig. \ref{fig:pca-svd} shows a convergence of the smaller singular values around $\tau=4$, in agreement with autocorrelation and mutual information. However, as we can observe in the same plot, the system is essentially one dimensional for $\tau \leq 6$ (this dimension probably corresponds to the main diagonal of the reconstructed attractor) and mostly two dimensional for $\tau \leq 16$. Similar behavior of two dominating singular values was observed, to some degree, throughout the dataset.
+
+\unsure[inline]{Interestingly, however, this behavior was much less pronounced for some time series, usually marked by small $p$-values of the stationarity test. Moreover, for those time series, the results of these techniques were exceptionally consisent.}
+
+The results of ADFD, see Fig. \ref{fig:adfd}, are usually consistent with the estimates provided by autocorrelation and delayed mutual information.
+
+The result of ILD, the most powerful algorithm for estimation of the embedding parameters, be seen on Fig. \ref{fig:ild}. It is mostly featureless, however, the lines are slightly converging for $m \geq 8$. Also, there are some visible throughs, e.g. for $\tau=8$.
+
+As explained in Section \ref{sec:delay}, these techniques should be used only as inspection tools, not as reliable guides for selection of $\tau$. The ultimate goal of the reconstruction is to obtain as accurate values of the non-linear parameters as possible, and thus selection of the optimal embedding parameters may differ for each of them.\add{Find some studies doing this also. Is there a way to justify this theoretically?} Thus, for example, in order to select the proper embedding parameters for computation of the largest Lyapunov exponent, we inspected the scaling regions for multiple values of $m$, $\tau$, Theiler window\add{Add description of Theiler window to \ref{sec:rosenstein}}, and other parameters, and picked those with the longest scaling regions (since the length of the scaling regions is proportional to the certainty of the estimate \cite{kennel1992determining}).
 
 In the Section \ref{sec:lle-exp}, we will show the effects of increasing $\tau$ on the average divergence.
 
-(TODO: Should I implement some better methods? MI and acorr are not practical for EEG and other high dimensional systems.)
+\add[inline]{Should I implement some better methods? MI and acorr are not practical for EEG and other high dimensional systems.}
 
 \begin{figure} 
 \centering
@@ -969,6 +998,30 @@ In the Section \ref{sec:lle-exp}, we will show the effects of increasing $\tau$ 
   \includegraphics[width=1.0\textwidth]{Images/dmi_acorr.png} }
   \caption{Delayed mutual information and autocorrelation as functions of $\tau$. The red line shows threshold value for autocorrelation of $1-1/e$.}
 \label{fig:dmi-acorr}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/dmi_acorr.png} }
+  \caption{Plot of singular values as functions of $\tau$ for $m=10$.}
+\label{fig:pca-svd}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/adfd.png} }
+  \caption{Plot of average displacement from diagonal for $m=10$.}
+\label{fig:adfd}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/ild.png} }
+  \caption{Plot of integral local deformation.}
+\label{fig:ild}
 \end{figure}
 
 \begin{figure} 
@@ -982,13 +1035,13 @@ In the Section \ref{sec:lle-exp}, we will show the effects of increasing $\tau$ 
 \subsection{Embedding dimension}
 For estimating the embedding dimension, we used combination of False Nearest Neighbors (FNN) algorithm described in Section \ref{sec:fnn} and Average False Neighbors (AFN) described in Section \ref{sec:afn}.
 
-After some experimentation, the parameters for FNN were $A_{\text{tol}} = 0.5$ and $R_{\text{tol}} = 3$. (TODO: Plot for different values.) The percentage of FNN's identified by the first te almost always plateaus for about $m=10$. The second test, however, is more sensitive to the tolerance value, and percentage of false neighbors reported by this test first quickly drops, and then starts raising. This behavior suggests noise corruption. \cite{kennel1992determining} As suggested by Kennel et al. \cite{kennel1992determining}, we used both criteria in conjuction to obtain the optimal value as suggested by FNN algorithm, and the results are significantly lower than those usually used in the literature for EEG data (TODO: Report average $m$ computed this way, add citation).
+After some experimentation, the parameters for FNN were $A_{\text{tol}} = 0.5$ and $R_{\text{tol}} = 3$.\add{Plot for different values.} The percentage of FNN's identified by the first te almost always plateaus for about $m=10$. The second test, however, is more sensitive to the tolerance value, and percentage of false neighbors reported by this test first quickly drops, and then starts raising. This behavior suggests noise corruption. \cite{kennel1992determining} As suggested by Kennel et al. \cite{kennel1992determining}, we used both criteria in conjuction to obtain the optimal value as suggested by FNN algorithm, and the results are significantly lower than those usually used in the literature for EEG data.\add{Report average $m$ computed this way, add citation.}
 
 The $E_1$ statistic of AFN usually stops increasing for the same value as reported by FNN, thus the results of those two algorithms are in accordance. From Fig. \ref{fig:fnn-afn}, we can see that the $E_2$ statistic, which should be used for distinguishing stochastic and deterministic data \cite{Cao1997}, behaves almost identically for both original and surrogate time series'. This is an indication of nondeterminism of our data. 
 
 However, this effect is amplified for $\tau > 1$, as the reader can see in Fig. \ref{fig:fnn-afn-osc}. Although the first criterion of FNN and $E_1$ of behave similiarly to the case $\tau=1$, the second test of FNN never reports anywhere near zero percent of FNNs, and $E_2$ statistic of AFN invariably oscillates around $1$, indicating nondeterminism. This is true both for original and surrogate data.
 
-Also, we plotted the value of correlation dimension against $m$ for various values of $\tau$ (see Fig. \ref{fig:em-corrdim}). The maximum agrees with the values of $m$ obtained by FNN and AFN for $\tau=1$. However, it remains largely unchanged for higher values of $\tau$. Moreover, in contrast to expectation, it does not saturate or even converge, but instead drops. (TODO: Why?)
+Also, we plotted the value of correlation dimension against $m$ for various values of $\tau$ (see Fig. \ref{fig:em-corrdim}). The maximum agrees with the values of $m$ obtained by FNN and AFN for $\tau=1$. However, it remains largely unchanged for higher values of $\tau$. Moreover, in contrast to expectation, it does not saturate or even converge, but instead drops. \unsure{Why?}
 
 \begin{figure} 
 \centering
