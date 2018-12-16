@@ -682,7 +682,7 @@ Another prominent and widely used algorithm for estimation of the largest Lyapun
 \subsubsection{Kantz's algorithm}
 Independently, at the same time as Rosenstein, H. Kantz developed a very similar algorithm, with slightly better properties. \cite{kantz1994robust}
 
-\subsection{Correlation dimension}
+\subsection{Correlation dimension} \label{sec:corrdim}
 Correlation dimension is a characteristic measure which describes complexity of the geometry of chaotic attractors.
 
 Correlation sum $C(r)$ is defined as the fraction of points in the phase space whose distance is smaller than $r$:
@@ -1133,11 +1133,11 @@ To compute the LLE estimates with automatic selection of proper embedding parame
 \section{Correlation dimension} \label{sec:corrdim-exp}
 \info[inline]{For corr dim, we also used two ways to compute it - automatic and fixed. Explain here why have we chosen $m=10$ and $\tau=3$.}
 
-\add[inline]{Describe the type of GPA algo used.}
+To compute the correlation sum $C(r)$, we used classical Grassberger-Procaccia algorithm described in Section \ref{sec:corrdim} using Chebyshev metric, $w_t = 50$, for values of $r$ either in geometrical progression of 100 values from 0.05 to 10 or by an automatic procedure described further. Then, these $(r, C(r))$ pairs were used to compute local least square fits of the equation $C(r) = r^{d_2}$ inside windows of length 7 for each pair. \add{This paragraph can be much improved (wording, etc.).}
 
 Fig. \ref{fig:cr} shows log-log plots of normalized correlations sum $C(r)$ against radius $r$ for varying values of time delay $\tau$. There are clear straight lines indicating expected relationship $C(r) \propto r^{d_2}$. We can see that the lines shift to the right, increasing their slopes with $m$. The correlation sum is almost independent of time delay.
 
-Fig. \ref{fig:loc-d2} shows the log plot of local slope of of $\log C(r)$ as a function of $r$. There are no apparent scaling regions at all. 
+Fig. \ref{fig:loc-d2} shows the log plot of local slope of of $\log C(r)$ as a function of $r$. There are no apparent scaling regions at all. Morever, by comparing with the same plot for iAAFT surrogate of the same time series (see Fig. \ref{fig:loc-d2-comp}), we cannot even reject the hypothesis of a linear stochastic process. 
 
 We decided to compute the correlation dimension as follows. First, as with computation of the Lyapunov exponent, we use a moving window of length 15000 datapoints and shift 100 to locate 60 s section of the time series with the lowest p-value for the $\chi^2$ stationarity test described in Section . \add{Add description of the test.} Then, we create embeddings for embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
 \begin{align*}
@@ -1158,9 +1158,17 @@ Fig. \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the emb
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.95\textwidth]{./Images/local_D_2/large.png} }
-  \caption{Local $D_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from left to right) and time delays $\tau = 4$ and $\tau = 8$.}
+  \includegraphics[width=0.95\textwidth]{./Images/local_d_2/large.png} }
+  \caption{Local correlation dimension $d_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from bottom to top) and time delays $\tau = 4$ and $\tau = 8$.}
   \label{fig:loc-d2}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.95\textwidth]{./Images/local_d_2/large_surr.png} }
+  \caption{Local correlation dimension $d_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from bottom to top) and time delays $\tau = 4$ and $\tau = 8$ for the original series (blue) and its surrogate series computed using iAAFT.}
+  \label{fig:loc-d2-comp}
 \end{figure}
 
 \begin{figure} 
