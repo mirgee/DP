@@ -66,6 +66,7 @@
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 
 % \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 % \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
@@ -1093,14 +1094,6 @@ We plotted the value of correlation dimension against $m$ for various values of 
 \label{fig:afn-comp}
 \end{figure}
 
-\begin{figure} 
-\centering
-\noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.5\textwidth]{Images/d2ms/d2mc0.png} }
-  \caption{Correlation dimension as function of the embedding dimension $m$.}
-\label{fig:em-corrdim}
-\end{figure}
-
 \section{Largest Lyapunov exponents} \label{sec:lle-exp}
 For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000. \unsure{Why? This is unexpected.}
 
@@ -1127,6 +1120,8 @@ This effect can be aleviated by choosing smaller $\tau$, but we are unaware of a
 
 \info[inline]{Good thing is that Eckmann's algorithm gives similar results with very different approach. Maybe we shoud incorporate this somehow?}
 
+To compute the LLE estimates with automatic selection of proper embedding parameters, we proceeded as follows.  First, we found the 60 s subsection of the time series with the lowest p-value of the $\chi^2$ stationarity test using moving window of length 15000 and slide 100. Selection of time delay was done using autocorrelation function with threshold $1-1/e$. The selected $\tau$ was used to compute the embedding dimension with smallest FNN percentage from embedding dimensions in range from 1 to 20, i.e. $m_1 = \argmin_{m' \in \{1,\dots,20\}} \mathrm{FNN}(m')$. The tolerance parameters wer $R=2.5$, $A=2.0$ and $w_t = 50$. Moreover, we found the first embedding dimension $m_2$ for which $E_1(m_2) - E_1(m_2-1) < 0.008$. \add{Add the average $m$'s computed this way.} The selected embedding dimension was $m = \ceil{m_1 + m_2)/2}$. The length of the scaling region $t_{\mathrm{max}} = m\tau$ and the Theiler window $t_w = 50$.
+
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
@@ -1136,7 +1131,46 @@ This effect can be aleviated by choosing smaller $\tau$, but we are unaware of a
 \end{figure}
 
 \section{Correlation dimension} \label{sec:corrdim-exp}
-The simplest version of the Grassberger-Procaccia algorithm was used to compute the correlation dimension. \cite{grassberger1983} The value of the correlation integral $C(r)$ from the definition \ref{eq:corrsum} is computed for multiple values of $r$ in range from $0.1*\sigma$ to $0.5*\sigma$, where $\sigma$ is the standard deviation of the time series, and a least squares straight line is plotted through the plot of $\ln C(r)$ against $\ln r$. Correlation dimension is approximated as the slope of the line.
+\info[inline]{For corr dim, we also used two ways to compute it - automatic and fixed. Explain here why have we chosen $m=10$ and $\tau=3$.}
+
+\add[inline]{Describe the type of GPA algo used.}
+
+Fig. \ref{fig:cr} shows log-log plots of normalized correlations sum $C(r)$ against radius $r$ for varying values of time delay $\tau$. There are clear straight lines indicating expected relationship $C(r) \propto r^{d_2}$. We can see that the lines shift to the right, increasing their slopes with $m$. The correlation sum is almost independent of time delay.
+
+Fig. \ref{fig:loc-d2} shows the log plot of local slope of of $\log C(r)$ as a function of $r$. There are no apparent scaling regions at all. 
+
+We decided to compute the correlation dimension as follows. First, as with computation of the Lyapunov exponent, we use a moving window of length 15000 datapoints and shift 100 to locate 60 s section of the time series with the lowest p-value for the $\chi^2$ stationarity test described in Section . \add{Add description of the test.} Then, we create embeddings for embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
+\begin{align*}
+  \log r_{\mathrm{upper}} = \log r_{\mathrm{lower}} + \frac{1}{10} \left( \log r_{\mathrm{max}} - \log r_{\mathrm{lower}} \right), 
+\end{align*}
+where $r_{\mathrm{max}}$ denotes the largest ocurring pairwise distance on the attractor. This approach of automatic selection radius bounds for evaluation of $d_2$ is borrowed from \cite{andreas2000}.
+
+Fig. \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the embedding dimension $m$ for varying values of the embedding dimension $\tau$. There $d_2$ are no signs of saturation, correlation dimension reaches a global maximum and then starts to decrease. \add{Conclusion? No finite value, or no chaos?}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{Images/cr.png} }
+  \caption{Normalized correlation sum as a function of radius $r$ for dimensions in range from $5$ to $30$ (from left to right).}
+  \label{fig:cr}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.95\textwidth]{./Images/local_D_2/large.png} }
+  \caption{Local $D_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from left to right) and time delays $\tau = 4$ and $\tau = 8$.}
+  \label{fig:loc-d2}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{./Images/em_corrdim.png} }
+  \caption{Correlation dimension as function of the embedding dimension $m$.}
+\label{fig:em-corrdim}
+\end{figure}
+
 
 \section{Sample entropy}
 \section{Detrended fluctuation analysis}
