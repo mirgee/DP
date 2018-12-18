@@ -486,7 +486,7 @@ In the previous section, we have introduced a concept of state space of a dynami
 
 To this goal, let $\mathbf{s}_n$ be the reconstructed vector we are trying to find, and let us have a time series of scalar measurements of a quantity depending on the current state of the system:
 \begin{align} \label{eq:measurements}
-  x_n = s(\xi(n \Delta t)) + \eta_n \, ,
+  x_n = s(\xi(n \Delta t)) + \eta_n(n \Delta t) \, ,
 \end{align}
 where $\xi$ is a state space vector, $s(\cdot)$ is a measurement function and $\eta_n$ is a measurement noise. Furthermore, let us consider a function $\Phi: M \rightarrow \RR^m$, such that $\mathbf{x}_n = \Phi(\xi(n \Delta t))$. Such function is called an \textbf{embedding}. In the following, we will discuss what properties does $\Phi$ have to satisfy so that it provides useful information about the true state space trajectories.
 
@@ -509,13 +509,13 @@ Int the following text, we will focus on the first one, because we are not using
 
 It had been already known since 1936, that every $n$-dimensional differentiable manifold can be embedded in $\RR^{2n+1}$, and that the set of such embeddings is open and dense in the space of generic smooth maps, which is known as Whitney's theorem. \cite{whitney1936} \footnote{The second part of the theorem is a consequence of the fact that two hyperplanes with dimensions $d_1$ and $d_2$ in $m$-dimensional space are likely to intersect if $d_1 + d_2 \geq m$.}) In other words, $2n+1$ independent measurements of a $n$-dimensional system can be uniquely mapped to a $2n+1$ dimensional space, hence each such $2n+1$ dimensional vector identifies identifies state of the system perfecly, thus reconstructing the true state space.
 
-Time delay embedding is a technique of state space reconstruction, which achieves the same goal, but with a single measured quantity. Itwas first introduced into the field of non-linear dynamical system analysis by N. H. Packard in 1980 (although it was already being used in different fields in 1950s \cite{andreas2000}). Studying the Rossler system, Packard noticed that by sampling a single coordinate, he was able to obtain a faithful phase-space representation of the original system by simply using a value of a coordinate with its values at two previous times. \cite{packard1980} Indeed, since only a single sequence of scalar measurements is available, our only option for constructing the vectors $\mathbf{s}_n$ is by using values recorded at multiple different times. Packard's technique, however, can be useful in general. 
+Time delay embedding is a technique of state space reconstruction, which achieves the same goal, but with a single measured quantity. It was first introduced into the field of non-linear dynamical system analysis by N. H. Packard in 1980 (although it was already being used in different fields in 1950s \cite{andreas2000}). Studying the Rossler system, Packard noticed that by sampling a single coordinate, he was able to obtain a faithful phase-space representation of the original system by simply using a value of a coordinate with its values at two previous times. \cite{packard1980} In other he demonstrated numerically that past and future measurements of one variable contain information about the unobserved variables and can be used to define the present state.
 
 In particular, for each time $t$, we define an embedding window $\tau_w$, and use measurements obtained at times $t'$ for $t-\tau_w \leq t' \leq t$. To this goal, we use $m$ measurements, $\tau$ elements apart. Here, $\tau$ is called \emph{lag} or \emph{time delay}, and is measured in number of samples\footnote{Some authors use the time units $\tau \Delta t$, where $\Delta t = t_s = 1/f_s$ is the sampling period.}. Using the notation of \ref{eq:measurements}, the time delay reconstruction is then formed by the following vectors:
 \begin{align}
   \textbf{x}_n = (x_{n-(m-1)\tau}, x_{n-(m-2)\tau},\dots,x_{n-\tau}, x_n) \, ,
 \end{align}
-for $n > (m-1)\tau$. \cite{kantz2004} 
+for $n > (m-1)\tau = \tau_w$. \cite{kantz2004} 
 
 A year after Packard's discovery, in \cite{takens1981}, F. Takens has proved theoretically that the attractor reconstructed using this method may have the same dynamical properties (entropy, dimension, Lyapunov spectrum) as attractor of the original system under some conditions. Takens delay embedding theorem is an important result of non-linear time series analysis and can be stated as follows:
 \begin{thm}[\cite{takens1981}] \label{thm:takens}
@@ -543,10 +543,18 @@ A fascinating consequence of Theorem \ref{thm:sauer} when applied to a sequence 
 \subsection{The effects of noise}
 Although these theoretical results are important to know about, they all make practically unrealistic assumptions, such as infinite amount of data and infinite measurement precision, and absence of noise. Moreover, practical applications present further challanges, such as presence of noise.
 
-(TODO: Expand.)
+Several factors complicate successful reconstruction from real-world, experimental data: \cite{casdagli1991state}
+\begin{description}
+  \item[Observational noise.] Given a reconstructed vector $\mathbf{x} \in \RR^m$, there is a (approximatly Gaussian shaped in natural scenarios) distribution $p(\mathbf{x})$ in the reconstruction space due to the noise term in equation (\ref{eq:measurements}). \cite{andreas2000}
+  \item[Dynamic noise (nonstationarity).] External influences perturb the system, which consequently appears nondeterministic.
+  \item[Estimation error.] Estimation of the dynamics of the system is performed using only limited amount of data.
+  \item[Quantization error.] The measured analogue quantity is converted and stored as a number with only finite number of bits.
+\end{description}
+
+Moreover, different reconstructions can amplify the already present noise to varying degree. In \cite{casdagli1991state}, Casdagli et al. provide a quantitative way of analyzing this amplification, and, by extension, of insight into selection of embedding parameters so that the noise amplification is minimized.
 
 \subsection{The choice of time delay} \label{sec:delay}
-A careful reader might have noted that the results of theorems in Section \ref{sec:method-of-delays} do not depend on the value of the delay $\tau$. Embeddings with the same value of the embedding dimension $m$, but different values of $\tau$ are theoretically equivalent. In practice, however, some theoretically sound time delay reconstructions may fail to be embeddings. Although some researchers propose that the only important parameter is the length of the embedding window $\tau_w = \tau (m-1)$ \cite{kugiumtzis1996state}, as we will see, the choice of time delay has effects independent of the choice of embedding dimension, and vice versa.
+A careful reader might have noted that the results of theorems in Section \ref{sec:method-of-delays} do not depend on the value of the delay $\tau$.\footnote{This is because of the fact that the measurements are infinitely precise. \cite{casdagli1991state}}. Embeddings with the same value of the embedding dimension $m$, but different values of $\tau$ are theoretically equivalent. In practice, however, some theoretically sound time delay reconstructions may fail to be embeddings. Although some researchers propose that the only important parameter is the length of the embedding window $\tau_w = \tau (m-1)$ \cite{kugiumtzis1996state}, as we will see, the choice of time delay has effects independent of the choice of embedding dimension, and vice versa.
 
 For example:
 \begin{enumerate}
@@ -570,6 +578,8 @@ In summary, picking the proper value of $\tau$ is a balancing act between redund
 
 \subsubsection{Autocorrelation} \label{sec:acorr}
 From the above, we know that for the optimal choice of time delay, we may want to study correlation of the elements of the reconstructed vectors $\mathbf{s}_n$. Thus, a natural method of estimating the time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a threshold value - commonly used are the first local minimum \cite{albano1993reliability}, $0$, $A(0)/e$ \cite{stam2005}, and $1-A(0)/e$ \cite{kantz2004}.
+
+\add{[inline]Fix the notation here.}
 \begin{dfn}[\cite{kantz2004}]
   \textbf{Autocorrelation} $A : \RR \rightarrow \RR$ for time delay $\tau$ is given by
   \begin{align*}
