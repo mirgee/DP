@@ -379,7 +379,7 @@ In general, any system with temporally changing state is dynamic. A \emph{determ
 
 A non-linear dynamical system is a system where the differential equations describing its dynamics are non-linear. Unlike in a linear system, changes in the initial state of a non-dynamical system are allowed to have a non-linear relationship to the state space trajectory of the system. \cite{kaplan2005}
 
-It is important to note the obvious fact that in the case of EEG signal analysis, it is not possible to measure the true state of the system $\xi(t)$. In fact, the observed variables are only a function of the true state of the system, $s(\xi(t))$ for some (generally non-invertible) measurement function $s: \RR^d \rightarrow \RR^{d'}$, where $d' \ll d$. Morover, the time between subsequent measurements is limited by a sampling frequency and the values of the variables themselves are taken and stored with a limited precision.
+It is important to note the obvious fact that in the case of EEG signal analysis, it is not possible to measure the true state of the system $\xi(t)$. In fact, the observed variables are only a function of the true state of the system, $s(\xi(t))$ for some (generally non-invertible) measurement function $s: \RR^d \rightarrow \RR^{n}$, where $n \ll d$. Morover, the time between subsequent measurements is limited by a sampling frequency and the values of the variables themselves are taken and stored with a limited precision.
 
 \add[inline]{Add a few examples (Lorenz, Rossler, Mackey-Glass). Create my own plots instead of reusing.}
 
@@ -474,7 +474,7 @@ Intuitively, the number of mesh cubes of side $\epsilon$ intersecting $F$ gives 
 
 Broadly, one possible approach to non-linear time series analysis consists of the following steps: 
 \begin{enumerate}
-  \item reconstruction of the attractor\info{Saying dynamics is not true. We are not reconstructing the vector field $\mathbf{F}$.} of given system from recorded data,
+  \item reconstruction of the attractor \info{Saying dynamics is not true. We are not reconstructing the vector field $\mathbf{F}$.} of given system from recorded data,
   \item characterization of the reconstructed attractor,
   \item checking validity of the results with surrogate data testing. \cite{stam2005}
 \end{enumerate}
@@ -486,7 +486,7 @@ In the previous section, we have introduced a concept of state space of a dynami
 
 To this goal, let $\mathbf{s}_n$ be the reconstructed vector we are trying to find, and let us have a time series of scalar measurements of a quantity depending on the current state of the system:
 \begin{align} \label{eq:measurements}
-  s_n = s(\xi(n \Delta t)) + \eta_n \, ,
+  x_n = s(\xi(n \Delta t)) + \eta_n \, ,
 \end{align}
 where $\xi$ is a state space vector, $s(\cdot)$ is a measurement function and $\eta_n$ is a measurement noise. Furthermore, let us consider a function $\Phi: M \rightarrow \RR^m$, such that $\mathbf{x}_n = \Phi(\xi(n \Delta t))$. Such function is called an \textbf{embedding}. In the following, we will discuss what properties does $\Phi$ have to satisfy so that it provides useful information about the true state space trajectories.
 
@@ -496,7 +496,7 @@ Firstly, note that we assume the studied dynamical system to be deterministic. I
 
 Secondly, since many of the attractor properties we care about (such as correlation dimensions, Lyapunov exponents, etc.) are only invariant under smooth non-singular transformations, in order to preserve these properties in the embedded space, we may require $\Phi$ to preserve the differential structure of the state space $M$. This corresponds to the tangent space $D \Phi$ also being a one-to-one mapping. 
 
-(TODO: Add images illustrating these two conditions.)
+\add[inline]{Add images illustrating these two conditions.}
 
 \subsection{Method of time delays} \label{sec:method-of-delays}
 There are two common approaches to the problem of state space reconstruction for EEG time series data:
@@ -511,15 +511,15 @@ It had been already known since 1936, that every $n$-dimensional differentiable 
 
 Time delay embedding is a technique of state space reconstruction, which achieves the same goal, but with a single measured quantity. Itwas first introduced into the field of non-linear dynamical system analysis by N. H. Packard in 1980 (although it was already being used in different fields in 1950s \cite{andreas2000}). Studying the Rossler system, Packard noticed that by sampling a single coordinate, he was able to obtain a faithful phase-space representation of the original system by simply using a value of a coordinate with its values at two previous times. \cite{packard1980} Indeed, since only a single sequence of scalar measurements is available, our only option for constructing the vectors $\mathbf{s}_n$ is by using values recorded at multiple different times. Packard's technique, however, can be useful in general. 
 
-In particular, for each time $t$, we define an embedding window $\tau_w$, and use measurements obtained at times $t'$ for $t-\tau_w \leq t' \leq t$. To this goal, we use $m$ measurements, $\tau$ elements apart. Here, $\tau$ is called \emph{lag} or \emph{time delay}, and is measured in number of samples\footnote{Some authors use the time units $\tau \Delta t$, where $\Delta t = 1/f_s$ is the sampling period.}. Using the notation of \ref{eq:measurements}, the time delay reconstruction is then formed by the following vectors:
+In particular, for each time $t$, we define an embedding window $\tau_w$, and use measurements obtained at times $t'$ for $t-\tau_w \leq t' \leq t$. To this goal, we use $m$ measurements, $\tau$ elements apart. Here, $\tau$ is called \emph{lag} or \emph{time delay}, and is measured in number of samples\footnote{Some authors use the time units $\tau \Delta t$, where $\Delta t = t_s = 1/f_s$ is the sampling period.}. Using the notation of \ref{eq:measurements}, the time delay reconstruction is then formed by the following vectors:
 \begin{align}
-  \textbf{s}_n = (s_{n-(m-1)\tau}, s_{n-(m-2)\tau},\dots,s_{n-\tau}, s_n) \, ,
+  \textbf{x}_n = (x_{n-(m-1)\tau}, x_{n-(m-2)\tau},\dots,x_{n-\tau}, x_n) \, ,
 \end{align}
 for $n > (m-1)\tau$. \cite{kantz2004} 
 
 A year after Packard's discovery, in \cite{takens1981}, F. Takens has proved theoretically that the attractor reconstructed using this method may have the same dynamical properties (entropy, dimension, Lyapunov spectrum) as attractor of the original system under some conditions. Takens delay embedding theorem is an important result of non-linear time series analysis and can be stated as follows:
 \begin{thm}[\cite{takens1981}] \label{thm:takens}
-  Let $M$ be a compact\footnote{This theorem can be proved for $M$ non-compact provided less restrictions are imposed on $s$.} smooth manifold specifying the state space of a deterministic dynamical system of dimension $d \in \NN$, $s : M \rightarrow \RR, s \in C^2$ a smooth measurement function, $f^t : M \rightarrow M, f \in C^2$ a set smooth diffeomorphic state evolution functions for $t \in \RR$. Then the set of maps $\phi_{(s,f^t)} : M \rightarrow \RR^{2d+1}$, defined by
+  Let $M$ be a compact\footnote{This theorem can be proved for $M$ non-compact provided less restrictions are imposed on $s$.} smooth manifold specifying the state space of a deterministic dynamical system of dimension $d \in \NN$, $s : M \rightarrow \RR^n, s \in C^2$ a smooth measurement function, $f^t : M \rightarrow M, f \in C^2$ a set smooth diffeomorphic state evolution functions for $t \in \RR$. Then the set of maps $\phi_{(s,f^t)} : M \rightarrow \RR^{2d+1}$, defined by
   \begin{align}
     \phi_{(s,f^t)}(x) = (s(\xi), s(f^{-\tau}(\xi)), \dots, s(f^{-2d\tau}(\xi))),
   \end{align}
@@ -536,7 +536,7 @@ Taken's theorem, although of theoretical importance, is not necessarily useful i
   \end{align*}
 \end{thm}
 
-In conclusion, Theorem \ref{thm:takens} and Theorem \ref{thm:sauer} together ensure that when $m$ is chosen such that $m > d_A$i (which may be a considerable reduction in dimension compared to $m \geq 2d+1$), then the vector $\textbf{s}_n$ is a true embedding of the underlying attractor for almost any $\tau$ (note only sufficiency of the resulti - $\textbf{s}_n$ may be an embedding even for smaller $m$).
+In conclusion, Theorem \ref{thm:takens} and Theorem \ref{thm:sauer} together ensure that when $m$ is chosen such that $m > d_A$i (which may be a considerable reduction in dimension compared to $m \geq 2d+1$), then $\Phi$ a true embedding of the underlying attractor for almost any $\tau$ (note only sufficiency of the result - $\textbf{x}_n$ may be an embedding even for smaller $m$).
 
 A fascinating consequence of Theorem \ref{thm:sauer} when applied to a sequence of measurements recorded from a physical system is that a successfully reconstructed attractor does not describe the time series, but the system itself. In the words of Theiler: ``If one believes that the brain (say) is a deterministic system, then it may be possible to study the brain by looking at the electrical output of a single neuron. This example is an ambitious one, but the point is that the delay-time embedding makes it possible for one to analyze the self-organizing behavior of a complex dynamical system without knowing the full state at any given time''. \cite{theiler1990estimating}
 
