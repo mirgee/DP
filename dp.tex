@@ -562,7 +562,7 @@ For example:
   \item Highly chaotic systems with large Lyapunov exponents (see Section \ref{sec:lyap}) and large dimension, projection to a low dimensional time series causes explosion in the noise amplification. As a result, this imposes limits on short term predictablity and state space reconstruction may become impossible. Such systems should be treated as operationally stochastic. \cite{casdagli1991state}
   \item It was shown that increasing $\tau$ leads to rise in entropy. \cite{Kantz1997}
   \item Deterministic behavior can be observed only when $\tau_w$ is smaller than the time scale of the foldings naturally produced as result of time embedding.
-  \item If the values of $\tau$ are \emph{too small} in comparison to the typical time scales of the series (measured e.g. by mean period), then the successive elements of reconstructed state space vectors become almost equal. This effect is often called \emph{redundance}. Since $s_t \approx s_{t + \tau}$, the reconstructed attractor will concentrate along the main diagonal (see Fig. \ref{fig:delay}, left hand side). Moreover, in this case, the effect of noise is amplified. \cite{casdagli1991state}
+  \item If the values of $\tau$ are \emph{too small} in comparison to the typical time scales of the series (measured e.g. by mean period), then the successive elements of reconstructed state space vectors become almost equal. This effect is often called \emph{redundance}. Since $x_t \approx x_{t + \tau}$, the reconstructed attractor will concentrate along the main diagonal (see Fig. \ref{fig:delay}, left hand side). Moreover, in this case, the effect of noise is amplified. \cite{casdagli1991state}
   \item If the values of $\tau$ are \emph{too large}, the successive elements in the reconstructed vector are almost independent. This effect, called \emph{irrelevance} or \emph{overfolding} is even magnified if the underlying attractor is chaotic, since deterministic correlations between states are lost even at very small time scales, i.e. even measurements performed at time $t$ and $t + \tau$ for very small $\tau$ may be already unrelated. The reconstructed attractor will form a seemingly random clound in $\RR^m$ - thus the reconstructed attractor may appear complex, even if the true attractor is simple (see Fig. \ref{fig:delay}, right hand side). 
 \end{enumerate}
 
@@ -583,7 +583,7 @@ From the above, we understand that statistical non-correlation between values of
   \textbf{Autocorrelation} $A : \RR \rightarrow \RR$ for time delay $\tau$ is given by
   \begin{align*}
     % A(\tau) = \frac{1}{\sigma^2} \langle (s_n - \langle s_n \rangle )(s_{n-\tau} - \langle s_n \rangle) \rangle \\
-    A(\tau) = \frac{E[(x_i - \overline{x})(x_{i-\tau - \overline{x}})]}{\sigma^2}, 
+    A(\tau) = \frac{E[(x_i - \overline{x})(x_{i-\tau} - \overline{x})]}{\sigma^2}, 
   \end{align*}
 \end{dfn}
 where $\overline{x}$ is the mean of the time series, and $\sigma^2$ is its standard deviation.
@@ -609,24 +609,42 @@ Although this approach yields coordinates independent in a more general sense th
 
 Another criticism of delayed mutual information that some systems exhibit slowly decaying mutual information which has no minima. \cite{martinerie1992mutual} 
 
-Moreover, both approaches described above address the issue of irrelevance, but not that of redundance. In fact, based mostly on empirical, rather than the most time delay estimation techniques optimize for the following criteria \footnote{However, additional criteria may arise depending on the particular application.}: \cite{kugiumtzis1996state} 
+\subsubsection{Average displacement from diagonal}
+\textbf{Average displacement from diaognal} is a simple technique which simply measures the average distance of the embedding vectors from their original location:
+\begin{align*}
+  \mathrm{ADFD}(m, \tau) = \frac{1}{N_{(m, \tau)}}\sum_{i=1}^{N_{(m, \tau)}} \norm{ \mathbf{x}_i^{(m, \tau)} - \mathbf{x}_i^{(m, 0)}},
+\end{align*}
+where $\mathbf{x}_i^{(m, \tau)}$ is the $i$-th vector of time delay embedding with embedding dimension $m$ and time delay $\tau$.
+
+Rosenstein et al. presented multiple methods for quantifying expansion from the main diagonal, and found $\mathrm{ADFD}$ to be the most computationally efficient, robust to noise, and accurate. \cite{rosenstein1994reconstruction} They also experimentily identified optimal $\tau$ as the one for which the slope of $\mathrm{ADFD}$ drops below 40\% of its initial value.  
+
+\subsubsection{Singular values analysis}
+All the approaches described so far address the issue of irrelevance, but not that of redundance. In fact, based mostly on empirical, rather than the most time delay estimation techniques optimize for the following criteria \footnote{However, additional criteria may arise depending on the particular application.}: \cite{kugiumtzis1996state} 
 \begin{enumerate}
   \item The reconstructed attractor must be expanded from the diagonal.
   \item The components of the reconstructed vector $\mathbf{x}_n$ must be uncorrelated.
 \end{enumerate}
 
-Those criteria are noticably similar, and bias towards larger estimates of $\tau$. This leads many authors to suggest more advanced techniques, such as generalized delayed mutual information mentioned above, or some of those introduced in the following text.
+Those criteria are noticeably similar, and bias towards larger estimates of $\tau$. This leads many authors to suggest more advanced techniques, such as generalized delayed mutual information mentioned above, or some of those introduced in the following text.
 
-\subsubsection{Average displacement from diagonal}
-\textbf{Average displacement from diognal} is a simple technique which simply measures the average distance of the embedding vectors from their original location:
+Principal component analysis, in particular, can be used to measure the volume occupied by the reconstructed attractor. Both overfolded and redundant attractors may be marked by low volume. \cite{andreas2000}
+
+Given a fixed embedding dimension $m$, the corresponding $m$ singular values as a function of $\tau$ contain information about the degree of extension of the embedded vectors in the $m$ directions in the reconstructed space. Rapid increase followed by rapid decrease of some singular values accompanied by the opposite behavior of others indicate a collapse of the attractor.
+
+If we assume, without loss of generality\unsure{Is this so?}, that the time series is standardized and denote
 \begin{align*}
-  \mathrm{ADFD}(m, \tau) = \frac{1}{N_{(m, \tau)}}\sum_{i=1}^{N_{(m, \tau)}} \norm{ \mathbf{x}_i^{(m, \tau)} - \mathbf{x}_i^{(m, 0)}},
+  \mathbb{X} \coloneqq \begin{pmatrix} \mathbf{x}_1^T \\ \mathbf{x}_2^T  \\ \dots \\ \mathbf{x}_{N_{(m, \tau)}}^T  \end{pmatrix},
 \end{align*}
-where $\mathbf{x}_i^{(m, \tau)}$ is the $i$-th vector of time delay embedding with embedding dimension $m$ adn time delay $\tau$.
+then
+\begin{align*}
+  (\mathbb{C})_{ij} \coloneqq (\mathbb{X}^T\mathbb{X})_{ij} = A\left( (i-j)\tau \right).
+\end{align*}
+This matrix is symmetric and thus diagonalizable, and also at least non-negative definite. Its eigenvalues are called the singular values.
 
-Rosenstein et al. presented multiple methods for quantifying expansion from the main diagonal, and found $\mathrm{ADFD}$ to be the most computationally efficient, robust to noise, and accurate. \cite{rosenstein1994reconstruction}
+If the time delay is too small, then all the elements of matrix $\mathbb{C}$ will have similar value $(\mathbb{C})_{ij} \approx A(0)$, and thus there will be one dominant singular value, while others will remain close to zero. This singular value then corresponds to the main diagonal of the attractor.
 
-\subsubsection{Singular values analysis}
+If the time delay is too large, then the diagonal elements will approach average of the squared time series $(\mathbb{C})_{ii} \approx \langle x^2 \rangle$, while the remaining elements will converge to zero due to decay of the autocorrelation function, $\mathbb{C} \approx c\mathbb{I}$for some constant $c$. This corresponds to the reconstruction forming a featureless noise. \cite{andreas2000}
+
 \subsubsection{Integral local deformation}
 The uniqueness theorem of differential equations requires that any no trajectories in the state space intersect. Moreover, in real physical systems, it may be reasonable to assume that it is highly unlikely to find closeby trajectories of opposite or orthogonal directions. This property is maintained by a successful embedding, and (if the assumption holds) can occur only in an improper reconstruction.
 
@@ -647,7 +665,6 @@ This expression, called \textbf{integral local deformation}, is then averaged ov
 \end{align*}
 
 \subsection{The choice of embedding dimension}
-
 \subsubsection{False nearest neighbors} \label{sec:fnn}
 Since the dynamics $\textbf{F}$ are assumed to be a \emph{smooth} vector field and the attractor $A$ is a \emph{compact} set in the phase space, its members acquire near neighbors, which should be subject to similar evolution. Therefore, these neighbors should remain close to each other after a short interval of time (even though chaos may introduce exponential divergence between them). This is a useful fact, which can be used, for example, to predict future evolution of a trajectory, or a computation of Lyapunov exponents. The \textbf{false nearest neighbors} algorithm uses them for estimation of embedding dimension. \cite{kennel1992determining}
 
