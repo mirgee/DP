@@ -577,9 +577,9 @@ In summary, picking the proper value of $\tau$ is a balancing act between redund
 \end{figure}
 
 \subsubsection{Autocorrelation} \label{sec:acorr}
-From the above, we know that for the optimal choice of time delay, we may want to study correlation of the elements of the reconstructed vectors $\mathbf{s}_n$. Thus, a natural method of estimating the time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a threshold value - commonly used are the first local minimum \cite{albano1993reliability}, $0$, $A(0)/e$ \cite{stam2005}, and $1-A(0)/e$ \cite{kantz2004}.
+From the above, we know that for the optimal choice of time delay, we may want to study correlation of the elements of the reconstructed vectors $\mathbf{x}_n$. Thus, a natural method of estimating the time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a threshold value - commonly used are the first local minimum \cite{albano1993reliability}, $0$, $A(0)/e$ \cite{stam2005}, and $1-A(0)/e$ \cite{kantz2004}.
 
-\add{[inline]Fix the notation here.}
+\add{[inline]Fix}
 \begin{dfn}[\cite{kantz2004}]
   \textbf{Autocorrelation} $A : \RR \rightarrow \RR$ for time delay $\tau$ is given by
   \begin{align*}
@@ -587,33 +587,37 @@ From the above, we know that for the optimal choice of time delay, we may want t
   \end{align*}
 \end{dfn}
 
-Computing the autocorrelation function is not only useful for examining the stationarity of the time series, but it also gives a geometrical insight into the shape of the attractor: if we approximate the cloud of reconstructed vectors $\mathbf{s}_n \in \RR^m$ by an ellipsoid, lengths of its semi-axis are given by the square root of the eigenvalues of its auto-covariance matrix. In two dimensions, zero of the covariance matrix corresponds to those eigenvalues being equal, i.e. $s_t$ and $s_{t-\tau}$ being completely uncorrelated. \cite{kantz2004} An obvious objection is that correlation between $s_t$ and $s_{t-\tau}$ says nothing about correlation between $s_t$ and $s_{t-2\tau}$, etc. Thus, this method, since it computes correlations only between two successive coordinates, is generally useful only for low dimensional systems.
+Computing the autocorrelation function is not only useful for examining the stationarity of the time series, but it also gives a geometrical insight into the shape of the attractor: if we approximate the cloud of reconstructed vectors $\mathbf{x}_n \in \RR^m$ by an ellipsoid, lengths of its semi-axis are given by the square root of the eigenvalues of its auto-covariance matrix. In two dimensions, zero of the covariance matrix corresponds to those eigenvalues being equal, i.e. $x_t$ and $x_{t-\tau}$ being completely uncorrelated. \cite{kantz2004} An obvious objection is that correlation between $x_t$ and $x_{t-\tau}$ says nothing about correlation between $x_t$ and $x_{t-2\tau}$, etc. Thus, this method, since it computes correlations only between two successive coordinates, is generally useful only for low dimensional systems.
 
 Autocorrelation also provides a lower bound for $\tau$ in the following sense. If the data is noisy, vectors formed by time delay embedding procedure are practically meaningless, if the variation of the signal in the time covered in the time window $\tau_w = (m-1)\tau$ is less the the variation of noise. This means that $\tau$ should be selected such that $A(\tau) > A(0) - \sigma^2_{\text{noise}}/\sigma^2_{\text{signal}}$. \cite{kantz2004}
 
-\subsubsection{Mutual information} \label{sec:dmi}
+\subsubsection{Delayed mutual information} \label{sec:dmi}
 Another commonly used method is to use the first minimum of the \emph{time delayed mutual information}. \cite{fraser1986independent} 
 
 \begin{dfn}[\cite{kantz2004}]
-  Let probability density of the values of a time series be split into $\epsilon$-wide histogram bins. Let $p_i$ be the probability that a signal assumes value in $i$-th bin of the histogram, and let $p_{ij}(\tau)$ be the the probability that $s_t$ is in a bin $i$ and $s_{t+\tau}$ is in a bin $j$. \textbf{Delayed mutual information} $\mathcal{I}_{\epsilon}$ for time delay $\tau$ is defined as
+  Let probability density of the values of a time series be split into $\epsilon$-wide histogram bins. Let $p_i$ be the probability that a signal assumes value in $i$-th bin of the histogram, and let $p_{ij}(\tau)$ be the the probability that $x_t$ is in a bin $i$ and $x_{t+\tau}$ is in a bin $j$. \textbf{Delayed mutual information} $\mathcal{I}_{\epsilon}$ for time delay $\tau$ is defined as
   \begin{align*}
     \mathcal{I}_{\epsilon}(\tau) = \sum_{i, j} p_{ij}(\tau) \ln p_{ij}(\tau) - 2 \sum_{i} p_i \ln p_i.
   \end{align*}
 \end{dfn}
 
-Although this approach yields coordinates independent in a more general sense than simple linear independence provided by the autocorrelation function, the same criticism applies: minimum dependence between $s_t$ and $s_{t-\tau}$ says nothing about dependencies between other coordinates. Again, using this method is justifiable only for two-dimensional reconstructions. However, delayed mutual information has been generalized for multiple dimensions by its proponent A. M. Fraser using multidimensional distributions into a concept he called \emph{redundancy}, which basically measures the degree to which the reconstructed vectors accumulate around the bisectrix of the embedding space. \cite{fraser1989reconstructing} 
+The optimal $\tau$ is usually selected as $\argmin_{\tau} \mathcal{I}_{\epsilon}(\tau)$.
+
+Although this approach yields coordinates independent in a more general sense than simple linear independence provided by the autocorrelation function, the same criticism applies: minimum dependence between $x_t$ and $x_{t-\tau}$ says nothing about dependencies between other coordinates. Again, using this method is justifiable only for two-dimensional reconstructions. However, delayed mutual information has been generalized for multiple dimensions by its proponent A. M. Fraser using multidimensional distributions into a concept he called \emph{redundancy}, which basically measures the degree to which the reconstructed vectors accumulate around the bisectrix of the embedding space. \cite{fraser1989reconstructing} 
 
 Another criticism of delayed mutual information that some systems exhibit slowly decaying mutual information which has no minima. \cite{martinerie1992mutual} 
 
 Moreover, both approaches described above address the issue of irrelevance, but not that of redundance. In fact, based mostly on empirical, rather than the most time delay estimation techniques optimize for the following criteria \footnote{However, additional criteria may arise depending on the particular application.}: \cite{kugiumtzis1996state} 
 \begin{enumerate}
   \item The reconstructed attractor must be expanded from the diagonal.
-  \item The components of the reconstructed vector $\mathbf{s}_n$ must be uncorrelated.
+  \item The components of the reconstructed vector $\mathbf{x}_n$ must be uncorrelated.
 \end{enumerate}
 
 Those criteria are noticably similar, and bias towards larger estimates of $\tau$. This leads many authors to suggest more advanced techniques.
 
-(TODO: Maybe talk about techniques we didn't use, or we will yet try.)
+\subsubsection{Average displacement from diagonal}
+\subsubsection{Singular values analysis}
+\subsubsection{Integral local deformation}
 
 \subsection{The choice of embedding dimension}
 
@@ -1039,7 +1043,7 @@ Typical plots of autocorrelation and delayed mutual information can be seen on F
 
 Fig. \ref{fig:pca-svd} shows singular values of the PCA reconstruction as functions of $\tau$. The two prominent singular values correspond to the main axes \unsure{Is this correct?} of the attractor. We can see several collapses: smaller ones at $\tau = 5$ and $\tau=7$, and larger one at $\tau=14$, corresponding to the sharp peak of ILD on Fig. \ref{fig:ild}. For $\tau=3$, the three largest singular values show convergence - however, the small singular values suggests that the attractor has not fully unfolded in their corresponding directions. \unsure{Not sure if this wording is precise and understandable.} Overall, this behavior suggests $\tau_{\mathrm{svd}} = 6$ as optimal. Note that results of this technique are difficult to evaluate by an automatic procedure.
 
-The results obtained by ADFD can be seen in Fig. \ref{fig:adfd}. The average displacement tends to increase with $m$, is not increasing increasing on its domain, and saturates for relavely small values of $\tau$ - thus, the estimated time delays are (consistently)\change{We need to smartly separate general observations with this analysis.} lower than those obtained by other techniques. Moreover, this technique requires prior selection of $m$. However, the algorithms for selection of $m$, require estimation $\tau$, making this technique impractical.
+The results obtained by ADFD can be seen in Fig. \ref{fig:adfd}. The average displacement tends to increase with $m$, is not monotonically increasing on its domain, and saturates for relavely small values of $\tau$ - thus, the estimated time delays are (consistently)\change{We need to smartly separate general observations with this analysis.} lower than those obtained by other techniques. Moreover, this technique requires prior selection of $m$. However, the algorithms for selection of $m$, require estimation $\tau$, making this technique impractical.
 
 The result of ILD, the most powerful algorithm for estimation of the embedding parameters we used, can be seen on Fig. \ref{fig:ild}. There is a clear minimum at $\tau_{\mathrm{ILD}}=4$, and the ILD curves become very similar for approximately all $m \geq 10$, except near the minimum, where they converge slower. Almost identical behavior was observed across all channels in this recording. \add{There are interesting patterns in these plots across patients and channels.} This algorithm is computationally expensive (it takes around an hour to generate a single plot), and so is impractical for large datasets.
 
@@ -1159,7 +1163,7 @@ With increasing time delay $\tau$, we observe gradually damped oscillation-like 
                     & \dots \\
   y_{i+(m-1)\tau}   &= \begin{pmatrix} x_{i+(m-1)\tau} & \mu_1 & \dots & \mu_{m-2} & \mu_{m-1} \end{pmatrix}, \\
 \end{align*}
-and so $y_i \approx y_{i+\tau} \approx y_{i+2\tau} \approx$, and this oscillation with period $\tau$ gradually vanishes over $m-1$ periods. \unsure{Why doesn't this happen always?}
+and so if $x_i \approx x_{i+\tau}$ for enough $i$, then $y_i \approx y_{i+\tau} \approx y_{i+2\tau} \approx$, and this oscillation with period $\tau$ gradually vanishes over $m-1$ periods. \unsure{Why doesn't this happen always?}
 
 This effect can be aleviated by choosing smaller $\tau$, but we are unaware of any way of eliminating it completely for Rosenstein's algorithm. \unsure{Are there others? Somehow introduce randomness?}\footnote{There are algorithms, such as modifications of Wolf's algorithm \cite{roschke1995nonlinear}, whose results are almost independent on $\tau$ (as is theoretically expected).} Another metric to optimize after length of the scaling region is, therefore, reduction of the degree of deformation of the scaling region by the periodic oscillations.
 
