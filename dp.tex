@@ -577,15 +577,17 @@ In summary, picking the proper value of $\tau$ is a balancing act between redund
 \end{figure}
 
 \subsubsection{Autocorrelation} \label{sec:acorr}
-From the above, we know that for the optimal choice of time delay, we may want to study correlation of the elements of the reconstructed vectors $\mathbf{x}_n$. Thus, a natural method of estimating the time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a threshold value - commonly used are the first local minimum \cite{albano1993reliability}, $0$, $A(0)/e$ \cite{stam2005}, and $1-A(0)/e$ \cite{kantz2004}.
+From the above, we understand that statistical non-correlation between values of coordinates of the reconstructed vectors $\mathbf{x}_n$ are desirable property of a time delay embedding. Thus, a natural method of estimating the optimal time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a threshold value - commonly used are $A(0)/e$ \cite{stam2005}, $1-A(0)/e$ \cite{kantz2004}, or even the first local minimum \cite{albano1993reliability, abarbanel2012analysis} or the first $0$ crossing \cite{kantz2004}.
 
-\add{[inline]Fix}
 \begin{dfn}[\cite{kantz2004}]
   \textbf{Autocorrelation} $A : \RR \rightarrow \RR$ for time delay $\tau$ is given by
   \begin{align*}
-    A(\tau) = \frac{1}{\sigma^2} \langle (s_n - \langle s_n \rangle )(s_{n-\tau} - \langle s_n \rangle) \rangle
+    % A(\tau) = \frac{1}{\sigma^2} \langle (s_n - \langle s_n \rangle )(s_{n-\tau} - \langle s_n \rangle) \rangle \\
+    A(\tau) = \frac{E[(x_i - \overline{x})(x_{i-\tau - \overline{x}})]}{\sigma^2}, 
   \end{align*}
 \end{dfn}
+where $\overline{x}$ is the mean of the time series, and $\sigma^2$ is its standard deviation.
+
 
 Computing the autocorrelation function is not only useful for examining the stationarity of the time series, but it also gives a geometrical insight into the shape of the attractor: if we approximate the cloud of reconstructed vectors $\mathbf{x}_n \in \RR^m$ by an ellipsoid, lengths of its semi-axis are given by the square root of the eigenvalues of its auto-covariance matrix. In two dimensions, zero of the covariance matrix corresponds to those eigenvalues being equal, i.e. $x_t$ and $x_{t-\tau}$ being completely uncorrelated. \cite{kantz2004} An obvious objection is that correlation between $x_t$ and $x_{t-\tau}$ says nothing about correlation between $x_t$ and $x_{t-2\tau}$, etc. Thus, this method, since it computes correlations only between two successive coordinates, is generally useful only for low dimensional systems.
 
@@ -601,7 +603,7 @@ Another commonly used method is to use the first minimum of the \emph{time delay
   \end{align*}
 \end{dfn}
 
-The optimal $\tau$ is usually selected as $\argmin_{\tau} \mathcal{I}_{\epsilon}(\tau)$.
+In other words, time delayed mutual information the average mutual information between measurements obtained by the original time series and its $\tau$-shifted (time delayed) counterpart. The optimal $\tau$ is usually selected as $\argmin_{\tau} \mathcal{I}_{\epsilon}(\tau)$.
 
 Although this approach yields coordinates independent in a more general sense than simple linear independence provided by the autocorrelation function, the same criticism applies: minimum dependence between $x_t$ and $x_{t-\tau}$ says nothing about dependencies between other coordinates. Again, using this method is justifiable only for two-dimensional reconstructions. However, delayed mutual information has been generalized for multiple dimensions by its proponent A. M. Fraser using multidimensional distributions into a concept he called \emph{redundancy}, which basically measures the degree to which the reconstructed vectors accumulate around the bisectrix of the embedding space. \cite{fraser1989reconstructing} 
 
@@ -613,11 +615,36 @@ Moreover, both approaches described above address the issue of irrelevance, but 
   \item The components of the reconstructed vector $\mathbf{x}_n$ must be uncorrelated.
 \end{enumerate}
 
-Those criteria are noticably similar, and bias towards larger estimates of $\tau$. This leads many authors to suggest more advanced techniques.
+Those criteria are noticably similar, and bias towards larger estimates of $\tau$. This leads many authors to suggest more advanced techniques, such as generalized delayed mutual information mentioned above, or some of those introduced in the following text.
 
 \subsubsection{Average displacement from diagonal}
+\textbf{Average displacement from diognal} is a simple technique which simply measures the average distance of the embedding vectors from their original location:
+\begin{align*}
+  \mathrm{ADFD}(m, \tau) = \frac{1}{N_{(m, \tau)}}\sum_{i=1}^{N_{(m, \tau)}} \norm{ \mathbf{x}_i^{(m, \tau)} - \mathbf{x}_i^{(m, 0)}},
+\end{align*}
+where $\mathbf{x}_i^{(m, \tau)}$ is the $i$-th vector of time delay embedding with embedding dimension $m$ adn time delay $\tau$.
+
+Rosenstein et al. presented multiple methods for quantifying expansion from the main diagonal, and found $\mathrm{ADFD}$ to be the most computationally efficient, robust to noise, and accurate. \cite{rosenstein1994reconstruction}
+
 \subsubsection{Singular values analysis}
 \subsubsection{Integral local deformation}
+The uniqueness theorem of differential equations requires that any no trajectories in the state space intersect. Moreover, in real physical systems, it may be reasonable to assume that it is highly unlikely to find closeby trajectories of opposite or orthogonal directions. This property is maintained by a successful embedding, and (if the assumption holds) can occur only in an improper reconstruction.
+
+T. Buzug and G. Pfister presented a quantitative measure of these close trajectory intersections by comparing the the evolutions of reference trajectories with centroids of points on the neighboring trajectories. \cite{buzug1992optimal} For the optimal embedding, divergence between these trajectories should be minimized.
+
+First, multiple random reference points are chosen. Let $\mathbf{x}_i(0)$ be such a reference point at time 0. Then, either a fixed number of nearest neighbors or all neighbors within a given radius and their centroid $\mathbf{x}_i^{com}(0)$ are found. Then, the absolute growth of the distance between the centroid of those originally neighboring points and the reference point after $qt_{ev}$ time steps is found as:
+\begin{align*}
+  \Delta(q,m,\tau) = \norm{\mathbf{x}^{com}(qt_{ev}) - \mathbf{x}_i(qt_{ev})} - \norm{\mathbf{x}_i^{com}(0) - \mathbf{x}_i(0)}.
+\end{align*}
+
+The values $\Delta(q,m,\tau)$ are discretely integrated from $q=1$ to $q=q_{max}$:
+\begin{align*}
+  \mathcal{D}(m, \tau, i) = \frac{t_{ev}}{2} \sum_{q=1}^{q_{max}} \left( \Delta(q-1,m,\tau) - \Delta(q,m,\tau) \right).
+\end{align*}
+This expression, called \textbf{integral local deformation}, is then averaged over $N_{ref}$ reference points and normalized:
+\begin{align*}
+  \langle \mathcal{D}(m, \tau, i) \rangle_i = \frac{t_{ev} \sum_{i=1}^{N_{ref}} \sum_{q=1}^{q_{max}} \left( \Delta(q-1,m,\tau) - \Delta(q,m,\tau) \right)}{2N_{ref} \Delta t \left( \max_{i \in 1, 2, \dots, N} x_i - \min_{i \in 1, 2, \dots, N} x_i \right)}
+\end{align*}
 
 \subsection{The choice of embedding dimension}
 
