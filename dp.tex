@@ -768,47 +768,44 @@ where $\Delta t$ is sampling time of the time series.
 
 The Lyapunov exponents carry the units of an inverse time - $1/\lambda_1$ gives a typical time scale for the divergence or convergence of nearby trajectories. \cite{kantz2004} Equivalently, $1/\lambda_1$ is (on average) an upper bound on predictability in the system. \cite{andreas2000} Also equivalently, they also can be seen as quantification of the degree of chaos in the system; a sigle positive exponents is a sufficient indication of presence of chaos. \cite{Rosenstein1993}
 
-(TODO: Say what different values of $\lambda_1$ say about the system.)
+\add[inline]{Say what different values of $\lambda_1$ say about the system.}
 
 \subsubsection{Rosenstein's algorithm} \label{sec:rosenstein}
 In the following, we will describe \emph{Rosenstein's algorithm} for computation of the largest Lyapunov exponent. \cite{Rosenstein1993} This algorithm was found to be relatively robust to noise, values of the embedding parameters and limited amount of data.
 
 First, state space is reconstructed using time delay embedding (see Section \ref{sec:embedding}). The suggested method of time delay selection is the autocorrelation method (see Section \ref{sec:acorr}).
 
-For each point on the trajectory $\mathbf{s}_n$, the algorithm locates the nearest neighbor $\mathbf{s}_{\hat{n}}$, such that their distance in the embedded space is minimized:
+For given embedding dimension $m$ and each point on the trajectory $\mathbf{x}_j$, the algorithm locates the nearest neighbor $\mathbf{x}_{n(j,m)}$, such that their distance in the embedded space is minimized:
 \begin{align*}
-  d_n(0) = \min_{n \neq \hat{n}} \norm { \mathbf{s}_n - \mathbf{s}_{\hat{n}} }.
+  d_j(0) = \norm { \mathbf{x}_j - \mathbf{x}_{ n(j,m) } }.
 \end{align*}
 
-As an approximation, we want to assume $\mathbf{s}_n$ and $\mathbf{s}_{\hat{n}}$ to be nearby initial conditions, but at the same time, we know they lie on the same trajectory. Hence, we will impose a condition on their temporal separation:
+As an approximation, we want to assume $\mathbf{x}_j$ and $\mathbf{x}_{n(j,m)}$ to be nearby initial conditions, but at the same time, we know they lie on the same trajectory. Hence, we will impose a condition on their temporal separation:
 \begin{align*}
-  \frac{1}{4} \text{ time series length} > \left| n - \hat{n} \right| > \text{mean period of the time series}.
+  \frac{1}{4} \text{ time series length} > \left| j - n(j,m) \right| > \text{mean period of the time series}.
 \end{align*}
 
-Then, assuming the $n$-th pair of nearest neighbors diverge exponentially at a rate given by the largest Lyapunov exponent, we have
+Then, assuming the $j$-th pair of nearest neighbors diverge exponentially at a rate given by the largest Lyapunov exponent, we have
 \begin{align*}
-  d_n(i) \approx d_n(0) e^{\lambda_1(i \Delta t)}.
+  d_j(i) \approx d_j(0) e^{\lambda_1(i \Delta t)}.
 \end{align*}
 
 By taking logarithm of both sides, we obtain
 
 \begin{align*}
-  \ln d_n(i) \approx \ln d_n(0) + \lambda_1 (i \Delta t).
+  \ln d_j(i) \approx \ln d_j(0) + \lambda_1 (i \Delta t).
 \end{align*}
 
 This represents a set of lines, one for each point on the reconstructed trajectory, each with a slope roughly proportional to $\lambda_1$. So, the algorithm approximates the largest Lyapunov exponent by least squares fit to the average line
 \begin{align*}
-  d(i) = \frac{1}{\Delta t} \langle \ln d_n(i) \rangle,
+  d(i) = \frac{1}{\Delta t} \langle \ln d_j(i) \rangle_{j = 1, 2, \dots, N_{(m, \tau)}}.
 \end{align*}
 
-where the average $\langle \cdot \rangle$ is over $n$. Note that the sampling period $\Delta t$ plays no role - one can decide to set $\Delta t = 1$ and work with units of time series indeces instead of seconds interchangeably. Relatedly, we can even rescale or shift the data, since Lyapunov exponents are invariant under any smooth invertible map.
+Note that the sampling period $\Delta t$ plays no role - one can decide to set $\Delta t = 1$ and work with units of time series indeces instead of seconds interchangeably. Relatedly, we can even rescale or shift the data, since Lyapunov exponents are invariant under any smooth invertible map.
 
 Another prominent and widely used algorithm for estimation of the largest Lyapunov exponent is Wolf's algorithm \cite{wolf1985determining}, but due to its instability and the impossibility of distinguishing exponential divergence, it cannot be recommended. \cite{kantz2004}
 
 \info[inline]{As we have mentioned already, the projection involved in the measurement may make distances shrink apparently for short times, although they grow in the true state space. \cite{kantz2004} Moreover, in the true state space distances do not grow everywhere on the attractor with the same rate, and locally they may even shrink. LLE is average of those local divergence rates. Influence of noise can be minimised by using an appropriate averaging statistics.}
-
-\subsubsection{Kantz's algorithm}
-Independently, at the same time as Rosenstein, H. Kantz developed a very similar algorithm, with slightly better properties. \cite{kantz1994robust}
 
 \subsection{Correlation dimension} \label{sec:corrdim}
 Correlation dimension is a characteristic measure which describes complexity of the geometry of chaotic attractors.
