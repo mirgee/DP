@@ -452,10 +452,10 @@ For these systems, after sufficient passage of time, all future states will cont
 \end{figure}
 
 Since most physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are relatively complex, characteristic of dynamical systems with extending volumes in some directions. This property results fast divergence of two initial states, one of which has nonzero component in the direction of growth, i.e. sensitive dependence on the initial conditions. However, since atractors are bounded, the divergence eventually stops and the two trajectories fold together. This continuous expansion and folding may create an attractor with a \emph{fractal structure} (an example of such an attractor is shown on Figure \ref{fig:self-similarity}). \cite{andreas2000} For our purposes it is sufficient to say that this means that these attractors can be characterized as having (quantifiable) self-similarity.\footnote{Cantor set being a canonical example of self-similarity.} However, the following definition related to fractals will be useful in Section \ref{sec:embedding}:
-\begin{dfn}[\cite{falconer2004}]
+\begin{dfn}[\cite{falconer2004}] \label{def:box-counting}
   Let $F$ be any non-empty bounded subset of $\RR^n$, and let $N_\epsilon(F)$ be the smallest number of sets of diameter at most $\epsilon$ which can cover $F$. Then, the \textbf{box-counting dimension} (also known as Minkowski–Bouligand dimension) is defined as
-  \begin{align}
-    d_F = \lim_{\epsilon \rightarrow 0} \frac{\log N_\epsilon(F)}{\log{\frac{1}{\epsilon}}} \, ,
+  \begin{align} \label{eq:box-counting}
+    d_0(F) = \lim_{\epsilon \rightarrow 0} -\frac{\log N_\epsilon(F)}{\log{\epsilon}} \, ,
   \end{align}
   if it exists.
 \end{dfn}
@@ -808,19 +808,6 @@ Another prominent and widely used algorithm for estimation of the largest Lyapun
 \info[inline]{As we have mentioned already, the projection involved in the measurement may make distances shrink apparently for short times, although they grow in the true state space. \cite{kantz2004} Moreover, in the true state space distances do not grow everywhere on the attractor with the same rate, and locally they may even shrink. LLE is average of those local divergence rates. Influence of noise can be minimised by using an appropriate averaging statistics.}
 
 \subsection{Correlation dimension} \label{sec:corrdim}
-Correlation dimension is a characteristic measure which describes complexity of the geometry of chaotic attractors.
-
-Correlation sum $C(r)$ is defined as the fraction of points in the phase space whose distance is smaller than $r$:
-\begin{align} \label{eq:corrsum}
-  C(r) = \frac{2}{N(N-1)} \sum_{i<j} \Phi(r-\norm{\textbf{s}_i - \textbf{s}_j}).
-\end{align}
-
-If $C(r)$ decreases according to the power law with $r \rightarrow 0$ such that $C(r) \approx r^D$, then $D$ is called the correlation dimension, formally defined as
-
-\begin{align} \label{eq:corrdim}
-  CD = \lim_{r \rightarrow 0} \frac{\log C(r)}{r}.
-\end{align}
-
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
@@ -829,15 +816,82 @@ If $C(r)$ decreases according to the power law with $r \rightarrow 0$ such that 
 \label{fig:corrdim}
 \end{figure}
 
+The world of mathematics offers numerous definitions of dimension (box-counting dimension (\ref{eq:box-counting}), Hausdorff dimension, information dimension, etc.) and similar quantities, but many of them can be regarded as variations of the following, simple and intuitive analogy:
 \begin{align*}[\cite{theiler1990estimating}]
-  \text{bulk} \approx \text{size}^{\text{dimension}}
+  \text{bulk} \approx \text{size}^{\text{dimension}} \implies \text{dimension} = \lim_{\text{size} \rightarrow 0} \frac{\log \text{bulk}}{\log \text{size}}.
+\end{align*}
+In other words, dimension can be loosely defined as scaling of ``bulk'' (corresponds to mathematical concept of measure) as a function of its linear ``size''. Of course, dimensions of different definitions may not be equal to each other, but for our purposes, we are interested in the most computationally accessible.
+
+Unlike Lyapunov exponents, which measure dynamical properties of the system, (correlation) dimension is a purely geometrical property of the attractor, independent of the ordering of the reconstructed vectors.\unsure{Is this true?}
+
+In this thesis, we are interested in dimension estimation for the following reasons:
+\begin{enumerate}
+  \item Even a system with high number of degrees of freedom, such as a brain, may actually evolve in a much lower-dimensional subspace. The number of active degrees of freedom may provide a measure of complexity of the observed system. This information is available in the attractor of the system and it can be shown that this property is preserved by state space reconstruction. \cite{andreas2000}
+  \item It can help distinguish stochastic and deterministic processes, since stochastic processes, after sufficient passage of time, use all available state space dimensions.
+\end{enumerate}
+Of course, although these expectations can be justified theoretically, the numerical reality may be different.
+
+Most definitions of dimension are based on first covering the studied object in the state space with the smallest possible balls (using a given metric). Correlation dimension is a special case of generalized box-counting dimension (which is a generalization of box-counting dimension already introduced in Definition \ref{def:box-counting}), defined as
+\begin{align*}
+  d_{\kappa}(A) = \lim_{r \rightarrow 0} \frac{1}{\kappa} \frac{ \log \int_M (\mu(B_r(\mathbf{x})))^{\kappa} \diff \mu( \mathbf{x})}{ \log r},
+\end{align*}
+where the integration is over the whole state space $M$ and $\mu$ is measure concentrated on $A$.
+If we define $\mu$ as
+\begin{align*}
+  \mu(\mathbf{x}) \coloneqq \int_M \Phi (r - \norm{\mathbf{x} -\mathbf{y}}) \diff \mu (\mathbf{y})
 \end{align*}
 
-\begin{align*}[\cite{theiler1990estimating}]
-  \text{dimension} = \lim_{\text{size} \rightarrow 0} \frac{\log \text{bulk}}{\log \text{size}}
-\end{align*} 
+The we can write the, ``bulk'' of $A$, so called generalized correlation integral as
+\begin{align*}
+C(\kappa, r) = (\int_M \left( \mu(B_r(\mathbf{x})))^{\kappa} \right)^{\frac{1}{\kappa}} = \left[ \int_M \left(\int_M \Phi (r - \norm{\mathbf{x} -\mathbf{y}}) \diff \mu (\mathbf{y})) \right)^{\kappa} \diff \mu (\mathbf{x}) \right]^{\frac{1}{\kappa}} 
+\end{align*}
+It can indeed be shown that $C(\kappa, r) \propto r^d_{\kappa}$.
+
+In the continuous case, correlation dimension than takes to form
+\begin{align*}
+  d_2(A) = \lim_{r \rightarrow 0} \frac{\log C(r,2)}{\log r}.
+\end{align*}
+
+There are essentially three ways of computing correlation dimension: box-counting algorithms, pairwise distance algorithms, and nearest neighbors algorithms. Grassberger-Procaccia algorithm, which we use to compute correlation dimension, is a variant of a pairwise distance algorithm.
+
+This class of algorithms, used in discrete cases with limited amount of data, estimates the measure of a box centered on point $\mathbf{x}_i$ in the reconstructed space as
+\begin{align*}
+  \mu_i = \frac{1}{N_{(m,\tau)}}
+\end{align*}
+and zero everywhere else.
+
+Thus, in the discrete case, the correlation sum $C(r)$ can be computed as 
+\begin{align} \label{eq:corrsum}
+  C(r) \coloneqq C(r,2) = \frac{2}{N_{(m,\tau)}(N_{(m,\tau)}-1)} \sum_{i<j} \Phi(r-\norm{\textbf{x}_i - \textbf{x}_j}).
+\end{align}
+which corresponds to the fraction of points in the phase space whose distance is smaller than $r$. Under certain reasonable conditions, correlation sum is an unbiased estimator of the correlation integral. \cite{ScholarpediaGpa}
+
+Typical behavior of the correlation sum is shown in Fig. \ref{fig:exp-cr}. We can see that the curves are forced to meet at the same point for all $m$ - for high enough $r$, all points are counted and $C(r)=1$ (or $C(r) = \binom{N_{(m,\tau)}}{2}$ not normalized). As the lines shift to the right with increasing $m$ and stay parallel in the proper scaling region, the slope near that point necessarily increases with $m$. For high enough $m$, the scaling region disappears. Moreover, the values of $C(r)$ are inaccurate for small $r$ due to noise and for small $C(r)$ due to statistical fluctuations (corresponding to horizontal lines). Thus, there is only a limited interval of $r$ and limited set of embedding dimensions $m$ for which an accurate estimation of $d_2$ can be made. \cite{andreas2000}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.6\textwidth]{Images/typ-cr.png} }
+  \caption{Log-log plot of typical behavior of $C(r)$.}
+\label{fig:exp-cr}
+\end{figure}
+
+In our experiments, we used \emph{local slopes approach} to estimating the correlation dimension, which is based on the idea of assigning a dimension estimate to each value of $r$ by defining
+\begin{align*}
+  d_2(r) = \frac{\partial \log C(r)}{\partial \log r}.
+\end{align*}
+In our implementation, we perform a least squares fit of values $(\log r, \log C(r))$ for a window of 6 neigboring points for each sampled $r$. Expected behavior of the resulting function in a favorable case can be seen in Fig. \ref{fig:exp-localcr}.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.6\textwidth]{Images/typ-localcr.png} }
+  \caption{Log plot of a typical local dimension estimates in favorable case.}
+\label{fig:exp-localcr}
+\end{figure}
 
 \subsection{Data requirements} \label{sec:requirements}
+\info[inline]{Interesting estimates were mentioned in Rosenstein \cite{Rosenstein1993}}
 
 \section{Visual characterization of the dynamical system}
 \subsection{Phase space plot}
