@@ -629,7 +629,7 @@ Those criteria are noticeably similar, and bias towards larger estimates of $\ta
 
 Principal component analysis, in particular, can be used to measure the volume occupied by the reconstructed attractor. Both overfolded and redundant attractors may be marked by low volume. \cite{andreas2000}
 
-Given a fixed embedding dimension $m$, the corresponding $m$ singular values as a function of $\tau$ contain information about the degree of extension of the embedded vectors in the $m$ directions in the reconstructed space. Rapid increase followed by rapid decrease of some singular values accompanied by the opposite behavior of others indicate a collapse of the attractor.
+Given a fixed embedding dimension $m$, the corresponding $m$ singular values as a function of $\tau$ contain information about the degree of extension of the embedded vectors in the $m$ directions in the reconstructed space. Rapid increase followed by rapid decrease of some singular values accompanied by the opposite behavior of others indicate a collapse of the attractor. Also, high number of large singular values is an indicator of volume of the reconstructed attractor.
 
 If we assume, without loss of generality\unsure{Is this so?}, that the time series is standardized and denote
 \begin{align*}
@@ -639,11 +639,13 @@ then
 \begin{align*}
   (\mathbb{C})_{ij} \coloneqq (\mathbb{X}^T\mathbb{X})_{ij} = A\left( (i-j)\tau \right).
 \end{align*}
-This matrix is symmetric and thus diagonalizable, and also at least non-negative definite. Its eigenvalues are called the singular values.
+This matrix is symmetric and thus diagonalizable, and also at least non-negative definite. Its eigenvalues are called the singular values, and correspond the the magnitude of variance of projections of the embedded vectors into individual directions of the principal components.
 
 If the time delay is too small, then all the elements of matrix $\mathbb{C}$ will have similar value $(\mathbb{C})_{ij} \approx A(0)$, and thus there will be one dominant singular value, while others will remain close to zero. This singular value then corresponds to the main diagonal of the attractor.
 
 If the time delay is too large, then the diagonal elements will approach average of the squared time series $(\mathbb{C})_{ii} \approx \langle x^2 \rangle$, while the remaining elements will converge to zero due to decay of the autocorrelation function, $\mathbb{C} \approx c\mathbb{I}$for some constant $c$. This corresponds to the reconstruction forming a featureless noise. \cite{andreas2000}
+
+One drawback of this method is that its evaluation is largely subjective. Moreover, it was suggested that although this method is effective noise reduction technique, its effectiveness at delay estimation is less clear - the number of large singular values is sensitive to noise. \cite{mees1987singular}
 
 \subsubsection{Integral local deformation}
 The uniqueness theorem of differential equations requires that any no trajectories in the state space intersect. Moreover, in real physical systems, it may be reasonable to assume that it is highly unlikely to find closeby trajectories of opposite or orthogonal directions. This property is maintained by a successful embedding, and (if the assumption holds) can occur only in an improper reconstruction.
@@ -668,18 +670,18 @@ This expression, called \textbf{integral local deformation}, is then averaged ov
 \subsubsection{False nearest neighbors} \label{sec:fnn}
 Since the dynamics $\textbf{F}$ are assumed to be a \emph{smooth} vector field and the attractor $A$ is a \emph{compact} set in the phase space, its members acquire near neighbors, which should be subject to similar evolution. Therefore, these neighbors should remain close to each other after a short interval of time (even though chaos may introduce exponential divergence between them). This is a useful fact, which can be used, for example, to predict future evolution of a trajectory, or a computation of Lyapunov exponents. The \textbf{false nearest neighbors} algorithm uses them for estimation of embedding dimension. \cite{kennel1992determining}
 
-The main idea is to use the transition from dimension $m$ to dimension $m+1$ in the embedding procedure to differentiate between ``true'' and ``false'' neighbors. If the embedding dimension $m$ is too small, some members of $A$ that are close to each other may not be neighbors in the true state space, simply because the true state space is projected down to a smaller space (see Fig. \cite{}). These members are \emph{false neighbors}, all other neighbors are \emph{true}. When the attractor is fully unfolded into large enough dimension and is properly embedded, all neighbors will be true.
+The main idea is to use the transition from dimension $m$ to dimension $m+1$ in the embedding procedure to differentiate between ``true'' and ``false'' neighbors. If the embedding dimension $m$ is too small, some members of $A$ that are close to each other may not be neighbors in the true state space, simply because the true state space is projected down to a smaller space (see Fig. \cite{})\add{Add the figure from Kennel.}. These members are \emph{false neighbors}, all other neighbors are \emph{true}. When the attractor is fully unfolded into large enough dimension and is properly embedded, all neighbors are true.
 
-Let use denote by $y^{(r)}(n)$ the $r$-th nearest neighbor of $y(n)$. Then, let $R_m^2(n,r)$ denote the square Euclidean distance between $y(n)$ and its neighbor:
+Let use denote by $y^{(r)}(n)$ the $r$-th nearest neighbor of $y(n)$. Then, let $R_m(n,r)$ denote the Euclidean distance between $y(n)$ and its neighbor:
 \begin{align*}
-  R_m^2(n,r) = \sum_{k=0}^{m-1}[ x(n+k\tau) - x^{(r)}(n+k\tau) ]^2
+  R_m(n,r) = \sqrt{ \sum_{k=0}^{m-1}[ x_{n+k\tau} - x^{(r)}_{n+k\tau} ]^2 }
 \end{align*}
 
 Then, any near neigbor for which the distance increase after transition from dimension $m$ to dimension $m+1$ is large in comparison to the initial distance is marked as false:
 \begin{align} \label{eq:first-criterion}
-  \left[ \frac{R_m^2(n,r) - R_{m+1}^2(n,r)}{R_m^2(n,r)} \right]^{1/2} = \frac{ x(n+k\tau) - x^{(r)}(n+k\tau) }{R_m(n,r)} > R,
+  \left[ \frac{R_m^2(n,r) - R_{m+1}^2(n,r)}{R_m^2(n,r)} \right]^{1/2} = \frac{ x_{n+k\tau} - x^{(r)}_{n+k\tau} }{R_m(n,r)} > R,
 \end{align}
-where $R_{\text{tol}} \in \RR$ is some threashold. The $m$ for which the relative proportion of false neigbors to all neigbors reaches zero is the embedding dimension suggested by this criterion.
+where $R \in \RR$ is some threashold. The $m$ for which the relative proportion of false neigbors to all neigbors reaches zero is the embedding dimension suggested by this criterion.
 
 This criterion, by itself, is not sufficient for determining proper embedding dimension. When applied to limited amount of white noise data, it erroneously suggested embedding the noise into a low dimensional attractor. This happens because even though a state may be a nearest neigbor, it is not necessarily temporally close, and thus the assumptions above do not hold. The experiments performed by Kennel et al. show for such states it is usually $R_m(n,r) \approx R_A$, where $R_A$ is radius of the attractor. Furthermore, for increasing amount of data, the embedding dimension suggested by this criterion also increased - behavior not observed for relatively small dimensional attractors. \cite{kennel1992determining} 
 
@@ -689,19 +691,44 @@ Therefore, Kennel et al. propose another criterion in addition to the one above.
 \end{align}
 as false, where $R_A$ may be computed as, for example 
 \begin{align*}
-  R_A = \frac{1}{N} \sum_{n=1}^{N} \left[ x(n) - \overline{x} \right]^2.
+  R_A = \frac{1}{N} \sum_{n=1}^{N} \left[ x_n - \overline{x} \right]^2.
 \end{align*}
 
 Although this technique is commonly used, it is not without its drawbacks. An obvious point is that altough it is true that distance between neigbors in unfolded attractor should not grow with increase in dimension, the inverse is not necessarily true, i.e. stable distance between near neighbors with increase in dimension does not guarantee that these neighbors are true. 
 
-Moreover, in practice, it has been found that the results of this method are sensitive not only to the tolerance parameters $R_{\text{tol}}$ and $A_{\text{tol}}$, but also to the lag as well. \cite{kugiumtzis1996state} In this sense, they are somewhat arbitrary unless stable across different choices of $\tau$.
+The authors suggest some values of the tolerance parameters they found useful in their experiments, but, in general, the results of this technique may depend on the choice of $R$ and $A$. Their selection is subjective and somewhat arbitrary. The best course of action is to evaluate the technique for multiple values of $R$ and $A$ and select those with the most ``reasonable'' results.
+
+In practice, it has been found that the results of this method are sensitive not only to the tolerance parameters $R$ and $A$, but also to the lag as well. \cite{kugiumtzis1996state} 
 
 Also, this method tends to underestimate $m$ for very small $\tau$. Small $\tau$ forces the attractor to lie near the diagonal in $\RR^m$ and further increasing $m$ imposes very little effect on the geometry of the attractor. In effect, most points will appear as true neighbors leading to a wrong conclusion. \cite{kugiumtzis1996state}
 
 Lastly, in presence of measurement noise, the proportion of false neigbors may increase after transition to a higher dimension, since even identical vectors will diverge. \cite{kantz2004}
 
 \subsubsection{Average false neighbors} \label{sec:afn}
-(TODO: Average false neighbors.) \cite{Cao1997}
+This technique by Cao \cite{Cao1997} addresses one of the drawbacks of false nearest neighbors mentioned in the previous section - the variance of results based on subjective choice of embedding parameters. It does so by defining two parameter free functions dependent only on the embedding parameters.
+
+The first function measures the variation of average ratio of distance of two neighbors in one dimension to the distance of the same neighbors in a higher dimension. More precisely, let
+\begin{align*}
+  E(m) =\frac{1}{N_{(m, \tau)}} \sum_{i=1}^{N_{(m,\tau)}} \frac{ \norm {\mathbf{x}_i^{(m+1)} - \mathbf{x}_{n(i, m)}^{(m+1)} }_{\infty} }{ \norm{ \mathbf{x}_i^{(m)} - \mathbf{x}_{n(i, m)}^{(m)} }_{\infty} },
+\end{align*}
+where $n(i,m)$ denotes the nearest neighbor of vector $\mathbf{x}_i$ in dimension $m$, and $\norm{ \cdot }_{\infty}$ denotes the Chebyshev norm \footnote{This norm suggested by the author, but presumably, another norm can be used.}. Then, the first statistic is defined as
+\begin{align*}
+  E_1(m) = \frac{E(m+1)}{E(m)}.
+\end{align*}
+In principle, $E_1(m)$ saturates and stops increasing after some threshold $m$ for systems with finite embedding dimension. 
+
+For systems with infinite embedding dimensions it may be difficult in practice to resolve whether $E_1$ indeed stopped increasing or is still slowly increasing. Alternatively, it may still saturate because of limited amount of data. For this reason, Cao introduces another statistic, whose purpose is to distinguish stochastic from deterministic sources of data.
+
+Let
+\begin{align*}
+  E^*(m) = \frac{1}{N - m\tau} \sum_{i=1}^{N - m\tau} | x_{i + m\tau} - x_{n(i,m) + m\tau} |.
+\end{align*}
+Then, similarly to above, the second statistic is defined as
+\begin{align*}
+  E_2(m) = \frac{E^*(m+1)}{E^*(m)}.
+\end{align*}
+
+Since, for random time series, the future values are independent of the present ones, the ratio $E_2(m)$ is expected to be close to 1 for all $m$.
 
 \section{Non-linear measures}
 In this section, we will study quantities invariant under embedding. These can be further use to characterize the dynamics of deterministic dynamical systems.
