@@ -1227,15 +1227,15 @@ As the first step of our analysis, we conducted an investigation of the differen
 
 To this goal, we separated the patients into terciles according to the ratio of the depression scores before and after treatment. Out of these three populations, we selected the first and last, containing 46 and 44 samples respectively, to obtain population we call \emph{responding} (responders) to treatment and \emph{non-responding} (non-responders) to treatment. The second tercile was not considered in this analysis to minimize the effect of inaccuracy of the self-reported depression score. Comparison of mean values of individual measures between the two populations can be seen on Figures \ref{fig:respnon1}, \ref{fig:respnon1auto} and \ref{fig:respnon2}. Length of an error bar corresponds to one standard deviation.
 
-For each group, we performed two-sided Kolmogorov-Smirnov test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for $d_2$ computed using automatic selection of embedding parameters. However, we found that responders had significantly lower $\lambda_1$ computed using these methods in C3 and C4 electrodes ($6.899\pm1.278$ vs. $7.342\pm1.838$ for C3, $6.731\pm1.116$ vs. $7.365\pm1.475$ for C4) on recording performed before treatment.
+For each group, we performed two-sided Kolmogorov-Smirnov test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for $d_2$ computed using automatic selection of embedding parameters. However, we found that responders had significantly lower $\lambda_1$ computed using these methods in C3 and C4 electrodes ($6.899\pm1.278$ vs. $7.342\pm1.838$ for C3, $6.731\pm1.116$ vs. $7.365\pm1.475$ for C4) on recording performed before treatment. The results for 
 
 \begin{table}[tbp]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
-Means    & 10.151 & 9.919 & 0.121 &       \\ \hline
-Stds     & 0.628  & 0.724 & 0.089 &       \\ \hline
+mean     & 10.151 $\pm$ 0.950 & 9.919 $\pm$ 1.074 & 0.121 &       \\ \hline
+std      & 0.628 $\pm$ 0.239 & 0.724 $\pm$ 0.295 & 0.089 &       \\ \hline
 FP1      & 9.770 $\pm$ 1.130 & 9.545 $\pm$ 1.287 & 0.432 &       \\ \hline
 FP2      & 9.764 $\pm$ 1.186 & 9.565 $\pm$ 1.281 & 0.432 &       \\ \hline
 F3       & 9.794 $\pm$ 1.082 & 9.493 $\pm$ 1.177 & 0.065 & *     \\ \hline
@@ -1256,18 +1256,81 @@ Fz       & 10.257 $\pm$ 1.004 & 10.117 $\pm$ 1.096 & 0.161 &       \\ \hline
 Cz       & 10.204 $\pm$ 0.906 & 10.075 $\pm$ 0.998 & 0.273 &       \\ \hline
 Pz       & 10.490 $\pm$ 0.897 & 10.408 $\pm$ 1.032 & 0.735 &       \\ \hline
 \end{tabular}
-\caption{Mean values of $\lambda_1$ of all patients before and after treatment.}
-\label{tab:llebaall}
+\caption{Before and after all for $\lambda_1$.}
+\label{fig:lleba}
 \end{table}
-
 
 \begin{table}[tbp]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
-Means    & 9.994 & 9.655 & 0.022 & **    \\ \hline
-Stds     & 0.639 & 0.701 & 0.452 &       \\ \hline
+mean     & 7.522 $\pm$ 0.441 & 7.593 $\pm$ 0.433 & 0.481 &       \\ \hline
+std      & 0.383 $\pm$ 0.125 & 0.414 $\pm$ 0.165 & 0.071 & *     \\ \hline
+FP1      & 7.812 $\pm$ 0.611 & 7.880 $\pm$ 0.704 & 0.387 &       \\ \hline
+FP2      & 7.826 $\pm$ 0.650 & 7.935 $\pm$ 0.790 & 0.035 & **    \\ \hline
+F3       & 7.594 $\pm$ 0.592 & 7.681 $\pm$ 0.586 & 0.179 &       \\ \hline
+F4       & 7.639 $\pm$ 0.602 & 7.726 $\pm$ 0.582 & 0.387 &       \\ \hline
+C3       & 7.342 $\pm$ 0.592 & 7.395 $\pm$ 0.591 & 0.585 &       \\ \hline
+C4       & 7.334 $\pm$ 0.550 & 7.412 $\pm$ 0.574 & 0.387 &       \\ \hline
+P3       & 7.274 $\pm$ 0.515 & 7.319 $\pm$ 0.522 & 0.305 &       \\ \hline
+P4       & 7.325 $\pm$ 0.573 & 7.349 $\pm$ 0.506 & 0.888 &       \\ \hline
+O1       & 7.539 $\pm$ 0.566 & 7.543 $\pm$ 0.524 & 0.987 &       \\ \hline
+O2       & 7.516 $\pm$ 0.518 & 7.569 $\pm$ 0.547 & 0.387 &       \\ \hline
+F7       & 7.680 $\pm$ 0.530 & 7.812 $\pm$ 0.550 & 0.305 &       \\ \hline
+F8       & 7.702 $\pm$ 0.534 & 7.822 $\pm$ 0.565 & 0.179 &       \\ \hline
+T3       & 7.669 $\pm$ 0.585 & 7.877 $\pm$ 0.624 & 0.011 & ***   \\ \hline
+T4       & 7.684 $\pm$ 0.588 & 7.840 $\pm$ 0.556 & 0.024 & **    \\ \hline
+T5       & 7.556 $\pm$ 0.523 & 7.593 $\pm$ 0.481 & 0.585 &       \\ \hline
+T6       & 7.536 $\pm$ 0.518 & 7.593 $\pm$ 0.483 & 0.585 &       \\ \hline
+Fz       & 7.339 $\pm$ 0.535 & 7.350 $\pm$ 0.525 & 0.987 &       \\ \hline
+Cz       & 7.359 $\pm$ 0.566 & 7.354 $\pm$ 0.533 & 0.998 &       \\ \hline
+Pz       & 7.199 $\pm$ 0.494 & 7.210 $\pm$ 0.543 & 0.888 &       \\ \hline
+\end{tabular}
+\caption{Mean values of $d_2$ of all patients before and after treatment.}
+\label{tab:d2ba}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+mean     & 0.761 $\pm$ 0.108 & 0.790 $\pm$ 0.130 & 0.240 &       \\ \hline
+std      & 0.071 $\pm$ 0.040 & 0.086 $\pm$ 0.048 & 0.094 &       \\ \hline
+FP1      & 0.804 $\pm$ 0.149 & 0.837 $\pm$ 0.176 & 0.403 &       \\ \hline
+FP2      & 0.802 $\pm$ 0.156 & 0.830 $\pm$ 0.175 & 0.403 &       \\ \hline
+F3       & 0.800 $\pm$ 0.132 & 0.839 $\pm$ 0.156 & 0.179 &       \\ \hline
+F4       & 0.790 $\pm$ 0.137 & 0.842 $\pm$ 0.168 & 0.046 & **    \\ \hline
+C3       & 0.793 $\pm$ 0.122 & 0.825 $\pm$ 0.147 & 0.314 &       \\ \hline
+C4       & 0.781 $\pm$ 0.126 & 0.821 $\pm$ 0.151 & 0.046 & **    \\ \hline
+P3       & 0.720 $\pm$ 0.087 & 0.740 $\pm$ 0.115 & 0.619 &       \\ \hline
+P4       & 0.720 $\pm$ 0.093 & 0.736 $\pm$ 0.116 & 0.975 &       \\ \hline
+O1       & 0.707 $\pm$ 0.113 & 0.718 $\pm$ 0.134 & 0.734 &       \\ \hline
+O2       & 0.712 $\pm$ 0.113 & 0.732 $\pm$ 0.154 & 0.314 &       \\ \hline
+F7       & 0.786 $\pm$ 0.163 & 0.811 $\pm$ 0.176 & 0.619 &       \\ \hline
+F8       & 0.781 $\pm$ 0.156 & 0.821 $\pm$ 0.195 & 0.403 &       \\ \hline
+T3       & 0.806 $\pm$ 0.160 & 0.867 $\pm$ 0.197 & 0.006 & ***   \\ \hline
+T4       & 0.812 $\pm$ 0.167 & 0.861 $\pm$ 0.197 & 0.131 &       \\ \hline
+T5       & 0.723 $\pm$ 0.110 & 0.743 $\pm$ 0.133 & 0.403 &       \\ \hline
+T6       & 0.714 $\pm$ 0.112 & 0.729 $\pm$ 0.123 & 0.506 &       \\ \hline
+Fz       & 0.747 $\pm$ 0.107 & 0.762 $\pm$ 0.124 & 0.506 &       \\ \hline
+Cz       & 0.756 $\pm$ 0.096 & 0.767 $\pm$ 0.110 & 0.840 &       \\ \hline
+Pz       & 0.716 $\pm$ 0.093 & 0.728 $\pm$ 0.113 & 0.996 &       \\ \hline
+\end{tabular}
+\caption{Mean values of sample entropy of all patients before and after treatment.}
+\label{tab:seba}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\tiny
+  \parbox{.45\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+mean     & 9.994 $\pm$ 0.890 & 9.655 $\pm$ 1.064 & 0.022 & **    \\ \hline
+std      & 0.639 $\pm$ 0.229 & 0.701 $\pm$ 0.267 & 0.452 &       \\ \hline
 FP1      & 9.599 $\pm$ 1.086 & 9.335 $\pm$ 1.360 & 0.625 &       \\ \hline
 FP2      & 9.590 $\pm$ 1.090 & 9.281 $\pm$ 1.293 & 0.308 &       \\ \hline
 F3       & 9.588 $\pm$ 1.119 & 9.190 $\pm$ 1.190 & 0.123 &       \\ \hline
@@ -1288,17 +1351,14 @@ Fz       & 10.096 $\pm$ 0.970 & 9.849 $\pm$ 1.126 & 0.072 & *     \\ \hline
 Cz       & 10.150 $\pm$ 0.886 & 9.847 $\pm$ 1.006 & 0.123 &       \\ \hline
 Pz       & 10.318 $\pm$ 0.805 & 10.113 $\pm$ 1.062 & 0.801 &       \\ \hline
 \end{tabular}
-\caption{Mean values of $\lambda_1$ of responding patients before and after treatment.}
-\label{tab:llebaresp}
-\end{table}
-
-\begin{table}[tbp]
-\centering
+}
+\hfill
+  \parbox{.45\linewidth}{
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
-Means    & 10.400 & 10.015 & 0.423 &       \\ \hline
-Stds     & 0.623  & 0.813 & 0.018 & ***   \\ \hline
+mean     & 10.400 $\pm$ 0.969 & 10.015 $\pm$ 1.088 & 0.423 &       \\ \hline
+std      & 0.623 $\pm$ 0.260 & 0.813 $\pm$ 0.370 & 0.018 & ***   \\ \hline
 FP1      & 10.034 $\pm$ 1.166 & 9.510 $\pm$ 1.325 & 0.108 &       \\ \hline
 FP2      & 10.045 $\pm$ 1.196 & 9.752 $\pm$ 1.269 & 0.778 &       \\ \hline
 F3       & 10.116 $\pm$ 1.034 & 9.619 $\pm$ 1.200 & 0.108 &       \\ \hline
@@ -1319,10 +1379,134 @@ Fz       & 10.568 $\pm$ 0.951 & 10.327 $\pm$ 1.024 & 0.423 &       \\ \hline
 Cz       & 10.383 $\pm$ 0.867 & 10.291 $\pm$ 0.939 & 0.924 &       \\ \hline
 Pz       & 10.744 $\pm$ 0.894 & 10.630 $\pm$ 1.023 & 0.423 &       \\ \hline
 \end{tabular}
-\caption{Mean values of $\lambda_1$ of non-responding patients before and after treatment.}
-\label{tab:llebanon}
+}
+\caption{Mean values of $\lambda_1$ of responding / non-responding patients before and after treatment.}
+\label{tab:llebaresp}
 \end{table}
 
+\begin{table}[tbp]
+\centering
+\tiny
+  \parbox{.45\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+mean     & 0.768 $\pm$ 0.093 & 0.811 $\pm$ 0.107 & 0.086 &       \\ \hline
+std      & 0.078 $\pm$ 0.039 & 0.093 $\pm$ 0.047 & 0.377 &       \\ \hline
+FP1      & 0.816 $\pm$ 0.156 & 0.866 $\pm$ 0.178 & 0.548 &       \\ \hline
+FP2      & 0.819 $\pm$ 0.158 & 0.866 $\pm$ 0.171 & 0.377 &       \\ \hline
+F3       & 0.815 $\pm$ 0.128 & 0.872 $\pm$ 0.145 & 0.086 &       \\ \hline
+F4       & 0.801 $\pm$ 0.126 & 0.868 $\pm$ 0.160 & 0.048 & **    \\ \hline
+C3       & 0.796 $\pm$ 0.107 & 0.841 $\pm$ 0.123 & 0.149 &       \\ \hline
+C4       & 0.780 $\pm$ 0.112 & 0.844 $\pm$ 0.129 & 0.012 & ***   \\ \hline
+P3       & 0.718 $\pm$ 0.075 & 0.744 $\pm$ 0.089 & 0.548 &       \\ \hline
+P4       & 0.722 $\pm$ 0.089 & 0.751 $\pm$ 0.103 & 0.548 &       \\ \hline
+O1       & 0.704 $\pm$ 0.074 & 0.738 $\pm$ 0.111 & 0.244 &       \\ \hline
+O2       & 0.725 $\pm$ 0.094 & 0.746 $\pm$ 0.116 & 0.149 &       \\ \hline
+F7       & 0.790 $\pm$ 0.166 & 0.837 $\pm$ 0.168 & 0.149 &       \\ \hline
+F8       & 0.786 $\pm$ 0.138 & 0.845 $\pm$ 0.190 & 0.548 &       \\ \hline
+T3       & 0.813 $\pm$ 0.163 & 0.894 $\pm$ 0.181 & 0.012 & ***   \\ \hline
+T4       & 0.828 $\pm$ 0.165 & 0.886 $\pm$ 0.162 & 0.048 & **    \\ \hline
+T5       & 0.722 $\pm$ 0.078 & 0.762 $\pm$ 0.110 & 0.086 &       \\ \hline
+T6       & 0.723 $\pm$ 0.094 & 0.752 $\pm$ 0.090 & 0.086 &       \\ \hline
+Fz       & 0.758 $\pm$ 0.094  & 0.782 $\pm$ 0.109 & 0.244 &       \\ \hline
+Cz       & 0.760 $\pm$ 0.082 & 0.783 $\pm$ 0.089 & 0.377 &       \\ \hline
+Pz       & 0.724 $\pm$ 0.090 & 0.742 $\pm$ 0.103 & 0.902 &       \\ \hline
+\end{tabular}
+}
+\hfill
+  \parbox{.45\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+mean     & 0.757 $\pm$ 0.113 & 0.798 $\pm$ 0.137 & 0.676 &       \\ \hline
+std      & 0.067 $\pm$ 0.044 & 0.095 $\pm$ 0.057 & 0.061 & *     \\ \hline
+FP1      & 0.796 $\pm$ 0.137 & 0.850 $\pm$ 0.178 & 0.479 &       \\ \hline
+FP2      & 0.799 $\pm$ 0.146 & 0.823 $\pm$ 0.162 & 0.975 &       \\ \hline
+F3       & 0.783 $\pm$ 0.130 & 0.843 $\pm$ 0.163 & 0.479 &       \\ \hline
+F4       & 0.782 $\pm$ 0.137 & 0.863 $\pm$ 0.169 & 0.111 &       \\ \hline
+C3       & 0.780 $\pm$ 0.128 & 0.826 $\pm$ 0.157 & 0.193 &       \\ \hline
+C4       & 0.774 $\pm$ 0.131 & 0.820 $\pm$ 0.153 & 0.193 &       \\ \hline
+P3       & 0.713 $\pm$ 0.092 & 0.747 $\pm$ 0.134 & 0.676 &       \\ \hline
+P4       & 0.713 $\pm$ 0.092 & 0.735 $\pm$ 0.130 & 0.975 &       \\ \hline
+O1       & 0.715 $\pm$ 0.130 & 0.723 $\pm$ 0.159 & 0.975 &       \\ \hline
+O2       & 0.716 $\pm$ 0.130 & 0.750 $\pm$ 0.201 & 0.975 &       \\ \hline
+F7       & 0.794 $\pm$ 0.167 & 0.824 $\pm$ 0.186 & 0.314 &       \\ \hline
+F8       & 0.784 $\pm$ 0.172 & 0.850 $\pm$ 0.207 & 0.314 &       \\ \hline
+T3       & 0.802 $\pm$ 0.159 & 0.901 $\pm$ 0.211 & 0.031 & **    \\ \hline
+T4       & 0.807 $\pm$ 0.176 & 0.887 $\pm$ 0.222 & 0.193 &       \\ \hline
+T5       & 0.722 $\pm$ 0.123 & 0.747 $\pm$ 0.152 & 0.863 &       \\ \hline
+T6       & 0.709 $\pm$ 0.127 & 0.721 $\pm$ 0.140 & 0.975 &       \\ \hline
+Fz       & 0.731 $\pm$ 0.104 & 0.757 $\pm$ 0.124 & 0.314 &       \\ \hline
+Cz       & 0.751 $\pm$ 0.093 & 0.757 $\pm$ 0.105 & 0.975 &       \\ \hline
+Pz       & 0.713 $\pm$ 0.092 & 0.730 $\pm$ 0.121 & 0.863 &       \\ \hline
+\end{tabular}
+}
+\caption{Mean values of sample entropy of responding / non-responding patients before and after treatment.}
+\label{tab:sebaresp}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\tiny
+  \parbox{.45\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+mean     & 7.536 $\pm$ 0.394 & 7.585 $\pm$ 0.465 & 0.765 &       \\ \hline
+std      & 0.401 $\pm$ 0.121 & 0.400 $\pm$ 0.134 & 0.917 &       \\ \hline
+FP1      & 7.851 $\pm$ 0.588 & 7.841 $\pm$ 0.751 & 0.580 &       \\ \hline
+FP2      & 7.921 $\pm$ 0.647 & 7.903 $\pm$ 0.553 & 0.580 &       \\ \hline
+F3       & 7.614 $\pm$ 0.579 & 7.714 $\pm$ 0.634 & 0.765 &       \\ \hline
+F4       & 7.640 $\pm$ 0.575 & 7.696 $\pm$ 0.591 & 0.408 &       \\ \hline
+C3       & 7.399 $\pm$ 0.575 & 7.416 $\pm$ 0.659 & 0.989 &       \\ \hline
+C4       & 7.303 $\pm$ 0.481 & 7.378 $\pm$ 0.615 & 0.765 &       \\ \hline
+P3       & 7.247 $\pm$ 0.488 & 7.288 $\pm$ 0.552 & 0.580 &       \\ \hline
+P4       & 7.338 $\pm$ 0.510 & 7.337 $\pm$ 0.543 & 0.765 &       \\ \hline
+O1       & 7.554 $\pm$ 0.479 & 7.593 $\pm$ 0.571 & 0.917 &       \\ \hline
+O2       & 7.539 $\pm$ 0.464 & 7.599 $\pm$ 0.560 & 0.765 &       \\ \hline
+F7       & 7.662 $\pm$ 0.585 & 7.797 $\pm$ 0.601 & 0.269 &       \\ \hline
+F8       & 7.717 $\pm$ 0.469 & 7.762 $\pm$ 0.574 & 0.408 &       \\ \hline
+T3       & 7.694 $\pm$ 0.524 & 7.902 $\pm$ 0.636 & 0.269 &       \\ \hline
+T4       & 7.682 $\pm$ 0.563 & 7.826 $\pm$ 0.522 & 0.100 &       \\ \hline
+T5       & 7.606 $\pm$ 0.532 & 7.589 $\pm$ 0.477 & 0.765 &       \\ \hline
+T6       & 7.578 $\pm$ 0.460 & 7.625 $\pm$ 0.485 & 0.765 &       \\ \hline
+Fz       & 7.335 $\pm$ 0.522 & 7.340 $\pm$ 0.571 & 0.989 &       \\ \hline
+Cz       & 7.321 $\pm$ 0.574 & 7.354 $\pm$ 0.532 & 0.917 &       \\ \hline
+Pz       & 7.188 $\pm$ 0.451 & 7.162 $\pm$ 0.538 & 0.765 &       \\ \hline
+\end{tabular}
+}
+\hfill
+  \parbox{.45\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+mean     & 7.483 $\pm$ 0.432 & 7.648 $\pm$ 0.369 & 0.548 &       \\ \hline
+std      & 0.366 $\pm$ 0.116 & 0.450 $\pm$ 0.162 & 0.048 & **    \\ \hline
+FP1      & 7.709 $\pm$ 0.552 & 7.984 $\pm$ 0.658 & 0.149 &       \\ \hline
+FP2      & 7.749 $\pm$ 0.582 & 7.909 $\pm$ 0.544 & 0.244 &       \\ \hline
+F3       & 7.517 $\pm$ 0.576 & 7.717 $\pm$ 0.548 & 0.244 &       \\ \hline
+F4       & 7.585 $\pm$ 0.621 & 7.886 $\pm$ 0.603 & 0.086 &       \\ \hline
+C3       & 7.271 $\pm$ 0.579 & 7.427 $\pm$ 0.583 & 0.377 &       \\ \hline
+C4       & 7.335 $\pm$ 0.561 & 7.435 $\pm$ 0.527 & 0.738 &       \\ \hline
+P3       & 7.272 $\pm$ 0.474 & 7.392 $\pm$ 0.488 & 0.548 &       \\ \hline
+P4       & 7.268 $\pm$ 0.457 & 7.417 $\pm$ 0.518 & 0.548 &       \\ \hline
+O1       & 7.510 $\pm$ 0.693 & 7.530 $\pm$ 0.484 & 0.548 &       \\ \hline
+O2       & 7.494 $\pm$ 0.533 & 7.623 $\pm$ 0.563 & 0.377 &       \\ \hline
+F7       & 7.643 $\pm$ 0.419 & 7.874 $\pm$ 0.486 & 0.048 & **    \\ \hline
+F8       & 7.651 $\pm$ 0.557 & 7.914 $\pm$ 0.554 & 0.012 & ***   \\ \hline
+T3       & 7.616 $\pm$ 0.582 & 8.032 $\pm$ 0.646 & 0.012 & ***   \\ \hline
+T4       & 7.687 $\pm$ 0.604 & 7.984 $\pm$ 0.648 & 0.086 &       \\ \hline
+T5       & 7.517 $\pm$ 0.518 & 7.625 $\pm$ 0.441 & 0.548 &       \\ \hline
+T6       & 7.488 $\pm$ 0.494 & 7.613 $\pm$ 0.493 & 0.377 &       \\ \hline
+Fz       & 7.287 $\pm$ 0.509 & 7.359 $\pm$ 0.459 & 0.548 &       \\ \hline
+Cz       & 7.380 $\pm$ 0.536 & 7.326 $\pm$ 0.490 & 0.902 &       \\ \hline
+Pz       & 7.195 $\pm$ 0.498 & 7.262 $\pm$ 0.499 & 0.548 &       \\ \hline
+\end{tabular}
+}
+\caption{Mean values of $d_2$ of responding / non-respoding patients before and after treatment.}
+\label{tab:d2baresp}
+\end{table}
 
 % We found that for each measure except correlation dimension, its average over channels, although differring between subjects, is remarkably stable for all patients accross measurements. This means that except for correlation dimension, information about any change between measurements was not caputered by the computed non-linear measures (see Figure \ref{fig:lyap_all}, \ref{fig:corrdim_all}).
 % 
