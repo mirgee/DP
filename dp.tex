@@ -22,6 +22,7 @@
 \usepackage{outlines}
 \usepackage[normalem]{ulem}
 \usepackage{dirtytalk}
+\usepackage{lscape}
 % \usepackage{subcaption}
 % \usepackage{subfigure}
 
@@ -562,8 +563,8 @@ For example:
   \item Highly chaotic systems with large Lyapunov exponents (see Section \ref{sec:lyap}) and large dimension, projection to a low dimensional time series causes explosion in the noise amplification. As a result, this imposes limits on short term predictablity and state space reconstruction may become impossible. Such systems should be treated as operationally stochastic. \cite{casdagli1991state}
   \item It was shown that increasing $\tau$ leads to rise in entropy. \cite{Kantz1997}
   \item Deterministic behavior can be observed only when $\tau_w$ is smaller than the time scale of the foldings naturally produced as result of time embedding.
-  \item If the values of $\tau$ are \emph{too small} in comparison to the typical time scales of the series (measured e.g. by mean period), then the successive elements of reconstructed state space vectors become almost equal. This effect is often called \emph{redundance}. Since $x_t \approx x_{t + \tau}$, the reconstructed attractor will concentrate along the main diagonal (see Fig. \ref{fig:delay}, left hand side). Moreover, in this case, the effect of noise is amplified. \cite{casdagli1991state}
-  \item If the values of $\tau$ are \emph{too large}, the successive elements in the reconstructed vector are almost independent. This effect, called \emph{irrelevance} or \emph{overfolding} is even magnified if the underlying attractor is chaotic, since deterministic correlations between states are lost even at very small time scales, i.e. even measurements performed at time $t$ and $t + \tau$ for very small $\tau$ may be already unrelated. The reconstructed attractor will form a seemingly random clound in $\RR^m$ - thus the reconstructed attractor may appear complex, even if the true attractor is simple (see Fig. \ref{fig:delay}, right hand side). 
+  \item If the values of $\tau$ are \emph{too small} in comparison to the typical time scales of the series (measured e.g. by mean period), then the successive elements of reconstructed state space vectors become almost equal. This effect is often called \emph{redundance}. Since $x_t \approx x_{t + \tau}$, the reconstructed attractor will concentrate along the main diagonal (see Figure \ref{fig:delay}, left hand side). Moreover, in this case, the effect of noise is amplified. \cite{casdagli1991state}
+  \item If the values of $\tau$ are \emph{too large}, the successive elements in the reconstructed vector are almost independent. This effect, called \emph{irrelevance} or \emph{overfolding} is even magnified if the underlying attractor is chaotic, since deterministic correlations between states are lost even at very small time scales, i.e. even measurements performed at time $t$ and $t + \tau$ for very small $\tau$ may be already unrelated. The reconstructed attractor will form a seemingly random clound in $\RR^m$ - thus the reconstructed attractor may appear complex, even if the true attractor is simple (see Figure \ref{fig:delay}, right hand side). 
 \end{enumerate}
 
 In summary, picking the proper value of $\tau$ is a balancing act between redundance and irrelevance. It is important to minimize excessive foldings, and extreme closeness between adjacent points on the trajectory (ideally, the distances between points is same in the reconstructed as in the true space).
@@ -670,7 +671,7 @@ This expression, called \textbf{integral local deformation}, is then averaged ov
 \subsubsection{False nearest neighbors} \label{sec:fnn}
 Since the dynamics $\textbf{F}$ are assumed to be a \emph{smooth} vector field and the attractor $A$ is a \emph{compact} set in the phase space, its members acquire near neighbors, which should be subject to similar evolution. Therefore, these neighbors should remain close to each other after a short interval of time (even though chaos may introduce exponential divergence between them). This is a useful fact, which can be used, for example, to predict future evolution of a trajectory, or a computation of Lyapunov exponents. The \textbf{false nearest neighbors} algorithm uses them for estimation of embedding dimension. \cite{kennel1992determining}
 
-The main idea is to use the transition from dimension $m$ to dimension $m+1$ in the embedding procedure to differentiate between ``true'' and ``false'' neighbors. If the embedding dimension $m$ is too small, some members of $A$ that are close to each other may not be neighbors in the true state space, simply because the true state space is projected down to a smaller space (see Fig. \cite{})\add{Add the figure from Kennel.}. These members are \emph{false neighbors}, all other neighbors are \emph{true}. When the attractor is fully unfolded into large enough dimension and is properly embedded, all neighbors are true.
+The main idea is to use the transition from dimension $m$ to dimension $m+1$ in the embedding procedure to differentiate between ``true'' and ``false'' neighbors. If the embedding dimension $m$ is too small, some members of $A$ that are close to each other may not be neighbors in the true state space, simply because the true state space is projected down to a smaller space (see Figure \cite{})\add{Add the figure from Kennel.}. These members are \emph{false neighbors}, all other neighbors are \emph{true}. When the attractor is fully unfolded into large enough dimension and is properly embedded, all neighbors are true.
 
 Let use denote by $y^{(r)}(n)$ the $r$-th nearest neighbor of $y(n)$. Then, let $R_m(n,r)$ denote the Euclidean distance between $y(n)$ and its neighbor:
 \begin{align*}
@@ -733,7 +734,7 @@ Since, for random time series, the future values are independent of the present 
 \section{Non-linear measures}
 In this section, we will study quantities invariant under embedding. These can be further use to characterize the dynamics of deterministic dynamical systems.
 \subsection{Lyapunov exponents} \label{sec:lyap}
-The characteristic property of chaotic systems is their sensitivity to initial conditions - similar causes need not have similar effects. Consequently, even small uncertainty in the current state of the system (due to, at best, with limited storage space) results in virtual impossibility of predicting future state of the sytem more than a short amount of time into the future, since uncertainty in the initial state is expanded at exponential rate with passage of time by the chaotic dynamics for the predicted future states (see Fig. ).
+The characteristic property of chaotic systems is their sensitivity to initial conditions - similar causes need not have similar effects. Consequently, even small uncertainty in the current state of the system (due to, at best, with limited storage space) results in virtual impossibility of predicting future state of the sytem more than a short amount of time into the future, since uncertainty in the initial state is expanded at exponential rate with passage of time by the chaotic dynamics for the predicted future states (see Figure ).
 
 Lyapunov exponents can be used to quantify this sensitivity. Consider a small sphere of initial conditions $B_r(\mathbf{x})$ for a state $\mathbf{x}$ in the phase space, $r$ infinitesimal, and $\mathbf{x}_n \in B_r(\mathbf{x})$. To study the evolution of states in this ball,  we can use a linear approximation of $\mathbf{F}$. Let us assume, for simplicity, that $\mathbf{x}_{n+1} = \mathbf{F}(\mathbf{x}_n)$. Then for infinitesimal divergences $\delta \mathbf{x}_n$, $\delta \mathbf{x}_{n+1}$, we have
 \begin{align*}
@@ -878,7 +879,7 @@ Thus, in the discrete case, the correlation sum $C(r)$ can be computed as
 \end{align}
 which corresponds to the fraction of points in the phase space whose distance is smaller than $r$. Under certain reasonable conditions, correlation sum is an unbiased estimator of the correlation integral. \cite{ScholarpediaGpa}
 
-Typical behavior of the correlation sum is shown in Fig. \ref{fig:exp-cr}. We can see that the curves are forced to meet at the same point for all $m$ - for high enough $r$, all points are counted and $C(r)=1$ (or $C(r) = \binom{N_{(m,\tau)}}{2}$ not normalized). As the lines shift to the right with increasing $m$ and stay parallel in the proper scaling region, the slope near that point necessarily increases with $m$. For high enough $m$, the scaling region disappears. Moreover, the values of $C(r)$ are inaccurate for small $r$ due to noise and for small $C(r)$ due to statistical fluctuations (corresponding to horizontal lines). Thus, there is only a limited interval of $r$ and limited set of embedding dimensions $m$ for which an accurate estimation of $d_2$ can be made. \cite{andreas2000}
+Typical behavior of the correlation sum is shown in Figure \ref{fig:exp-cr}. We can see that the curves are forced to meet at the same point for all $m$ - for high enough $r$, all points are counted and $C(r)=1$ (or $C(r) = \binom{N_{(m,\tau)}}{2}$ not normalized). As the lines shift to the right with increasing $m$ and stay parallel in the proper scaling region, the slope near that point necessarily increases with $m$. For high enough $m$, the scaling region disappears. Moreover, the values of $C(r)$ are inaccurate for small $r$ due to noise and for small $C(r)$ due to statistical fluctuations (corresponding to horizontal lines). Thus, there is only a limited interval of $r$ and limited set of embedding dimensions $m$ for which an accurate estimation of $d_2$ can be made. \cite{andreas2000}
 
 \begin{figure} 
 \centering
@@ -892,7 +893,7 @@ In our experiments, we used \emph{local slopes approach} to estimating the corre
 \begin{align*}
   d_2(r) = \frac{\partial \log C(r)}{\partial \log r}.
 \end{align*}
-In our implementation, we perform a least squares fit of values $(\log r, \log C(r))$ for a window of 6 neigboring points for each sampled $r$. Expected behavior of the resulting function in a favorable case can be seen in Fig. \ref{fig:exp-localcr}.
+In our implementation, we perform a least squares fit of values $(\log r, \log C(r))$ for a window of 6 neigboring points for each sampled $r$. Expected behavior of the resulting function in a favorable case can be seen in Figure \ref{fig:exp-localcr}.
 
 \begin{figure} 
 \centering
@@ -937,9 +938,17 @@ The EEG recordings were performed by and obtained from the Czech National Instit
 
 The experiment lasted 4 weeks. At the beginning of week 1, each subject's depression score was measured, their EEG signal was recorded, and, based on the measurement and patient's history, prescription of up to 4 drugs was made. After 4 weeks, depression score was remeasured and EEG signal recorded again.
 
-During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz). 99 subjects EEG signal was measured at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz.
+During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz), see Figure \ref{fig:electrodes} for reference. 99 subjects EEG signal was measured at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz.
 
-A typical recoding can be seen on Fig. \ref{fig:data}.
+A typical recoding can be seen on Figure \ref{fig:data}.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.5\textwidth]{Images/electrodes.png} }
+  \caption{}
+\label{fig:electrodes}
+\end{figure}
 
 \begin{figure} 
 \centering
@@ -976,7 +985,7 @@ Stationarity was evaluated on multiple time scales using the stationarity test d
 
 \section{State space reconstruction}
 \subsection{Surrogate data}
-\add[inline]{Describe process of generating surrogate data.} See Fig. \ref{fig:ts}.
+\add[inline]{Describe process of generating surrogate data.} See Figure \ref{fig:ts}.
 
 \begin{figure} 
 \centering
@@ -997,17 +1006,17 @@ In order to estimate the time delay, we used the following techniques:
   \item Integral local deformation (ILD) (see Section )
 \end{enumerate}
 
-In this section, we will analyze the results of these techniques for time series obtained from FP1 electrode of patient 75, second session, shown in Fig. \ref{fig:ts}. The time series was clipped to 60 s (15000 data points). In the following sections \change{Add concrete references.}, we will explain how these techniques were used to obtain estimates of individual non-linear measures.
+In this section, we will analyze the results of these techniques for time series obtained from FP1 electrode of patient 75, second session, shown in Figure \ref{fig:ts}. The time series was clipped to 60 s (15000 data points). In the following sections \change{Add concrete references.}, we will explain how these techniques were used to obtain estimates of individual non-linear measures.
 
-Fig. \ref{fig:recon} shows reconstructed trajectories for the first 4 s (1000 data points) of the recording, for varying time delay $\tau$. As expected, the reconstructed attractors for small delays cluster along the main diagonal, expand, and then become increasingly chaotic with larger $\tau$. However, it is impossible to judge objectively on the degree of folding in the attractor from these plots (even for shorter time series), which highlights the importance of qualitative measures for EEG signals.
+Figure \ref{fig:recon} shows reconstructed trajectories for the first 4 s (1000 data points) of the recording, for varying time delay $\tau$. As expected, the reconstructed attractors for small delays cluster along the main diagonal, expand, and then become increasingly chaotic with larger $\tau$. However, it is impossible to judge objectively on the degree of folding in the attractor from these plots (even for shorter time series), which highlights the importance of qualitative measures for EEG signals.
 
-Typical plots of autocorrelation and delayed mutual information can be seen on Fig. \ref{fig:dmi-acorr}. First local minima of DMI and first $\tau$ for which $A(\tau) \leq 1/e$ are marked by yellow dots. For this channel, these are $\tau_{\mathrm{DMI}} = 7$ and $\tau_{A} = 6$. These values were computed for all channels of this recording, and their distribution for both DMI and autocorrelation can be seen in Fig. \ref{fig:dmi-acorr-hist}. For this patient, autocorrelation shows less variance and lower suggested time delays. This behavior was observed across patients. \add{I should provide mean $\tau$ reported by $A(\tau)$ and DMI for all recordings.}
+Typical plots of autocorrelation and delayed mutual information can be seen on Figure \ref{fig:dmi-acorr}. First local minima of DMI and first $\tau$ for which $A(\tau) \leq 1/e$ are marked by yellow dots. For this channel, these are $\tau_{\mathrm{DMI}} = 7$ and $\tau_{A} = 6$. These values were computed for all channels of this recording, and their distribution for both DMI and autocorrelation can be seen in Figure \ref{fig:dmi-acorr-hist}. For this patient, autocorrelation shows less variance and lower suggested time delays. This behavior was observed across patients. \add{I should provide mean $\tau$ reported by $A(\tau)$ and DMI for all recordings.}
 
-Fig. \ref{fig:pca-svd} shows singular values of the PCA reconstruction as functions of $\tau$. The two prominent singular values correspond to the main axes \unsure{Is this correct?} of the attractor. We can see several collapses: smaller ones at $\tau = 5$ and $\tau=7$, and larger one at $\tau=14$, corresponding to the sharp peak of ILD on Fig. \ref{fig:ild}. For $\tau=3$, the three largest singular values show convergence - however, the small singular values suggests that the attractor has not fully unfolded in their corresponding directions. \unsure{Not sure if this wording is precise and understandable.} Overall, this behavior suggests $\tau_{\mathrm{svd}} = 6$ as optimal. Note that results of this technique are difficult to evaluate by an automatic procedure.
+Figure \ref{fig:pca-svd} shows singular values of the PCA reconstruction as functions of $\tau$. The two prominent singular values correspond to the main axes \unsure{Is this correct?} of the attractor. We can see several collapses: smaller ones at $\tau = 5$ and $\tau=7$, and larger one at $\tau=14$, corresponding to the sharp peak of ILD on Figure \ref{fig:ild}. For $\tau=3$, the three largest singular values show convergence - however, the small singular values suggests that the attractor has not fully unfolded in their corresponding directions. \unsure{Not sure if this wording is precise and understandable.} Overall, this behavior suggests $\tau_{\mathrm{svd}} = 6$ as optimal. Note that results of this technique are difficult to evaluate by an automatic procedure.
 
-The results obtained by ADFD can be seen in Fig. \ref{fig:adfd}. The average displacement tends to increase with $m$, is not monotonically increasing on its domain, and saturates for relavely small values of $\tau$ - thus, the estimated time delays are (consistently)\change{We need to smartly separate general observations with this analysis.} lower than those obtained by other techniques. Moreover, this technique requires prior selection of $m$. However, the algorithms for selection of $m$, require estimation $\tau$, making this technique impractical.
+The results obtained by ADFD can be seen in Figure \ref{fig:adfd}. The average displacement tends to increase with $m$, is not monotonically increasing on its domain, and saturates for relavely small values of $\tau$ - thus, the estimated time delays are (consistently)\change{We need to smartly separate general observations with this analysis.} lower than those obtained by other techniques. Moreover, this technique requires prior selection of $m$. However, the algorithms for selection of $m$, require estimation $\tau$, making this technique impractical.
 
-The result of ILD, the most powerful algorithm for estimation of the embedding parameters we used, can be seen on Fig. \ref{fig:ild}. There is a clear minimum at $\tau_{\mathrm{ILD}}=4$, and the ILD curves become very similar for approximately all $m \geq 10$, except near the minimum, where they converge slower. Almost identical behavior was observed across all channels in this recording. \add{There are interesting patterns in these plots across patients and channels.} This algorithm is computationally expensive (it takes around an hour to generate a single plot), and so is impractical for large datasets.
+The result of ILD, the most powerful algorithm for estimation of the embedding parameters we used, can be seen on Figure \ref{fig:ild}. There is a clear minimum at $\tau_{\mathrm{ILD}}=4$, and the ILD curves become very similar for approximately all $m \geq 10$, except near the minimum, where they converge slower. Almost identical behavior was observed across all channels in this recording. \add{There are interesting patterns in these plots across patients and channels.} This algorithm is computationally expensive (it takes around an hour to generate a single plot), and so is impractical for large datasets.
 
 As explained in Section \ref{sec:delay}, these techniques should be used only as inspection tools, not as reliable guides for selection of $\tau$. The ultimate goal of the reconstruction is to obtain as accurate values of the non-linear parameters as possible, and thus selection of the optimal embedding parameters may differ for each of them.\unsure{Find some studies doing this also. Is there a way to justify this theoretically?} Thus, for example, in order to select the proper embedding parameters for computation of the largest Lyapunov exponent, we inspected the scaling regions for multiple values of $m$, $\tau$, Theiler window\add{Add description of Theiler window to \ref{sec:rosenstein}}, and other parameters, and picked those with the longest scaling regions (since the length of the scaling regions is proportional to the certainty of the estimate \cite{kennel1992determining}).
 
@@ -1085,7 +1094,7 @@ Integral local deformation & 4                                    \\ \hline
 \subsection{Embedding dimension}
 For estimating the embedding dimension, we used combination of \emph{false nearest neighbors} (FNN) algorithm described in Section \ref{sec:fnn} and average false neighbors (AFN) described in Section \ref{sec:afn}. The convergence of ILD curves and saturation of correlation dimension also provides insight into optimal choice of embedding dimension.
 
-The percentage of reported false neighbors depends strongly on the selected values of $R$ and $A$ from equations (\ref{eq:first-criterion}) and (\ref{eq:second-criterion}). This is illustrated on Fig. \ref{fig:fnn-comp}, showing the percentage of false neighbors reported by the respective criteria for varying values of $A$ and $R$, and for several values of time delay $\tau$. 
+The percentage of reported false neighbors depends strongly on the selected values of $R$ and $A$ from equations (\ref{eq:first-criterion}) and (\ref{eq:second-criterion}). This is illustrated on Figure \ref{fig:fnn-comp}, showing the percentage of false neighbors reported by the respective criteria for varying values of $A$ and $R$, and for several values of time delay $\tau$. 
 
 The percentages reported by the criterion I are almost independent of $\tau$, whereas increasing $\tau$ tends to increase the percentage reported by criterion II. For high enough $\tau$, criterion II will report all neighbors as false. 
 
@@ -1093,9 +1102,9 @@ The apparent independence of the results of the criterion I on $\tau$ is indicat
 
 By selecting proper parameters and using both criteria cojointly, however, FNN can still be used to obtain reasonable results, consistent with estimates obtained by ILD and AFN. \add{Report average $m$ computed by ANN and FNN, $R=2.5$, $A=2.0$, $\Delta E_1 \leq 0.005$ for this patient using a histogram.}
 
-The $E_1$ statistic of AFN usually stops increasing for approximately the same value as reported by criterion I of FNN for $R=2.5$, see Fig. \ref{fig:afn-comp}. The $E_2$ statistic, tends to oscillate in small neighborhood of value $1$, which is an indecation of nondeterminism \cite{Cao1997}.
+The $E_1$ statistic of AFN usually stops increasing for approximately the same value as reported by criterion I of FNN for $R=2.5$, see Figure \ref{fig:afn-comp}. The $E_2$ statistic, tends to oscillate in small neighborhood of value $1$, which is an indecation of nondeterminism \cite{Cao1997}.
 
-We plotted the value of correlation dimension against $m$ for various values of $\tau$ (see Fig. \ref{fig:em-corrdim}) - for details about the computation, see Section \ref{sec:corrdim-exp}.\add{Add statistics of $m$ computed this way.}
+We plotted the value of correlation dimension against $m$ for various values of $\tau$ (see Figure \ref{fig:em-corrdim}) - for details about the computation, see Section \ref{sec:corrdim-exp}.\add{Add statistics of $m$ computed this way.}
 
 \begin{figure} 
 \centering
@@ -1116,7 +1125,7 @@ We plotted the value of correlation dimension against $m$ for various values of 
 \section{Largest Lyapunov exponents} \label{sec:lle-exp}
 For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000. \unsure{Why? This is unexpected.}
 
-Fig. \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Let us remind the reader that longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension may appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. Therefore, selecting proper embedding dimension based on divergence plots is a balancing act between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
+Figure \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Let us remind the reader that longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension may appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. Therefore, selecting proper embedding dimension based on divergence plots is a balancing act between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
 
 With increasing time delay $\tau$, we observe gradually damped oscillation-like behavior with period $\tau$ and amplitudes also increasing with $\tau$. Average divergence computed using Kantz' algorithm also exhibits this behavior. The explanation is as follows: let $x_1, x_2, \dots, x_N$ represent equidistantly sampled time series, and $y_i \in \RR^{m}$ an embedded point in the reconstructed orbit. Then
 \begin{align*}
@@ -1154,9 +1163,9 @@ To compute the LLE estimates with automatic selection of proper embedding parame
 
 To compute the correlation sum $C(r)$, we used classical Grassberger-Procaccia algorithm described in Section \ref{sec:corrdim} using Chebyshev metric, $w_t = 50$, for values of $r$ either in geometrical progression of 100 values from 0.05 to 10 or by an automatic procedure described further. Then, these $(r, C(r))$ pairs were used to compute local least square fits of the equation $C(r) = r^{d_2}$ inside windows of length 7 for each pair. \add{This paragraph can be much improved (wording, etc.).}
 
-Fig. \ref{fig:cr} shows log-log plots of normalized correlations sum $C(r)$ against radius $r$ for varying values of time delay $\tau$. There are clear straight lines indicating expected relationship $C(r) \propto r^{d_2}$. We can see that the lines shift to the right, increasing their slopes with $m$. The correlation sum is almost independent of time delay.
+Figure \ref{fig:cr} shows log-log plots of normalized correlations sum $C(r)$ against radius $r$ for varying values of time delay $\tau$. There are clear straight lines indicating expected relationship $C(r) \propto r^{d_2}$. We can see that the lines shift to the right, increasing their slopes with $m$. The correlation sum is almost independent of time delay.
 
-Fig. \ref{fig:loc-d2} shows the log plot of local slope of of $\log C(r)$ as a function of $r$. There are no apparent scaling regions at all. Morever, by comparing with the same plot for iAAFT surrogate of the same time series (see Fig. \ref{fig:loc-d2-comp}), we cannot even reject the hypothesis of a linear stochastic process. 
+Figure \ref{fig:loc-d2} shows the log plot of local slope of of $\log C(r)$ as a function of $r$. There are no apparent scaling regions at all. Morever, by comparing with the same plot for iAAFT surrogate of the same time series (see Figure \ref{fig:loc-d2-comp}), we cannot even reject the hypothesis of a linear stochastic process. 
 
 We decided to compute the correlation dimension as follows. First, as with computation of the Lyapunov exponent, we use a moving window of length 15000 datapoints and shift 100 to locate 60 s section of the time series with the lowest p-value for the $\chi^2$ stationarity test described in Section . \add{Add description of the test.} Then, we create embeddings for embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
 \begin{align*}
@@ -1164,7 +1173,7 @@ We decided to compute the correlation dimension as follows. First, as with compu
 \end{align*}
 where $r_{\mathrm{max}}$ denotes the largest ocurring pairwise distance on the attractor. This approach of automatic selection radius bounds for evaluation of $d_2$ is borrowed from \cite{andreas2000}.
 
-Fig. \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the embedding dimension $m$ for varying values of the embedding dimension $\tau$. There $d_2$ are no signs of saturation, correlation dimension reaches a global maximum and then starts to decrease. \add{Conclusion? No finite value, or no chaos?}
+Figure \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the embedding dimension $m$ for varying values of the embedding dimension $\tau$. There $d_2$ are no signs of saturation, correlation dimension reaches a global maximum and then starts to decrease. \add{Conclusion? No finite value, or no chaos?}
 
 \begin{figure} 
 \centering
@@ -1213,58 +1222,189 @@ Fig. \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the emb
 \label{fig:surr-test}
 \end{figure}
 
-\section{Unsupervised analysis of before / after treatment differences}
+\section{Analysis of before / after treatment differences}
 As the first step of our analysis, we conducted an investigation of the differences in the non-linear measures computed from the signals obtained before and after treatment.
 
-To this goal, we started by simply plotting each measure's mean value over channels for the recording before and after administration of drugs for all patients. Moreover, we performed two-sided Kolmogorov-Smirnov test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same.
+To this goal, we separated the patients into terciles according to the ratio of the depression scores before and after treatment. Out of these three populations, we selected the first and last, containing 46 and 44 samples respectively, to obtain population we call \emph{responding} (responders) to treatment and \emph{non-responding} (non-responders) to treatment. The second tercile was not considered in this analysis to minimize the effect of inaccuracy of the self-reported depression score. Comparison of mean values of individual measures between the two populations can be seen on Figures \ref{fig:respnon1}, \ref{fig:respnon1auto} and \ref{fig:respnon2}. Length of an error bar corresponds to one standard deviation.
 
-We found that for each measure except correlation dimension, its average over channels, although differring between subjects, is remarkably stable for all patients accross measurements. This means that except for correlation dimension, information about any change between measurements was not caputered by the computed non-linear measures (see Figure \ref{fig:lyap_all}, \ref{fig:corrdim_all}).
+For each group, we performed two-sided Kolmogorov-Smirnov test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for $d_2$ computed using automatic selection of embedding parameters. However, we found that responders had significantly lower $\lambda_1$ computed using these methods in C3 and C4 electrodes ($6.899\pm1.278$ vs. $7.342\pm1.838$ for C3, $6.731\pm1.116$ vs. $7.365\pm1.475$ for C4) on recording performed before treatment.
 
-Moreover, we found that for all measures, either for mean value or all channels, we cannot reject the hypothesis that the computed values are drawn from the same distribution. This is true even when patients responding and not responding to treatment are considered separately.
-
-Apart from computing the mean, principal component analysis was used to reduce the number of dimensions of the 19 dimensional feature vectors. By visually inspecting projections into 2, 3 (2/3D plot)  and 4 dimensions (a heatmap), we were unable to find any separation boundary between before and after group. \footnote{And neither for male / female, responding / non-responding, age < 40 / age > 50 groups, and in groups based on depression scores.} (see Figure \ref{fig:pca2d}, \ref{fig:pca3d}, \ref{fig:heatmap}).
-
-Also, by looking at the subjects above 90th percentile of euclidean distance between before and after vectors in the projected space, we were unable to find any regularity. Subjects in those groups seem to be drawn randomly from the dataset.
-
-\begin{figure} 
+\begin{table}[tbp]
 \centering
-\noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.8\textwidth]{Images/lyap_all.png} }
-  \caption{}
-\label{fig:lyap_all}
-\end{figure}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+Means    & 10.151 & 9.919 & 0.121 &       \\ \hline
+Stds     & 0.628  & 0.724 & 0.089 &       \\ \hline
+FP1      & 9.770 $\pm$ 1.130 & 9.545 $\pm$ 1.287 & 0.432 &       \\ \hline
+FP2      & 9.764 $\pm$ 1.186 & 9.565 $\pm$ 1.281 & 0.432 &       \\ \hline
+F3       & 9.794 $\pm$ 1.082 & 9.493 $\pm$ 1.177 & 0.065 & *     \\ \hline
+F4       & 9.862 $\pm$ 1.090 & 9.413 $\pm$ 1.330 & 0.010 & ***   \\ \hline
+C3       & 9.846 $\pm$ 1.068 & 9.579 $\pm$ 1.117 & 0.089 &       \\ \hline
+C4       & 9.922 $\pm$ 1.046 & 9.598 $\pm$ 1.196 & 0.033 & **    \\ \hline
+P3       & 10.447 $\pm$ 0.865 & 10.291 $\pm$ 1.055 & 0.212 &       \\ \hline
+P4       & 10.437 $\pm$ 0.883 & 10.266 $\pm$ 1.046 & 0.832 &       \\ \hline
+O1       & 10.539 $\pm$ 1.174 & 10.485 $\pm$ 1.271 & 0.965 &       \\ \hline
+O2       & 10.518 $\pm$ 1.198 & 10.409 $\pm$ 1.312 & 0.273 &       \\ \hline
+F7       & 10.096 $\pm$ 1.351 & 9.886 $\pm$ 1.402 & 0.432 &       \\ \hline
+F8       & 10.118 $\pm$ 1.297 & 9.785 $\pm$ 1.545 & 0.273 &       \\ \hline
+T3       & 9.872 $\pm$ 1.308 & 9.387 $\pm$ 1.544 & 0.000 & ***   \\ \hline
+T4       & 9.842 $\pm$ 1.317 & 9.449 $\pm$ 1.534 & 0.065 & *     \\ \hline
+T5       & 10.506 $\pm$ 1.092 & 10.329 $\pm$ 1.262 & 0.273 &       \\ \hline
+T6       & 10.584 $\pm$ 1.087 & 10.380 $\pm$ 1.189 & 0.347 &       \\ \hline
+Fz       & 10.257 $\pm$ 1.004 & 10.117 $\pm$ 1.096 & 0.161 &       \\ \hline
+Cz       & 10.204 $\pm$ 0.906 & 10.075 $\pm$ 0.998 & 0.273 &       \\ \hline
+Pz       & 10.490 $\pm$ 0.897 & 10.408 $\pm$ 1.032 & 0.735 &       \\ \hline
+\end{tabular}
+\caption{Mean values of $\lambda_1$ of all patients before and after treatment.}
+\label{tab:llebaall}
+\end{table}
 
-\begin{figure} 
-\centering
-\noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.8\textwidth]{Images/corrdim_all.png} }
-  \caption{}
-\label{fig:corrdim_all}
-\end{figure}
 
-\begin{figure} 
+\begin{table}[tbp]
 \centering
-\noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.8\textwidth]{Images/pca2d.png} }
-  \caption{}
-\label{fig:pca2d}
-\end{figure}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+Means    & 9.994 & 9.655 & 0.022 & **    \\ \hline
+Stds     & 0.639 & 0.701 & 0.452 &       \\ \hline
+FP1      & 9.599 $\pm$ 1.086 & 9.335 $\pm$ 1.360 & 0.625 &       \\ \hline
+FP2      & 9.590 $\pm$ 1.090 & 9.281 $\pm$ 1.293 & 0.308 &       \\ \hline
+F3       & 9.588 $\pm$ 1.119 & 9.190 $\pm$ 1.190 & 0.123 &       \\ \hline
+F4       & 9.682 $\pm$ 0.999 & 9.199 $\pm$ 1.339 & 0.072 & *     \\ \hline
+C3       & 9.690 $\pm$ 1.065 & 9.349 $\pm$ 1.111 & 0.072 & *     \\ \hline
+C4       & 9.827 $\pm$ 1.052 & 9.407 $\pm$ 1.221 & 0.041 & **    \\ \hline
+P3       & 10.294 $\pm$ 0.797 & 10.032 $\pm$ 1.050 & 0.072 & *     \\ \hline
+P4       & 10.265 $\pm$ 0.873 & 10.004 $\pm$ 1.104 & 0.308 &       \\ \hline
+O1       & 10.343 $\pm$ 1.081 & 10.117 $\pm$ 1.176 & 0.452 &       \\ \hline
+O2       & 10.261 $\pm$ 1.160 & 9.961 $\pm$ 1.212 & 0.123 &       \\ \hline
+F7       & 9.998 $\pm$ 1.324 & 9.682 $\pm$ 1.419 & 0.199 &       \\ \hline
+F8       & 9.991 $\pm$ 1.170 & 9.659 $\pm$ 1.492 & 0.308 &       \\ \hline
+T3       & 9.789 $\pm$ 1.387 & 9.172 $\pm$ 1.492 & 0.005 & ***   \\ \hline
+T4       & 9.703 $\pm$ 1.261 & 9.164 $\pm$ 1.403 & 0.022 & **    \\ \hline
+T5       & 10.370 $\pm$ 1.091 & 10.073 $\pm$ 1.214 & 0.011 & ***   \\ \hline
+T6       & 10.335 $\pm$ 0.954 & 10.021 $\pm$ 1.166 & 0.123 &       \\ \hline
+Fz       & 10.096 $\pm$ 0.970 & 9.849 $\pm$ 1.126 & 0.072 & *     \\ \hline
+Cz       & 10.150 $\pm$ 0.886 & 9.847 $\pm$ 1.006 & 0.123 &       \\ \hline
+Pz       & 10.318 $\pm$ 0.805 & 10.113 $\pm$ 1.062 & 0.801 &       \\ \hline
+\end{tabular}
+\caption{Mean values of $\lambda_1$ of responding patients before and after treatment.}
+\label{tab:llebaresp}
+\end{table}
 
-\begin{figure} 
+\begin{table}[tbp]
 \centering
-\noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.8\textwidth]{Images/pca3d.png} }
-  \caption{}
-\label{fig:pca3d}
-\end{figure}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+Means    & 10.400 & 10.015 & 0.423 &       \\ \hline
+Stds     & 0.623  & 0.813 & 0.018 & ***   \\ \hline
+FP1      & 10.034 $\pm$ 1.166 & 9.510 $\pm$ 1.325 & 0.108 &       \\ \hline
+FP2      & 10.045 $\pm$ 1.196 & 9.752 $\pm$ 1.269 & 0.778 &       \\ \hline
+F3       & 10.116 $\pm$ 1.034 & 9.619 $\pm$ 1.200 & 0.108 &       \\ \hline
+F4       & 10.098 $\pm$ 1.146 & 9.343 $\pm$ 1.364 & 0.034 & **    \\ \hline
+C3       & 10.160 $\pm$ 1.010 & 9.585 $\pm$ 1.147 & 0.018 & ***   \\ \hline
+C4       & 10.162 $\pm$ 1.060 & 9.681 $\pm$ 1.170 & 0.062 & *     \\ \hline
+P3       & 10.711 $\pm$ 0.874 & 10.468 $\pm$ 1.065 & 0.423 &       \\ \hline
+P4       & 10.720 $\pm$ 0.897 & 10.453 $\pm$ 1.005 & 0.595 &       \\ \hline
+O1       & 10.765 $\pm$ 1.292 & 10.772 $\pm$ 1.352 & 0.924 &       \\ \hline
+O2       & 10.823 $\pm$ 1.242 & 10.604 $\pm$ 1.434 & 0.595 &       \\ \hline
+F7       & 10.234 $\pm$ 1.340 & 9.875 $\pm$ 1.459 & 0.282 &       \\ \hline
+F8       & 10.307 $\pm$ 1.405 & 9.556 $\pm$ 1.715 & 0.108 &       \\ \hline
+T3       & 10.073 $\pm$ 1.207 & 9.292 $\pm$ 1.602 & 0.004 & ***   \\ \hline
+T4       & 10.018 $\pm$ 1.431 & 9.394 $\pm$ 1.726 & 0.179 &       \\ \hline
+T5       & 10.709 $\pm$ 1.140 & 10.490 $\pm$ 1.301 & 0.778 &       \\ \hline
+T6       & 10.933 $\pm$ 1.072 & 10.649 $\pm$ 1.219 & 0.778 &       \\ \hline
+Fz       & 10.568 $\pm$ 0.951 & 10.327 $\pm$ 1.024 & 0.423 &       \\ \hline
+Cz       & 10.383 $\pm$ 0.867 & 10.291 $\pm$ 0.939 & 0.924 &       \\ \hline
+Pz       & 10.744 $\pm$ 0.894 & 10.630 $\pm$ 1.023 & 0.423 &       \\ \hline
+\end{tabular}
+\caption{Mean values of $\lambda_1$ of non-responding patients before and after treatment.}
+\label{tab:llebanon}
+\end{table}
 
-\begin{figure} 
-\centering
-\noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.4\textwidth]{Images/heatmap.png} }
-  \caption{}
-\label{fig:heatmap}
-\end{figure}
+
+% We found that for each measure except correlation dimension, its average over channels, although differring between subjects, is remarkably stable for all patients accross measurements. This means that except for correlation dimension, information about any change between measurements was not caputered by the computed non-linear measures (see Figure \ref{fig:lyap_all}, \ref{fig:corrdim_all}).
+% 
+% Moreover, we found that for all measures, either for mean value or all channels, we cannot reject the hypothesis that the computed values are drawn from the same distribution. This is true even when patients responding and not responding to treatment are considered separately.
+% 
+% Apart from computing the mean, principal component analysis was used to reduce the number of dimensions of the 19 dimensional feature vectors. By visually inspecting projections into 2, 3 (2/3D plot)  and 4 dimensions (a heatmap), we were unable to find any separation boundary between before and after group. \footnote{And neither for male / female, responding / non-responding, age < 40 / age > 50 groups, and in groups based on depression scores.} (see Figure \ref{fig:pca2d}, \ref{fig:pca3d}, \ref{fig:heatmap}).
+% 
+% Also, by looking at the subjects above 90th percentile of euclidean distance between before and after vectors in the projected space, we were unable to find any regularity. Subjects in those groups seem to be drawn randomly from the dataset.
+
+% \begin{figure} 
+% \centering
+% \noindent\makebox[\textwidth]{%
+%   \includegraphics[width=0.8\textwidth]{Images/lyap_all.png} }
+%   \caption{}
+% \label{fig:lyap_all}
+% \end{figure}
+% 
+% \begin{figure} 
+% \centering
+% \noindent\makebox[\textwidth]{%
+%   \includegraphics[width=0.8\textwidth]{Images/corrdim_all.png} }
+%   \caption{}
+% \label{fig:corrdim_all}
+% \end{figure}
+% 
+% \begin{figure} 
+% \centering
+% \noindent\makebox[\textwidth]{%
+%   \includegraphics[width=0.8\textwidth]{Images/pca2d.png} }
+%   \caption{}
+% \label{fig:pca2d}
+% \end{figure}
+% 
+% \begin{figure} 
+% \centering
+% \noindent\makebox[\textwidth]{%
+%   \includegraphics[width=0.8\textwidth]{Images/pca3d.png} }
+%   \caption{}
+% \label{fig:pca3d}
+% \end{figure}
+% 
+% \begin{figure} 
+% \centering
+% \noindent\makebox[\textwidth]{%
+%   \includegraphics[width=0.4\textwidth]{Images/heatmap.png} }
+%   \caption{}
+% \label{fig:heatmap}
+% \end{figure}
+
+\begin{landscape}
+  \begin{figure} 
+  \centering
+  \noindent\makebox[\textwidth]{%
+    \includegraphics[width=1.4\textwidth]{./Images/bars/bef_aft.png} }
+    \caption{Values of individual measures computed before and after treatment.}
+   \label{fig:befaft}
+  \end{figure}
+
+  \begin{figure} 
+  \centering
+  \noindent\makebox[\textwidth]{%
+    \includegraphics[width=1.4\textwidth]{./Images/bars/resp_non1.png} }
+    \caption{Comparison of mean values of largest Lyapunov exponent and correlation dimension between responders and non-responders computed using embedding dimension $m=10$ and time delay $\tau=3$.}
+   \label{fig:respnon1}
+  \end{figure}
+
+  \begin{figure} 
+  \centering
+  \noindent\makebox[\textwidth]{%
+    \includegraphics[width=1.4\textwidth]{./Images/bars/resp_non1_auto.png} }
+    \caption{Comparison of mean values of largest Lyapunov exponent and correlation dimension between responders and non-responders computed using automatic procedure described in Section .}
+   \label{fig:respnon1auto}
+  \end{figure}
+
+  \begin{figure} 
+  \centering
+  \noindent\makebox[\textwidth]{%
+    \includegraphics[width=1.4\textwidth]{./Images/bars/resp_non2.png} }
+    \caption{Comparison of mean values of computed detrended fluctuation analysis and sample entropy between responders and non-responders.}
+   \label{fig:respnon2}
+  \end{figure}
+\end{landscape}
 \section{Results}
 
 \chapter*{Conclusion}
