@@ -305,7 +305,7 @@ In \textbf{Chapter 3}, we describe the methods proposed, experiments performed, 
 
 % \addcontentsline{toc}{chapter}{Introduction}
 
-\chapter{Non-linear time series analysis}
+\chapter{Non-linear Time Series Analysis}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The most simple of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description.
 
 Those examples represent two classes of processes existent before the rise of non-linear dynamics: \cite{andreas2000}
@@ -554,7 +554,7 @@ Several factors complicate successful reconstruction from real-world, experiment
 
 Moreover, different reconstructions can amplify the already present noise to varying degree. In \cite{casdagli1991state}, Casdagli et al. provide a quantitative way of analyzing this amplification, and, by extension, of insight into selection of embedding parameters so that the noise amplification is minimized.
 
-\subsection{The choice of time delay} \label{sec:delay}
+\subsection{Time delay selection} \label{sec:delay}
 A careful reader might have noted that the results of theorems in Section \ref{sec:method-of-delays} do not depend on the value of the delay $\tau$.\footnote{This is because of the fact that the measurements are infinitely precise. \cite{casdagli1991state}}. Embeddings with the same value of the embedding dimension $m$, but different values of $\tau$ are theoretically equivalent. In practice, however, some theoretically sound time delay reconstructions may fail to be embeddings. Although some researchers propose that the only important parameter is the length of the embedding window $\tau_w = \tau (m-1)$ \cite{kugiumtzis1996state}, as we will see, the choice of time delay has effects independent of the choice of embedding dimension, and vice versa.
 
 For example:
@@ -667,7 +667,7 @@ This expression, called \textbf{integral local deformation}, is then averaged ov
   \langle \mathcal{D}(m, \tau, i) \rangle_i = \frac{t_{ev} \sum_{i=1}^{N_{ref}} \sum_{q=1}^{q_{max}} \left( \Delta(q-1,m,\tau) - \Delta(q,m,\tau) \right)}{2N_{ref} \Delta t \left( \max_{i \in 1, 2, \dots, N} x_i - \min_{i \in 1, 2, \dots, N} x_i \right)}
 \end{align*}
 
-\subsection{The choice of embedding dimension}
+\subsection{Embedding dimension selection}
 \subsubsection{False nearest neighbors} \label{sec:fnn}
 Since the dynamics $\textbf{F}$ are assumed to be a \emph{smooth} vector field and the attractor $A$ is a \emph{compact} set in the phase space, its members acquire near neighbors, which should be subject to similar evolution. Therefore, these neighbors should remain close to each other after a short interval of time (even though chaos may introduce exponential divergence between them). This is a useful fact, which can be used, for example, to predict future evolution of a trajectory, or a computation of Lyapunov exponents. The \textbf{false nearest neighbors} algorithm uses them for estimation of embedding dimension. \cite{kennel1992determining}
 
@@ -808,7 +808,7 @@ Another prominent and widely used algorithm for estimation of the largest Lyapun
 
 \info[inline]{As we have mentioned already, the projection involved in the measurement may make distances shrink apparently for short times, although they grow in the true state space. \cite{kantz2004} Moreover, in the true state space distances do not grow everywhere on the attractor with the same rate, and locally they may even shrink. LLE is average of those local divergence rates. Influence of noise can be minimised by using an appropriate averaging statistics.}
 
-\subsubsection{Dataset size requirements}
+\subsubsection{Dataset size requirements} \label{sec:req-lyap}
 The minimum dataset requirements was estimated by Eckmann and Ruelle in \cite{eckmann1992fundamental} by imposing requirements on the distances and number of neighbors for each point. If $\Gamma(r) \gg 1$ is the average number of neighbors withing radius $r$, we may approximate it as
 \begin{align*}
   \Gamma(r) \approx \mathrm{const.} \times r^m,
@@ -903,7 +903,7 @@ In our implementation, we perform a least squares fit of values $(\log r, \log C
 \label{fig:exp-localcr}
 \end{figure}
 
-\subsubsection{Dataset size requirements}
+\subsubsection{Dataset size requirements} \label{sec:req-corr}
 There are multiple estimations of the minimum dataset size. Most of them are based on an attempt to avoid so called \emph{edge effect}. It can be shown that the correlation dimension for a hypercube in $m$-dimensions of unit edge length the local correlation dimension is
 \begin{align*}
   d_2^{(m)}(r) = m - \frac{mr}{2-r} \approx m(1 - \frac{r}{2}).
@@ -938,7 +938,7 @@ The EEG recordings were performed by and obtained from the Czech National Instit
 
 The experiment lasted 4 weeks. At the beginning of week 1, each subject's depression score was measured, their EEG signal was recorded, and, based on the measurement and patient's history, prescription of up to 4 drugs was made. After 4 weeks, depression score was remeasured and EEG signal recorded again.
 
-During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz), see Figure \ref{fig:electrodes} for reference. 99 subjects EEG signal was measured at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz.
+During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz), see Figure \ref{fig:electrodes} for reference. EEG signals of 99 subjects were recorded at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz.
 
 A typical recoding can be seen on Figure \ref{fig:data}.
 
@@ -959,13 +959,11 @@ A typical recoding can be seen on Figure \ref{fig:data}.
 \end{figure}
 
 \section{Preprocessing}
-Recordings of $f_s = 1000$ Hz were downsampled to $250$ Hz using the Fourier method to avoid confounding effects.
+Recordings of $f_s = 1000$ Hz were downsampled (decimated) by factor $4$ to $250$ Hz using the Fourier method (also known as trigonometric interpolation), i.e. by performing discrete Fourier transform on the original series, dividing it into $2*1000/250=8$ intervals, removing all but the first and the last intervals (thus removing the highest positive and negative frequencies, corresponding to low-pass filtering), and performing inverse discrete Fourier transform. This procedure assumes that the signal is periodic, and may have some influence on the obtained results. However, it was observed that this effect is almost negligible, even for considerably higher decimation factors. \cite{diab2013effect}
 
-Recordings of insufficient duration were not used for further analysis. To balance the data requirements (see Section \add{Add reference} ) and stationarity (see Section \ref{sec:stationarity}, the threshold was selected to be 60 s (15 000 datapoints per time series), resulting in exclusion of 26 recordings from the total of 266.
+In further analysis, unless otherwise specified, recordings were shortened to a fixed length. To balance the data requirements (see Sections \ref{sec:req-lyap} and \ref{sec:req-corr}), decrease in dataset size due to removal of too short recordings, and stationarity (see Section \ref{sec:stationarity}), the threshold was selected to be 60 s (15 000 datapoints per time series), resulting in exclusion of 26 recordings from the total of 266.
 
-All signals were highpass filtered with 0.5 Hz frequency and lowpass filtered with 70 Hz frequency. Our hypothesis is that such filter should not affect signals of our interest, since neural oscillations are known to lie inside the unmodified frequency band.
-  
-It has been observed that simple average filtering does not influence the reconstruction considerably. \cite{Rohrbacker2009}
+In some studies, band-pass filtering was used to remove frequencies which are physiologically impossible to produce by neural oscillations (e.g. high-pass filtering with 0.5 Hz threshold or lowpass filtering with 70 Hz threshold). \cite{hosseinifard2013} Sometimes, it is suggested to notch filter at power line frequencies (40 Hz or 50 Hz). However, some authors suggest that linear filtering may adversely affect the results of non-linear analysis. \cite{andreas2000} Others, on the other hand, observed that simple linear filtering does not influence the reconstruction of embedding space considerably. \cite{Rohrbacker2009} If quality of the data is sufficient, filtering is not necessary. \cite{Jas2017} By visual inspection, we found our data to be of sufficient quality and therefore decided to not risk influencing the results by filtering. \info{In fact, we tried both, but for filtered the results looked slightly more uniform.}
 
 \section{Stationarity}
 Stationarity was evaluated on multiple time scales using the stationarity test described in Section \ref{sec:stationarity}. For results, see Table \ref{tab:stat}.
