@@ -914,6 +914,35 @@ For large enough $r$, $d_2^{(m)}(r)$ converges to zero. This result, which can b
 \end{align*}
 where $\rho$ is the maximum error. This implies an exponential increase of minimum required dataset size with embedded dimension. For example, $N_{(m, \tau)} = 5^m$ for $\rho = 5\%$. \cite{andreas2000}
 
+\section{Surrogate data testing}
+It has been shown that, for example, fitered noise can mimic low-dimensional chaotic attractors when examined by Grassberger-Procaccia algorithm described above. \cite{rapp1993filtered} Hence, interpretation of results obtained by non-linear analysis require judgement. For example. obtaining finite-dimensional estimates for $d_2$ is not evidence of non-linearity, but may indicate lack of data, measurement error, on numerical inaccuracies. The result of these algorithms does not include any error estimate, and sometimes even non-linearity of the underlying process is uncertain. So, one may ask: would we obtain the same estimate for data with the same (non-measured) linear properties as the original, but differs in the (measured) non-linear property? In the following, we will describe a method for answering this question. \info{We may also want to know whether the process is determinsitic or not. There are tests for that, but we are not using them in this thesis.}
+
+To this end, we construct a Monte Carlo hypothesis test. We choose a null hypothesis of a model for the process creating obtained data which denies the property we assume to measure. For each time series, we create so called \emph{surrogate data} which deliberately capture only properties consistent with chosen null hypothesis, and compute the estimates using the same method as for the original data. If the result for the original time series is significantly different from the surrogate estimates, we reject the the null hypothesis. In the opposite case, we fail reject the null hypothesis. 
+
+Here, we use two sided test. If the measure of significance is defined as
+\begin{align*}
+  \mathcal{S} \equiv \frac{| Q_{\text{orig}} - \mu_{\text{surr}} |}{\sigma_{\text{surr}}},
+\end{align*}
+where $Q_{\text{orig}}$ is the statistic computed for the original time series, and $\mu_{\text{surr}}$, $\sigma_{\text{surr}}$ are the mean and variance of the statistic computed for the surrogate time series. \cite{theiler1992testing} If we assume that distribution of the generated is Gaussian, than $\mathcal{S} \geq 2$ is required for 95 \% significance level. However, validity of this assumption is not always guaranteed. For non-Gaussian distributions, we may require larger $\mathcal{S}$, or, alternatively, use a rank based test, as follows. \cite{kantz2004}
+
+Using rank-based test, we want to test if $Q_{\text{orig}}$ is smaller or larger than the expected value of estimates produced by the null hypothesis model. If we generate $n_s$ surrogate estimates, then, we have $n_s$ estimates following the null hypothesis, each having a probability $2/n_s$ of being the smallest or largest. A false rejection will happen if $Q_{\text{orig}}$ happens to also follow the null hypothesis and is either the smallest or the largest, which happens with probablity $1 - \alpha \coloneqq 2/(n_s+1)$, where $\alpha$ is the confidence level. Hence, for confidence level $\alpha = 95 \%$, the number of surrogates should be $n_s = 38$. \cite{andreas2000}
+
+\subsubsection{Generating amplitude adjusted surrogates}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/surr_schema.png} }
+  \caption{ \cite{andreas2000} }
+\label{fig:surr-schema}
+\end{figure}
+
+For our purposes, since we assume that the data are produced by a non-linear process, a reasonable null hypothesis may be that the data are produced by a Gaussian linear stochastic process
+\begin{align*}
+  x_{t+1} = \mu + \sum_{j=0}^{p-1} a_j x_{t-j} + \sigma e_t,
+\end{align*}
+with unknown parameters $a_j, e_t, \mu, \sigma \in \RR$. \cite{theiler1992testing}
+
 \section{Applications in disease diagnosis}\label{sec:applications}
 Although non-linear dynamical analysis of EEG signal has been successfully applied to many psychological and psychiatric conditions, such as insomnia, schizophrenia, epilepsy, dementia, Alzheimer's disease, the number of studies applying methods of non-linear time series analysis for clinical depression diagnosis is relatively limited. \cite{rodriguez2015}
 
