@@ -917,17 +917,7 @@ where $\rho$ is the maximum error. This implies an exponential increase of minim
 \section{Surrogate data testing}
 It has been shown that, for example, fitered noise can mimic low-dimensional chaotic attractors when examined by Grassberger-Procaccia algorithm described above. \cite{rapp1993filtered} Hence, interpretation of results obtained by non-linear analysis require judgement. For example. obtaining finite-dimensional estimates for $d_2$ is not evidence of non-linearity, but may indicate lack of data, measurement error, on numerical inaccuracies. The result of these algorithms does not include any error estimate, and sometimes even non-linearity of the underlying process is uncertain. So, one may ask: would we obtain the same estimate for data with the same (non-measured) linear properties as the original, but differs in the (measured) non-linear property? In the following, we will describe a method for answering this question. \info{We may also want to know whether the process is determinsitic or not. There are tests for that, but we are not using them in this thesis.}
 
-To this end, we construct a Monte Carlo hypothesis test. We choose a null hypothesis of a model for the process creating obtained data which denies the property we assume to measure. For each time series, we create so called \emph{surrogate data} which deliberately capture only properties consistent with chosen null hypothesis, and compute the estimates using the same method as for the original data. If the result for the original time series is significantly different from the surrogate estimates, we reject the the null hypothesis. In the opposite case, we fail reject the null hypothesis. 
-
-Here, we use two sided test. If the measure of significance is defined as
-\begin{align*}
-  \mathcal{S} \equiv \frac{| Q_{\text{orig}} - \mu_{\text{surr}} |}{\sigma_{\text{surr}}},
-\end{align*}
-where $Q_{\text{orig}}$ is the statistic computed for the original time series, and $\mu_{\text{surr}}$, $\sigma_{\text{surr}}$ are the mean and variance of the statistic computed for the surrogate time series. \cite{theiler1992testing} If we assume that distribution of the generated is Gaussian, than $\mathcal{S} \geq 2$ is required for 95 \% significance level. However, validity of this assumption is not always guaranteed. For non-Gaussian distributions, we may require larger $\mathcal{S}$, or, alternatively, use a rank based test, as follows. \cite{kantz2004}
-
-Using rank-based test, we want to test if $Q_{\text{orig}}$ is smaller or larger than the expected value of estimates produced by the null hypothesis model. If we generate $n_s$ surrogate estimates, then, we have $n_s$ estimates following the null hypothesis, each having a probability $2/n_s$ of being the smallest or largest. A false rejection will happen if $Q_{\text{orig}}$ happens to also follow the null hypothesis and is either the smallest or the largest, which happens with probablity $1 - \alpha \coloneqq 2/(n_s+1)$, where $\alpha$ is the confidence level. Hence, for confidence level $\alpha = 95 \%$, the number of surrogates should be $n_s = 38$. \cite{andreas2000}
-
-\subsubsection{Generating amplitude adjusted surrogates}
+To this end, we construct a Monte Carlo hypothesis test of non-linearity. We choose a null hypothesis of a model for the process creating obtained data which denies the property we assume to measure. For each time series, we create so called \emph{surrogate data} which deliberately capture only properties consistent with chosen null hypothesis, and compute the estimates using the same method as for the original data. If the result for the original time series is significantly different from the surrogate estimates, we reject the the null hypothesis. In the opposite case, we fail reject the null hypothesis. A schematic depiction of the process can be seen in Figure \ref{fig:surr-schema}.
 
 \begin{figure} 
 \centering
@@ -937,13 +927,41 @@ Using rank-based test, we want to test if $Q_{\text{orig}}$ is smaller or larger
 \label{fig:surr-schema}
 \end{figure}
 
-For our purposes, since we assume that the data are produced by a non-linear process, a reasonable null hypothesis may be that the data are produced by a Gaussian linear stochastic process
+Here, we use two sided test, and measure of significance is defined as
 \begin{align*}
-  x_{t+1} = \mu + \sum_{j=0}^{p-1} a_j x_{t-j} + \sigma e_t,
+  \mathcal{S} \equiv \frac{| Q_{\text{orig}} - \mu_{\text{surr}} |}{\sigma_{\text{surr}}},
 \end{align*}
+where $Q_{\text{orig}}$ is the statistic computed for the original time series, and $\mu_{\text{surr}}$, $\sigma_{\text{surr}}$ are the mean and variance of the statistic computed for the surrogate time series. \cite{theiler1992testing} If we assume that distribution of the generated is Gaussian, than $\mathcal{S} \geq 2$ is required for 95 \% significance level. However, validity of this assumption is not always guaranteed. For non-Gaussian distributions, we may require larger $\mathcal{S}$, or, alternatively, use a rank based test, as follows. \cite{kantz2004}
+
+Using rank-based test, we want to test if $Q_{\text{orig}}$ is smaller or larger than the expected value of estimates produced by the null hypothesis model. If we generate $n_s$ surrogate estimates, then, we have $n_s$ estimates following the null hypothesis, each having a probability $2/n_s$ of being the smallest or largest. A false rejection will happen if $Q_{\text{orig}}$ happens to also follow the null hypothesis and is either the smallest or the largest, which happens with probablity $1 - \alpha \coloneqq 2/(n_s+1)$, where $\alpha$ is the confidence level. Hence, for confidence level $\alpha = 95 \%$, the number of surrogates should be $n_s = 38$. \cite{andreas2000}
+
+\subsubsection{Generating improved amplitude adjusted surrogates}
+For our purposes, since we assume that the data are produced by a non-linear process, a reasonable null hypothesis may be that the data are produced by a Gaussian linear stochastic process $\mathrm{AR}(p)$
+\begin{align} \label{eq:lin-stoch-proc}
+  x_{t+1} = \mu + \sum_{j=0}^{p-1} a_j x_{t-j} + \sigma e_t,
+\end{align}
 with unknown parameters $a_j, e_t, \mu, \sigma \in \RR$. \cite{theiler1992testing}
 
+If the computed non-linear statistic depends on the free parameters in $\mathrm{AR}(p)$ (\ref{eq:lin-stoch-proc}) (which is not true, e.g. for $d_2$), then one may try to estimate these parameters from the original time series. Alternatively (and this is the approach we use in our analysis), one may exploit the fact that $\mathrm{AR}(p)$ can be also perfectly described by its power spectrum. \cite{theiler1992testing}\footnote{This is due to Wiener-Khinchin theorem, which states, roughly, that spectral decomposition of autocorrelation of a stationary process is the power spectrum of the process.} Hence, to obtain a surrogate, one may simply perform a Fourier transform of the original time series, randomize phases, and apply inverse Fourier transform. This way, the amplitudes (composing the power spectrum) are preserved. This procedure has been named \emph{Fourier transform phase randomization} (FTPR).
+
+However, there is a drawback of FTPR. It has been shown that if the amplitudes of $\mathrm{AR}(p)$ are not Gaussian (as in (\ref{eq:lin-stoch-proc})), e.g. non-linear,\unsure{e.g. or i.e. here?} then the surrogates created using this method show non-linear behavior. \cite{kantz2004} Rarely do the amplitudes of an experimental process follow a Gaussian distribution. Hence, we change our model to correspond a non-linear, time independent filter applied to the output of $\mathrm{AR}(p)$. Surrogate creation algorithm for this model was described by Theiler in \cite{theiler1992testing}: rescale the values of the original time series so that they are Gaussian, apply FTPR described above, rescale the values back to follow the same distribution of the original time series. This surrogate creation method is called \emph{amplitude-adjusted Fourier transform} (AAFT), and has been successfully applied to EEG signal. \cite{theiler1994evidence}
+
+Even this method is not without its drawbacks: due to the final reordering, the original power spectrum is slightly distorted in the surrogate. In \cite{theiler1994evidence}, it was proposed how to mitigate this effect. The amplitudes of Fourier transform of AAFT surrogates are replaced by the amplitudes of the original time series. The power spectrum is now correct, but the distribution is wrong. So, the original time series is reordered to according to ranks of values in this surrogate. This results in precisely the desired distribution of values, but again, slightly deviant power spectrum. These steps are then iterated and, experimentally, they results seem to converge. Hence, the final procedure, called \emph{improved (iterated) amplitude-adjusted Fourier transform} (iAAFT) can be summarized as follows: \cite{andreas2000}
+
+\begin{enumerate}
+  \item Compute and store the moduli of the original time series.
+  \item Create an AAFT surrogate as follows:
+    \subitem Create a set of random numbers with Gaussian distribution.
+    \subitem Rank order the original time series, and reorder the random numbers created in the previous step such that they achieve the same ordering as the original time series.
+    \subitem Randomize the phases Fourier transform of the time series obtained in previous step and apply inverse Fourier transform.
+    \subitem Find the rank ordering of the time series obtained in the previous step, and reorder the original time series so that it assumes the same rank ordering.
+  \item Replace the moduli of these surrogates by those of the original time series and apply inverse Fourier transform.
+  \item Find the rank ordering of the time series obtained in the previous step, and reorder the original time series so that is assumes the same rank ordering.
+  \item Apply step 3. to time series obtained in the previous step, or stop if stopping criterion is reached.
+\end{enumerate}
+
 \section{Applications in disease diagnosis}\label{sec:applications}
+\add[inline]{This section is probably not sufficiently exhaustive.}
 Although non-linear dynamical analysis of EEG signal has been successfully applied to many psychological and psychiatric conditions, such as insomnia, schizophrenia, epilepsy, dementia, Alzheimer's disease, the number of studies applying methods of non-linear time series analysis for clinical depression diagnosis is relatively limited. \cite{rodriguez2015}
 
 It has been found that the EEG dynamics of depressed patients exhibit more predictability than those of non-depressed ones, with this indicator receding after treatment. \cite{nandrino1994} \cite{pezard1996}
