@@ -15,16 +15,18 @@
 \usepackage{amstext}
 \usepackage{graphicx}
 \usepackage{setspace}
-\usepackage{wrapfig}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{svg}
-\usepackage{outlines}
+% \usepackage{wrapfig}
+% \usepackage{algorithm}
+% \usepackage{algpseudocode}
+% \usepackage{svg}
+% \usepackage{outlines}
 \usepackage[normalem]{ulem}
-\usepackage{dirtytalk}
+% \usepackage{dirtytalk}
 \usepackage{lscape}
+\usepackage{hhline}
+\usepackage{subcaption}
 % \usepackage{subcaption}
-% \usepackage{subfigure}
+% \usepackage{subfig}
 
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage{xcolor}  % Coloured text etc.
@@ -305,7 +307,7 @@ In \textbf{Chapter 3}, we describe the methods proposed, experiments performed, 
 
 % \addcontentsline{toc}{chapter}{Introduction}
 
-\chapter{Non-linear Time Series Analysis}
+\chapter{Non-linear time series analysis}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The most simple of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description.
 
 Those examples represent two classes of processes existent before the rise of non-linear dynamics: \cite{andreas2000}
@@ -948,6 +950,8 @@ However, there is a drawback of FTPR. It has been shown that if the amplitudes o
 
 Even this method is not without its drawbacks: due to the final reordering, the original power spectrum is slightly distorted in the surrogate. In \cite{theiler1994evidence}, it was proposed how to mitigate this effect. The amplitudes of Fourier transform of AAFT surrogates are replaced by the amplitudes of the original time series. The power spectrum is now correct, but the distribution is wrong. So, the original time series is reordered to according to ranks of values in this surrogate. This results in precisely the desired distribution of values, but again, slightly deviant power spectrum. These steps are then iterated and, experimentally, they results seem to converge. Hence, the final procedure, called \emph{improved (iterated) amplitude-adjusted Fourier transform} (iAAFT) can be summarized as follows: \cite{andreas2000}
 
+\add[inline]{Maybe talk about the problems, e.g. endpoint mismatch? We will need to refer to them later.}
+
 \begin{enumerate}
   \item Compute and store the moduli of the original time series.
   \item Create an AAFT surrogate as follows:
@@ -978,7 +982,7 @@ Sleep disorder diagnosis may also relevant to this work for the very close conne
 
 Many studies focused of extracting Lyapunov exponents of EEGs measured during various sleep stages. The general pattern that emerged was that deep sleep stages exhibit lower complexity evidenced by lower dimensionality lower values of the largest Lyapunov exponent \cite{stam2005}.
 
-\chapter{Experiments}
+\chapter{Non-linear analysis approach}
 
 \section{Dataset}
 The EEG recordings were performed by and obtained from the Czech National Institute of Mental Health. The dataset comprises total of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58). Geriatric Depession Scale questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression). 
@@ -1167,7 +1171,8 @@ We plotted the value of correlation dimension against $m$ for various values of 
 \label{fig:afn-comp}
 \end{figure}
 
-\section{Largest Lyapunov exponents} \label{sec:lle-exp}
+\section{Estimation of non-linear features}
+\subsection{Largest Lyapunov exponents} \label{sec:lle-exp}
 For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000. \unsure{Why? This is unexpected.}
 
 Figure \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Let us remind the reader that longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension may appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. Therefore, selecting proper embedding dimension based on divergence plots is a balancing act between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
@@ -1203,7 +1208,7 @@ To compute the LLE estimates with automatic selection of proper embedding parame
 \label{fig:lle-comp}
 \end{figure}
 
-\section{Correlation dimension} \label{sec:corrdim-exp}
+\subsection{Correlation dimension} \label{sec:corrdim-exp}
 \info[inline]{For corr dim, we also used two ways to compute it - automatic and fixed. Explain here why have we chosen $m=10$ and $\tau=3$.}
 
 To compute the correlation sum $C(r)$, we used classical Grassberger-Procaccia algorithm described in Section \ref{sec:corrdim} using Chebyshev metric, $w_t = 50$, for values of $r$ either in geometrical progression of 100 values from 0.05 to 10 or by an automatic procedure described further. Then, these $(r, C(r))$ pairs were used to compute local least square fits of the equation $C(r) = r^{d_2}$ inside windows of length 7 for each pair. \add{This paragraph can be much improved (wording, etc.).}
@@ -1252,12 +1257,12 @@ Figure \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the e
 \label{fig:em-corrdim}
 \end{figure}
 
+\subsection{Detrended fluctuation analysis}
+\subsection{Hurst exponent}
+\subsection{Higuchi fractal dimension}
+\subsection{Sample entropy}
 
-\section{Sample entropy}
-\section{Detrended fluctuation analysis}
-\section{Hurst exponent}
-
-\section{Surrogate analysis} \label{sec:surrogate-analysis}
+\subsection{Surrogate analysis} \label{sec:surrogate-analysis}
 
 \begin{figure} 
 \centering
@@ -1267,16 +1272,19 @@ Figure \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the e
 \label{fig:surr-test}
 \end{figure}
 
-\section{Analysis of before / after treatment differences}
-As the first step of our analysis, we conducted an investigation of the differences in the non-linear measures computed from the signals obtained before and after treatment.
+\section{Analysis of measure distributions between groups} \label{sec:distanal}
+\subsection{Before and after treatment}
+As the first step of our analysis, we conducted an investigation of the differences in the non-linear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time. \add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient recieved personalized method of treatment, and the methods may have differing impact.
 
-To this goal, we separated the patients into terciles according to the ratio of the depression scores before and after treatment. Out of these three populations, we selected the first and last, containing 46 and 44 samples respectively, to obtain population we call \emph{responding} (responders) to treatment and \emph{non-responding} (non-responders) to treatment. The second tercile was not considered in this analysis to minimize the effect of inaccuracy of the self-reported depression score. Comparison of mean values of individual measures between the two populations can be seen in Figures \ref{fig:respnon1}, \ref{fig:respnon1auto} and \ref{fig:respnon2}. Length of an error bar corresponds to one standard deviation.
+We separated the patients into terciles according to the ratio of the depression scores before and after treatment. Out of these three populations, we selected the first and last, containing 46 and 44 samples respectively, to obtain population we call \emph{responding} (responders) to treatment and \emph{non-responding} (non-responders) to treatment. The second tercile was not considered in this analysis to minimize the effect of inaccuracy of the self-reported depression score. Comparison of mean values of individual measures between the two populations can be seen in Figures \ref{fig:respnon1}, \ref{fig:respnon1auto} and \ref{fig:respnon2}. Length of an error bar corresponds to one standard deviation.
 
-For each group, we performed two-sided Kolmogorov-Smirnov test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for $d_2$ computed using automatic selection of embedding parameters so in this section, we used $\lambda_1$ and $d_2$ computed for $m = 10$, $\tau=3$, $w_t = 50$. Moreover, we found no significant differences in DFA, so we decided to leave it out of this analysis. \info{However, we found that responders had significantly lower $\lambda_1$ computed using these methods in C3 and C4 electrodes ($6.899\pm1.278$ vs. $7.342\pm1.838$ for C3, $6.731\pm1.116$ vs. $7.365\pm1.475$ for C4) on recording performed before treatment.} The results can be seen in Tables \ref{tab:lleba}, \ref{tab:d2ba} and \ref{tab:seba}. 
+For each group, we performed two-sided Kolmogorov-Smirnov test \add{Kruskal is better, redirect to distributions.} for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for $d_2$ computed using automatic selection of embedding parameters so in this section, we used $\lambda_1$ and $d_2$ computed for $m = 10$, $\tau=3$, $w_t = 50$. Moreover, we found no significant differences in DFA, so we decided to leave it out of this analysis. \info{However, we found that responders had significantly lower $\lambda_1$ computed using these methods in C3 and C4 electrodes ($6.899\pm1.278$ vs. $7.342\pm1.838$ for C3, $6.731\pm1.116$ vs. $7.365\pm1.475$ for C4) on recording performed before treatment.} The results can be seen in Tables \ref{tab:lleba}, \ref{tab:d2ba} and \ref{tab:seba}. 
 
 For all measures computed this way, we found significantly differences in temporal areas, especially T3. The distributions of Largest Lyapunov exponents were also significantly different in the frontal and ``central'' areas, whereas $d_2$ differed mainly in prefrontal areas.\info{Which are associated with depression, but we want to leave that out in this section.} Sample entropy mimics the pattern seen in $\lambda_1$, differing mainly in frontal and ``central'' areas.
 
 We also performed unsupervised analysis of before / after groupds using PCA in 2,3, and 4 dimensions, and compared centroids and mean distances between before and after treatment recording for each group. However, the resulting plots and heatmaps are featureless and thus we will leave them out. The mean distances are also uninformative.
+
+\add[inline]{Change the tables and text to using Kruskal test instead of KS. Justify by saying the distributions are not generally normal.}
 
 \begin{table}[tbp]
 \centering
@@ -1591,8 +1599,269 @@ Pz       & 0.713 $\pm$ 0.092 & 0.730 $\pm$ 0.121 & 0.863 &       \\ \hline
   \end{figure}
 \end{landscape}
 
+\subsection{Low and high depression score}
+\info[inline]{Here, we have to explain limitations of training classifiers on this test. There is no healthy group. The effect of depression score is meddled with the effect of drugs in after treatment measurements. But still, there are correlations. The goal of this is to inform and maybe interpret the results of classification, and which measures show correlations and how they are distributed between groups, which is inherently important and relevant for eventual interpretation.}
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1\textwidth]{./Images/dists/dfadepdist.png} }
+  \caption{Distributions of DFA between healthy and depressed patients. Healthy patients seem to have, on average, lower values of DFA, and the distributions are not generally normal.}
+ \label{fig:dfadepdist}
+\end{figure}
 
-\section{Results}
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1\textwidth]{./Images/dists/dfadepcorr.png} }
+  \caption{Trend of values of DFA as a function of depression score. For all channels, correlation is significantly ($p$ < 0.05) negative.}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1\textwidth]{./Images/dists/dfadepcorr.png} }
+  \caption{Trend of values of largest Lyapunov exponent as a function of depression score. The correlation is significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, F3, C3, C4, F7, F8, T3.}
+\end{figure}
+
+\begin{table}[tbp]
+\centering
+\tiny
+  \parbox{.49\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Depressed} & \textbf{Healthy} & \textbf{p-value} & \textbf{Sig.} \\ \hline
+mean     & 0.503 $\pm$ 0.104 & 0.561 $\pm$ 0.125 & 0.027 & *     \\ \hline
+std      & 0.109 $\pm$ 0.032 & 0.105 $\pm$ 0.025 & 0.681 &       \\ \hline
+FP1      & 0.637 $\pm$ 0.144 & 0.694 $\pm$ 0.154 & 0.168 &       \\ \hline
+FP2      & 0.641 $\pm$ 0.166 & 0.710 $\pm$ 0.169 & 0.131 &       \\ \hline
+F3       & 0.520 $\pm$ 0.131 & 0.553 $\pm$ 0.134 & 0.153 &       \\ \hline
+F4       & 0.527 $\pm$ 0.127 & 0.566 $\pm$ 0.125 & 0.104 &       \\ \hline
+C3       & 0.500 $\pm$ 0.128 & 0.528 $\pm$ 0.126 & 0.183 &       \\ \hline
+C4       & 0.474 $\pm$ 0.105 & 0.535 $\pm$ 0.132 & 0.049 & *     \\ \hline
+P3       & 0.442 $\pm$ 0.148 & 0.487 $\pm$ 0.149 & 0.100 &       \\ \hline
+P4       & 0.435 $\pm$ 0.127 & 0.479 $\pm$ 0.141 & 0.135 &       \\ \hline
+O1       & 0.401 $\pm$ 0.144 & 0.507 $\pm$ 0.178 & 0.011 & *     \\ \hline
+O2       & 0.437 $\pm$ 0.155 & 0.503 $\pm$ 0.155 & 0.076 &       \\ \hline
+F7       & 0.627 $\pm$ 0.131 & 0.695 $\pm$ 0.159 & 0.035 & *     \\ \hline
+F8       & 0.624 $\pm$ 0.129 & 0.694 $\pm$ 0.155 & 0.014 & *     \\ \hline
+T3       & 0.527 $\pm$ 0.119 & 0.580 $\pm$ 0.146 & 0.057 &       \\ \hline
+T4       & 0.516 $\pm$ 0.119 & 0.595 $\pm$ 0.130 & 0.007 & **    \\ \hline
+T5       & 0.436 $\pm$ 0.151 & 0.493 $\pm$ 0.141 & 0.088 &       \\ \hline
+T6       & 0.421 $\pm$ 0.140 & 0.482 $\pm$ 0.138 & 0.066 &       \\ \hline
+Fz       & 0.471 $\pm$ 0.111 & 0.528 $\pm$ 0.130 & 0.053 &       \\ \hline
+Cz       & 0.469 $\pm$ 0.094 & 0.518 $\pm$ 0.119 & 0.040 & *     \\ \hline
+Pz       & 0.453 $\pm$ 0.140 & 0.521 $\pm$ 0.150 & 0.051 &       \\ \hline
+\end{tabular}
+\subcaption{DFA}
+}
+\hfill
+  \parbox{.49\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Depressed} & \textbf{Healthy} & \textbf{p-value} & \textbf{Sig.} \\ \hline
+mean     & 0.557 $\pm$ 0.079 & 0.592 $\pm$ 0.095 & 0.051 &       \\ \hline
+std      & 0.080 $\pm$ 0.027 & 0.068 $\pm$ 0.022 & 0.038 & *     \\ \hline
+FP1      & 0.638 $\pm$ 0.102 & 0.669 $\pm$ 0.096 & 0.139 &       \\ \hline
+FP2      & 0.649 $\pm$ 0.117 & 0.668 $\pm$ 0.113 & 0.554 &       \\ \hline
+F3       & 0.565 $\pm$ 0.086 & 0.585 $\pm$ 0.103 & 0.250 &       \\ \hline
+F4       & 0.576 $\pm$ 0.091 & 0.603 $\pm$ 0.098 & 0.189 &       \\ \hline
+C3       & 0.562 $\pm$ 0.090 & 0.576 $\pm$ 0.107 & 0.293 &       \\ \hline
+C4       & 0.548 $\pm$ 0.074 & 0.574 $\pm$ 0.102 & 0.163 &       \\ \hline
+P3       & 0.513 $\pm$ 0.121 & 0.538 $\pm$ 0.121 & 0.278 &       \\ \hline
+P4       & 0.513 $\pm$ 0.110 & 0.542 $\pm$ 0.113 & 0.212 &       \\ \hline
+O1       & 0.475 $\pm$ 0.119 & 0.554 $\pm$ 0.138 & 0.018 & *     \\ \hline
+O2       & 0.499 $\pm$ 0.121 & 0.552 $\pm$ 0.123 & 0.079 &       \\ \hline
+F7       & 0.650 $\pm$ 0.091 & 0.674 $\pm$ 0.103 & 0.168 &       \\ \hline
+F8       & 0.643 $\pm$ 0.092 & 0.674 $\pm$ 0.118 & 0.061 &       \\ \hline
+T3       & 0.587 $\pm$ 0.082 & 0.604 $\pm$ 0.103 & 0.332 &       \\ \hline
+T4       & 0.571 $\pm$ 0.084 & 0.621 $\pm$ 0.091 & 0.012 & *     \\ \hline
+T5       & 0.498 $\pm$ 0.112 & 0.555 $\pm$ 0.107 & 0.043 & *     \\ \hline
+T6       & 0.489 $\pm$ 0.113 & 0.540 $\pm$ 0.102 & 0.038 & *     \\ \hline
+Fz       & 0.537 $\pm$ 0.085 & 0.576 $\pm$ 0.100 & 0.043 & *     \\ \hline
+Cz       & 0.548 $\pm$ 0.080 & 0.579 $\pm$ 0.094 & 0.063 &       \\ \hline
+Pz       & 0.525 $\pm$ 0.117 & 0.567 $\pm$ 0.120 & 0.068 &       \\ \hline
+\end{tabular}
+\subcaption{Hurst exponent}
+}
+\bigskip
+  \parbox{.49\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Depressed} & \textbf{Healthy} & \textbf{p-value} &  \textbf{Sig.} \\ \hline
+mean     & 10.144 $\pm$ 1.166 & 9.830 $\pm$ 0.884 & 0.194 &       \\ \hline
+std      & 0.761 $\pm$ 0.304 & 0.662 $\pm$ 0.258 & 0.173 &       \\ \hline
+FP1      & 9.650 $\pm$ 1.363 & 9.574 $\pm$ 1.122 & 0.831 &       \\ \hline
+FP2      & 9.874 $\pm$ 1.387 & 9.543 $\pm$ 1.126 & 0.324 &       \\ \hline
+F3       & 9.627 $\pm$ 1.260 & 9.387 $\pm$ 1.094 & 0.421 &       \\ \hline
+F4       & 9.876 $\pm$ 1.421 & 9.383 $\pm$ 1.137 & 0.119 &       \\ \hline
+C3       & 9.500 $\pm$ 1.234 & 9.483 $\pm$ 0.948 & 0.895 &       \\ \hline
+C4       & 9.810 $\pm$ 1.302 & 9.550 $\pm$ 0.955 & 0.212 &       \\ \hline
+P3       & 10.508 $\pm$ 1.060 & 10.223 $\pm$ 0.763 & 0.301 &       \\ \hline
+P4       & 10.588 $\pm$ 1.051 & 10.178 $\pm$ 0.914 & 0.131 &       \\ \hline
+O1       & 10.744 $\pm$ 1.380 & 10.317 $\pm$ 0.893 & 0.063 &       \\ \hline
+O2       & 10.724 $\pm$ 1.394 & 10.070 $\pm$ 0.985 & 0.030 & *     \\ \hline
+F7       & 9.941 $\pm$ 1.666 & 9.757 $\pm$ 1.452 & 0.657 &       \\ \hline
+F8       & 9.953 $\pm$ 1.655 & 9.794 $\pm$ 1.403 & 0.543 &       \\ \hline
+T3       & 9.442 $\pm$ 1.541 & 9.367 $\pm$ 1.382 & 0.742 &       \\ \hline
+T4       & 9.710 $\pm$ 1.663 & 9.422 $\pm$ 1.357 & 0.375 &       \\ \hline
+T5       & 10.667 $\pm$ 1.211 & 10.240 $\pm$ 1.027 & 0.107 &       \\ \hline
+T6       & 10.877 $\pm$ 1.226 & 10.165 $\pm$ 0.948 & 0.017 & *     \\ \hline
+Fz       & 10.296 $\pm$ 1.171 & 10.098 $\pm$ 0.851 & 0.349 &       \\ \hline
+Cz       & 10.284 $\pm$ 1.038 & 9.972 $\pm$ 0.754 & 0.243 &       \\ \hline
+Pz       & 10.663 $\pm$ 1.140 & 10.254 $\pm$ 0.902 & 0.200 &       \\ \hline
+\end{tabular}
+\subcaption{Largest Lyapunov exponent}
+}
+\hfill
+  \parbox{.49\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Depressed} & \textbf{Healthy} & \textbf{p-value} & \textbf{Sig.} \\ \hline
+mean     & 0.768 $\pm$ 0.141 & 0.796 $\pm$ 0.103 & 0.119 &       \\ \hline
+std      & 0.087 $\pm$ 0.045 & 0.085 $\pm$ 0.045 & 0.870 &       \\ \hline
+FP1      & 0.819 $\pm$ 0.172 & 0.834 $\pm$ 0.150 & 0.611 &       \\ \hline
+FP2      & 0.788 $\pm$ 0.169 & 0.839 $\pm$ 0.138 & 0.135 &       \\ \hline
+F3       & 0.819 $\pm$ 0.170 & 0.848 $\pm$ 0.141 & 0.264 &       \\ \hline
+F4       & 0.801 $\pm$ 0.182 & 0.851 $\pm$ 0.145 & 0.115 &       \\ \hline
+C3       & 0.835 $\pm$ 0.158 & 0.830 $\pm$ 0.118 & 0.793 &       \\ \hline
+C4       & 0.807 $\pm$ 0.172 & 0.823 $\pm$ 0.106 & 0.119 &       \\ \hline
+P3       & 0.715 $\pm$ 0.111 & 0.733 $\pm$ 0.089 & 0.257 &       \\ \hline
+P4       & 0.702 $\pm$ 0.115 & 0.736 $\pm$ 0.108 & 0.148 &       \\ \hline
+O1       & 0.701 $\pm$ 0.146 & 0.729 $\pm$ 0.111 & 0.066 &       \\ \hline
+O2       & 0.705 $\pm$ 0.146 & 0.753 $\pm$ 0.127 & 0.016 & *     \\ \hline
+F7       & 0.803 $\pm$ 0.202 & 0.815 $\pm$ 0.178 & 0.681 &       \\ \hline
+F8       & 0.802 $\pm$ 0.216 & 0.815 $\pm$ 0.174 & 0.421 &       \\ \hline
+T3       & 0.862 $\pm$ 0.208 & 0.869 $\pm$ 0.177 & 0.634 &       \\ \hline
+T4       & 0.835 $\pm$ 0.218 & 0.860 $\pm$ 0.169 & 0.230 &       \\ \hline
+T5       & 0.714 $\pm$ 0.134 & 0.748 $\pm$ 0.097 & 0.030 & *     \\ \hline
+T6       & 0.694 $\pm$ 0.115 & 0.747 $\pm$ 0.092 & 0.008 & **    \\ \hline
+Fz       & 0.744 $\pm$ 0.132 & 0.768 $\pm$ 0.098 & 0.218 &       \\ \hline
+Cz       & 0.749 $\pm$ 0.113 & 0.782 $\pm$ 0.082 & 0.079 &       \\ \hline
+Pz       & 0.696 $\pm$ 0.117 & 0.736 $\pm$ 0.117 & 0.131 &       \\ \hline
+\end{tabular}
+\subcaption{Sample entropy}
+}
+\bigskip
+\parbox{.49\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Depressed} & \textbf{Healthy} & \textbf{p-value} &  \textbf{Sig.} \\ \hline
+mean     & 1.357 $\pm$ 0.139 & 1.402 $\pm$ 0.113 & 0.082 &       \\ \hline
+std      & 0.095 $\pm$ 0.043 & 0.091 $\pm$ 0.042 & 0.793 &       \\ \hline
+FP1      & 1.423 $\pm$ 0.186 & 1.456 $\pm$ 0.177 & 0.450 &       \\ \hline
+FP2      & 1.396 $\pm$ 0.188 & 1.459 $\pm$ 0.163 & 0.123 &       \\ \hline
+F3       & 1.413 $\pm$ 0.177 & 1.459 $\pm$ 0.157 & 0.173 &       \\ \hline
+F4       & 1.396 $\pm$ 0.181 & 1.462 $\pm$ 0.153 & 0.094 &       \\ \hline
+C3       & 1.435 $\pm$ 0.149 & 1.448 $\pm$ 0.125 & 0.693 &       \\ \hline
+C4       & 1.401 $\pm$ 0.147 & 1.436 $\pm$ 0.111 & 0.097 &       \\ \hline
+P3       & 1.299 $\pm$ 0.115 & 1.336 $\pm$ 0.104 & 0.194 &       \\ \hline
+P4       & 1.291 $\pm$ 0.108 & 1.336 $\pm$ 0.120 & 0.111 &       \\ \hline
+O1       & 1.265 $\pm$ 0.141 & 1.322 $\pm$ 0.123 & 0.035 & *     \\ \hline
+O2       & 1.273 $\pm$ 0.146 & 1.338 $\pm$ 0.129 & 0.031 & *     \\ \hline
+F7       & 1.406 $\pm$ 0.190 & 1.437 $\pm$ 0.173 & 0.301 &       \\ \hline
+F8       & 1.402 $\pm$ 0.198 & 1.447 $\pm$ 0.173 & 0.153 &       \\ \hline
+T3       & 1.448 $\pm$ 0.188 & 1.468 $\pm$ 0.174 & 0.532 &       \\ \hline
+T4       & 1.427 $\pm$ 0.214 & 1.452 $\pm$ 0.147 & 0.243 &       \\ \hline
+T5       & 1.281 $\pm$ 0.126 & 1.334 $\pm$ 0.106 & 0.035 & *     \\ \hline
+T6       & 1.258 $\pm$ 0.113 & 1.330 $\pm$ 0.093 & 0.004 & ***   \\ \hline
+Fz       & 1.335 $\pm$ 0.152 & 1.375 $\pm$ 0.124 & 0.148 &       \\ \hline
+Cz       & 1.352 $\pm$ 0.123 & 1.411 $\pm$ 0.098 & 0.040 & *     \\ \hline
+Pz       & 1.287 $\pm$ 0.126 & 1.334 $\pm$ 0.123 & 0.131 &       \\ \hline
+\end{tabular}
+\subcaption{Higuchi fractal dimension}
+}
+\hfill
+  \parbox{.49\linewidth}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Channel} & \textbf{Depressed} & \textbf{Healthy} & \textbf{p-value} & \textbf{Sig.} \\ \hline
+mean     & 10.892 $\pm$ 0.681 & 10.734 $\pm$ 0.723 & 0.332 &       \\ \hline
+std      & 0.667 $\pm$ 0.166 & 0.629 $\pm$ 0.161 & 0.393 &       \\ \hline
+FP1      & 11.439 $\pm$ 0.814 & 11.067 $\pm$ 1.058 & 0.076 &       \\ \hline
+FP2      & 11.405 $\pm$ 0.921 & 11.141 $\pm$ 0.998 & 0.522 &       \\ \hline
+F3       & 11.100 $\pm$ 0.881 & 10.673 $\pm$ 0.809 & 0.076 &       \\ \hline
+F4       & 10.888 $\pm$ 0.884 & 10.844 $\pm$ 0.947 & 0.870 &       \\ \hline
+C3       & 10.481 $\pm$ 0.872 & 10.289 $\pm$ 0.895 & 0.375 &       \\ \hline
+C4       & 10.495 $\pm$ 0.880 & 10.402 $\pm$ 0.978 & 0.706 &       \\ \hline
+P3       & 10.665 $\pm$ 0.854 & 10.419 $\pm$ 0.861 & 0.301 &       \\ \hline
+P4       & 10.465 $\pm$ 0.766 & 10.313 $\pm$ 0.774 & 0.460 &       \\ \hline
+O1       & 11.002 $\pm$ 1.225 & 11.023 $\pm$ 0.944 & 0.646 &       \\ \hline
+O2       & 10.990 $\pm$ 1.022 & 10.894 $\pm$ 1.020 & 0.657 &       \\ \hline
+F7       & 10.979 $\pm$ 0.799 & 10.842 $\pm$ 0.837 & 0.402 &       \\ \hline
+F8       & 11.116 $\pm$ 1.020 & 10.858 $\pm$ 0.835 & 0.358 &       \\ \hline
+T3       & 11.133 $\pm$ 0.763 & 11.085 $\pm$ 0.946 & 0.974 &       \\ \hline
+T4       & 11.256 $\pm$ 0.924 & 11.090 $\pm$ 0.965 & 0.565 &       \\ \hline
+T5       & 10.988 $\pm$ 0.927 & 10.970 $\pm$ 0.995 & 0.961 &       \\ \hline
+T6       & 11.038 $\pm$ 0.729 & 10.911 $\pm$ 0.743 & 0.588 &       \\ \hline
+Fz       & 10.614 $\pm$ 0.792 & 10.322 $\pm$ 0.877 & 0.206 &       \\ \hline
+Cz       & 10.444 $\pm$ 1.047 & 10.545 $\pm$ 0.962 & 0.767 &       \\ \hline
+Pz       & 10.454 $\pm$ 0.959 & 10.254 $\pm$ 0.886 & 0.384 &       \\ \hline
+\end{tabular}
+\subcaption{Correlation dimension}
+}
+\caption{Comparison of mean values of measures computed for depressed and healthy patients.}
+\end{table}
+
+
+\subsection{Low and high remission}
+\info[inline]{There was no control group given no drugs. Each patient assigned different treatment. Each patient started on different level of depression. We recognize this is inherently bad study design.}
+
+\section{Classification}
+We used two classifiers: logistic regression (LR) and support vector machine (SVM). One third of randomly selected samples was held out as a test set, the rest was used for training and cross validation. Feature selection was performed on LR with regularization strength 1 and SVM with regularization strenth 1 and linear kernel (i.e. $k(\vec{x_1}, \vec{x_2}) = \vec{x_1} \cdot \vec{x_2}$) using
+\begin{itemize}
+  \item recursive feature elimination with 3-fold cross validation based on coefficients of the linear model,
+  \item elimination of features with below-mean coefficients of the linear model,
+  \item selection of 5 features with the highest $\chi^2$ statistics between values of the feature and corresponding class,\unsure{Am I justified in using $\chi^2$?}
+  \item genetic algorithm with 3-fold cross validation (scoring models based on ROC AUC, population size 50, 50 generations, crossover probability 0.8, mutation probability 0.2, and tournament size 5).
+\end{itemize}
+Then, a brute force grid search with 3-fold cross validation was performed on each classifier to select 
+\begin{itemize}
+  \item the optimal regularization stength, and norm for LR, and
+  \item the optimal regularization strength and kernel type (linear, polynomial, or radial basis function with coefficients $\gamma = 1/n_f$, where $n_f$ is the number of selected features) for SVM.\unsure{Am I justified in changing the kernel type?}
+\end{itemize}
+These classifiers were evaluated on the test set. The best performing classifiers (based on accuracy, precision, recall, f-score, ROC AUC and confusion matrices) for each measure were selected, and then manually optimized by adding, removing, or replacing features based on differences in distributions described in Section \ref{sec:distanal}, performance of similar classifiers on similar measures, and results of other studies. In some cases, hyperparameters were modified. The results are described in the following text.
+
+\subsection{Depression}
+
+\begin{table}[tbp]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Measure} & \textbf{Class.} & \textbf{Acc.} & \textbf{F-sc.} & \textbf{ROC AUC} & \textbf{CM} & \textbf{Channels} \\ \hline
+DFA & LR & 0.88 & 0.88 & 0.91 & $\left( \begin{smallmatrix} 9 & 2 \\ 0 & 6 \end{smallmatrix} \right)$ & C3, C4, O1, T4 \\ \hline 
+HE & LR & 0.76 & 0.77 & 0.78 & $\left( \begin{smallmatrix} 8 & 3 \\ 1 & 5 \\ \end{smallmatrix} \right)$ & O1, T4 \\ \hline
+CD & SVM (poly.) & 0.76 & 0.76 & 0.74 & $\left( \begin{smallmatrix} 9 & 2 \\ 2 & 4\end{smallmatrix} \right)$ & F3, F4, P3, O1, T4, T5, Cz, Pz \\ \hline
+LLE & SVM (lin.) & 0.71 & 0.71 & 0.77 & $\left( \begin{smallmatrix} 6 & 5 \\ 0 & 6 \end{smallmatrix} \right)$ & FP1, FP2, F4, C3, O1, T3, T6 \\ \hline
+SE & LR & 0.71 & 0.71 & 0.73 & $\left( \begin{smallmatrix} 7 & 4 \\ 1 & 5 \end{smallmatrix} \right)$ & P3, P4, T5, T6 \\ \hhline{=|=|=|=|=|=|=}
+DFA & SVM (rbf) & 0.70 & 0.70 & 0.72 & $\left( \begin{smallmatrix} 8 & 7 \\ 1 & 11 \end{smallmatrix} \right)$ & O1, T5, T6 \\ \hline
+CD & SVM (rbf) & 0.70 & 0.70 & 0.71 & $\left( \begin{smallmatrix} 10 & 5 \\ 3 & 9 \end{smallmatrix} \right)$ & C4, P4, T4, T6, Cz \\ \hline
+HE & LR & 0.70 & 0.70 & 0.70 & $\left( \begin{smallmatrix} 11 & 4 \\ 4 & 8 \end{smallmatrix} \right)$ & F3, F4, T3, T5, Fz, Cz \\ \hline
+\end{tabular}
+\caption{Evaluation of depression classification. The first part corresponds to classifiers trained on 15 healthy (DS $\leq$ 10) and 24 depressed (DS $\geq$ 30) patients. The second part corresponds to classifiers trained on 24 healthy (DS $\leq$ 12) and 36 depressed (DS $\geq$ 32). Both before and after treatment sessions are included.}
+\label{tab:depcl}
+
+\bigskip
+
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Measure} & \textbf{Class.} & \textbf{Acc.} & \textbf{F-sc.} & \textbf{ROC AUC} & \textbf{CM} & \textbf{Channels} \\ \hline
+CD & SVM (rbf) & 1.00 & 1.00 & 1.00 & $\left( \begin{smallmatrix} 10 & 0 \\ 0 & 10 \end{smallmatrix} \right)$ & F4, C4, O1, F7, F8, T5, T6 \\ \hline
+LLE & LR & 0.80 & 0.80 & 0.80 & $\left( \begin{smallmatrix} 9 & 1 \\ 3 & 7 \end{smallmatrix} \right)$ & \small{FP2, F3, F4, P3, P4, F7, F8, T6, Fz, Cz} \\ \hline
+DFA & LR & 0.80 & 0.80 & 0.80 & $\left( \begin{smallmatrix} 8 & 2 \\ 2 & 8 \end{smallmatrix} \right)$ & FP2, F3, O1, T5, T6, Cz \\ \hline
+HE & LR & 0.70 & 0.70 & 0.70 & $\left( \begin{smallmatrix} 7 & 3 \\ 3 & 7 \end{smallmatrix} \right)$ & FP2, F3, O1, T5, T6, Cz \\ \hhline{=|=|=|=|=|=|=}
+LLE & SVM (rbf) & 0.76 & 0.76 & 0.77 & $\left( \begin{smallmatrix} 16 & 7 \\ 3 & 16 \end{smallmatrix} \right)$ & F3, F4, O1, O2, T6, Fz \\ \hline
+HE & LR & 0.71 & 0.71 & 0.73 & $\left( \begin{smallmatrix} 14 & 9 \\ 3 & 16 \end{smallmatrix} \right)$ & P3, F7, T4, T6, Cz \\ \hline
+CD & LR & 0.69 & 0.69 & 0.70 & $\left( \begin{smallmatrix} 14 & 9 \\ 4 & 15 \end{smallmatrix} \right)$ & F4, C4, T5 \\ \hline
+HD & LR & 0.69 & 0.69 & 0.70 & $\left( \begin{smallmatrix} 13 & 10 \\ 3 & 16 \end{smallmatrix} \right)$ & FP2 \\ \hline
+DFA & LR & 0.64 & 0.64 & 0.64 & $\left( \begin{smallmatrix} 15 & 8 \\ 7 & 12 \end{smallmatrix} \right)$ & C3, P4, F7, T6 \\ \hline
+\end{tabular}
+\caption{Evaluation of remission. The first part corresponds to split of the whole dataset according to the first and last septiles of $m_2 / m_1$ (considered non-remitting and remitting patients respectively). The second part corresponds to split according to first and last terciles of $m_2 / m_1$. Both before and after treatment sessions are included.}
+\label{tab:respcl}
+\end{table}
+
+\subsection{Remission}
+
+\chapter{Machine learning approach}
 
 \chapter*{Conclusion}
 
