@@ -27,6 +27,7 @@
 \usepackage{subcaption}
 % \usepackage{subcaption}
 % \usepackage{subfig}
+\usepackage{makecell}
 
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage{xcolor}  % Coloured text etc.
@@ -612,7 +613,7 @@ Although this approach yields coordinates independent in a more general sense th
 
 Another criticism of delayed mutual information that some systems exhibit slowly decaying mutual information which has no minima. \cite{martinerie1992mutual} 
 
-\subsubsection{Average displacement from diagonal}
+\subsubsection{Average displacement from diagonal} \label{sec:adfd}
 \textbf{Average displacement from diaognal} is a simple technique which simply measures the average distance of the embedding vectors from their original location:
 \begin{align*}
   \mathrm{ADFD}(m, \tau) = \frac{1}{N_{(m, \tau)}}\sum_{i=1}^{N_{(m, \tau)}} \norm{ \mathbf{x}_i^{(m, \tau)} - \mathbf{x}_i^{(m, 0)}},
@@ -621,7 +622,7 @@ where $\mathbf{x}_i^{(m, \tau)}$ is the $i$-th vector of time delay embedding wi
 
 Rosenstein et al. presented multiple methods for quantifying expansion from the main diagonal, and found $\mathrm{ADFD}$ to be the most computationally efficient, robust to noise, and accurate. \cite{rosenstein1994reconstruction} They also experimentily identified optimal $\tau$ as the one for which the slope of $\mathrm{ADFD}$ drops below 40\% of its initial value.  
 
-\subsubsection{Singular values analysis}
+\subsubsection{Singular values analysis} \label{sec:svd}
 All the approaches described so far address the issue of irrelevance, but not that of redundance. In fact, based mostly on empirical, rather than the most time delay estimation techniques optimize for the following criteria \footnote{However, additional criteria may arise depending on the particular application.}: \cite{kugiumtzis1996state} 
 \begin{enumerate}
   \item The reconstructed attractor must be expanded from the diagonal.
@@ -650,7 +651,7 @@ If the time delay is too large, then the diagonal elements will approach average
 
 One drawback of this method is that its evaluation is largely subjective. Moreover, it was suggested that although this method is effective noise reduction technique, its effectiveness at delay estimation is less clear - the number of large singular values is sensitive to noise. \cite{mees1987singular}
 
-\subsubsection{Integral local deformation}
+\subsubsection{Integral local deformation} \label{sec:ild}
 The uniqueness theorem of differential equations requires that any no trajectories in the state space intersect. Moreover, in real physical systems, it may be reasonable to assume that it is highly unlikely to find closeby trajectories of opposite or orthogonal directions. This property is maintained by a successful embedding, and (if the assumption holds) can occur only in an improper reconstruction.
 
 T. Buzug and G. Pfister presented a quantitative measure of these close trajectory intersections by comparing the the evolutions of reference trajectories with centroids of points on the neighboring trajectories. \cite{buzug1992optimal} For the optimal embedding, divergence between these trajectories should be minimized.
@@ -1029,25 +1030,9 @@ In further analysis, unless otherwise specified, recordings were shortened to a 
 In some studies, band-pass filtering was used to remove frequencies which are physiologically impossible to produce by neural oscillations (e.g. high-pass filtering with 0.5 Hz threshold or lowpass filtering with 70 Hz threshold). \cite{hosseinifard2013} Sometimes, it is suggested to notch filter at power line frequencies (40 Hz or 50 Hz). However, some authors suggest that linear filtering may adversely affect the results of non-linear analysis. \cite{andreas2000} Others, on the other hand, observed that simple linear filtering does not influence the reconstruction of embedding space considerably. \cite{Rohrbacker2009} If quality of the data is sufficient, filtering is not necessary. \cite{Jas2017} By visual inspection, we found our data to be of sufficient quality and therefore decided to not risk influencing the results by filtering. \info{In fact, we tried both, but for filtered the results looked slightly more uniform.}
 
 \section{Stationarity}
-Stationarity was evaluated on multiple time scales using the stationarity test described in Section \ref{sec:stationarity}. For results, see Table \ref{tab:stat}.
-
-\begin{table}[tbp] 
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Duration\textbackslash Av. p-value} & \textbf{Original} & \textbf{Surrogate} \\ \hline
-10 s                                         &                   &                    \\ \hline
-30 s                                         &                   &                    \\ \hline
-60 s                                         &                   &                    \\ \hline
-\end{tabular}
-\caption{Results of stationarity tests.}
-\label{tab:stat}
-\end{table}
+Stationarity was evaluated on multiple time scales using the stationarity test described in Section \ref{sec:stationarity}. However, we found that selecting the least stationary window using this test was did not improve the results as measured by the surrogate data analysis. Moreover, it may be beneficial for future analysis to have each measure computed for the same time window in each channel. Thus, we decided to skip this window selection step and pick a fixed time window for all channels and all recordings.
 
 \section{State space reconstruction}
-\subsection{Surrogate data}
-\add[inline]{Describe process of generating surrogate data.} See Figure \ref{fig:ts}.
-
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
@@ -1062,9 +1047,9 @@ In order to estimate the time delay, we used the following techniques:
   \item Reconstruction plots
   \item Autocorrelation $A(\tau)$ (see Section \ref{sec:acorr})
   \item Delayed mutual information $\mathcal{I}(\tau)$ (see Section \ref{sec:dmi})
-  \item Average displacement from diagonal (ADFD) (see Section )
-  \item PCA reconstructions comparison (see Section )
-  \item Integral local deformation (ILD) (see Section )
+  \item Average displacement from diagonal (ADFD) (see Section \ref{sec:adfd})
+  \item PCA reconstructions comparison (see Section \ref{sec:svd})
+  \item Integral local deformation (ILD) (see Section \ref{sec:ild})
 \end{enumerate}
 
 In this section, we will analyze the results of these techniques for time series obtained from FP1 electrode of patient 75, second session, shown in Figure \ref{fig:ts}. The time series was clipped to 60 s (15000 data points). In the following sections \change{Add concrete references.}, we will explain how these techniques were used to obtain estimates of individual non-linear measures.
@@ -1302,7 +1287,7 @@ We also performed unsupervised analysis of before / after groupds using PCA in 2
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 10.151 $\pm$ 0.950 & 9.919 $\pm$ 1.074 & 0.121 &       \\ \hline
 std      & 0.628 $\pm$ 0.239 & 0.724 $\pm$ 0.295 & 0.089 &       \\ \hline
 FP1      & 9.770 $\pm$ 1.130 & 9.545 $\pm$ 1.287 & 0.432 &       \\ \hline
@@ -1333,7 +1318,7 @@ Pz       & 10.490 $\pm$ 0.897 & 10.408 $\pm$ 1.032 & 0.735 &       \\ \hline
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 7.522 $\pm$ 0.441 & 7.593 $\pm$ 0.433 & 0.481 &       \\ \hline
 std      & 0.383 $\pm$ 0.125 & 0.414 $\pm$ 0.165 & 0.071 & *     \\ \hline
 FP1      & 7.812 $\pm$ 0.611 & 7.880 $\pm$ 0.704 & 0.387 &       \\ \hline
@@ -1364,7 +1349,7 @@ Pz       & 7.199 $\pm$ 0.494 & 7.210 $\pm$ 0.543 & 0.888 &       \\ \hline
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 0.761 $\pm$ 0.108 & 0.790 $\pm$ 0.130 & 0.240 &       \\ \hline
 std      & 0.071 $\pm$ 0.040 & 0.086 $\pm$ 0.048 & 0.094 &       \\ \hline
 FP1      & 0.804 $\pm$ 0.149 & 0.837 $\pm$ 0.176 & 0.403 &       \\ \hline
@@ -1397,7 +1382,7 @@ Pz       & 0.716 $\pm$ 0.093 & 0.728 $\pm$ 0.113 & 0.996 &       \\ \hline
   \parbox{.45\linewidth}{
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 9.994 $\pm$ 0.890 & 9.655 $\pm$ 1.064 & 0.022 & **    \\ \hline
 std      & 0.639 $\pm$ 0.229 & 0.701 $\pm$ 0.267 & 0.452 &       \\ \hline
 FP1      & 9.599 $\pm$ 1.086 & 9.335 $\pm$ 1.360 & 0.625 &       \\ \hline
@@ -1425,7 +1410,7 @@ Pz       & 10.318 $\pm$ 0.805 & 10.113 $\pm$ 1.062 & 0.801 &       \\ \hline
   \parbox{.45\linewidth}{
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 10.400 $\pm$ 0.969 & 10.015 $\pm$ 1.088 & 0.423 &       \\ \hline
 std      & 0.623 $\pm$ 0.260 & 0.813 $\pm$ 0.370 & 0.018 & ***   \\ \hline
 FP1      & 10.034 $\pm$ 1.166 & 9.510 $\pm$ 1.325 & 0.108 &       \\ \hline
@@ -1459,7 +1444,7 @@ Pz       & 10.744 $\pm$ 0.894 & 10.630 $\pm$ 1.023 & 0.423 &       \\ \hline
   \parbox{.45\linewidth}{
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 7.536 $\pm$ 0.394 & 7.585 $\pm$ 0.465 & 0.765 &       \\ \hline
 std      & 0.401 $\pm$ 0.121 & 0.400 $\pm$ 0.134 & 0.917 &       \\ \hline
 FP1      & 7.851 $\pm$ 0.588 & 7.841 $\pm$ 0.751 & 0.580 &       \\ \hline
@@ -1487,7 +1472,7 @@ Pz       & 7.188 $\pm$ 0.451 & 7.162 $\pm$ 0.538 & 0.765 &       \\ \hline
   \parbox{.45\linewidth}{
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 7.483 $\pm$ 0.432 & 7.648 $\pm$ 0.369 & 0.548 &       \\ \hline
 std      & 0.366 $\pm$ 0.116 & 0.450 $\pm$ 0.162 & 0.048 & **    \\ \hline
 FP1      & 7.709 $\pm$ 0.552 & 7.984 $\pm$ 0.658 & 0.149 &       \\ \hline
@@ -1521,7 +1506,7 @@ Pz       & 7.195 $\pm$ 0.498 & 7.262 $\pm$ 0.499 & 0.548 &       \\ \hline
   \parbox{.45\linewidth}{
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 0.768 $\pm$ 0.093 & 0.811 $\pm$ 0.107 & 0.086 &       \\ \hline
 std      & 0.078 $\pm$ 0.039 & 0.093 $\pm$ 0.047 & 0.377 &       \\ \hline
 FP1      & 0.816 $\pm$ 0.156 & 0.866 $\pm$ 0.178 & 0.548 &       \\ \hline
@@ -1549,7 +1534,7 @@ Pz       & 0.724 $\pm$ 0.090 & 0.742 $\pm$ 0.103 & 0.902 &       \\ \hline
   \parbox{.45\linewidth}{
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Significance} \\ \hline
+\textbf{Channel} & \textbf{Before} & \textbf{After} & \textbf{p-value} & \textbf{Sig.} \\ \hline
 mean     & 0.757 $\pm$ 0.113 & 0.798 $\pm$ 0.137 & 0.676 &       \\ \hline
 std      & 0.067 $\pm$ 0.044 & 0.095 $\pm$ 0.057 & 0.061 & *     \\ \hline
 FP1      & 0.796 $\pm$ 0.137 & 0.850 $\pm$ 0.178 & 0.479 &       \\ \hline
@@ -1611,30 +1596,30 @@ Pz       & 0.713 $\pm$ 0.092 & 0.730 $\pm$ 0.121 & 0.863 &       \\ \hline
   \end{figure}
 \end{landscape}
 
-\subsection{Low and high depression score}
+\subsection{Low and high depression score} \label{sec:analdepdif}
 As mentioned in Section \ref{sec:dataset}, studied dataset lacks symptom absent group. This makes the task of training a classifier for depression diagnosis inherently difficult. The patients, however, still vary in severity of their symptoms, which allows us to study correlation between symptom severity (which may, in turn, inform the task of finding a classifier). To this goal, we explored the differences in distributions of computed non-linear between groups of the ``healthiest'' and most depressed patients visually and using statistical tests, and in this section, we present some of the results.
 
-With the goal of analyzing the differences between the lightest and most sever symptoms, we selected two classes of recordings for analysis in this section as follows. The first class, called \emph{healthy}, of 16 recordings reported depression score $\leq$ 8, and the second class, called \emph{depressed}, of 18 recordings with depression score $\geq$ 32. We should recognize that including after treatment recordings does not control for possible effects of treatment not reflecting in the depression scores but reflecting in the signal, or the inverse. Indeed, all the healthy recordings were made after treatment, and most of the depressed recordings were made before treatment.
+With the goal of analyzing the differences between the lightest and most severe symptoms, we selected two classes of recordings for analysis in this section as follows. The first class, called \emph{healthy}, of 50 recordings with reported depression score $\leq$ 16, and the second class, called \emph{depressed}, of 50 recordings with depression score $\geq$ 28. We should recognize that including after treatment recordings does not control for possible effects of treatment not reflecting in the depression scores but reflecting in the signal, or the inverse. Indeed, all the healthy recordings were made after treatment, and most of the depressed recordings were made before treatment.
 
-First, we looked at histograms of computed measures between the two groups. There were striking trends in the means of the two distributions in almost all channels for all features except correlation dimension. Means of depressed recordings are typically shifted to the right of the mean of healthy recordings for all measures except for largest Lyapunov exponent and correlation dimension. For largest Lyapunov exponent, the sitation in opposite. For correlation dimension, the means are similar. Figure \ref{fig:dfadepdist}, which shows the distributions of DFA for both groups, exemplifies the differences. Another important observation is that the distributions are not generally normal, which is useful for the following statistical tests.
+First, we looked at histograms of computed measures between the two groups. There were striking trends in the means of the two distributions in almost all channels for all measures except correlation dimension. Means of depressed recordings are typically shifted to the left of the mean of healthy recordings for all measures except for largest Lyapunov exponent, for which the means are shifted to the right. For correlation dimension, the distributions are similar. Figure \ref{fig:lyapdepdist}, which shows the distributions of the largest Lyapunov exponents for both groups, exemplifies the differences. Another observation is that the distributions are, with exceptions, generally approximately normal.
 
-Prompted by these findings, we investigated the differences in the means using Kruskal-Wallis test. Table \ref{tab:depmeans} shows the results. The p-value cutoffs for significance ratings are 0.05, 0.01, 0.005. We may observe significant differences in many channels, with the strongest being in the occipital and temporal regions. The most informative measures seem to be DFA and Hurst exponent (being qualitatively similar features).
+Moreover, we investigated the differences in the distributions using Kolmogorov-Smirnov test.\footnote{Kruskal-Wallis test showed differences only for the largest Lyapunov exponent and Higuchi fractal dimension.} Table \ref{tab:depmeans} shows the results. The p-value cutoffs for significance ratings are 0.05, 0.01, 0.005. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
 
-Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for all remaining features except for correlation dimension. However, only for DFA and Hurst exponent, the correlation coefficients were statistically significant for all channels. Of course, these results are expected given the previous observations. However, the clear trends slowly disappear when the classes are extended to include more recordings.
+Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for all remaining features except for correlation dimension. Of course, these results are expected given the previous observations.\unsure{Is this true?} However, the correlation becomes less significant when the classes are extended to include more recordings.
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
-  \includegraphics[width=1\textwidth]{./Images/dists/dfadepdist.png} }
-  \caption{Distributions of DFA between healthy and depressed patients. Healthy patients seem to have, on average, lower values of DFA, and the distributions are not generally normal.}
- \label{fig:dfadepdist}
+  \includegraphics[width=1\textwidth]{./Images/dists/lyapdepdist.png} }
+  \caption{Distributions of the largest Lyapunov exponents between healthy and depressed patients. Most notable differences can be observed in the left and right temporal areas, T3 and T6. The distributions seem generally normal (however, this is not true for all measures).}
+ \label{fig:lyapdepdist}
 \end{figure}
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/dfadepcorr.png} }
-  \caption{Trend of values of DFA as a function of depression score. For all channels, correlation is significantly ($p$ < 0.05) negative. Similar trend is present in Hurst exponent, Higuchi fractal dimension and sample entropy.}
+  \caption{Trend of values of DFA as a function of depression score. The correlation is not significantly ($p$ < 0.05) negative for F3, F4, P3, Cz. Similar trend is present in Hurst exponent, Higuchi fractal dimension and sample entropy.}
  \label{fig:dfadepcorr}
 \end{figure}
 
@@ -1642,7 +1627,7 @@ Furthermore, we inspected the correlations between the individual measures and c
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/lyapdepcorr.png} }
-  \caption{Trend of values of largest Lyapunov exponent as a function of depression score. The correlation is significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, F3, C3, C4, F7, F8, T3. }
+  \caption{Trend of values of largest Lyapunov exponent as a function of depression score. The correlation is not significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, C3, F7, F8, T3. }
  \label{fig:lyapdepcorr}
 \end{figure}
 
@@ -1653,27 +1638,27 @@ Furthermore, we inspected the correlations between the individual measures and c
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Healthy} & \textbf{Depressed} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 0.580 $\pm$ 0.115 & 0.459 $\pm$ 0.066 & 0.001 & ***   \\ \hline
-std      & 0.104 $\pm$ 0.023 & 0.101 $\pm$ 0.026 & 0.558 &       \\ \hline
-FP1      & 0.723 $\pm$ 0.146 & 0.586 $\pm$ 0.109 & 0.009 & **    \\ \hline
-FP2      & 0.744 $\pm$ 0.155 & 0.570 $\pm$ 0.129 & 0.002 & ***   \\ \hline
-F3       & 0.563 $\pm$ 0.113 & 0.483 $\pm$ 0.102 & 0.042 & *     \\ \hline
-F4       & 0.589 $\pm$ 0.104 & 0.497 $\pm$ 0.115 & 0.011 & *     \\ \hline
-C3       & 0.540 $\pm$ 0.114 & 0.435 $\pm$ 0.087 & 0.006 & **    \\ \hline
-C4       & 0.533 $\pm$ 0.136 & 0.433 $\pm$ 0.066 & 0.042 & *     \\ \hline
-P3       & 0.508 $\pm$ 0.125 & 0.402 $\pm$ 0.108 & 0.016 & *     \\ \hline
-P4       & 0.494 $\pm$ 0.122 & 0.409 $\pm$ 0.091 & 0.073 &       \\ \hline
-O1       & 0.553 $\pm$ 0.169 & 0.341 $\pm$ 0.099 & 0.000 & ***   \\ \hline
-O2       & 0.527 $\pm$ 0.148 & 0.381 $\pm$ 0.124 & 0.006 & **    \\ \hline
-F7       & 0.711 $\pm$ 0.132 & 0.591 $\pm$ 0.075 & 0.016 & *     \\ \hline
-F8       & 0.725 $\pm$ 0.120 & 0.593 $\pm$ 0.070 & 0.002 & ***   \\ \hline
-T3       & 0.603 $\pm$ 0.120 & 0.475 $\pm$ 0.074 & 0.002 & ***   \\ \hline
-T4       & 0.609 $\pm$ 0.123 & 0.480 $\pm$ 0.078 & 0.001 & ***   \\ \hline
-T5       & 0.505 $\pm$ 0.147 & 0.378 $\pm$ 0.079 & 0.011 & *     \\ \hline
-T6       & 0.504 $\pm$ 0.162 & 0.376 $\pm$ 0.094 & 0.027 & *     \\ \hline
-Fz       & 0.543 $\pm$ 0.114 & 0.441 $\pm$ 0.092 & 0.012 & *     \\ \hline
-Cz       & 0.513 $\pm$ 0.115 & 0.435 $\pm$ 0.079 & 0.038 & *     \\ \hline
-Pz       & 0.540 $\pm$ 0.129 & 0.411 $\pm$ 0.104 & 0.006 & **    \\ \hline
+mean     & 0.576 $\pm$ 0.127 & 0.524 $\pm$ 0.104 & 0.095 &       \\ \hline
+std      & 0.105 $\pm$ 0.027 & 0.110 $\pm$ 0.030 & 0.508 &       \\ \hline
+FP1      & 0.712 $\pm$ 0.150 & 0.665 $\pm$ 0.152 & 0.508 &       \\ \hline
+FP2      & 0.710 $\pm$ 0.168 & 0.663 $\pm$ 0.145 & 0.358 &       \\ \hline
+F3       & 0.583 $\pm$ 0.141 & 0.538 $\pm$ 0.126 & 0.155 &       \\ \hline
+F4       & 0.573 $\pm$ 0.126 & 0.538 $\pm$ 0.120 & 0.155 &       \\ \hline
+C3       & 0.561 $\pm$ 0.146 & 0.507 $\pm$ 0.135 & 0.056 &       \\ \hline
+C4       & 0.548 $\pm$ 0.135 & 0.498 $\pm$ 0.128 & 0.056 &       \\ \hline
+P3       & 0.522 $\pm$ 0.148 & 0.473 $\pm$ 0.146 & 0.017 & *     \\ \hline
+P4       & 0.526 $\pm$ 0.145 & 0.454 $\pm$ 0.124 & 0.095 &       \\ \hline
+O1       & 0.502 $\pm$ 0.178 & 0.431 $\pm$ 0.141 & 0.056 &       \\ \hline
+O2       & 0.509 $\pm$ 0.162 & 0.450 $\pm$ 0.141 & 0.032 & *     \\ \hline
+F7       & 0.709 $\pm$ 0.162 & 0.652 $\pm$ 0.115 & 0.017 & *     \\ \hline
+F8       & 0.696 $\pm$ 0.154 & 0.643 $\pm$ 0.117 & 0.009 & **    \\ \hline
+T3       & 0.583 $\pm$ 0.134 & 0.548 $\pm$ 0.132 & 0.241 &       \\ \hline
+T4       & 0.596 $\pm$ 0.141 & 0.544 $\pm$ 0.123 & 0.009 & **    \\ \hline
+T5       & 0.496 $\pm$ 0.152 & 0.437 $\pm$ 0.137 & 0.032 & *     \\ \hline
+T6       & 0.489 $\pm$ 0.160 & 0.433 $\pm$ 0.136 & 0.056 &       \\ \hline
+Fz       & 0.554 $\pm$ 0.138 & 0.487 $\pm$ 0.113 & 0.095 &       \\ \hline
+Cz       & 0.534 $\pm$ 0.127 & 0.504 $\pm$ 0.116 & 0.155 &       \\ \hline
+Pz       & 0.547 $\pm$ 0.145 & 0.490 $\pm$ 0.146 & 0.017 & *     \\ \hline
 \end{tabular}
 \subcaption{DFA}
 }
@@ -1682,28 +1667,27 @@ Pz       & 0.540 $\pm$ 0.129 & 0.411 $\pm$ 0.104 & 0.006 & **    \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Healthy} & \textbf{Depressed} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 0.607 $\pm$ 0.085 & 0.529 $\pm$ 0.055 & 0.005 & ***   \\ \hline
-std      & 0.064 $\pm$ 0.017 & 0.078 $\pm$ 0.024 & 0.053 &       \\ \hline
-FP1      & 0.684 $\pm$ 0.093 & 0.610 $\pm$ 0.073 & 0.006 & **    \\ \hline
-FP2      & 0.690 $\pm$ 0.100 & 0.604 $\pm$ 0.094 & 0.021 & *     \\ \hline
-F3       & 0.598 $\pm$ 0.092 & 0.545 $\pm$ 0.070 & 0.062 &       \\ \hline
-F4       & 0.623 $\pm$ 0.077 & 0.552 $\pm$ 0.078 & 0.027 & *     \\ \hline
-C3       & 0.589 $\pm$ 0.093 & 0.523 $\pm$ 0.075 & 0.019 & *     \\ \hline
-C4       & 0.574 $\pm$ 0.113 & 0.526 $\pm$ 0.056 & 0.214 &       \\ \hline
-P3       & 0.560 $\pm$ 0.092 & 0.489 $\pm$ 0.100 & 0.058 &       \\ \hline
-P4       & 0.555 $\pm$ 0.094 & 0.499 $\pm$ 0.083 & 0.147 &       \\ \hline
-O1       & 0.586 $\pm$ 0.121 & 0.425 $\pm$ 0.093 & 0.000 & ***   \\ \hline
-O2       & 0.571 $\pm$ 0.116 & 0.456 $\pm$ 0.103 & 0.006 & **    \\ \hline
-F7       & 0.694 $\pm$ 0.082 & 0.634 $\pm$ 0.051 & 0.038 & *     \\ \hline
-F8       & 0.692 $\pm$ 0.071 & 0.629 $\pm$ 0.050 & 0.019 & *     \\ \hline
-T3       & 0.621 $\pm$ 0.082 & 0.559 $\pm$ 0.052 & 0.021 & *     \\ \hline
-T4       & 0.631 $\pm$ 0.082 & 0.549 $\pm$ 0.068 & 0.002 & ***   \\ \hline
-T5       & 0.562 $\pm$ 0.106 & 0.462 $\pm$ 0.075 & 0.004 & ***   \\ \hline
-T6       & 0.554 $\pm$ 0.115 & 0.457 $\pm$ 0.086 & 0.011 & *     \\ \hline
-Fz       & 0.593 $\pm$ 0.088 & 0.513 $\pm$ 0.072 & 0.005 & **    \\ \hline
-
-Cz       & 0.579 $\pm$ 0.084 & 0.521 $\pm$ 0.078 & 0.038 & *     \\ \hline
-Pz       & 0.585 $\pm$ 0.094 & 0.498 $\pm$ 0.095 & 0.013 & *     \\ \hline
+mean     & 0.604 $\pm$ 0.091 & 0.574 $\pm$ 0.080 & 0.241 &       \\ \hline
+std      & 0.068 $\pm$ 0.022 & 0.076 $\pm$ 0.025 & 0.241 &       \\ \hline
+FP1      & 0.679 $\pm$ 0.088 & 0.654 $\pm$ 0.102 & 0.358 &       \\ \hline
+FP2      & 0.674 $\pm$ 0.104 & 0.662 $\pm$ 0.101 & 0.841 &       \\ \hline
+F3       & 0.609 $\pm$ 0.098 & 0.582 $\pm$ 0.084 & 0.241 &       \\ \hline
+F4       & 0.604 $\pm$ 0.094 & 0.586 $\pm$ 0.089 & 0.241 &       \\ \hline
+C3       & 0.596 $\pm$ 0.105 & 0.568 $\pm$ 0.093 & 0.155 &       \\ \hline
+C4       & 0.587 $\pm$ 0.097 & 0.563 $\pm$ 0.093 & 0.358 &       \\ \hline
+P3       & 0.567 $\pm$ 0.119 & 0.536 $\pm$ 0.115 & 0.508 &       \\ \hline
+P4       & 0.573 $\pm$ 0.108 & 0.527 $\pm$ 0.106 & 0.155 &       \\ \hline
+O1       & 0.549 $\pm$ 0.133 & 0.505 $\pm$ 0.116 & 0.155 &       \\ \hline
+O2       & 0.561 $\pm$ 0.128 & 0.519 $\pm$ 0.112 & 0.032 & *     \\ \hline
+F7       & 0.695 $\pm$ 0.105 & 0.667 $\pm$ 0.083 & 0.155 &       \\ \hline
+F8       & 0.677 $\pm$ 0.103 & 0.658 $\pm$ 0.082 & 0.032 & *     \\ \hline
+T3       & 0.611 $\pm$ 0.092 & 0.597 $\pm$ 0.087 & 0.508 &       \\ \hline
+T4       & 0.625 $\pm$ 0.091 & 0.594 $\pm$ 0.087 & 0.009 & **    \\ \hline
+T5       & 0.555 $\pm$ 0.114 & 0.509 $\pm$ 0.106 & 0.155 &       \\ \hline
+T6       & 0.544 $\pm$ 0.115 & 0.502 $\pm$ 0.111 & 0.032 & *     \\ \hline
+Fz       & 0.594 $\pm$ 0.096 & 0.553 $\pm$ 0.088 & 0.056 &       \\ \hline
+Cz       & 0.594 $\pm$ 0.093 & 0.571 $\pm$ 0.084 & 0.241 &       \\ \hline
+Pz       & 0.588 $\pm$ 0.114 & 0.554 $\pm$ 0.117 & 0.095 &       \\ \hline
 \end{tabular}
 \subcaption{Hurst exponent}
 }
@@ -1712,27 +1696,27 @@ Pz       & 0.585 $\pm$ 0.094 & 0.498 $\pm$ 0.095 & 0.013 & *     \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Healthy} & \textbf{Depressed} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 9.865 $\pm$ 0.800 & 10.538 $\pm$ 0.985 & 0.030 & *     \\ \hline
-std      & 0.709 $\pm$ 0.273 & 0.726 $\pm$ 0.313 & 0.972 &       \\ \hline
-FP1      & 9.557 $\pm$ 1.075 & 9.923 $\pm$ 1.192 & 0.427 &       \\ \hline
-FP2      & 9.565 $\pm$ 1.115 & 10.215 $\pm$ 1.161 & 0.138 &       \\ \hline
-F3       & 9.436 $\pm$ 1.008 & 9.983 $\pm$ 1.094 & 0.147 &       \\ \hline
-F4       & 9.370 $\pm$ 1.072 & 10.278 $\pm$ 1.345 & 0.023 & *     \\ \hline
-C3       & 9.574 $\pm$ 0.823 & 9.861 $\pm$ 1.233 & 0.227 &       \\ \hline
-C4       & 9.579 $\pm$ 0.903 & 10.193 $\pm$ 1.162 & 0.049 & *     \\ \hline
-P3       & 10.374 $\pm$ 0.543 & 10.893 $\pm$ 0.955 & 0.049 & *     \\ \hline
-P4       & 10.330 $\pm$ 0.656 & 11.018 $\pm$ 0.852 & 0.019 & *     \\ \hline
-O1       & 10.298 $\pm$ 0.704 & 11.230 $\pm$ 1.233 & 0.002 & ***   \\ \hline
-O2       & 10.097 $\pm$ 0.983 & 11.228 $\pm$ 1.126 & 0.003 & ***   \\ \hline
-F7       & 9.772 $\pm$ 1.504 & 10.211 $\pm$ 1.409 & 0.535 &       \\ \hline
-F8       & 9.714 $\pm$ 1.548 & 10.279 $\pm$ 1.414 & 0.301 &       \\ \hline
-T3       & 9.339 $\pm$ 1.502 & 9.900 $\pm$ 1.309 & 0.255 &       \\ \hline
-T4       & 9.319 $\pm$ 1.413 & 10.269 $\pm$ 1.331 & 0.062 &       \\ \hline
-T5       & 10.275 $\pm$ 0.958 & 11.055 $\pm$ 1.104 & 0.023 & *     \\ \hline
-T6       & 10.213 $\pm$ 0.924 & 11.290 $\pm$ 1.037 & 0.006 & **    \\ \hline
-Fz       & 10.125 $\pm$ 0.705 & 10.657 $\pm$ 0.983 & 0.084 &       \\ \hline
-Cz       & 10.052 $\pm$ 0.618 & 10.652 $\pm$ 0.859 & 0.058 &       \\ \hline
-Pz       & 10.441 $\pm$ 0.570 & 11.081 $\pm$ 0.951 & 0.038 & *     \\ \hline
+mean     & 9.848 $\pm$ 0.947 & 10.236 $\pm$ 1.043 & 0.056 &       \\ \hline
+std      & 0.681 $\pm$ 0.264 & 0.670 $\pm$ 0.291 & 0.841 &       \\ \hline
+FP1      & 9.538 $\pm$ 1.257 & 9.888 $\pm$ 1.202 & 0.241 &       \\ \hline
+FP2      & 9.551 $\pm$ 1.274 & 9.946 $\pm$ 1.275 & 0.358 &       \\ \hline
+F3       & 9.413 $\pm$ 1.081 & 9.812 $\pm$ 1.097 & 0.241 &       \\ \hline
+F4       & 9.363 $\pm$ 1.234 & 9.963 $\pm$ 1.254 & 0.032 & *     \\ \hline
+C3       & 9.518 $\pm$ 1.010 & 9.803 $\pm$ 1.155 & 0.056 &       \\ \hline
+C4       & 9.513 $\pm$ 1.131 & 9.956 $\pm$ 1.172 & 0.095 &       \\ \hline
+P3       & 10.226 $\pm$ 0.806 & 10.569 $\pm$ 0.961 & 0.032 & *     \\ \hline
+P4       & 10.200 $\pm$ 0.898 & 10.593 $\pm$ 0.941 & 0.095 &       \\ \hline
+O1       & 10.321 $\pm$ 0.976 & 10.736 $\pm$ 1.201 & 0.056 &       \\ \hline
+O2       & 10.240 $\pm$ 1.059 & 10.700 $\pm$ 1.205 & 0.032 & *     \\ \hline
+F7       & 9.814 $\pm$ 1.401 & 9.988 $\pm$ 1.466 & 0.841 &       \\ \hline
+F8       & 9.772 $\pm$ 1.528 & 10.061 $\pm$ 1.471 & 0.358 &       \\ \hline
+T3       & 9.336 $\pm$ 1.454 & 9.731 $\pm$ 1.498 & 0.017 & *     \\ \hline
+T4       & 9.408 $\pm$ 1.378 & 9.922 $\pm$ 1.520 & 0.155 &       \\ \hline
+T5       & 10.216 $\pm$ 1.039 & 10.649 $\pm$ 1.142 & 0.155 &       \\ \hline
+T6       & 10.200 $\pm$ 0.929 & 10.787 $\pm$ 1.157 & 0.001 & ***   \\ \hline
+Fz       & 10.097 $\pm$ 0.901 & 10.358 $\pm$ 1.040 & 0.358 &       \\ \hline
+Cz       & 10.048 $\pm$ 0.816 & 10.339 $\pm$ 0.963 & 0.095 &       \\ \hline
+Pz       & 10.343 $\pm$ 0.888 & 10.680 $\pm$ 1.016 & 0.032 & *     \\ \hline
 \end{tabular}
 \subcaption{Largest Lyapunov exponent}
 }
@@ -1741,27 +1725,27 @@ Pz       & 10.441 $\pm$ 0.570 & 11.081 $\pm$ 0.951 & 0.038 & *     \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Healthy} & \textbf{Depressed} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 0.800 $\pm$ 0.092 & 0.724 $\pm$ 0.096 & 0.008 & **    \\ \hline
-std      & 0.090 $\pm$ 0.049 & 0.072 $\pm$ 0.045 & 0.255 &       \\ \hline
-FP1      & 0.845 $\pm$ 0.142 & 0.778 $\pm$ 0.115 & 0.178 &       \\ \hline
-FP2      & 0.853 $\pm$ 0.141 & 0.742 $\pm$ 0.111 & 0.038 & *     \\ \hline
-F3       & 0.851 $\pm$ 0.124 & 0.771 $\pm$ 0.111 & 0.042 & *     \\ \hline
-F4       & 0.864 $\pm$ 0.130 & 0.755 $\pm$ 0.149 & 0.010 & **    \\ \hline
-C3       & 0.822 $\pm$ 0.110 & 0.786 $\pm$ 0.140 & 0.190 &       \\ \hline
-C4       & 0.825 $\pm$ 0.104 & 0.764 $\pm$ 0.142 & 0.038 & *     \\ \hline
-P3       & 0.728 $\pm$ 0.056 & 0.686 $\pm$ 0.075 & 0.021 & *     \\ \hline
-P4       & 0.728 $\pm$ 0.061 & 0.669 $\pm$ 0.051 & 0.006 & **    \\ \hline
-O1       & 0.736 $\pm$ 0.091 & 0.656 $\pm$ 0.116 & 0.001 & ***   \\ \hline
-O2       & 0.759 $\pm$ 0.132 & 0.657 $\pm$ 0.092 & 0.001 & ***   \\ \hline
-F7       & 0.835 $\pm$ 0.185 & 0.770 $\pm$ 0.149 & 0.270 &       \\ \hline
-F8       & 0.845 $\pm$ 0.192 & 0.761 $\pm$ 0.170 & 0.105 &       \\ \hline
-T3       & 0.877 $\pm$ 0.197 & 0.798 $\pm$ 0.157 & 0.227 &       \\ \hline
-T4       & 0.884 $\pm$ 0.192 & 0.763 $\pm$ 0.155 & 0.027 & *     \\ \hline
-T5       & 0.745 $\pm$ 0.082 & 0.683 $\pm$ 0.106 & 0.005 & **    \\ \hline
-T6       & 0.749 $\pm$ 0.087 & 0.654 $\pm$ 0.065 & 0.002 & ***   \\ \hline
-Fz       & 0.768 $\pm$ 0.072 & 0.702 $\pm$ 0.079 & 0.025 & *     \\ \hline
-Cz       & 0.771 $\pm$ 0.067 & 0.709 $\pm$ 0.072 & 0.014 & *     \\ \hline
-Pz       & 0.724 $\pm$ 0.055 & 0.662 $\pm$ 0.059 & 0.005 & **    \\ \hline
+mean     & 0.797 $\pm$ 0.123 & 0.760 $\pm$ 0.125 & 0.056 &       \\ \hline
+std      & 0.087 $\pm$ 0.046 & 0.076 $\pm$ 0.044 & 0.508 &       \\ \hline
+FP1      & 0.843 $\pm$ 0.180 & 0.788 $\pm$ 0.154 & 0.241 &       \\ \hline
+FP2      & 0.841 $\pm$ 0.179 & 0.790 $\pm$ 0.157 & 0.241 &       \\ \hline
+F3       & 0.848 $\pm$ 0.149 & 0.799 $\pm$ 0.145 & 0.095 &       \\ \hline
+F4       & 0.852 $\pm$ 0.171 & 0.792 $\pm$ 0.160 & 0.056 &       \\ \hline
+C3       & 0.833 $\pm$ 0.141 & 0.801 $\pm$ 0.146 & 0.095 &       \\ \hline
+C4       & 0.832 $\pm$ 0.151 & 0.791 $\pm$ 0.155 & 0.017 & *     \\ \hline
+P3       & 0.740 $\pm$ 0.101 & 0.714 $\pm$ 0.102 & 0.095 &       \\ \hline
+P4       & 0.742 $\pm$ 0.109 & 0.705 $\pm$ 0.105 & 0.095 &       \\ \hline
+O1       & 0.729 $\pm$ 0.123 & 0.704 $\pm$ 0.128 & 0.358 &       \\ \hline
+O2       & 0.739 $\pm$ 0.130 & 0.705 $\pm$ 0.126 & 0.032 & *     \\ \hline
+F7       & 0.817 $\pm$ 0.174 & 0.799 $\pm$ 0.179 & 0.841 &       \\ \hline
+F8       & 0.824 $\pm$ 0.199 & 0.796 $\pm$ 0.189 & 0.155 &       \\ \hline
+T3       & 0.873 $\pm$ 0.195 & 0.834 $\pm$ 0.188 & 0.155 &       \\ \hline
+T4       & 0.864 $\pm$ 0.179 & 0.816 $\pm$ 0.194 & 0.155 &       \\ \hline
+T5       & 0.750 $\pm$ 0.120 & 0.715 $\pm$ 0.125 & 0.095 &       \\ \hline
+T6       & 0.743 $\pm$ 0.109 & 0.704 $\pm$ 0.115 & 0.009 & **    \\ \hline
+Fz       & 0.771 $\pm$ 0.116 & 0.739 $\pm$ 0.119 & 0.056 &       \\ \hline
+Cz       & 0.775 $\pm$ 0.101 & 0.745 $\pm$ 0.108 & 0.155 &       \\ \hline
+Pz       & 0.734 $\pm$ 0.109 & 0.701 $\pm$ 0.105 & 0.155 &       \\ \hline
 \end{tabular}
 \subcaption{Sample entropy}
 }
@@ -1770,27 +1754,27 @@ Pz       & 0.724 $\pm$ 0.055 & 0.662 $\pm$ 0.059 & 0.005 & **    \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Healthy} & \textbf{Depressed} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 1.407 $\pm$ 0.093 & 1.313 $\pm$ 0.101 & 0.006 & **    \\ \hline
-std      & 0.091 $\pm$ 0.047 & 0.084 $\pm$ 0.043 & 0.558 &       \\ \hline
-FP1      & 1.474 $\pm$ 0.165 & 1.372 $\pm$ 0.131 & 0.067 &       \\ \hline
-FP2      & 1.480 $\pm$ 0.153 & 1.336 $\pm$ 0.131 & 0.011 & *     \\ \hline
-F3       & 1.457 $\pm$ 0.124 & 1.370 $\pm$ 0.132 & 0.038 & *     \\ \hline
-F4       & 1.478 $\pm$ 0.125 & 1.349 $\pm$ 0.151 & 0.009 & **    \\ \hline
-C3       & 1.422 $\pm$ 0.102 & 1.392 $\pm$ 0.147 & 0.301 &       \\ \hline
-C4       & 1.431 $\pm$ 0.104 & 1.360 $\pm$ 0.124 & 0.030 & *     \\ \hline
-P3       & 1.332 $\pm$ 0.078 & 1.267 $\pm$ 0.090 & 0.042 & *     \\ \hline
-P4       & 1.329 $\pm$ 0.092 & 1.257 $\pm$ 0.071 & 0.023 & *     \\ \hline
-O1       & 1.336 $\pm$ 0.100 & 1.220 $\pm$ 0.110 & 0.002 & ***   \\ \hline
-O2       & 1.345 $\pm$ 0.124 & 1.226 $\pm$ 0.103 & 0.005 & ***   \\ \hline
-F7       & 1.457 $\pm$ 0.157 & 1.365 $\pm$ 0.146 & 0.035 & *     \\ \hline
-F8       & 1.476 $\pm$ 0.169 & 1.353 $\pm$ 0.156 & 0.008 & **    \\ \hline
-T3       & 1.463 $\pm$ 0.175 & 1.388 $\pm$ 0.136 & 0.147 &       \\ \hline
-T4       & 1.472 $\pm$ 0.162 & 1.361 $\pm$ 0.173 & 0.027 & *     \\ \hline
-T5       & 1.331 $\pm$ 0.081 & 1.249 $\pm$ 0.105 & 0.005 & ***   \\ \hline
-T6       & 1.335 $\pm$ 0.092 & 1.221 $\pm$ 0.080 & 0.001 & ***   \\ \hline
-Fz       & 1.378 $\pm$ 0.087 & 1.293 $\pm$ 0.108 & 0.025 & *     \\ \hline
-Cz       & 1.401 $\pm$ 0.081 & 1.315 $\pm$ 0.098 & 0.016 & *     \\ \hline
-Pz       & 1.330 $\pm$ 0.082 & 1.249 $\pm$ 0.093 & 0.012 & *     \\ \hline
+mean     & 1.408 $\pm$ 0.129 & 1.357 $\pm$ 0.131 & 0.017 & *     \\ \hline
+std      & 0.093 $\pm$ 0.042 & 0.086 $\pm$ 0.042 & 0.241 &       \\ \hline
+FP1      & 1.474 $\pm$ 0.186 & 1.406 $\pm$ 0.166 & 0.095 &       \\ \hline
+FP2      & 1.468 $\pm$ 0.182 & 1.405 $\pm$ 0.176 & 0.056 &       \\ \hline
+F3       & 1.465 $\pm$ 0.160 & 1.405 $\pm$ 0.158 & 0.017 & *     \\ \hline
+F4       & 1.466 $\pm$ 0.180 & 1.398 $\pm$ 0.167 & 0.056 &       \\ \hline
+C3       & 1.450 $\pm$ 0.135 & 1.406 $\pm$ 0.140 & 0.032 & *     \\ \hline
+C4       & 1.446 $\pm$ 0.149 & 1.393 $\pm$ 0.139 & 0.032 & *     \\ \hline
+P3       & 1.346 $\pm$ 0.109 & 1.305 $\pm$ 0.111 & 0.095 &       \\ \hline
+P4       & 1.345 $\pm$ 0.119 & 1.295 $\pm$ 0.106 & 0.009 & **    \\ \hline
+O1       & 1.322 $\pm$ 0.138 & 1.279 $\pm$ 0.136 & 0.155 &       \\ \hline
+O2       & 1.330 $\pm$ 0.136 & 1.283 $\pm$ 0.141 & 0.095 &       \\ \hline
+F7       & 1.450 $\pm$ 0.178 & 1.412 $\pm$ 0.181 & 0.508 &       \\ \hline
+F8       & 1.462 $\pm$ 0.190 & 1.405 $\pm$ 0.183 & 0.095 &       \\ \hline
+T3       & 1.474 $\pm$ 0.191 & 1.431 $\pm$ 0.184 & 0.508 &       \\ \hline
+T4       & 1.468 $\pm$ 0.168 & 1.414 $\pm$ 0.192 & 0.241 &       \\ \hline
+T5       & 1.333 $\pm$ 0.117 & 1.290 $\pm$ 0.127 & 0.095 &       \\ \hline
+T6       & 1.327 $\pm$ 0.116 & 1.274 $\pm$ 0.121 & 0.032 & *     \\ \hline
+Fz       & 1.381 $\pm$ 0.137 & 1.340 $\pm$ 0.147 & 0.095 &       \\ \hline
+Cz       & 1.404 $\pm$ 0.115 & 1.356 $\pm$ 0.125 & 0.032 & *     \\ \hline
+Pz       & 1.337 $\pm$ 0.118 & 1.295 $\pm$ 0.118 & 0.155 &       \\ \hline
 \end{tabular}
 \subcaption{Higuchi fractal dimension}
 }
@@ -1799,41 +1783,44 @@ Pz       & 1.330 $\pm$ 0.082 & 1.249 $\pm$ 0.093 & 0.012 & *     \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Healthy} & \textbf{Depressed} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 10.889 $\pm$ 0.779 & 11.002 $\pm$ 0.715 & 0.629 &       \\ \hline
-std      & 0.648 $\pm$ 0.175 & 0.638 $\pm$ 0.144 & 0.945 &       \\ \hline
-FP1      & 11.304 $\pm$ 1.150 & 11.506 $\pm$ 0.853 & 0.352 &       \\ \hline
-FP2      & 11.431 $\pm$ 0.903 & 11.281 $\pm$ 0.999 & 0.427 &       \\ \hline
-F3       & 10.760 $\pm$ 0.741 & 11.355 $\pm$ 0.876 & 0.049 & *     \\ \hline
-F4       & 11.166 $\pm$ 0.833 & 11.099 $\pm$ 0.969 & 0.863 &       \\ \hline
-C3       & 10.460 $\pm$ 1.002 & 10.637 $\pm$ 0.842 & 0.581 &       \\ \hline
-C4       & 10.530 $\pm$ 1.088 & 10.686 $\pm$ 0.877 & 0.654 &       \\ \hline
-P3       & 10.486 $\pm$ 0.964 & 10.786 $\pm$ 0.894 & 0.255 &       \\ \hline
-P4       & 10.407 $\pm$ 0.796 & 10.597 $\pm$ 0.754 & 0.469 &       \\ \hline
-O1       & 11.105 $\pm$ 1.035 & 11.104 $\pm$ 1.301 & 0.756 &       \\ \hline
-O2       & 11.057 $\pm$ 1.149 & 11.120 $\pm$ 1.119 & 0.756 &       \\ \hline
-F7       & 10.983 $\pm$ 0.732 & 11.022 $\pm$ 0.791 & 0.704 &       \\ \hline
-F8       & 11.050 $\pm$ 0.786 & 11.219 $\pm$ 1.076 & 0.704 &       \\ \hline
-T3       & 11.215 $\pm$ 0.981 & 11.106 $\pm$ 0.642 & 0.679 &       \\ \hline
-T4       & 11.223 $\pm$ 1.008 & 11.202 $\pm$ 0.732 & 0.890 &       \\ \hline
-T5       & 11.169 $\pm$ 1.138 & 11.040 $\pm$ 1.028 & 0.581 &       \\ \hline
-T6       & 10.972 $\pm$ 0.894 & 11.021 $\pm$ 0.825 & 0.863 &       \\ \hline
-Fz       & 10.494 $\pm$ 1.000 & 10.702 $\pm$ 0.901 & 0.535 &       \\ \hline
-Cz       & 10.641 $\pm$ 1.105 & 10.784 $\pm$ 1.094 & 0.581 &       \\ \hline
-Pz       & 10.436 $\pm$ 0.958 & 10.762 $\pm$ 0.917 & 0.270 &       \\ \hline
+mean     & 10.591 $\pm$ 0.879 & 10.816 $\pm$ 0.716 & 0.507 &       \\ \hline
+std      & 0.664 $\pm$ 0.197 & 0.651 $\pm$ 0.154 & 0.377 &       \\ \hline
+FP1      & 10.939 $\pm$ 1.125 & 11.222 $\pm$ 0.915 & 0.116 &       \\ \hline
+FP2      & 11.015 $\pm$ 1.038 & 11.278 $\pm$ 0.978 & 0.257 &       \\ \hline
+F3       & 10.616 $\pm$ 1.053 & 10.986 $\pm$ 0.911 & 0.108 &       \\ \hline
+F4       & 10.614 $\pm$ 0.975 & 10.892 $\pm$ 0.944 & 0.250 &       \\ \hline
+C3       & 10.147 $\pm$ 1.136 & 10.425 $\pm$ 0.864 & 0.035 & *     \\ \hline
+C4       & 10.218 $\pm$ 1.120 & 10.504 $\pm$ 0.981 & 0.111 &       \\ \hline
+P3       & 10.226 $\pm$ 1.053 & 10.596 $\pm$ 0.928 & 0.264 &       \\ \hline
+P4       & 10.169 $\pm$ 0.973 & 10.420 $\pm$ 0.825 & 0.363 &       \\ \hline
+O1       & 10.690 $\pm$ 1.007 & 11.014 $\pm$ 1.144 & 0.261 &       \\ \hline
+O2       & 10.725 $\pm$ 1.088 & 10.863 $\pm$ 0.983 & 0.577 &       \\ \hline
+F7       & 10.913 $\pm$ 0.962 & 10.948 $\pm$ 0.818 & 0.556 &       \\ \hline
+F8       & 10.923 $\pm$ 0.892 & 11.087 $\pm$ 0.953 & 0.771 &       \\ \hline
+T3       & 11.015 $\pm$ 1.113 & 10.995 $\pm$ 0.812 & 0.750 &       \\ \hline
+T4       & 11.059 $\pm$ 1.002 & 11.109 $\pm$ 0.958 & 0.905 &       \\ \hline
+T5       & 10.787 $\pm$ 1.048 & 10.831 $\pm$ 0.913 & 0.991 &       \\ \hline
+T6       & 10.740 $\pm$ 0.946 & 10.998 $\pm$ 0.764 & 0.511 &       \\ \hline
+Fz       & 10.151 $\pm$ 1.118 & 10.585 $\pm$ 0.906 & 0.182 &       \\ \hline
+Cz       & 10.297 $\pm$ 1.258 & 10.451 $\pm$ 1.038 & 0.602 &       \\ \hline
+Pz       & 9.991 $\pm$ 1.073 & 10.295 $\pm$ 0.891 & 0.363 &       \\ \hline
 \end{tabular}
 \subcaption{Correlation dimension}
 }
-\caption{Comparison of mean values of measures computed for 16 healthy (depression score $\leq$ 8)  and 18 depressed (depression score $\geq$ 34) patients.}
+\caption{Comparison of mean values of measures computed for 50 healthy (depression score $\leq$ 16) and 50 depressed (depression score $\geq$ 28) patients.}
 \label{tab:depmeans}
 \end{table}
 
-\subsection{Low and high remission}
+\subsection{Low and high remission} \label{sec:analrespdif}
 Neurocorrelates of remission, or, in other words, positive response to a treatment, are interesting apart from the neurocorrelates of depression itself. Instead of indicating whether a treatment should be prescribed in the first place, the effects of various drugs on the brain may help in designing more individualized treatments, or in developments of new drugs, even for other conditions. However, as noted in Section \ref{sec:dataset}, in our dataset, different kinds of treatments (including rTMS) are mixed for most patients, thus making the singular causes of any observed changes challenging. Nevertheless, we may still attempt to find discrepancies between the remitting and stagnant patients. If we assume that any prescribed treatment was beneficial, we may be able identify traits of patients who are difficult to treat. Indeed, medical literature recognizes entire categories of such patients. \cite{kane1996factors}
 
 Hence, we assigned each patient a number called \emph{change}, the ratio of score recorded during the second treatment to the score recorded during the first treatment. Mean change is 2.47, mode 1.66, standard deviation 3.145637. Most values range from 1 to 5, with a few outliers improving their symptoms 14 and 16-fold respectively. Only 9 patients stagnated exactly or slightly worsened their symptoms (change $\leq$ 1).
 
-We performed Kruskal-Wallis test to see the differences between the mean values in individual channels. The p-value cutoffs for significance ratings are 0.05, 0.01, 0.005. The two classes were selected based on the first and last septiles of all patients according to change, translating to 16 least and 17 most remitting patients. Change for such selected non-remitters range from 0.70 to 1.13, and from 3.2 to 16 for remitters. 
-First, we considered only before treament recordings in order to avoid the confounding effects of treatment. The only significant differences found were in Lyapunov exponent, in frontal areas F3, Fz. After observing no significant differences between before and after treatment recordings of the non-remitting patients, we decided to consider the after treatment recordings for the non-remitting group to increase the test power. Aside from the largest Lyapunov exponent, Higuchi fractal dimension then also showed significant differences in the same frontal areas F3, Fz. The results are shown in Table \ref{tab:remlyaphigu}. Lastly, we performed the same test on the same groups, but considered both before and after recordings. The results are shown in Table \ref{tab:remmeans}. 
+We performed Kolmogorov-Smirnov test to see the differences in the computed measures between the two groups in individual channels. The p-value cutoffs for significance ratings are 0.05, 0.01, 0.005. The two classes were selected to contain 50 least and 50 most remitting patients respectively, i.e. 50 patients with the lowest and 50 patients with the highest value of change. Mean change for such selected non-remitters is $1.19 \pm 0.19$ (range from 0.70 to 1.5), and $3.32 \pm 2.37$ (range from 2 to 16) for remitters. 
+
+Note that many of the patients classified as non-remitting actually improved their symptoms. In fact, symptoms of only 9 patients of the whole dataset worsened or stayed stagnant. No significant differences between before and after treatment recordings of the non-remitting patients, were found. This suggests considering the after treatment recordings for the non-remitting group to increase the number of strictly non-remitting patients. However, this would \unsure{Why not actually do that? I tried and it destroyed the differences.}
+
+Hence, we considered only before treament recordings in order to avoid the possible confounding effects of treatment. The most significant differences found were in Lyapunov exponent, especially in frontal, parietal, and right temporal areas. Aside from the largest Lyapunov exponent, Higuchi fractal dimension then also showed significant differences in frontal areas, and sample entropy in areas above corpus collosum. The results are shown in Table \ref{tab:remmeans}. 
 
 Of course, analyzing effectivity of treatment is difficult problem, and we realize the many limitations of this analysis. For example, many variables, including age, sex, starting depression score, behavioral changes occuring in the interim period and (again) the kind of treatment, were not accounted for. 
 
@@ -1844,91 +1831,27 @@ Of course, analyzing effectivity of treatment is difficult problem, and we reali
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Remitting} & \textbf{Retaining} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 10.130 $\pm$ 0.624 & 10.337 $\pm$ 1.027 & 0.197 &       \\ \hline
-std      & 0.600 $\pm$ 0.216 & 0.745 $\pm$ 0.335 & 0.205 &       \\ \hline
-FP1      & 9.661 $\pm$ 0.969 & 9.882 $\pm$ 1.232 & 0.289 &       \\ \hline
-FP2      & 9.732 $\pm$ 0.883 & 10.087 $\pm$ 1.217 & 0.145 &       \\ \hline
-F3       & 9.556 $\pm$ 0.889 & 10.071 $\pm$ 0.907 & 0.034 & *     \\ \hline
-F4       & 9.884 $\pm$ 0.746 & 9.901 $\pm$ 1.369 & 0.493 &       \\ \hline
-C3       & 9.794 $\pm$ 0.792 & 9.992 $\pm$ 1.128 & 0.244 &       \\ \hline
-C4       & 10.117 $\pm$ 0.651 & 10.114 $\pm$ 1.125 & 0.574 &       \\ \hline
-P3       & 10.468 $\pm$ 0.578 & 10.688 $\pm$ 0.991 & 0.197 &       \\ \hline
-P4       & 10.480 $\pm$ 0.608 & 10.747 $\pm$ 0.899 & 0.084 &       \\ \hline
-O1       & 10.510 $\pm$ 0.710 & 10.717 $\pm$ 1.543 & 0.056 &       \\ \hline
-O2       & 10.411 $\pm$ 0.925 & 10.733 $\pm$ 1.323 & 0.088 &       \\ \hline
-F7       & 10.199 $\pm$ 0.956 & 10.196 $\pm$ 1.511 & 0.724 &       \\ \hline
-F8       & 10.139 $\pm$ 0.800 & 9.988 $\pm$ 1.913 & 0.454 &       \\ \hline
-T3       & 9.964 $\pm$ 1.098 & 9.734 $\pm$ 1.479 & 0.771 &       \\ \hline
-T4       & 9.778 $\pm$ 1.156 & 9.790 $\pm$ 1.613 & 0.739 &       \\ \hline
-T5       & 10.480 $\pm$ 0.849 & 10.707 $\pm$ 1.098 & 0.205 &       \\ \hline
-T6       & 10.592 $\pm$ 0.774 & 10.908 $\pm$ 1.072 & 0.096 &       \\ \hline
-Fz       & 10.157 $\pm$ 0.702 & 10.693 $\pm$ 0.852 & 0.021 & *     \\ \hline
-Cz       & 10.088 $\pm$ 0.736 & 10.540 $\pm$ 0.834 & 0.084 &       \\ \hline
-Pz       & 10.469 $\pm$ 0.656 & 10.908 $\pm$ 0.748 & 0.029 & *     \\ \hline
-\end{tabular}
-\subcaption{Largest Lyapunov exponent}
-}
-\hfill
-  \parbox{.49\linewidth}{
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\textbf{Channel} & \textbf{Remitting} & \textbf{Retaining} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 1.361 $\pm$ 0.095 & 1.343 $\pm$ 0.114 & 0.279 &       \\ \hline
-std      & 0.079 $\pm$ 0.034 & 0.096 $\pm$ 0.053 & 0.480 &       \\ \hline
-FP1      & 1.436 $\pm$ 0.171 & 1.401 $\pm$ 0.142 & 0.360 &       \\ \hline
-FP2      & 1.419 $\pm$ 0.159 & 1.383 $\pm$ 0.149 & 0.140 &       \\ \hline
-F3       & 1.418 $\pm$ 0.124 & 1.361 $\pm$ 0.116 & 0.046 & *     \\ \hline
-F4       & 1.392 $\pm$ 0.121 & 1.396 $\pm$ 0.163 & 0.755 &       \\ \hline
-C3       & 1.403 $\pm$ 0.085 & 1.378 $\pm$ 0.127 & 0.134 &       \\ \hline
-C4       & 1.372 $\pm$ 0.074 & 1.369 $\pm$ 0.115 & 0.467 &       \\ \hline
-P3       & 1.305 $\pm$ 0.088 & 1.285 $\pm$ 0.103 & 0.261 &       \\ \hline
-P4       & 1.304 $\pm$ 0.090 & 1.275 $\pm$ 0.105 & 0.081 &       \\ \hline
-O1       & 1.292 $\pm$ 0.100 & 1.291 $\pm$ 0.189 & 0.289 &       \\ \hline
-O2       & 1.299 $\pm$ 0.112 & 1.277 $\pm$ 0.167 & 0.261 &       \\ \hline
-F7       & 1.378 $\pm$ 0.109 & 1.387 $\pm$ 0.164 & 0.454 &       \\ \hline
-F8       & 1.380 $\pm$ 0.110 & 1.433 $\pm$ 0.227 & 0.787 &       \\ \hline
-T3       & 1.404 $\pm$ 0.167 & 1.420 $\pm$ 0.163 & 0.803 &       \\ \hline
-T4       & 1.413 $\pm$ 0.166 & 1.437 $\pm$ 0.193 & 0.835 &       \\ \hline
-T5       & 1.310 $\pm$ 0.102 & 1.275 $\pm$ 0.119 & 0.151 &       \\ \hline
-T6       & 1.291 $\pm$ 0.089 & 1.265 $\pm$ 0.139 & 0.140 &       \\ \hline
-Fz       & 1.353 $\pm$ 0.102 & 1.297 $\pm$ 0.097 & 0.038 & *     \\ \hline
-Cz       & 1.384 $\pm$ 0.086 & 1.330 $\pm$ 0.092 & 0.058 &       \\ \hline
-Pz       & 1.310 $\pm$ 0.104 & 1.264 $\pm$ 0.089 & 0.053 &       \\ \hline
-\end{tabular}
-\subcaption{Higuchi fractal dimension}
-}
-\caption{The mean values of the two significantly different non-linear measures computed for groups of 16 remitting and 34 patients retaining (or worsening) their symptoms.}
-\label{tab:remlyaphigu}
-\end{table}
-
-\begin{table}[tbp]
-\centering
-\tiny
-  \parbox{.49\linewidth}{
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\textbf{Channel} & \textbf{Remitting} & \textbf{Retaining} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 0.534 $\pm$ 0.142 & 0.527 $\pm$ 0.081 & 0.581 &       \\ \hline
-std      & 0.108 $\pm$ 0.033 & 0.120 $\pm$ 0.026 & 0.098 &       \\ \hline
-FP1      & 0.668 $\pm$ 0.183 & 0.694 $\pm$ 0.118 & 0.969 &       \\ \hline
-FP2      & 0.670 $\pm$ 0.194 & 0.700 $\pm$ 0.114 & 0.908 &       \\ \hline
-F3       & 0.514 $\pm$ 0.145 & 0.534 $\pm$ 0.123 & 0.653 &       \\ \hline
-F4       & 0.528 $\pm$ 0.142 & 0.529 $\pm$ 0.096 & 0.817 &       \\ \hline
-C3       & 0.519 $\pm$ 0.146 & 0.514 $\pm$ 0.116 & 0.626 &       \\ \hline
-C4       & 0.519 $\pm$ 0.158 & 0.489 $\pm$ 0.102 & 0.449 &       \\ \hline
-P3       & 0.453 $\pm$ 0.171 & 0.439 $\pm$ 0.103 & 0.472 &       \\ \hline
-P4       & 0.447 $\pm$ 0.162 & 0.447 $\pm$ 0.108 & 0.788 &       \\ \hline
-O1       & 0.474 $\pm$ 0.183 & 0.417 $\pm$ 0.110 & 0.140 &       \\ \hline
-O2       & 0.475 $\pm$ 0.165 & 0.442 $\pm$ 0.103 & 0.275 &       \\ \hline
-F7       & 0.651 $\pm$ 0.183 & 0.676 $\pm$ 0.111 & 0.827 &       \\ \hline
-F8       & 0.649 $\pm$ 0.172 & 0.668 $\pm$ 0.106 & 0.959 &       \\ \hline
-T3       & 0.589 $\pm$ 0.182 & 0.564 $\pm$ 0.109 & 0.412 &       \\ \hline
-T4       & 0.561 $\pm$ 0.143 & 0.569 $\pm$ 0.120 & 0.797 &       \\ \hline
-T5       & 0.479 $\pm$ 0.170 & 0.426 $\pm$ 0.112 & 0.195 &       \\ \hline
-T6       & 0.479 $\pm$ 0.161 & 0.428 $\pm$ 0.143 & 0.174 &       \\ \hline
-Fz       & 0.494 $\pm$ 0.136 & 0.488 $\pm$ 0.093 & 0.681 &       \\ \hline
-Cz       & 0.485 $\pm$ 0.127 & 0.502 $\pm$ 0.088 & 0.969 &       \\ \hline
-Pz       & 0.491 $\pm$ 0.182 & 0.496 $\pm$ 0.126 & 0.739 &       \\ \hline
+mean     & 0.566 $\pm$ 0.122 & 0.554 $\pm$ 0.098 & 0.652 &       \\ \hline
+std      & 0.106 $\pm$ 0.034 & 0.108 $\pm$ 0.026 & 0.652 &       \\ \hline
+FP1      & 0.689 $\pm$ 0.154 & 0.697 $\pm$ 0.121 & 0.652 &       \\ \hline
+FP2      & 0.690 $\pm$ 0.150 & 0.704 $\pm$ 0.127 & 0.822 &       \\ \hline
+F3       & 0.579 $\pm$ 0.152 & 0.566 $\pm$ 0.129 & 0.946 &       \\ \hline
+F4       & 0.567 $\pm$ 0.141 & 0.569 $\pm$ 0.112 & 0.946 &       \\ \hline
+C3       & 0.548 $\pm$ 0.134 & 0.526 $\pm$ 0.124 & 0.652 &       \\ \hline
+C4       & 0.541 $\pm$ 0.136 & 0.503 $\pm$ 0.110 & 0.139 &       \\ \hline
+P3       & 0.515 $\pm$ 0.162 & 0.493 $\pm$ 0.126 & 0.480 &       \\ \hline
+P4       & 0.499 $\pm$ 0.157 & 0.499 $\pm$ 0.123 & 0.822 &       \\ \hline
+O1       & 0.492 $\pm$ 0.161 & 0.462 $\pm$ 0.136 & 0.480 &       \\ \hline
+O2       & 0.497 $\pm$ 0.154 & 0.502 $\pm$ 0.156 & 0.480 &       \\ \hline
+F7       & 0.687 $\pm$ 0.144 & 0.685 $\pm$ 0.092 & 0.480 &       \\ \hline
+F8       & 0.688 $\pm$ 0.134 & 0.677 $\pm$ 0.103 & 0.652 &       \\ \hline
+T3       & 0.600 $\pm$ 0.157 & 0.576 $\pm$ 0.115 & 0.220 &       \\ \hline
+T4       & 0.576 $\pm$ 0.127 & 0.591 $\pm$ 0.127 & 0.652 &       \\ \hline
+T5       & 0.486 $\pm$ 0.154 & 0.454 $\pm$ 0.130 & 0.480 &       \\ \hline
+T6       & 0.485 $\pm$ 0.154 & 0.460 $\pm$ 0.148 & 0.139 &       \\ \hline
+Fz       & 0.537 $\pm$ 0.129 & 0.514 $\pm$ 0.110 & 0.652 &       \\ \hline
+Cz       & 0.544 $\pm$ 0.124 & 0.522 $\pm$ 0.100 & 0.083 &       \\ \hline
+Pz       & 0.536 $\pm$ 0.165 & 0.534 $\pm$ 0.119 & 0.480 &       \\ \hline
 \end{tabular}
 \subcaption{DFA}
 }
@@ -1937,27 +1860,27 @@ Pz       & 0.491 $\pm$ 0.182 & 0.496 $\pm$ 0.126 & 0.739 &       \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Remitting} & \textbf{Retaining} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 0.573 $\pm$ 0.112 & 0.572 $\pm$ 0.061 & 0.653 &       \\ \hline
-std      & 0.072 $\pm$ 0.026 & 0.078 $\pm$ 0.018 & 0.083 &       \\ \hline
-FP1      & 0.650 $\pm$ 0.121 & 0.661 $\pm$ 0.062 & 0.581 &       \\ \hline
-FP2      & 0.650 $\pm$ 0.130 & 0.669 $\pm$ 0.065 & 0.928 &       \\ \hline
-F3       & 0.560 $\pm$ 0.119 & 0.579 $\pm$ 0.087 & 0.768 &       \\ \hline
-F4       & 0.579 $\pm$ 0.112 & 0.583 $\pm$ 0.078 & 0.768 &       \\ \hline
-C3       & 0.574 $\pm$ 0.119 & 0.566 $\pm$ 0.082 & 0.653 &       \\ \hline
-C4       & 0.564 $\pm$ 0.120 & 0.553 $\pm$ 0.076 & 0.546 &       \\ \hline
-P3       & 0.511 $\pm$ 0.143 & 0.517 $\pm$ 0.090 & 0.837 &       \\ \hline
-P4       & 0.512 $\pm$ 0.140 & 0.517 $\pm$ 0.092 & 0.797 &       \\ \hline
-O1       & 0.532 $\pm$ 0.143 & 0.495 $\pm$ 0.096 & 0.130 &       \\ \hline
-O2       & 0.530 $\pm$ 0.137 & 0.520 $\pm$ 0.080 & 0.465 &       \\ \hline
-F7       & 0.651 $\pm$ 0.126 & 0.671 $\pm$ 0.064 & 0.959 &       \\ \hline
-F8       & 0.649 $\pm$ 0.126 & 0.663 $\pm$ 0.069 & 0.807 &       \\ \hline
-T3       & 0.607 $\pm$ 0.125 & 0.598 $\pm$ 0.072 & 0.465 &       \\ \hline
-T4       & 0.600 $\pm$ 0.106 & 0.605 $\pm$ 0.080 & 0.827 &       \\ \hline
-T5       & 0.539 $\pm$ 0.135 & 0.498 $\pm$ 0.088 & 0.127 &       \\ \hline
-T6       & 0.534 $\pm$ 0.125 & 0.495 $\pm$ 0.109 & 0.133 &       \\ \hline
-Fz       & 0.553 $\pm$ 0.117 & 0.553 $\pm$ 0.073 & 0.653 &       \\ \hline
-Cz       & 0.559 $\pm$ 0.107 & 0.563 $\pm$ 0.070 & 0.626 &       \\ \hline
-Pz       & 0.542 $\pm$ 0.146 & 0.554 $\pm$ 0.087 & 0.672 &       \\ \hline
+mean     & 0.603 $\pm$ 0.093 & 0.593 $\pm$ 0.072 & 0.333 &       \\ \hline
+std      & 0.071 $\pm$ 0.027 & 0.072 $\pm$ 0.018 & 0.220 &       \\ \hline
+FP1      & 0.672 $\pm$ 0.103 & 0.669 $\pm$ 0.071 & 0.139 &       \\ \hline
+FP2      & 0.680 $\pm$ 0.098 & 0.675 $\pm$ 0.076 & 0.652 &       \\ \hline
+F3       & 0.610 $\pm$ 0.103 & 0.602 $\pm$ 0.086 & 0.652 &       \\ \hline
+F4       & 0.606 $\pm$ 0.100 & 0.609 $\pm$ 0.080 & 0.946 &       \\ \hline
+C3       & 0.597 $\pm$ 0.100 & 0.580 $\pm$ 0.091 & 0.652 &       \\ \hline
+C4       & 0.594 $\pm$ 0.104 & 0.563 $\pm$ 0.087 & 0.048 & *     \\ \hline
+P3       & 0.564 $\pm$ 0.129 & 0.550 $\pm$ 0.098 & 0.333 &       \\ \hline
+P4       & 0.558 $\pm$ 0.127 & 0.555 $\pm$ 0.098 & 0.652 &       \\ \hline
+O1       & 0.549 $\pm$ 0.126 & 0.527 $\pm$ 0.105 & 0.220 &       \\ \hline
+O2       & 0.556 $\pm$ 0.128 & 0.555 $\pm$ 0.112 & 0.946 &       \\ \hline
+F7       & 0.684 $\pm$ 0.097 & 0.685 $\pm$ 0.059 & 0.480 &       \\ \hline
+F8       & 0.684 $\pm$ 0.086 & 0.678 $\pm$ 0.070 & 0.652 &       \\ \hline
+T3       & 0.626 $\pm$ 0.104 & 0.617 $\pm$ 0.077 & 0.220 &       \\ \hline
+T4       & 0.622 $\pm$ 0.088 & 0.623 $\pm$ 0.080 & 0.652 &       \\ \hline
+T5       & 0.546 $\pm$ 0.123 & 0.522 $\pm$ 0.097 & 0.048 & *     \\ \hline
+T6       & 0.547 $\pm$ 0.122 & 0.519 $\pm$ 0.116 & 0.220 &       \\ \hline
+Fz       & 0.587 $\pm$ 0.099 & 0.577 $\pm$ 0.080 & 0.480 &       \\ \hline
+Cz       & 0.600 $\pm$ 0.093 & 0.579 $\pm$ 0.080 & 0.139 &       \\ \hline
+Pz       & 0.582 $\pm$ 0.130 & 0.583 $\pm$ 0.085 & 0.480 &       \\ \hline
 \end{tabular}
 \subcaption{Hurst exponent}
 }
@@ -1966,27 +1889,27 @@ Pz       & 0.542 $\pm$ 0.146 & 0.554 $\pm$ 0.087 & 0.672 &       \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Remitting} & \textbf{Retaining} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 9.940 $\pm$ 0.744 & 10.337 $\pm$ 1.027 & 0.026 & *     \\ \hline
-std      & 0.658 $\pm$ 0.243 & 0.745 $\pm$ 0.335 & 0.397 &       \\ \hline
-FP1      & 9.539 $\pm$ 0.989 & 9.882 $\pm$ 1.232 & 0.112 &       \\ \hline
-FP2      & 9.543 $\pm$ 1.010 & 10.087 $\pm$ 1.217 & 0.033 & *     \\ \hline
-F3       & 9.447 $\pm$ 0.910 & 10.071 $\pm$ 0.907 & 0.004 & ***   \\ \hline
-F4       & 9.565 $\pm$ 0.951 & 9.901 $\pm$ 1.369 & 0.101 &       \\ \hline
-C3       & 9.656 $\pm$ 0.816 & 9.992 $\pm$ 1.128 & 0.077 &       \\ \hline
-C4       & 9.832 $\pm$ 0.853 & 10.114 $\pm$ 1.125 & 0.121 &       \\ \hline
-P3       & 10.376 $\pm$ 0.588 & 10.688 $\pm$ 0.991 & 0.047 & *     \\ \hline
-P4       & 10.358 $\pm$ 0.694 & 10.747 $\pm$ 0.899 & 0.014 & *     \\ \hline
-O1       & 10.396 $\pm$ 0.777 & 10.717 $\pm$ 1.543 & 0.009 & **    \\ \hline
-O2       & 10.221 $\pm$ 0.977 & 10.733 $\pm$ 1.323 & 0.008 & **    \\ \hline
-F7       & 9.874 $\pm$ 1.255 & 10.196 $\pm$ 1.511 & 0.259 &       \\ \hline
-F8       & 9.811 $\pm$ 1.198 & 9.988 $\pm$ 1.913 & 0.158 &       \\ \hline
-T3       & 9.609 $\pm$ 1.326 & 9.734 $\pm$ 1.479 & 0.663 &       \\ \hline
-T4       & 9.444 $\pm$ 1.345 & 9.790 $\pm$ 1.613 & 0.293 &       \\ \hline
-T5       & 10.330 $\pm$ 0.919 & 10.707 $\pm$ 1.098 & 0.040 & *     \\ \hline
-T6       & 10.365 $\pm$ 0.868 & 10.908 $\pm$ 1.072 & 0.010 & **    \\ \hline
-Fz       & 10.103 $\pm$ 0.700 & 10.693 $\pm$ 0.852 & 0.003 & ***   \\ \hline
-Cz       & 10.014 $\pm$ 0.725 & 10.540 $\pm$ 0.834 & 0.016 & *     \\ \hline
-Pz       & 10.384 $\pm$ 0.675 & 10.908 $\pm$ 0.748 & 0.003 & ***   \\ \hline
+mean     & 10.123 $\pm$ 0.766 & 10.458 $\pm$ 0.952 & 0.014 & *     \\ \hline
+std      & 0.628 $\pm$ 0.217 & 0.604 $\pm$ 0.252 & 0.480 &       \\ \hline
+FP1      & 9.762 $\pm$ 1.057 & 10.052 $\pm$ 1.110 & 0.220 &       \\ \hline
+FP2      & 9.740 $\pm$ 1.132 & 10.088 $\pm$ 1.150 & 0.139 &       \\ \hline
+F3       & 9.688 $\pm$ 0.917 & 10.156 $\pm$ 1.000 & 0.001 & ***   \\ \hline
+F4       & 9.802 $\pm$ 0.941 & 10.241 $\pm$ 1.117 & 0.014 & *     \\ \hline
+C3       & 9.821 $\pm$ 0.931 & 10.115 $\pm$ 1.004 & 0.083 &       \\ \hline
+C4       & 9.921 $\pm$ 0.909 & 10.217 $\pm$ 1.076 & 0.003 & ***   \\ \hline
+P3       & 10.410 $\pm$ 0.638 & 10.700 $\pm$ 0.884 & 0.048 & *     \\ \hline
+P4       & 10.423 $\pm$ 0.700 & 10.754 $\pm$ 0.918 & 0.014 & *     \\ \hline
+O1       & 10.609 $\pm$ 0.769 & 10.815 $\pm$ 1.218 & 0.139 &       \\ \hline
+O2       & 10.443 $\pm$ 0.943 & 10.863 $\pm$ 1.167 & 0.083 &       \\ \hline
+F7       & 10.092 $\pm$ 1.289 & 10.386 $\pm$ 1.358 & 0.333 &       \\ \hline
+F8       & 10.045 $\pm$ 1.116 & 10.459 $\pm$ 1.329 & 0.007 & **    \\ \hline
+T3       & 9.885 $\pm$ 1.324 & 10.126 $\pm$ 1.221 & 0.652 &       \\ \hline
+T4       & 9.777 $\pm$ 1.164 & 10.176 $\pm$ 1.418 & 0.048 & *     \\ \hline
+T5       & 10.531 $\pm$ 0.824 & 10.773 $\pm$ 1.114 & 0.014 & *     \\ \hline
+T6       & 10.500 $\pm$ 0.860 & 10.981 $\pm$ 1.086 & 0.007 & **    \\ \hline
+Fz       & 10.238 $\pm$ 0.801 & 10.570 $\pm$ 0.913 & 0.048 & *     \\ \hline
+Cz       & 10.213 $\pm$ 0.770 & 10.447 $\pm$ 0.835 & 0.220 &       \\ \hline
+Pz       & 10.447 $\pm$ 0.702 & 10.775 $\pm$ 0.876 & 0.139 &       \\ \hline
 \end{tabular}
 \subcaption{Largest Lyapunov exponent}
 }
@@ -1995,27 +1918,27 @@ Pz       & 10.384 $\pm$ 0.675 & 10.908 $\pm$ 0.748 & 0.003 & ***   \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Remitting} & \textbf{Retaining} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 0.774 $\pm$ 0.086 & 0.760 $\pm$ 0.121 & 0.182 &       \\ \hline
-std      & 0.085 $\pm$ 0.042 & 0.085 $\pm$ 0.056 & 0.817 &       \\ \hline
-FP1      & 0.825 $\pm$ 0.147 & 0.795 $\pm$ 0.149 & 0.281 &       \\ \hline
-FP2      & 0.824 $\pm$ 0.137 & 0.778 $\pm$ 0.146 & 0.081 &       \\ \hline
-F3       & 0.827 $\pm$ 0.121 & 0.773 $\pm$ 0.115 & 0.033 & *     \\ \hline
-F4       & 0.817 $\pm$ 0.123 & 0.806 $\pm$ 0.167 & 0.330 &       \\ \hline
-C3       & 0.806 $\pm$ 0.092 & 0.797 $\pm$ 0.150 & 0.147 &       \\ \hline
-C4       & 0.789 $\pm$ 0.091 & 0.784 $\pm$ 0.139 & 0.342 &       \\ \hline
-P3       & 0.705 $\pm$ 0.074 & 0.714 $\pm$ 0.103 & 0.434 &       \\ \hline
-P4       & 0.704 $\pm$ 0.079 & 0.703 $\pm$ 0.103 & 0.118 &       \\ \hline
-O1       & 0.711 $\pm$ 0.083 & 0.725 $\pm$ 0.177 & 0.174 &       \\ \hline
-O2       & 0.734 $\pm$ 0.117 & 0.712 $\pm$ 0.156 & 0.090 &       \\ \hline
-F7       & 0.788 $\pm$ 0.155 & 0.793 $\pm$ 0.183 & 0.644 &       \\ \hline
-F8       & 0.799 $\pm$ 0.156 & 0.821 $\pm$ 0.232 & 0.465 &       \\ \hline
-T3       & 0.833 $\pm$ 0.164 & 0.847 $\pm$ 0.184 & 0.980 &       \\ \hline
-T4       & 0.860 $\pm$ 0.180 & 0.852 $\pm$ 0.197 & 0.626 &       \\ \hline
-T5       & 0.732 $\pm$ 0.079 & 0.711 $\pm$ 0.121 & 0.065 &       \\ \hline
-T6       & 0.727 $\pm$ 0.079 & 0.702 $\pm$ 0.131 & 0.022 & *     \\ \hline
-Fz       & 0.754 $\pm$ 0.077 & 0.712 $\pm$ 0.087 & 0.017 & *     \\ \hline
-Cz       & 0.771 $\pm$ 0.068 & 0.733 $\pm$ 0.086 & 0.022 & *     \\ \hline
-Pz       & 0.707 $\pm$ 0.079 & 0.689 $\pm$ 0.082 & 0.065 &       \\ \hline
+mean     & 0.764 $\pm$ 0.102 & 0.749 $\pm$ 0.106 & 0.026 & *     \\ \hline
+std      & 0.075 $\pm$ 0.038 & 0.064 $\pm$ 0.041 & 0.003 & ***   \\ \hline
+FP1      & 0.806 $\pm$ 0.154 & 0.789 $\pm$ 0.129 & 0.652 &       \\ \hline
+FP2      & 0.810 $\pm$ 0.162 & 0.787 $\pm$ 0.136 & 0.652 &       \\ \hline
+F3       & 0.809 $\pm$ 0.128 & 0.776 $\pm$ 0.122 & 0.026 & *     \\ \hline
+F4       & 0.799 $\pm$ 0.134 & 0.772 $\pm$ 0.130 & 0.139 &       \\ \hline
+C3       & 0.797 $\pm$ 0.116 & 0.781 $\pm$ 0.122 & 0.048 & *     \\ \hline
+C4       & 0.785 $\pm$ 0.122 & 0.767 $\pm$ 0.126 & 0.048 & *     \\ \hline
+P3       & 0.718 $\pm$ 0.084 & 0.711 $\pm$ 0.086 & 0.333 &       \\ \hline
+P4       & 0.720 $\pm$ 0.096 & 0.709 $\pm$ 0.089 & 0.220 &       \\ \hline
+O1       & 0.699 $\pm$ 0.080 & 0.705 $\pm$ 0.119 & 0.333 &       \\ \hline
+O2       & 0.718 $\pm$ 0.102 & 0.702 $\pm$ 0.119 & 0.220 &       \\ \hline
+F7       & 0.781 $\pm$ 0.163 & 0.775 $\pm$ 0.156 & 0.333 &       \\ \hline
+F8       & 0.783 $\pm$ 0.146 & 0.766 $\pm$ 0.159 & 0.139 &       \\ \hline
+T3       & 0.810 $\pm$ 0.169 & 0.792 $\pm$ 0.151 & 0.333 &       \\ \hline
+T4       & 0.818 $\pm$ 0.164 & 0.795 $\pm$ 0.168 & 0.220 &       \\ \hline
+T5       & 0.719 $\pm$ 0.085 & 0.715 $\pm$ 0.116 & 0.220 &       \\ \hline
+T6       & 0.722 $\pm$ 0.104 & 0.702 $\pm$ 0.117 & 0.139 &       \\ \hline
+Fz       & 0.753 $\pm$ 0.100 & 0.729 $\pm$ 0.097 & 0.048 & *     \\ \hline
+Cz       & 0.758 $\pm$ 0.090 & 0.744 $\pm$ 0.090 & 0.480 &       \\ \hline
+Pz       & 0.720 $\pm$ 0.098 & 0.705 $\pm$ 0.087 & 0.333 &       \\ \hline
 \end{tabular}
 \subcaption{Sample entropy}
 }
@@ -2024,27 +1947,27 @@ Pz       & 0.707 $\pm$ 0.079 & 0.689 $\pm$ 0.082 & 0.065 &       \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Remitting} & \textbf{Retaining} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 1.380 $\pm$ 0.099 & 1.343 $\pm$ 0.114 & 0.056 &       \\ \hline
-std      & 0.088 $\pm$ 0.040 & 0.096 $\pm$ 0.053 & 0.797 &       \\ \hline
-FP1      & 1.448 $\pm$ 0.175 & 1.401 $\pm$ 0.142 & 0.162 &       \\ \hline
-FP2      & 1.443 $\pm$ 0.164 & 1.383 $\pm$ 0.149 & 0.040 & *     \\ \hline
-F3       & 1.431 $\pm$ 0.130 & 1.361 $\pm$ 0.116 & 0.008 & **    \\ \hline
-F4       & 1.427 $\pm$ 0.137 & 1.396 $\pm$ 0.163 & 0.287 &       \\ \hline
-C3       & 1.421 $\pm$ 0.087 & 1.378 $\pm$ 0.127 & 0.020 & *     \\ \hline
-C4       & 1.401 $\pm$ 0.090 & 1.369 $\pm$ 0.115 & 0.070 &       \\ \hline
-P3       & 1.313 $\pm$ 0.088 & 1.285 $\pm$ 0.103 & 0.086 &       \\ \hline
-P4       & 1.310 $\pm$ 0.096 & 1.275 $\pm$ 0.105 & 0.041 & *     \\ \hline
-O1       & 1.305 $\pm$ 0.108 & 1.291 $\pm$ 0.189 & 0.109 &       \\ \hline
-O2       & 1.314 $\pm$ 0.124 & 1.277 $\pm$ 0.167 & 0.090 &       \\ \hline
-F7       & 1.412 $\pm$ 0.146 & 1.387 $\pm$ 0.164 & 0.166 &       \\ \hline
-F8       & 1.422 $\pm$ 0.155 & 1.433 $\pm$ 0.227 & 0.426 &       \\ \hline
-T3       & 1.435 $\pm$ 0.171 & 1.420 $\pm$ 0.163 & 0.653 &       \\ \hline
-T4       & 1.444 $\pm$ 0.163 & 1.437 $\pm$ 0.193 & 0.626 &       \\ \hline
-T5       & 1.318 $\pm$ 0.093 & 1.275 $\pm$ 0.119 & 0.026 & *     \\ \hline
-T6       & 1.310 $\pm$ 0.093 & 1.265 $\pm$ 0.139 & 0.016 & *     \\ \hline
-Fz       & 1.359 $\pm$ 0.103 & 1.297 $\pm$ 0.097 & 0.007 & **    \\ \hline
-Cz       & 1.393 $\pm$ 0.084 & 1.330 $\pm$ 0.092 & 0.005 & ***   \\ \hline
-Pz       & 1.314 $\pm$ 0.100 & 1.264 $\pm$ 0.089 & 0.012 & *     \\ \hline
+mean     & 1.378 $\pm$ 0.113 & 1.348 $\pm$ 0.113 & 0.083 &       \\ \hline
+std      & 0.080 $\pm$ 0.036 & 0.074 $\pm$ 0.037 & 0.333 &       \\ \hline
+FP1      & 1.442 $\pm$ 0.165 & 1.400 $\pm$ 0.138 & 0.333 &       \\ \hline
+FP2      & 1.445 $\pm$ 0.169 & 1.405 $\pm$ 0.143 & 0.139 &       \\ \hline
+F3       & 1.431 $\pm$ 0.138 & 1.381 $\pm$ 0.133 & 0.026 & *     \\ \hline
+F4       & 1.420 $\pm$ 0.143 & 1.380 $\pm$ 0.139 & 0.083 &       \\ \hline
+C3       & 1.413 $\pm$ 0.115 & 1.385 $\pm$ 0.120 & 0.048 & *     \\ \hline
+C4       & 1.403 $\pm$ 0.124 & 1.376 $\pm$ 0.126 & 0.220 &       \\ \hline
+P3       & 1.328 $\pm$ 0.101 & 1.304 $\pm$ 0.104 & 0.083 &       \\ \hline
+P4       & 1.322 $\pm$ 0.103 & 1.302 $\pm$ 0.103 & 0.048 & *     \\ \hline
+O1       & 1.298 $\pm$ 0.106 & 1.284 $\pm$ 0.139 & 0.333 &       \\ \hline
+O2       & 1.311 $\pm$ 0.125 & 1.281 $\pm$ 0.128 & 0.220 &       \\ \hline
+F7       & 1.418 $\pm$ 0.159 & 1.385 $\pm$ 0.152 & 0.083 &       \\ \hline
+F8       & 1.419 $\pm$ 0.144 & 1.387 $\pm$ 0.160 & 0.014 & *     \\ \hline
+T3       & 1.421 $\pm$ 0.169 & 1.388 $\pm$ 0.143 & 0.480 &       \\ \hline
+T4       & 1.422 $\pm$ 0.166 & 1.398 $\pm$ 0.165 & 0.652 &       \\ \hline
+T5       & 1.312 $\pm$ 0.099 & 1.290 $\pm$ 0.118 & 0.083 &       \\ \hline
+T6       & 1.308 $\pm$ 0.110 & 1.278 $\pm$ 0.130 & 0.139 &       \\ \hline
+Fz       & 1.367 $\pm$ 0.123 & 1.330 $\pm$ 0.119 & 0.026 & *     \\ \hline
+Cz       & 1.383 $\pm$ 0.106 & 1.359 $\pm$ 0.103 & 0.333 &       \\ \hline
+Pz       & 1.328 $\pm$ 0.111 & 1.301 $\pm$ 0.106 & 0.083 &       \\ \hline
 \end{tabular}
 \subcaption{Higuchi fractal dimension}
 }
@@ -2053,31 +1976,31 @@ Pz       & 1.314 $\pm$ 0.100 & 1.264 $\pm$ 0.089 & 0.012 & *     \\ \hline
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Channel} & \textbf{Remitting} & \textbf{Retaining} & \textbf{p-value} & \textbf{Sig.} \\ \hline
-mean     & 10.862 $\pm$ 0.672 & 10.675 $\pm$ 0.864 & 0.434 &       \\ \hline
-std      & 0.638 $\pm$ 0.161 & 0.731 $\pm$ 0.197 & 0.040 & *     \\ \hline
-FP1      & 11.282 $\pm$ 1.040 & 10.999 $\pm$ 0.996 & 0.472 &       \\ \hline
-FP2      & 11.337 $\pm$ 0.775 & 11.150 $\pm$ 0.961 & 0.488 &       \\ \hline
-F3       & 10.882 $\pm$ 0.847 & 10.603 $\pm$ 0.868 & 0.238 &       \\ \hline
-F4       & 10.891 $\pm$ 0.868 & 10.819 $\pm$ 1.087 & 0.729 &       \\ \hline
-C3       & 10.330 $\pm$ 0.919 & 10.245 $\pm$ 1.116 & 0.990 &       \\ \hline
-C4       & 10.426 $\pm$ 1.021 & 10.362 $\pm$ 1.319 & 0.847 &       \\ \hline
-P3       & 10.597 $\pm$ 0.779 & 10.303 $\pm$ 1.106 & 0.118 &       \\ \hline
-P4       & 10.480 $\pm$ 0.804 & 10.357 $\pm$ 1.136 & 0.449 &       \\ \hline
-O1       & 11.109 $\pm$ 0.868 & 10.969 $\pm$ 1.281 & 0.305 &       \\ \hline
-O2       & 11.001 $\pm$ 0.938 & 10.778 $\pm$ 1.254 & 0.195 &       \\ \hline
-F7       & 10.902 $\pm$ 0.821 & 11.069 $\pm$ 0.997 & 0.644 &       \\ \hline
-F8       & 11.014 $\pm$ 0.846 & 11.155 $\pm$ 1.010 & 0.441 &       \\ \hline
-T3       & 11.057 $\pm$ 0.943 & 10.980 $\pm$ 1.116 & 0.857 &       \\ \hline
-T4       & 11.242 $\pm$ 0.945 & 11.114 $\pm$ 1.139 & 0.918 &       \\ \hline
-T5       & 11.099 $\pm$ 0.841 & 10.642 $\pm$ 1.058 & 0.010 & **    \\ \hline
-T6       & 11.043 $\pm$ 0.783 & 10.552 $\pm$ 0.857 & 0.004 & ***   \\ \hline
-Fz       & 10.634 $\pm$ 0.866 & 10.333 $\pm$ 1.052 & 0.223 &       \\ \hline
-Cz       & 10.658 $\pm$ 0.978 & 10.253 $\pm$ 1.022 & 0.223 &       \\ \hline
-Pz       & 10.398 $\pm$ 0.816 & 10.145 $\pm$ 1.163 & 0.199 &       \\ \hline
+mean     & 10.546 $\pm$ 0.755 & 10.696 $\pm$ 0.848 & 0.639 &       \\ \hline
+std      & 0.649 $\pm$ 0.191 & 0.653 $\pm$ 0.162 & 0.466 &       \\ \hline
+FP1      & 10.900 $\pm$ 0.951 & 11.006 $\pm$ 0.834 & 0.639 &       \\ \hline
+FP2      & 11.005 $\pm$ 0.967 & 11.043 $\pm$ 1.010 & 0.941 &       \\ \hline
+F3       & 10.659 $\pm$ 1.000 & 10.648 $\pm$ 1.049 & 0.994 &       \\ \hline
+F4       & 10.486 $\pm$ 0.796 & 10.785 $\pm$ 1.056 & 0.210 &       \\ \hline
+C3       & 10.058 $\pm$ 0.918 & 10.308 $\pm$ 1.145 & 0.131 &       \\ \hline
+C4       & 10.100 $\pm$ 0.990 & 10.412 $\pm$ 1.180 & 0.466 &       \\ \hline
+P3       & 10.272 $\pm$ 0.987 & 10.402 $\pm$ 0.993 & 0.639 &       \\ \hline
+P4       & 10.245 $\pm$ 1.036 & 10.341 $\pm$ 0.903 & 0.994 &       \\ \hline
+O1       & 10.677 $\pm$ 0.933 & 10.968 $\pm$ 1.251 & 0.466 &       \\ \hline
+O2       & 10.728 $\pm$ 0.875 & 10.789 $\pm$ 1.021 & 0.941 &       \\ \hline
+F7       & 10.859 $\pm$ 0.915 & 10.968 $\pm$ 0.948 & 0.812 &       \\ \hline
+F8       & 10.864 $\pm$ 0.869 & 11.088 $\pm$ 0.952 & 0.210 &       \\ \hline
+T3       & 10.760 $\pm$ 0.920 & 10.769 $\pm$ 0.914 & 0.941 &       \\ \hline
+T4       & 10.837 $\pm$ 1.070 & 10.992 $\pm$ 1.040 & 0.210 &       \\ \hline
+T5       & 10.719 $\pm$ 0.884 & 10.743 $\pm$ 1.041 & 0.466 &       \\ \hline
+T6       & 10.739 $\pm$ 0.939 & 10.847 $\pm$ 0.993 & 0.994 &       \\ \hline
+Fz       & 10.301 $\pm$ 0.979 & 10.402 $\pm$ 1.023 & 0.639 &       \\ \hline
+Cz       & 10.197 $\pm$ 1.114 & 10.472 $\pm$ 1.167 & 0.210 &       \\ \hline
+Pz       & 9.964 $\pm$ 0.917 & 10.249 $\pm$ 1.132 & 0.131 &       \\ \hline
 \end{tabular}
 \subcaption{Correlation dimension}
 }
-\caption{Comparison of mean values of measures computed for 32 remitting (patients responding positively to treatment) patients and 34 patients retaining or worsening their symptoms.}
+\caption{Comparison of mean values of measures computed from recordings obtained during the first session for 50 remitting (patients responding positively to treatment) patients and 50 patients retaining (or worsening their) symptoms.}
 \label{tab:remmeans}
 \end{table}
 
@@ -2087,54 +2010,86 @@ We used two classifiers: logistic regression (LR) and support vector machine (SV
   \item recursive feature elimination with 3-fold cross validation based on coefficients of the linear model,
   \item elimination of features with below-mean coefficients of the linear model,
   \item selection of 5 features with the highest $\chi^2$ statistics between values of the feature and corresponding class,\unsure{Am I justified in using $\chi^2$?}
-  \item genetic algorithm with 3-fold cross validation (scoring models based on ROC AUC, population size 50, 50 generations, crossover probability 0.8, mutation probability 0.2, and tournament size 5).
+  \item genetic algorithm with 5-fold cross validation (scoring models based on ROC AUC, population size 80, 80 generations, crossover probability 0.8, mutation probability 0.2, and tournament size 5),
+  \item manual selection of channels with significantly different means of corresponding features between the two considered classes, as reported by the Kolmogorov-Smirnov test.
 \end{itemize}
-Then, a brute force grid search with 3-fold cross validation was performed on each classifier to select 
+Note that from the algorithmic techniques, genetic algorithm was by far the most effective. However, most of the best performing and thus reported classifiers were found by combination of the last two techniques, i.e. by applying genetic selection algorithm to the features marked as having diffening means between the two groups.
+
+Evaluation was performed using 5-fold cross-validation. The best performing classifiers (based on accuracy, precision, recall, f-score, and number of features) were selected for each measure and for all measures by varying the maximum number of features considered by the genetic algorithm from 3 to the 1/10 of the corresponding training set size. Then, a brute force grid search with 5-fold cross validation was performed on each classifier to select 
 \begin{itemize}
   \item the optimal regularization stength, and norm for LR, and
   \item the optimal regularization strength and kernel type (linear, polynomial, or radial basis function with coefficients $\gamma = 1/n_f$, where $n_f$ is the number of selected features) for SVM.\unsure{Am I justified in changing the kernel type?}
 \end{itemize}
-These classifiers were evaluated on the test set. The best performing classifiers (based on accuracy, precision, recall, f-score, ROC AUC and confusion matrices) for each measure were selected, and then manually optimized by adding, removing, or replacing features based on differences in distributions described in Section \ref{sec:distanal}, performance of similar classifiers on similar measures, and results of other studies. In some cases, hyperparameters were modified. The results are described in the following text.
+This resulted in slight improvement in accuracy, and correspondingly slight bias of the reported classifiers.
 
 \subsection{Depression}
+The recordings were separated into two classes as follows:
+\begin{description}
+  \item[Healthy]: 50 recordings with associated depression score at most 16.
+  \item[Depressed]: 50 recordings with associated depression score at least 28.
+\end{description}
+
+The results are shown in Table \ref{tab:depcl}. The best performing classifiers in this section were SVMs. The largest Lyapunov exponent was the most predictive out of all considered non-linear measures, both achieving the highest accuracy out of the single-measure classifiers ($0.72 \pm 0.04$), and being one of the measures in majority of the best performing combined-measure classifiers. It was followed, perhaps surprisingly considering the results obtained in Section \ref{sec:analdepdif}, by correlation dimension ($0.71 \pm 0.05$). Although the accuracy of the remaining classifiers, whose features were obtained using the Kolmogorov-Smirnov test from Section \ref{sec:analdepdif}, was slightly lower (with higher variance), they are also simpler in terms of the number of selected channels.
+
+All the channels in the combined-measure classifiers were found using the genetic algorithm, as described in the opening to this section. The best overall accuracy was achieved by combination of the largest Lyapunov exponent and sample entropy ($0.75 \pm 0.10$). However, second to it was a combination of the largest Lyapunov exponent and correlation dimension, which has lower variance ($0.74 \pm 0.04)$. Other measures performing well together with the largest Lyapunov exponent are the Hurst exponent, and sample entropy together with DFA. The best combination not inluding the largest Lyapunov exponent is correlation dimension and Higuchi fractal dimension.
+
+There seems to be little consistency in the selected features of the same measures across classifiers. A possible explanation is that different measures complement themselves in such a way that different channels are relevant when classification is performed based on single measure as opposed to a combination of measures.
 
 \begin{table}[tbp]
 \centering
+\scriptsize
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-\textbf{Measure} & \textbf{Class.} & \textbf{Acc.} & \textbf{F-sc.} & \textbf{ROC AUC} & \textbf{CM} & \textbf{Channels} \\ \hline
-DFA & LR & 0.88 & 0.88 & 0.91 & $\left( \begin{smallmatrix} 9 & 2 \\ 0 & 6 \end{smallmatrix} \right)$ & C3, C4, O1, T4 \\ \hline 
-HE & LR & 0.76 & 0.77 & 0.78 & $\left( \begin{smallmatrix} 8 & 3 \\ 1 & 5 \\ \end{smallmatrix} \right)$ & O1, T4 \\ \hline
-CD & SVM (poly.) & 0.76 & 0.76 & 0.74 & $\left( \begin{smallmatrix} 9 & 2 \\ 2 & 4\end{smallmatrix} \right)$ & F3, F4, P3, O1, T4, T5, Cz, Pz \\ \hline
-LLE & SVM (lin.) & 0.71 & 0.71 & 0.77 & $\left( \begin{smallmatrix} 6 & 5 \\ 0 & 6 \end{smallmatrix} \right)$ & FP1, FP2, F4, C3, O1, T3, T6 \\ \hline
-SE & LR & 0.71 & 0.71 & 0.73 & $\left( \begin{smallmatrix} 7 & 4 \\ 1 & 5 \end{smallmatrix} \right)$ & P3, P4, T5, T6 \\ \hhline{=|=|=|=|=|=|=}
-DFA & SVM (rbf) & 0.70 & 0.70 & 0.72 & $\left( \begin{smallmatrix} 8 & 7 \\ 1 & 11 \end{smallmatrix} \right)$ & O1, T5, T6 \\ \hline
-CD & SVM (rbf) & 0.70 & 0.70 & 0.71 & $\left( \begin{smallmatrix} 10 & 5 \\ 3 & 9 \end{smallmatrix} \right)$ & C4, P4, T4, T6, Cz \\ \hline
-HE & LR & 0.70 & 0.70 & 0.70 & $\left( \begin{smallmatrix} 11 & 4 \\ 4 & 8 \end{smallmatrix} \right)$ & F3, F4, T3, T5, Fz, Cz \\ \hline
+\textbf{Measure} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-score} & \textbf{Channels} \\ \hline
+LLE, SE & SVM (lin.) & 0.75 $\pm$ 0.10 & 0.77 $\pm$ 0.09 & 0.75 $\pm$ 0.10 & 0.75 $\pm$ 0.10 & \makecell{\emph{LLE}: C4, T3, T6, Pz \\
+                                                                                                         \emph{SE}: C3, P4} \\ \hline 
+LLE, CD & SVM (lin.) & 0.74 $\pm$ 0.04 & 0.76 $\pm$ 0.04 & 0.74 $\pm$ 0.04 & 0.74 $\pm$ 0.05 & \makecell{\emph{LLE}: F3, F7, T6 \\
+                                                                                                         \emph{CD}: O1, O2, T5 } \\ \hline 
+LLE, HE & SVM (lin.) & 0.73 $\pm$ 0.06 & 0.74 $\pm$ 0.06 & 0.73 $\pm$ 0.06 & 0.73 $\pm$ 0.06 & \makecell{\emph{LLE}: P3, T3, T6, Pz \\
+                                                                                                         \emph{HE}: C3, T3} \\ \hline 
+LLE, SE, DFA & SVM (lin.) & 0.73 $\pm$ 0.09 & 0.74 $\pm$ 0.10 & 0.73 $\pm$ 0.09 & 0.73 $\pm$ 0.09 & \makecell{\emph{LLE}: T6, Fz \\
+                                                                                                         \emph{SE}: T6 \\ 
+                                                                                                         \emph{DFA}: P4} \\ \hline 
+CD, HD & LR & 0.73 $\pm$ 0.10 & 0.74 $\pm$ 0.11 & 0.73 $\pm$ 0.10 & 0.73 $\pm$ 0.10 & \makecell{\emph{CD}: F3, Fz \\
+                                                                                                \emph{HD}: P3, Cz} \\ \hhline{=|=|=|=|=|=|=}
+LLE & SVM (lin.) & 0.72 $\pm$ 0.04 & 0.73 $\pm$ 0.04 & 0.72 $\pm$ 0.04 & 0.72 $\pm$ 0.04 & T3, T5, T6, Pz \\ \hline
+CD & SVM (lin.) & 0.71 $\pm$ 0.05 & 0.72 $\pm$ 0.05 & 0.71 $\pm$ 0.05 & 0.71 $\pm$ 0.05 & F3, C4, P3, F8, T5, T6, Fz, Cz \\ \hline 
+SE & LR & 0.68 $\pm$ 0.12 & 0.69 $\pm$ 0.12 & 0.68 $\pm$ 0.12 & 0.68 $\pm$ 0.12 & C4, O2, T6 \\ \hline
+HD & SVM (rbf) & 0.67 $\pm$ 0.11 & 0.67 $\pm$ 0.12 & 0.67 $\pm$ 0.11 & 0.67 $\pm$ 0.11 & C3, C4, P4, T6, Cz \\ \hline
+DFA & LR & 0.67 $\pm$ 0.16 & 0.68 $\pm$ 0.17 & 0.67 $\pm$ 0.16 & 0.67 $\pm$ 0.16 & F8, O2 \\ \hline
+HE & LR & 0.67 $\pm$ 0.17 & 0.68 $\pm$ 0.18 & 0.67 $\pm$ 0.17 & 0.67 $\pm$ 0.17 & O2, T4 \\ \hline
 \end{tabular}
-\caption{Evaluation of depression classification. The first part corresponds to classifiers trained on 15 healthy (DS $\leq$ 10) and 24 depressed (DS $\geq$ 30) patients. The second part corresponds to classifiers trained on 24 healthy (DS $\leq$ 12) and 36 depressed (DS $\geq$ 32). Both before and after treatment sessions are included.}
+\caption{Evaluation of depression classification. The two classes consist of 50 / 50 recordings with the smallest / highest associated depression score out of recordings performed both before and after administration of drugs.}
 \label{tab:depcl}
 
 \bigskip
 
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-\textbf{Measure} & \textbf{Class.} & \textbf{Acc.} & \textbf{F-sc.} & \textbf{ROC AUC} & \textbf{CM} & \textbf{Channels} \\ \hline
-CD & SVM (rbf) & 1.00 & 1.00 & 1.00 & $\left( \begin{smallmatrix} 10 & 0 \\ 0 & 10 \end{smallmatrix} \right)$ & F4, C4, O1, F7, F8, T5, T6 \\ \hline
-LLE & LR & 0.80 & 0.80 & 0.80 & $\left( \begin{smallmatrix} 9 & 1 \\ 3 & 7 \end{smallmatrix} \right)$ & \small{FP2, F3, F4, P3, P4, F7, F8, T6, Fz, Cz} \\ \hline
-DFA & LR & 0.80 & 0.80 & 0.80 & $\left( \begin{smallmatrix} 8 & 2 \\ 2 & 8 \end{smallmatrix} \right)$ & FP2, F3, O1, T5, T6, Cz \\ \hline
-HE & LR & 0.70 & 0.70 & 0.70 & $\left( \begin{smallmatrix} 7 & 3 \\ 3 & 7 \end{smallmatrix} \right)$ & FP2, F3, O1, T5, T6, Cz \\ \hhline{=|=|=|=|=|=|=}
-LLE & SVM (rbf) & 0.76 & 0.76 & 0.77 & $\left( \begin{smallmatrix} 16 & 7 \\ 3 & 16 \end{smallmatrix} \right)$ & F3, F4, O1, O2, T6, Fz \\ \hline
-HE & LR & 0.71 & 0.71 & 0.73 & $\left( \begin{smallmatrix} 14 & 9 \\ 3 & 16 \end{smallmatrix} \right)$ & P3, F7, T4, T6, Cz \\ \hline
-CD & LR & 0.69 & 0.69 & 0.70 & $\left( \begin{smallmatrix} 14 & 9 \\ 4 & 15 \end{smallmatrix} \right)$ & F4, C4, T5 \\ \hline
-HD & LR & 0.69 & 0.69 & 0.70 & $\left( \begin{smallmatrix} 13 & 10 \\ 3 & 16 \end{smallmatrix} \right)$ & FP2 \\ \hline
-DFA & LR & 0.64 & 0.64 & 0.64 & $\left( \begin{smallmatrix} 15 & 8 \\ 7 & 12 \end{smallmatrix} \right)$ & C3, P4, F7, T6 \\ \hline
+\textbf{Measure} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-score} & \textbf{Channels} \\ \hline
+LLE, SE & SVM (lin.) & 0.75 $\pm$ 0.10 & 0.77 $\pm$ 0.09 & 0.75 $\pm$ 0.10 & 0.75 $\pm$ 0.10 & \makecell{\emph{LLE}: FP2, F3, O1, T4, T6 \\
+                                                                                                         \emph{SE}: F3, C3, T6 }  \\ \hline
+LLE, CD& SVM (lin.) & 0.75 $\pm$ 0.11 & 0.76 $\pm$ 0.11 & 0.75 $\pm$ 0.11 & 0.75 $\pm$ 0.11 & \makecell{\emph{LLE}: F3, O2, T5, T6 \\
+                                                                                                        \emph{CD}: FP2, F4, O2 } \\ \hhline{=|=|=|=|=|=|=}
+LLE & LR & 0.71  $\pm$ 0.08  & 0.73  $\pm$ 0.08  & 0.71  $\pm$ 0.08  & 0.70  $\pm$ 0.09  & F3, F4, T5, T6 \\ \hline 
+CD & LR & 0.67 $\pm$ 0.09 & 0.70 $\pm$ 0.11 & 0.67 $\pm$ 0.09 & 0.65 $\pm$ 0.10 & F3, F4, O2, Pz \\ \hline
+HD & LR & 0.66 $\pm$ 0.05 & 0.72 $\pm$ 0.08 & 0.66 $\pm$ 0.05 & 0.64 $\pm$ 0.05 & F3, F8 \\ \hline
+SE & LR & 0.66 $\pm$ 0.09 & 0.66 $\pm$ 0.09 & 0.66 $\pm$ 0.09 & 0.65 $\pm$ 0.10 & FP1, F3, P3, Cz \\ \hline
+DFA & SVM (lin.) & 0.64 $\pm$ 0.15 & 0.65 $\pm$ 0.15 & 0.64 $\pm$ 0.15 & 0.63 $\pm$ 0.15 & T3, T4, Cz \\ \hline
+HE & SVM (rbf) & 0.63 $\pm$ 0.09 & 0.64 $\pm$ 0.10 & 0.63 $\pm$ 0.09 & 0.62 $\pm$ 0.09 & C3, T6 \\ \hline
 \end{tabular}
-\caption{Evaluation of remission. The first part corresponds to split of the whole dataset according to the first and last septiles of $m_2 / m_1$ (considered non-remitting and remitting patients respectively). The second part corresponds to split according to first and last terciles of $m_2 / m_1$. Both before and after treatment sessions are included.}
+\caption{Evaluation of remission classification. Only recordings obtained before drug administration were considered. The two classes consist of the 50 patients with the highest and least improvement in depression score after the drug administration (as measured by ratio of the two depression scores).}
 \label{tab:respcl}
 \end{table}
 
 \subsection{Remission}
+Let us remind the reader of the definition of change from Section \ref{sec:analrespdif} as the ratio of the depression score reported on the second session (after administration of drugs) to the depression score reported on the first session (before administration of drugs). The recordings were separated into two classes as follows:
+\begin{description}
+  \item[Retaining]: 50 recordings made before administration of drugs with the lowest change.
+  \item[Remitting]: 50 recordings made before administration of drugs with the highest change.
+\end{description}
+
+The results can be seen in Table \ref{tab:respcl}.
 
 \chapter{Machine learning approach}
 
