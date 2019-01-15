@@ -917,7 +917,55 @@ For large enough $r$, $d_2^{(m)}(r)$ converges to zero. This result, which can b
 \end{align*}
 where $\rho$ is the maximum error. This implies an exponential increase of minimum required dataset size with embedded dimension. For example, $N_{(m, \tau)} = 5^m$ for $\rho = 5\%$. \cite{andreas2000}
 
-\section{Surrogate data testing}
+\subsection{Detrended fluctuation analysis}
+Physiological time series, such as EEG, may exhibit so called statistical self-affine properties. Self-affinity is a special case of self-similarity, which occurs when one or more small parts of a fractal object is exactly or approximately similar to itself. When self-similarity is expressed in terms of statistical properties (e.g. mean value and variance of a part of time series are scaled version of its overall mean and variance), then the object is called statistically self-similar.\footnote{An example of statistically self-similar object are are naval coastlines.} Self-similarity, in turn, differs from self-affinity in that self-affine objects witness similarity anisotropically, i.e. after applying an anisotropic affine transformation. \footnote{The measured property of a self-similar process (e.g. the size of a flower on Romanesco cauliflower) do not follow normal distributions, but power law distributions. Hence, mode and mean of provide a poor representation of this representation. These processes do not have a scale at which to measure these statistics to characterize them, and are therefore called scale-free.} \cite{hardstone2012detrended} Stated more formally:
+
+\begin{dfn}[\cite{beran2017statistics}] \label{def:self-affin}
+  A time series $X$ given by $x_1, x_2, \dots, x_n$ is said to be \textbf{statistically self-affine} if 
+  \begin{align*}
+    \mathrm{std}(X, Lt) \approx L^H \mathrm{std}(X, t),
+  \end{align*}
+  where $\mathrm{std}(X,k)$ is the standard deviation of the process $X$ calculated over windows of length $k$, $H$ is the Hurst parameter, and L a window length factor.
+\end{dfn}
+
+The Hurst parameter, which behaves similarly to the Hurst exponent (see Section \ref{sec:hurst-theory}), ranges between 0 and 1. Higher values of $H$ describe smoother signals, with high values followed by low, whereas low values of $H$ indicate radical oscillations between high and low values. Note that since a stationary process has constant variance across time scales, Definition \ref{def:self-affin} applies only to non-stationary processes. However, even stationary processes may exhibit scale-free behavior. These are modelled as so called fractional Gaussian noise (fGn), whereas non-stationary processes are modelled as fractional Brownian motion (fBm). These processes are related by the fact that increments in fBm can be modelled as a fGn process with same $H$. This relationship allows us to generalize Definition \ref{def:self-affin} for non-stationary processes. \cite{hardstone2012detrended}
+
+DFA is a method of estimating $H$ without making prior assumptions about stationarity of the process by exploiting the relationship between fGn and fBm procesess. First, a so called signal profile, i.e. integral of the de-meaned signal is computed as
+\begin{align*}
+  y_k = \sum_{i=1}^{k} \left( x_i - \langle x \rangle \right).
+\end{align*}
+The resulting time series $y$ is then divided into segments of varying length $m$ (each value of $m$ representing a time scale). A local linear least-squares fit is applied to each of these segments. Let us designate the resulting piecewise linear fit as $y_m(k)$. The integrated time series is then detrended by subtracting the local linear fit. The root mean square error is then given by 
+\begin{align*}
+  F(m) \coloneqq \sqrt{ \frac{1}{N} \sum_{i=1}^{N} \left( y_i - y_m(i) \right)^2 }.
+\end{align*}
+Finally, if a log-log plot $F(m)$ as a function $m$ shows a linear scaling region (i.e. the original time series exhibits self-similar, scale-free properties described above), the slope of this line approximates $H$ and represents the result of DFA analysis. \cite{lee2007detrended}
+
+\add[inline]{Maybe add some more intuitive explanation.}
+
+The importance of DFA for EEG analysis comes from the observation that it can reveal so called long-range temporal correlations (LRTC) in neuronal activity. These large-scale patterns in EEG activity may be characteristic of baseline processing during eyes-closed wakeful condition in healthy human brain. These parameters computed from the theta amplitudes were shown to be negatively correlated with (Hamilton) depression score, thus suggesting that depressed patients display abnormally small autocorrelations on large scale. \cite{linkenkaer2005breakdown} In our study, we observed similar results, see Section \ref{sec:analdepdif}.
+
+\subsection{Hurst exponent} \label{sec:hurst-theory}
+\subsection{Higuchi fractal dimension}
+\subsection{Sample entropy}
+Understood in the context of dynamical systems, entropy is the rate at which a given system produces information. It is equal to the sum of all positive Lyapunov exponents of the system's attractor, and positive entropy indicates presence of chaotic dynamics. \cite{andreas2000} Computing entropy from a physiological time series directly using the information-theoretical definition, is, however, problematic. The time series produced during measurements on biological systems are often short and noisy. Moreover, in EEG analysis, the impact of noise is especially severe. To combat this issue, many methods of computing entropy for such time series has been devised. Sample entropy represents an improvement on other entropy measure popular in clinical settings, called approximate entropy, which has been successfully applied on EEG to classify diseases such as schizophrenia, epilepsy, and addiction. \cite{yun2012decreased}
+
+For a given embedding dimension $m$ and tolerance parameter $r$, sample entropy can be defined as the negative natural logarithm of the conditional probability that two subseqences of the time series of length $m$ which are similar, i.e. their distance is less than $r$ (excluding self-matches\footnote{This is one of the differences of sample entropy from approximate entropy.}), will remain similar after including the next point, i.e. when their respective lengths are increased to $m+1$. Thus, sample entropy is thus a measure of predictability (the opposite of regularity), lower value of sample entropy indicates more self-similarity, or, in a certain sense, less complexity. In other words:
+\begin{dfn}[\cite{richman2000physiological}]
+  Let us have a time series $x_1, x_2, \dots, x_N$, and let $X_m(i) = \left( x_i, x_{i+1}, \dots, x_{i+m-1} \right)$ be the $i$-th vector in the embedding of dimension $m$, and $\norm{\cdot}_{\infty}$ be the Chebyshev metric\footnote{Any metric can be used, but Chebyshev metric is recommended by the original authors. \cite{richman2000physiological}}. Then, \textbf{sample entropy} is defined as
+  \begin{align*}
+    \mathrm{SampEn}(m, r, N) = -\ln \frac{A^m(r)}{B^m(r)},
+  \end{align*}
+  where
+  \begin{description}
+    \item[$A^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{X_{m+1}(i) - X_{m+1}(j)}_{\infty} < r$, $i \neq j$, and 
+    \item[$B^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{X_{m}(i) - X_{m}(j)}_{\infty} < r$, $i \neq j$.
+  \end{description}
+\end{dfn}
+Obviously, it is always $A^m(r) \leq B^m(r)$, hence sample entropy is always non-negative. If $A^m(r) = B^m(r)=0$, no regularity has been detected, and $B^m(r) \neq 0$ with $A^m(r)=0$ corresponds to (the above mentioned) conditional probability of 0, and infinite value of sample entropy. The recommended value of $r$ is $0.2 * \mathrm{std}(x)$. \cite{richman2000physiological}
+
+Sample entropy has been successfully employed for diagnosing depression \cite{acharya2015novel, hauge2011nonlinear}. It was shown to be significantly different between middle aged and elderly women during sleep. \cite{bruce2009sample} \add{Extend this section a little bit.}
+
+\section{Surrogate data testing} \label{sec:surrogate-analysis-theory}
 It has been shown that, for example, fitered noise can mimic low-dimensional chaotic attractors when examined by Grassberger-Procaccia algorithm described above. \cite{rapp1993filtered} Hence, interpretation of results obtained by non-linear analysis require judgement. For example. obtaining finite-dimensional estimates for $d_2$ is not evidence of non-linearity, but may indicate lack of data, measurement error, on numerical inaccuracies. The result of these algorithms does not include any error estimate, and sometimes even non-linearity of the underlying process is uncertain. So, one may ask: would we obtain the same estimate for data with the same (non-measured) linear properties as the original, but differs in the (measured) non-linear property? In the following, we will describe a method for answering this question. \info{We may also want to know whether the process is determinsitic or not. There are tests for that, but we are not using them in this thesis.}
 
 To this end, we construct a Monte Carlo hypothesis test of non-linearity. We choose a null hypothesis of a model for the process creating obtained data which denies the property we assume to measure. For each time series, we create so called \emph{surrogate data} which deliberately capture only properties consistent with chosen null hypothesis, and compute the estimates using the same method as for the original data. If the result for the original time series is significantly different from the surrogate estimates, we reject the the null hypothesis. In the opposite case, we fail reject the null hypothesis. A schematic depiction of the process can be seen in Figure \ref{fig:surr-schema}.
@@ -931,14 +979,14 @@ To this end, we construct a Monte Carlo hypothesis test of non-linearity. We cho
 \end{figure}
 
 Here, we use two sided test, and measure of significance is defined as
-\begin{align*}
+\begin{align} \label{eq:sigma}
   \mathcal{S} \equiv \frac{| Q_{\text{orig}} - \mu_{\text{surr}} |}{\sigma_{\text{surr}}},
-\end{align*}
+\end{align}
 where $Q_{\text{orig}}$ is the statistic computed for the original time series, and $\mu_{\text{surr}}$, $\sigma_{\text{surr}}$ are the mean and variance of the statistic computed for the surrogate time series. \cite{theiler1992testing} If we assume that distribution of the generated is Gaussian, than $\mathcal{S} \geq 2$ is required for 95 \% significance level. However, validity of this assumption is not always guaranteed. For non-Gaussian distributions, we may require larger $\mathcal{S}$, or, alternatively, use a rank based test, as follows. \cite{kantz2004}
 
-Using rank-based test, we want to test if $Q_{\text{orig}}$ is smaller or larger than the expected value of estimates produced by the null hypothesis model. If we generate $n_s$ surrogate estimates, then, we have $n_s$ estimates following the null hypothesis, each having a probability $2/n_s$ of being the smallest or largest. A false rejection will happen if $Q_{\text{orig}}$ happens to also follow the null hypothesis and is either the smallest or the largest, which happens with probablity $1 - \alpha \coloneqq 2/(n_s+1)$, where $\alpha$ is the confidence level. Hence, for confidence level $\alpha = 95 \%$, the number of surrogates should be $n_s = 38$. \cite{andreas2000}
+Using rank-based test, we want to test if $Q_{\text{orig}}$ is smaller or larger than the expected value of estimates produced by the null hypothesis model. If we generate $n_s$ surrogate estimates, then, we have $n_s$ estimates following the null hypothesis, each having a probability $2/n_s$ of being the smallest or largest. A false rejection will happen if $Q_{\text{orig}}$ happens to also follow the null hypothesis and is either the smallest or the largest, which happens with probablity $1 - \alpha \coloneqq 2/(n_s+1)$, where $\alpha$ is the confidence level. Hence, for confidence level $\alpha = 95 \%$, the number of surrogates should be $n_s = 38$. \cite{andreas2000} Note that, since many of the algorithms used for estimating non-linear measures are relatively computationally expensive, surrogate analysis with high confidence levels, especially on large datasets of multichannel signals such as EEG, is even more so.
 
-\subsubsection{Generating improved amplitude adjusted surrogates}
+\subsubsection{Generating improved amplitude adjusted surrogates} \label{sec:iaaft}
 For our purposes, since we assume that the data are produced by a non-linear process, a reasonable null hypothesis may be that the data are produced by a Gaussian linear stochastic process $\mathrm{AR}(p)$
 \begin{align} \label{eq:lin-stoch-proc}
   x_{t+1} = \mu + \sum_{j=0}^{p-1} a_j x_{t-j} + \sigma e_t,
@@ -1260,13 +1308,16 @@ Figure \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the e
 \subsection{Sample entropy}
 
 \subsection{Surrogate analysis} \label{sec:surrogate-analysis}
+As mentioned in Section \ref{sec:surrogate-analysis-theory}, surrogate analysis for high condifence levels requires generating surrogate dataset tens of times larger than the original dataset, and computing corresponding non-linear measures for these surrogate signals. To achieve confidence level $\alpha = 95 \%$ for our dataset, this translates to generating $266*19*38 = 192052$ surrogate samples and computing on them each non-linear measure considered in our study. Since non-linear algorithms considered (described in the preceding subsections) are relatively computationally expensive, performing surrogate analysis for all measures and all patients is computationally infeasible. Thus, we analyzed each algorithm (with varying parameters) on a single recording (patient number 75, second session), using 19 surrogate samples. For generating the surrogate data, we used the iAAFT algorithm described in Section \ref{sec:iaaft}. Note that to perform this as a test of non-linearity, we have to assume that the choice of embedding parameters for the algorithms is correct.
+
+An example of a result of such analysis for the largest Lyapunov exponent (embedding dimension 10, time delay 3) can be seen in Figure \ref{fig:surr-lyap}; the results for other measures were similar. First, we can observe that the distribution of the values computed for the surrogate data does not seem normal for all channels. As mentioned in Section \ref{sec:surrogate-analysis-theory}, this increases the required value sigma to achieve the same confidence, or requires performing a rank based test. It can be easily observed, then, that based on the rank based test, the hypothesis of a linear stochastic process cannot be rejected on (admittedly relatively low) confidence level $\alpha = 1 - 2/(19+1) = 90 \%$ for all channels except FP2, C4, T4, Pz. Obviously, does not necessarily imply that that the process underlying corresponding time series is stochastic, because, for example, there still may be other non-linear measures (or different choice of embedding parameters) which can discriminate between the original time series and the surrogate data. Neither does it suggest that the choice of embedding parameters is incorrect, because the process underlying corresponding time series may be stochastic. It is simply a failed attempt at disproving the null hypothesis of a stochastic linear process. Moreover, all our analyses concerned only a single patient.
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.5\textwidth]{Images/surr_test.png} }
-  \caption{Example distribution of the largest Lyapunov exponent for surrogate data and the original.}
-\label{fig:surr-test}
+  \includegraphics[width=1.0\textwidth]{./Images/surrogate/lyap_10_3_50.png} }
+  \caption{Example distribution of the largest Lyapunov exponent (embedding dimension 10, time delay 3) for 19 surrogate samples and the original for all channels. The number next to each channel name represents the confidence in sigma, computed as in equation \ref{eq:sigma}.}
+\label{fig:surr-lyap}
 \end{figure}
 
 \section{Analysis of measure distributions between groups} \label{sec:distanal}
