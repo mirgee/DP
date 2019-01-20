@@ -1361,11 +1361,36 @@ Figure \ref{fig:em-corrdim} shows $d_2$ computed this way as a function of the e
 
 \subsection{Detrended fluctuation analysis}
 \add[inline]{Show plots, how and why we chose the params so that the fit is optimal.}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.5\textwidth]{./Images/dfa_fit.png} }
+  \caption{Computation of DFA.}
+\label{fig:dfa-fit}
+\end{figure}
+
+Figure \ref{fig:dfa-fit} how we fitted the scaling region in the log-log plot of $F(n)$.
+
+Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to beta frequency (3-7 Hz). However, the resulting values were too large, and we found no differences between the studied groups.
+
 \subsection{Hurst exponent}
+Generally, the number of values $n$ for which to calculate the scaled range $R(n) / \sigma(n)$ is a tradeoff between the length and number of the considered subsequences. In order to avoid both small and large values of $n$, we used 15 values of $n$ spaced evenly on the middle 25 \% of the logarithmic scale between 0 and $\ln N$
+
 \subsection{Higuchi fractal dimension}
 \info[inline]{We could have tried optimizing the params more.}
 \subsection{Sample entropy}
 \info[inline]{Time lag 1.}
+\subsection{Frequency band amplitudes}
+We also analyzed mean frequency amplitudes in alpha, beta, gamma, delta and theta frequency bands, and found no differences between the studied groups. See Figure \ref{fig:mba}.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.7\textwidth]{./Images/mba.png} }
+  \caption{Typical range of mean band amplitudes in channel FP1.}
+\label{fig:mba}
+\end{figure}
 
 \subsection{Surrogate analysis} \label{sec:surrogate-analysis}
 As mentioned in Section \ref{sec:surrogate-analysis-theory}, surrogate analysis for high condifence levels requires generating surrogate dataset tens of times larger than the original dataset, and computing corresponding non-linear measures for these surrogate signals. To achieve confidence level $\alpha = 95 \%$ for our dataset, this translates to generating $266*19*38 = 192052$ surrogate samples and computing on them each non-linear measure considered in our study. Since non-linear algorithms considered (described in the preceding subsections) are relatively computationally expensive, performing surrogate analysis for all measures and all patients is computationally infeasible. Thus, we analyzed each algorithm (with varying parameters) on a single recording (patient number 75, second session), using 19 surrogate samples. For generating the surrogate data, we used the iAAFT algorithm described in Section \ref{sec:iaaft}. Note that to perform this as a test of non-linearity, we have to assume that the choice of embedding parameters for the algorithms is correct.
