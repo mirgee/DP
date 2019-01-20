@@ -957,11 +957,31 @@ Finally, if a log-log plot $F(m)$ as a function $m$ shows a linear scaling regio
 
 \add[inline]{Maybe add some more intuitive explanation.}
 
-The importance of DFA for EEG analysis comes from the observation that it can reveal so called long-range temporal correlations (LRTC) in neuronal activity. These large-scale patterns in EEG activity may be characteristic of baseline processing during eyes-closed wakeful condition in healthy human brain. These parameters computed from the theta amplitudes were shown to be negatively correlated with (Hamilton) depression score, thus suggesting that depressed patients display abnormally small autocorrelations on large scale. \cite{linkenkaer2005breakdown} In our study, we observed similar results, see Section \ref{sec:analdepdif}.
+The importance of DFA for EEG analysis comes from the observation that it can reveal so called long-range temporal correlations (LRTC) in neuronal activity. Long-range temporal correlations, or long-range dependence, is a phenomenon which occurs when the average rate of decay of statistical dependence between increasingly (temporally) distant points in the time series is slower than exponential. Large-scale patterns in EEG activity may be characteristic of baseline processing during eyes-closed wakeful condition in healthy human brain. These parameters computed from the theta amplitudes were shown to be negatively correlated with (Hamilton) depression score, thus suggesting that depressed patients display abnormally small autocorrelations on large scale. \cite{linkenkaer2005breakdown} In our study, we observed similar results, see Section \ref{sec:analdepdif}.
 
 \subsection{Hurst exponent} \label{sec:hurst-theory}
+As mentioned in the previous section, similarly to the Hurst parameter in DFA, Hurst exponent is a measure of presence of long-range temporal dependencies in the time series. It was developed from Edwin H. Hurst observation when researching the optimal (or minimal required) storage sizing of river dams. Supposing there is a constant reservoir outflow equal to the mean annual water discharge, required storage size corresponds to the range (i.e. the difference between the maximum and the minimum value) of a cumulative sums of deviations from the mean annual discharge. We shall call this value, as a function of the number of years, $R(n)$. \cite{hurst1956problem} After manually analyzing about a hundred records of natural phenomena, Hurst was able to demonstrate this value, on average and after normalizing by the standard deviation of the original time series, follows the following trend:
+\begin{equation} \label{eq:resc-range}
+  R(n) / \sigma(n) \propto (n / 2)^K.
+\end{equation}
+In this equation, $R(n) / \sigma(n)$ is called the rescaled range, and $K$ is called the Hurst exponent. \cite{hurst1957suggested} Obviously, it is always the case that $0 \leq K \leq 1$.
 
+The algorithm we used for computing estimation of the Hurst exponent is as follows. The time series is split into multiple subseries of varying length $n$, and cumulative mean adjusted is computed for each. Range $R(n)$ is computed from this cumulative time series, and $\sigma(n)$ from the origingal time series. In other words, let us have time series $x$, with values $x_1, x_2, \dots, x_N$. For each subseries $x^{(n)}$ of length $n$, we compute
+\begin{align*}
+  z_k^{(n)} &= \sum_{i=1}^{n} (x_i - \langle x^{(n)} \rangle) \qquad \mathrm{for }\, k=1,\dots,n \\
+  R(n) &= \max_{i=1,\dots,n}{z_i} - \min_{i=1,\dots,n}{z_i}
+\end{align*}
+and
+\begin{align*}
+  \sigma(n) &= \sqrt{ \frac{1}{n} \sum_{i=1}^n ( x_i - \langle x^{(j)} \rangle ) }.
+\end{align*}
+Finally, the Hurst exponent $K$ is computed by fitting the plot of the logarithm of scaled range \\ $\log R(n) / \sigma(n)$ versus $\log n$.
 
+Interestingly, if the quantites observed resulted from mutually completely independent events (i.e. white noise, with its corresponding cumulative sum, random walk), the relationship in equation (\ref{eq:resc-range}) is replaced with
+\begin{equation*}
+  R(n) / \sigma(n) \propto 1.25 \sqrt{N},
+\end{equation*}
+as can be easily verified by flipping a set of coins. \footnote{Hurst himself actually made experiments, tossing 10 coins 1000 times. It took him almost 6 hours. \cite{feder2013fractals}} \cite{hurst1957suggested} This allows us to recognize stochastic processes with mutually uncorrelated values. The value of Hurst exponent for white noise is $K=1/2$, and many natural processes, such as rainfalls, river water level heights, temperatures and pressures, annual growth of tree rings, and even financial markets have $K > 1/2$, suggesting long-term temporal correlations in the processes. Values of $0 \leq K < 1/2$, on the other hand, suggest long-time negative correlations, i.e. high values being often followed by low values in the future. \cite{hurst1956problem}
 
 \subsection{Higuchi fractal dimension}
 In this section, it will be beneficial to change our usual notation for the purpose of readability. Let us have time series $x(1), x(2), \dots, x(N)$. We construct a new time series, $x_k^m$, as 
