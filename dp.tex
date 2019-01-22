@@ -1379,6 +1379,7 @@ Generally, the number of values $n$ for which to calculate the scaled range $R(n
 
 \subsection{Higuchi fractal dimension}
 \info[inline]{We could have tried optimizing the params more.}
+
 \subsection{Sample entropy}
 \info[inline]{Time lag 1.}
 \subsection{Frequency band amplitudes}
@@ -2227,11 +2228,10 @@ Let us remind the reader of the definition of change from Section \ref{sec:analr
 
 The results can be seen in Table \ref{tab:respcl}.
 
-\chapter{Convolutional Neural Networks}
+\chapter{Feature extraction approach}
+\section{Convolutional Neural Networks}
 
-\section{Mathematical background}
-TODO: Do we really need this section???
-
+\subsection{Mathematical background}
 \begin{dfn}
   Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a functional defined as
   \begin{align}
@@ -2284,7 +2284,7 @@ TODO: This is probably too basic to be here
 
 \textbf{Stochastic gradient descent}\dots
 
-\section{History}
+\subsection{History}
 
 The classical approach to image pattern recognition consists of the following stages:
 \begin{description}
@@ -2307,7 +2307,7 @@ One of the oldest neural network architectures, fully connected multi-layer perc
 
 Although the main idea dates back to 1980, when K. Fukushima introduced neocognitron \cite{fukushima1982}, the back-propagation algorithm was not known at the time. The first convolutional architecture successfuly applied on an image pattern recognition problem by attempting to solve the aforementioned problems, dubbed LeNet-5, was proposed in 1998 by Y. LeCun, L. Bottou, Y. Bengio and P. Haffner \cite{LeCun1998}.
 
-\section{Description}
+\subsection{Description}
 
 \begin{figure} 
 \centering
@@ -2324,7 +2324,7 @@ Bearing resemblence to visual processing in biological organisms \footnote{As ea
   \item[spatial subsampling:] adding a subsampling layers, which reduce the resolution of the previous layer by averaging or taking the maximal value of neighboring pixels in the previous layer.
 \end{description}
 
-\subsection{Local receptive fields}
+\subsubsection{Local receptive fields}
 \emph{Local receptive fields} enable the network to synthesize filters that produce strong response to elementary salient features in the early layers (such as lines, edges and corners in a visual input, and their equivalents in other modalities), and then learn to combine them in the subsequent layers to produce higher-order feature detectors.
 
 \begin{figure} 
@@ -2339,7 +2339,7 @@ For a visual explanation of the concept of receptive field, see Figure \ref{fig:
 
 In shallow neural networks, locality of receptive fields implies locality of ``influence'' of each input unit on the output. In deep neural networks, on the other hand, units in the deeper layers can be indirectly connected to some or all units of the input, thus enabling them to achieve aforementioned effect of combining more complex features from simpler ones.
 
-\subsection{Shared weights}
+\subsubsection{Shared weights}
 With \emph{shared weights}, neural units in a layer with differing receptive fields have the same feature map and the same feature detecting operation (convolution with feature map kernel followed by additive bias and a application of a non-linear function) is performed on differing parts of the image (see Figure \ref{fig:shared_weights}). A single convolutional layer is composed of multiple feature detecting planes.
 
 Shared weights principle exploits the fact that in natural ./Images, a function of small number of neighboring pixels can be useful in multiple parts of the image. For example, an edge detector can be used accross the entire image to detect edges in the first layer, an object detector can then be used to detect presence of edges in particular arrangements in the next layer, etc.
@@ -2348,7 +2348,7 @@ Although it does not reduce the time complexity of the feedforward pass, it does
 
 One of the drawbacks of classical CNNs is that although convolution in combination with weight sharing causes layer output to be equivariant to translation of the input, this is not the case for scaling and rotation. Moreover, equivariance to input may not be always desirable. Consider a case of face detection, where all training and test ./Images are centered. Then, the relative positions of individual features are important, and it may be favorable to fix feature detectors (and thus weights) to certain locations in the image.
 
-\subsection{Pooling}
+\subsubsection{Pooling}
 \begin{figure} 
 
 \centering
@@ -2380,15 +2380,6 @@ Although the combination of convolution and pooling performs well in many practi
   \caption{Examples of drawbacks of the pooling operation. Max pooling discards all except the maximum element, and valuable information may thus be lost. Average pooling considers all the values, and the information about their contrast is reduced. Moreover, extreme values may have undesired effects on the result. \cite{yu2014}}
 \label{fig:drawbacks}
 \end{figure}
-
-
-\section{Applications}
-Maybe mention an example of how LeNet-5 was improved on subsequently (AlexNet, ResNet, etc.)? But this changes all the time\dots
-
-\section{CapsNets?} \label{sec:capsnets}
-Does it make sense trying them? I found a only a few successful implementations. Maybe it would be better to try those after we have some results already, because it seems risky - we might end up with nothing.
-
-\chapter{Feature extraction approach}
 
 \chapter*{Conclusion}
 
