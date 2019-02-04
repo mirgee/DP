@@ -2381,6 +2381,73 @@ Although the combination of convolution and pooling performs well in many practi
 \label{fig:drawbacks}
 \end{figure}
 
+\section{Used architectures}
+\add[inline]{Describe CSP, maybe GAF and CS.}
+\subsection{Filter Bank Common Spatial Patterns (FBCSP)}
+
+
+
+\section{Experimental results}
+We used 5-fold cross validation. 
+
+\begin{table}[tbp]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Dataset} & \multicolumn{2}{c}{\textbf{DEP}} \vline & \multicolumn{2}{c}{\textbf{REM}} \vline \\ \hline
+ & \textbf{Neg.} & \textbf{Pos.} & \textbf{Neg.} & \textbf{Pos.}  \\ \hline 
+Training & & & 5348 & 5442 \\ \hline 
+Validation & & & 1349 & 1349 \\ \hline 
+Test & & & 1669 & 1704 \\ \hline 
+Overall & & & 8366 & 8495 \\ \hline 
+\end{tabular}
+\caption{Negative / positive samples in training, validation, test sets.}
+% \label{tab:depcl}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+  \parbox{.49\linewidth}{
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Label} & \textbf{Freq. range} & \textbf{Arch.} & \textbf{Acc.} \\ \hline
+DEP & $0-f_{\text{fin}}$ & SHAL &  \\ \hline 
+ & $4-f_{\text{fin}}$ & SHAL &  \\ \hline 
+ & $0-f_{\text{fin}}$ & DEEP &  \\ \hline 
+ & $4-f_{\text{fin}}$ & DEEP &  \\ \hline 
+REM & $0-f_{\text{fin}}$ & SHAL &  \\ \hline 
+ & $4-f_{\text{fin}}$ & SHAL &  \\ \hline 
+ & $0-f_{\text{fin}}$ & DEEP &  \\ \hline 
+ & $4-f_{\text{fin}}$ & DEEP &  \\ \hline 
+\end{tabular}
+\subcaption{Caption.}
+% \label{tab:depcl}
+}
+\hfill
+  \parbox{.49\linewidth}{
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Label} & \textbf{Freq. range} & \textbf{Meth.} & \textbf{Acc.} \\ \hline
+DEP & $0-f_{\text{fin}}$ & RP &  \\ \hline 
+ & $4-f_{\text{fin}}$ & RP &  \\ \hline 
+ & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
+ & $4-f_{\text{fin}}$ & GAF &  \\ \hline 
+ & $0-f_{\text{fin}}$ & CS &  \\ \hline 
+ & $4-f_{\text{fin}}$ & CS &  \\ \hline 
+REM & $0-f_{\text{fin}}$ & RP &  \\ \hline 
+ & $4-f_{\text{fin}}$ & RP &  \\ \hline 
+ & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
+ & $4-f_{\text{fin}}$ &  GAF &  \\ \hline 
+ & $0-f_{\text{fin}}$ & CS &  \\ \hline 
+ & $4-f_{\text{fin}}$ & CS &  \\ \hline 
+\end{tabular}
+\subcaption{Caption.}
+% \label{tab:depcl}
+}
+\end{table}
+
 \chapter*{Conclusion}
 
 \bibliographystyle{plain}
