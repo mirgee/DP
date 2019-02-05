@@ -2381,25 +2381,49 @@ Although the combination of convolution and pooling performs well in many practi
 \label{fig:drawbacks}
 \end{figure}
 
-\section{Used architectures}
-\add[inline]{Describe CSP, maybe GAF and CS.}
+\section{Common Spatial Patterns (CSP)}
+Briefly what CSP serves for.
+
+Why is spatial filtering important: noise from imprecise recording, ``noise'' because signals conveyed (motor activities modulate $\mu$-rhythm) in different frequency bands, spatial origin of the signal may be important (diff. parts of somatosensory cortex are responsible for diff. movements), but we have low spatial resolution due to limited number of electrodes.
+
+\subsection{CSP analysis}
+CSP analysis in more detail
+
 \subsection{Filter Bank Common Spatial Patterns (FBCSP)}
+Why it sometimes fails, what FBCSP is.
+
+It was originally proposed for people with impeded motor control (e.g. disabled people) in context of BCI. But we show that similar method can be used to diagnose DEP and REMIS.
+
+\section{Used architectures}
+
+\subsection{Shallow network}
+
+\subsection{Deep network}
+
+\subsection{``Traditional''}
 
 
+\section{Experiment}
 
-\section{Experimental results}
+\subsection{Dataset}
+How we selected the datasets. 
+
+
+\subsection{Preprocessing}
+Filtering, running average and standard deviation.
+
+\subsection{Results}
 We used 5-fold cross validation. 
-
 \begin{table}[tbp]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Dataset} & \multicolumn{2}{c}{\textbf{DEP}} \vline & \multicolumn{2}{c}{\textbf{REM}} \vline \\ \hline
  & \textbf{Neg.} & \textbf{Pos.} & \textbf{Neg.} & \textbf{Pos.}  \\ \hline 
-Training & & & 5348 & 5442 \\ \hline 
-Validation & & & 1349 & 1349 \\ \hline 
-Test & & & 1669 & 1704 \\ \hline 
-Overall & & & 8366 & 8495 \\ \hline 
+Training & 3278 & 3230 & 5348 & 5442 \\ \hline 
+Validation & 826 & 802 & 1349 & 1349 \\ \hline 
+Test & 1038 & 997 & 1669 & 1704 \\ \hline 
+Overall & 5142 & 5029 & 8366 & 8495 \\ \hline 
 \end{tabular}
 \caption{Negative / positive samples in training, validation, test sets.}
 % \label{tab:depcl}
@@ -2411,15 +2435,15 @@ Overall & & & 8366 & 8495 \\ \hline
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{Label} & \textbf{Freq. range} & \textbf{Arch.} & \textbf{Acc.} \\ \hline
-DEP & $0-f_{\text{fin}}$ & SHAL &  \\ \hline 
- & $4-f_{\text{fin}}$ & SHAL &  \\ \hline 
- & $0-f_{\text{fin}}$ & DEEP &  \\ \hline 
- & $4-f_{\text{fin}}$ & DEEP &  \\ \hline 
-REM & $0-f_{\text{fin}}$ & SHAL &  \\ \hline 
- & $4-f_{\text{fin}}$ & SHAL &  \\ \hline 
- & $0-f_{\text{fin}}$ & DEEP &  \\ \hline 
- & $4-f_{\text{fin}}$ & DEEP &  \\ \hline 
+\textbf{Label} & \textbf{Freq.} & \textbf{Arch.} & \textbf{Acc.} \\ \hline
+DEP & $0-f_{\text{fin}}$ & SHAL &                           \\ \hline 
+ & $4-f_{\text{fin}}$ & SHAL &     $84.16 \pm 1.05 \%$     \\ \hline 
+ & $0-f_{\text{fin}}$ & DEEP &                            \\ \hline 
+ & $4-f_{\text{fin}}$ & DEEP &                            \\ \hline 
+REM & $0-f_{\text{fin}}$ & SHAL &  $86.11 \pm 0.38 \%$    \\ \hline 
+ & $4-f_{\text{fin}}$ & SHAL &     $86.33 \pm 0.59 \%$    \\ \hline 
+ & $0-f_{\text{fin}}$ & DEEP &     $83.87 \pm 2.24 \%$    \\ \hline 
+ & $4-f_{\text{fin}}$ & DEEP &     $84.22 \pm 2.49 \%$    \\ \hline 
 \end{tabular}
 \subcaption{Caption.}
 % \label{tab:depcl}
@@ -2429,7 +2453,7 @@ REM & $0-f_{\text{fin}}$ & SHAL &  \\ \hline
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{Label} & \textbf{Freq. range} & \textbf{Meth.} & \textbf{Acc.} \\ \hline
+\textbf{Label} & \textbf{Freq.} & \textbf{Meth.} & \textbf{Acc.} \\ \hline
 DEP & $0-f_{\text{fin}}$ & RP &  \\ \hline 
  & $4-f_{\text{fin}}$ & RP &  \\ \hline 
  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
