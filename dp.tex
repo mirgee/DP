@@ -2350,7 +2350,6 @@ One of the drawbacks of classical CNNs is that although convolution in combinati
 
 \subsubsection{Pooling}
 \begin{figure} 
-
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{./Images/shared_weights.png} }
@@ -2382,19 +2381,63 @@ Although the combination of convolution and pooling performs well in many practi
 \end{figure}
 
 \section{Common Spatial Patterns (CSP)}
-Briefly what CSP serves for.
+As mentioned repeatedly in the previous text, the task of finding patterns in EEG signal associated with particular mind state or motor action present us with numerous challenges. CSP, and in FBCSP (see Section \ref{sec:fbcsp}) in particular, are methods devised in attempt to overcome mainly two of them. Firstly, information about different temporally overlapping brain activities is conveyed in parallel in multiple frequency bands. For example, resting wakeful state comprises distinct idle rhythms over different cortical areas (such as $\alpha$-rhythm characteristic of idling visual cortex in the occipital area), which are overlapping with $\mu$-rhythms produced in sensorimotor areas both during imagined and performed movement. Secondly, the spatial origin of those signals is important for associating them with said mind states or motor actions. For example, different parts of the sensorimotor cortex over the central sulcus map directly to movements of distinct bodyparts. This is further complicated by the fact that EEG apparatus has inherently low spatial resolution due to small number of electrodes and poor volume conduction. 
 
-Why is spatial filtering important: noise from imprecise recording, ``noise'' because signals conveyed (motor activities modulate $\mu$-rhythm) in different frequency bands, spatial origin of the signal may be important (diff. parts of somatosensory cortex are responsible for diff. movements), but we have low spatial resolution due to limited number of electrodes.
+Spatial filtering, then, is process of addressing this second challenge by accentuating signals from some areas, while attenuating others. And CSP analysis is a data-driven approach of achieving this by mutually maximizing the variance of spatially filtered signal associated with one activity, while minimizing the variance of filtered signal associated with other activity, thus making the signals independent (as Gaussian random processes). \cite{blankertz2008optimizing} In the following section, we will explain the process in detail.
 
-\subsection{CSP analysis}
-CSP analysis in more detail
+\subsection{CSP analysis} \label{sec:csp}
+Let $C$ be the number of channels, and $\mathbf{x}(t) \in \RR^C$ be a band-passed, de-meaned and scaled multichannel EEG recording. CSP analysis yields a projection of $\mathbf{x}(t)$ of the signal from the original signal space to $\mathbf{x}_{\text{CSP}}(t) \in \RR^C$ by finding a matrix $W \in \RR^{C \times C}$, where
+\begin{align*}
+  \mathbf{x}_{\text{CSP}}(t) = W^T \mathbf{x}(t).
+\end{align*}
+Each column vector of $W$ is referred to as spatial filter. Thus, CSP decomposes the original signals into additive subcomponents, column vectors of $A \coloneqq (W^{-1})^T$, referred to as spatial patterns, giving name to the technique.
 
-\subsection{Filter Bank Common Spatial Patterns (FBCSP)}
-Why it sometimes fails, what FBCSP is.
+The matrix $W$ is found under optimization criteria, which we will describe in the following text. Firstly, let $\Sigma^{(+)} \in \RR^C$ and $\Sigma^{(-)} \in \RR^C$ be estimates of the inter-channel covariance matrices, corresponding to signals recorded in the two conditions $c$ we aim to distinguish, $+$ and $-$:
+\begin{align*}
+  \Sigma^{(c)} = \frac{1}{|I_c|} \sum_{i \in I_c} X_i X_i^{T}, \qquad c \in \{ +, - \},
+\end{align*}
+where $I_c$ is the set of time indeces matching the two conditions.\footnote{Here we suppose that two separate events happened during a single recording to simplify notation. This is not strictly necessary.} Since variance of band-pass filtered is the power present in the frequency band, the diagonal elements of $\Sigma^{(c)}$ represent the fraction of the total band power in each channel, and the off-diagonal elements represent the fractional covariance. \cite{koles1990spatial} CSP then performs simultaneous decomposition 
+\begin{align*}
+  W^T \Sigma^{(+)} W &= \Lambda^{(+)}, \\
+  W^T \Sigma^{(-)} W &= \Lambda^{(-)}, \qquad \Lambda^{(c)} \, \text{diagonal}
+\end{align*}
+under the condition that $\Lambda^{(+)} + \Lambda^{(+)} = I$, which is equivalent to solving the generalized eigenvalue problem
+\begin{align*}
+  \Sigma^{(+)}\mathbf{w} = \lambda \Sigma^{(-)}\mathbf{w}
+\end{align*}
+for generalized eigenvectors $\mathbf{w}$ and their eigenvalues $\lambda$. The resulting eigenvectors $\mathbf{w}_j$, $j \in \{1, \dots, C \}$ then are the column vectors of $W$, and corresponding eigenvalues $\lambda_j^{(c)} = \mathbf{w}_j^T \Sigma^{(c)} \mathbf{w}_j$ are the diagonal elements of $\Lambda^{(c)}$. Then, $\lambda_j = \lambda_j^{(+)} / \lambda_j^{(-)}$, and $\lambda_j^{(+)} + \lambda_j^{(-)} = 1$. This means that high variance the direction of $\mathbf{w}_j$ of signal in class $+$ results in small variance in signal in class $-$, and vice versa (see Figure \ref{fig:csp}). \cite{blankertz2008optimizing}
 
-It was originally proposed for people with impeded motor control (e.g. disabled people) in context of BCI. But we show that similar method can be used to diagnose DEP and REMIS.
+This method, although loosely based on PCA, is better suited for supervised classification, since, unlike PCA, it is guaranteed to find components which are responsible for the maximum differences in variance between the two classes. These eigenvectors are an orthonormal set which spans $\RR^C$, and are optimal for the amount of variance they account for in the least squares sense. \cite{koles1990spatial}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.7\textwidth]{./Images/csp/csp_merged.png} }
+  \caption{CSP}
+\label{fig:csp}
+\end{figure}
+
+\subsection{Filter Bank Common Spatial Patterns (FBCSP)} \label{sec:fbcsp}
+Although CSP usually yields good performance when the signals have been filtered in frequency range carefully tuned for the particular subject and classification problem at hand, its performance rapidly decreases when measurements are either unfiltered or filtered in inappropriate frequency range. \cite{ang2008filter} Thus, an improvement has been suggested, called Filter Bank Spatial Patterns (FBCSP). It comprises of four stages: frequency filtering, spatial filtering, feature selection and classification (see Figure \ref{fig:fbcsp}). In Stage 1, multiple band-pass filters are applied to split the signal into distanct filter banks. Then, in Stage 2, spatial filters are found for each of the respective filter banks using CSP analysis, as described in Section \ref{sec:csp}. These filters characterize features present in the signal specific to the corresponding frequency band. In Stage 3, a feature selection algorithm is employed to select the most discriminative features of all the filters found in previous step. Finally, in Stage 4, a classification algorithm uses the selected features for classiying the input signal into a class.
+
+Using the fact that magnitudes of the CSP eigenvalues are proportional to the amount of variance explained by corresponding signal in the direction corresponding to the eigenvector, the CSP algorithm in Stage 2 is slightly modified to to order the eigenvectors according to the magnitued of their eigenvalues, and only the first and last $m$ filtered signals are selected for further classification. This means selecting only the first and last $m$ rows from the matrix $X_{\text{CSP} = W^TX}$, yielding a matrix $Z \in (2m) \times T$ with row vectors $Z_j$, $j=1, \dots, 2m$. The final feature vector $\mathbf{f}$ is composed as logarithm of the contribution of variance of each row vector to the total variance as follows: \cite{ang2008filter}
+
+\begin{align*}
+  f_j = \log \left( \frac{\text{var}(Z_j)}{\sum_{i=1}^{2m} \text{var}(Z_i)} \right).
+\end{align*}
+
+\info[inline]{It was originally proposed for people with impeded motor control (e.g. disabled people) in context of BCI. But we show that similar method can be used to diagnose DEP and REMIS.}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{./Images/fbcsp.png} }
+  \caption{FBCSP}\cite{ang2008filter} 
+\label{fig:fbcsp}
+\end{figure}
 
 \section{Used architectures}
+Explain how the CSP described above influences the proposed architectures.
 
 \subsection{Shallow network}
 
@@ -2413,7 +2456,7 @@ How we selected the datasets.
 Filtering, running average and standard deviation.
 
 \subsection{Results}
-We used 5-fold cross validation. 
+We used 5-fold cross validation. SHAL performs noticably better on REM than DEEP. Filtering has not much effect, but helps slightly for REM, but does not help on DEP.
 \begin{table}[tbp]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
@@ -2436,10 +2479,10 @@ Overall & 5142 & 5029 & 8366 & 8495 \\ \hline
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{Label} & \textbf{Freq.} & \textbf{Arch.} & \textbf{Acc.} \\ \hline
-DEP & $0-f_{\text{fin}}$ & SHAL &                           \\ \hline 
- & $4-f_{\text{fin}}$ & SHAL &     $84.16 \pm 1.05 \%$     \\ \hline 
- & $0-f_{\text{fin}}$ & DEEP &                            \\ \hline 
- & $4-f_{\text{fin}}$ & DEEP &                            \\ \hline 
+DEP & $0-f_{\text{fin}}$ & SHAL &  $84.53 \pm 1.29 \%$    \\ \hline 
+ & $4-f_{\text{fin}}$ & SHAL &     $84.16 \pm 1.05 \%$    \\ \hline 
+ & $0-f_{\text{fin}}$ & DEEP &     $85.65 \pm 0.71 \%$    \\ \hline 
+ & $4-f_{\text{fin}}$ & DEEP &     $84.63 \pm 2.02 \%$    \\ \hline 
 REM & $0-f_{\text{fin}}$ & SHAL &  $86.11 \pm 0.38 \%$    \\ \hline 
  & $4-f_{\text{fin}}$ & SHAL &     $86.33 \pm 0.59 \%$    \\ \hline 
  & $0-f_{\text{fin}}$ & DEEP &     $83.87 \pm 2.24 \%$    \\ \hline 
