@@ -2436,21 +2436,33 @@ Using the fact that magnitudes of the CSP eigenvalues are proportional to the am
 \label{fig:fbcsp}
 \end{figure}
 
-\section{Used architectures}
-Explain how the CSP described above influences the proposed architectures.
-
-\subsection{Shallow network}
-
-\subsection{Deep network}
-
-\subsection{``Traditional''}
-
-
 \section{Experiment}
 
-\subsection{Dataset}
-How we selected the datasets. 
+\subsection{Input representation}
+We tried raw, cos sim, and recplots (with Chebyshev metric, because it seemed to show slightly more elaborate patterns, show image of difference). Our decision to try cos sim was because it is similar to GAF, but for nD-TS, and GAF was found to work. RP was used because it models the input as a non-linear system, and we can use some ``prior knowledge'' about the input this way. Another possibility is to learn on scalp images, but, as explained in \cite{schirrmeister2017deep}.
 
+Before applying any machine learning technique to the classification problem at hand, the question of optimal input representation needs to be answered. To this end, multiple factors need to be considered. Firstly, what is the dimensionality of the input relative to the resulting number of samples, and does it allow construction of sufficiently complex architectures compared to complexity of the classification problem? Secondly, does each input sample contain enough information to perform successful classification? Thirdly, is the input representation appropriate for the kind of data, i.e. does it help or hinder successful classification? In our case, for all the methods considered, answer to the first question is a function of recording slice length used to generate the input. Answering the remaining questions, however, is difficult without prior experiments on similar datasets. For this reason, research on applying known techniques to new problems is useful.
+
+Since well designed neural networks are characteristically able to learn feature maps given enough data, one obvious possibility is to use raw data. This approach has multiple benefits. First one, as we will see, is relatively low dimensionality. Global, and local features, no prior bias. Our first choice, then, was then to select 
+
+As mentioned in Chapter 1, brain is a non-linear dynamical system. Another possibility, therefore, is to represent the input data as recurrence plots, mentioned in Section . The obvious drawbacks redundancy due to symmetry and high dimensionality. On the other hand, recurrence plots are known to capture properties of the system which are difficult to obtain using other methods in some cases. \add{Cite this.}
+
+\add{Also point out to previous research with recurrence plots.}
+
+Lastly, inspired by success of Gramian Angular Fields for sequence classification \cite{wang2015imaging}, we decided to try cosine similarity.
+
+\subsection{Used architectures}
+Explain how the CSP described above influences the proposed architectures. \cite{schirrmeister2017deep} Plots, number of parameters. We used ELUs, they worked better than ReLU, say what their benefits are.
+
+\subsubsection{Shallow CSP-like network}
+
+\subsubsection{Deep networks}
+Here describe the two deep networks I used, how they differ (don't know yet).
+
+% \subsubsection{Deep VGG-like network}
+
+\subsection{Dataset}
+How we selected the datasets. Differences between previous chapter - need more data, so whole time series. 
 
 \subsection{Preprocessing}
 Filtering, running average and standard deviation.
@@ -2513,6 +2525,8 @@ REM & $0-f_{\text{fin}}$ & RP &  \\ \hline
 \subcaption{Caption.}
 % \label{tab:depcl}
 }
+
+\add[inline]{We might want to show the missclasifications - how close were they? Are people acting, or is the measurement relatively objective?}
 \end{table}
 
 \chapter*{Conclusion}
