@@ -385,7 +385,7 @@ It is important to note the obvious fact that in the case of EEG signal analysis
 
 \add[inline]{Add a few examples (Lorenz, Rossler, Mackey-Glass). Create my own plots instead of reusing.}
 
-\subsection{Recurrence plot}
+\subsection{Recurrence plot} \label{sec:recplot}
 When presented with a task of finding regularities in seemingly chaotic data, one possible approach is analysing at least approximate repetitions of simple patterns, which can be further used for reconstruction of more complicated rules. Recurrence plot is a method of visualizing obtained state-space trajectory segments in relation to each other to achieve this goal. Furthermore, it can be used to test necessary conditions for validity of dynamical parameters derivable from a non-linear time series such as the information dimension, entropy, Lyapunov exponents, dimension spectrum, etc. The information contained in recurrence plots is not easily obtainable by other known methods. \cite{eckmann1987}
 
 \begin{dfn}[\cite{eckmann1987}]
@@ -395,12 +395,13 @@ When presented with a task of finding regularities in seemingly chaotic data, on
   \end{align}
 \end{dfn}
 
-In other words, $M_{ij}$ is a symmetric\footnote{Although this is true for our definition, it may not be true for an alternative definition using a more general topology instead of a norm.} binary $N x N$ matrix, where $M_{ij} = 1$ when $i$-th and $j$-th points of the reconstructed trajectory enter each other's $\epsilon$ neighborhood.
+In other words, $M_{ij}$ is a symmetric\footnote{Although this is true for our definition, it may not be true for an alternative definition using a more general topology instead of a norm. For example, each point may have been assigned its own $\epsilon$-neighborhood.} binary $N x N$ matrix, where $M_{ij} = 1$ when $i$-th and $j$-th points of the reconstructed trajectory enter each other's $\epsilon$ neighborhood. Since those points are, in fact, times, recurrence plots are a way of visualizing subtle time correlation information.
 
-The essential drawback of recurrence plot is their size - it is quadratic in the length of the time series. A simple way of reducing its dimension is to partition the time series into disjoined segments, and let $M_{ij}$ represent the distance between those two segments. This is known as \textbf{meta-recurrence plot}. \cite{kantz2004} (TODO: Find a justification for using them.)
+The essential drawback of recurrence plot is their size - it is quadratic in the length of the time series. A simple way of reducing its dimension is to partition the time series into disjoined segments, and let $M_{ij}$ represent the distance between those two segments. This is known as \textbf{meta-recurrence plot}. \cite{kantz2004}
 
-(TODO: Cross-recurrence plots may be useful? Only between two series. Joint recurrence plots may be used to detect phase synchronization.)
+In \cite{eckmann1987}, J. Eckmann et al. analyzed patterns typically observed in recurrence plots and distinguished between large-scale \emph{typology} and small-scale \emph{texture}. Moreover, they were able identify multiple different patterns easily distinguishible by the human eye typical of dynamical systems with distinct properties. This work was furhter extended in \cite{marwan2007recurrence}.
 
+A more objective approach to analyzing recurrence plots is an ensemble of techniques group under the term Recurrence Quantification Analysis (RQA). Using these techniques, a number of scalar measures can be used to quantify properties of recurrence plots. An important ingredient for computation of these measures is the distribution of lengths of diagonal lines in the plot. It can be shown that this distribution is directly related to correlation dimension, which we will cover in Section \ref{sec:corrdim}. \cite{marwan2007recurrence}
 
 \subsection{Nonstationarity} \label{sec:stationarity}
 Nonstationarity is a phenomenon which considerably complicates practical analysis of dynamical systems. All the techniques presented in this text assume stationary process, since this assumption is a prerequisite to deterministic chaos. \cite{isliker1993test} We will call system \textbf{nonstationary} if the dynamics of the system are influenced by causes lying outside of them (and \textbf{stationary} if the opposity is true). In ergodic theory (study of the invariant measures of dynamical systems), the concept of stationarity is defined more rigorously. However, these definitions are not suited numerical applications. \cite{andreas2000} However, a relevant subset of nonstationary systems can be defined more explicitly:
@@ -882,6 +883,8 @@ In the continuous case, correlation dimension than takes to form
   d_2(A) = \lim_{r \rightarrow 0} \frac{\log C(r,2)}{\log r}.
 \end{align*}
 
+As explained in Section \ref{sec:recplot}, correlation dimension is closely related to the distribution of lengths of diagonal lines on recurrence plots. Intuitively, we can see that both methods are measuring temporal correlations in the original time series.
+
 \subsubsection{Grassberger-Procaccia algorithm}
 There are essentially three ways of computing correlation dimension: box-counting algorithms, pairwise distance algorithms, and nearest neighbors algorithms. Grassberger-Procaccia algorithm, which we use to compute correlation dimension, is a variant of a pairwise distance algorithm.
 
@@ -1087,6 +1090,8 @@ In 2013, Bachmann et al. compared two non-linear analysis methods, spectral assy
 Sleep disorder diagnosis may also relevant to this work for the very close connection of depression with disturbed sleep and insomnia \cite{nutt2008}. The first study emplying techniques of non-linear analysis on human EEG was published in 1985 and dealt with sleep recordings. \cite{babloyantz1985} This early success sparked intensive research focus on applying non-linear analysis to sleep data, thus generating relatively large amount of results. 
 
 Many studies focused of extracting Lyapunov exponents of EEGs measured during various sleep stages. The general pattern that emerged was that deep sleep stages exhibit lower complexity evidenced by lower dimensionality lower values of the largest Lyapunov exponent \cite{stam2005}.
+
+Recurrence plots, and RQA in particular, have been demonstrated to be effective at decoding neuroscientific physiological time series. For example, they have been suggested as a method of lowering singal-to-noise ratio in analysis of event related potentials in response to a surprising stimulus, where repeated exposure would influence the outcome (and thus classical averaging methods are not viable). \cite{marwan2007recurrence} Moreover, they have been successfully employed in detecting epileptic seizures using intracranial recordings. \cite{pijn1997nonlinear} Simple K-nearest neighbors classifiers achieved surprisingly high accuracies at emotion recognition tasks \cite{bahari2013eeg}, and convolutional neural networks used recurrence plots for activity recognition. \cite{garcia2018classification}  Most importantly for our study, recurrence plots of signals in the left hemisphere were observed to qualitatively differ between healthy baseline and depressed patients. The authors suggested that this area is worth further exploration. \cite{acharya2015computer}
 
 \chapter{Non-linear analysis approach}
 
@@ -2445,8 +2450,9 @@ Before applying any machine learning technique to the classification problem at 
 
 Since well designed neural networks are characteristically able to learn feature maps given enough data, one obvious possibility is to use raw data. This approach has multiple benefits. First one, as we will see, is relatively low dimensionality. Global, and local features, no prior bias. Our first choice, then, was then to select 
 
-As mentioned in Chapter 1, brain is a non-linear dynamical system. Another possibility, therefore, is to represent the input data as recurrence plots, mentioned in Section . The obvious drawbacks redundancy due to symmetry and high dimensionality. On the other hand, recurrence plots are known to capture properties of the system which are difficult to obtain using other methods in some cases. \add{Cite this.}
+As mentioned in Chapter 1, brain is a non-linear dynamical system. Another possibility, therefore, is to represent the input data as recurrence plots, mentioned in Section . The obvious drawbacks are redundancy due to symmetry and high dimensionality. On the other hand, recurrence plots are known to capture properties of the system which are difficult to obtain using other methods in some cases. \cite{eckmann1987}
 
+R
 \add{Also point out to previous research with recurrence plots.}
 
 Lastly, inspired by success of Gramian Angular Fields for sequence classification \cite{wang2015imaging}, we decided to try cosine similarity.
@@ -2460,6 +2466,8 @@ Explain how the CSP described above influences the proposed architectures. \cite
 Here describe the two deep networks I used, how they differ (don't know yet).
 
 % \subsubsection{Deep VGG-like network}
+
+For recurrence plots and cosine similarities, we also tried the architecture (along with the same hyperparameters) used in \cite{garcia2018classification}, which resulted in overall accuracy of 0.942 and 0.804 recall on classification task of 6 activies using recurrence plots and CNNs, evaluated using 10-fold cross validation on over 10 000 samples. However, we were unable to replicate the result. This may be because of the difference in input image sizes, number of used input channels (the authors had only 4 electrodes available, and used all of them as input channels, whereas we used spatial embedding). 
 
 \subsection{Dataset}
 How we selected the datasets. Differences between previous chapter - need more data, so whole time series. 
@@ -2526,7 +2534,10 @@ REM & $0-f_{\text{fin}}$ & RP &  \\ \hline
 % \label{tab:depcl}
 }
 
-\add[inline]{We might want to show the missclasifications - how close were they? Are people acting, or is the measurement relatively objective?}
+\add[inline]{We might want to show the missclasifications - how close were they? Are people acting, or is the measurement relatively objective? Or maybe confusing matrices.}
+\add[inline]{How about seeing different activations?}
+\info[inline]{Batchsize 64 128 doesn't matter. The learning rate was decreased with batch size.}
+\info[inline]{CHanges to number of any parameter, including adding layers made the results worse. Interestingly, simpler models overfit the training set very quickly, and regularization hurt performance. Hence, this model is probably at least close to local optima in hyperparameter space.}
 \end{table}
 
 \chapter*{Conclusion}
