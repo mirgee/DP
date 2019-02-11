@@ -2444,18 +2444,64 @@ Using the fact that magnitudes of the CSP eigenvalues are proportional to the am
 \section{Experiment}
 
 \subsection{Input representation}
-We tried raw, cos sim, and recplots (with Chebyshev metric, because it seemed to show slightly more elaborate patterns, show image of difference). Our decision to try cos sim was because it is similar to GAF, but for nD-TS, and GAF was found to work. RP was used because it models the input as a non-linear system, and we can use some ``prior knowledge'' about the input this way. Another possibility is to learn on scalp images, but, as explained in \cite{schirrmeister2017deep}.
-
 Before applying any machine learning technique to the classification problem at hand, the question of optimal input representation needs to be answered. To this end, multiple factors need to be considered. Firstly, what is the dimensionality of the input relative to the resulting number of samples, and does it allow construction of sufficiently complex architectures compared to complexity of the classification problem? Secondly, does each input sample contain enough information to perform successful classification? Thirdly, is the input representation appropriate for the kind of data, i.e. does it help or hinder successful classification? In our case, for all the methods considered, answer to the first question is a function of recording slice length used to generate the input. Answering the remaining questions, however, is difficult without prior experiments on similar datasets. For this reason, research on applying known techniques to new problems is useful.
 
 Since well designed neural networks are characteristically able to learn feature maps given enough data, one obvious possibility is to use raw data. This approach has multiple benefits. First one, as we will see, is relatively low dimensionality. Global, and local features, no prior bias. Our first choice, then, was then to select 
 
-As mentioned in Chapter 1, brain is a non-linear dynamical system. Another possibility, therefore, is to represent the input data as recurrence plots, mentioned in Section . The obvious drawbacks are redundancy due to symmetry and high dimensionality. On the other hand, recurrence plots are known to capture properties of the system which are difficult to obtain using other methods in some cases. \cite{eckmann1987}
+As mentioned in Chapter 1, brain is a non-linear dynamical system. Another possibility, therefore, is to represent the input data as recurrence plots, mentioned in Section \ref{sec:recplot}. The obvious drawbacks are redundancy due to symmetry and high dimensionality. On the other hand, recurrence plots are known to capture properties of the system which are difficult to obtain using other methods in some cases. \cite{eckmann1987} Morever, they have already been applied with success to classification of physical activites using convolutional neural networks \cite{garcia2018classification}, and even some qualitative differences in recurrence plots have been observed between depressed and healthy patients \cite{acharya2015computer}. We have discussed more applications in \ref{sec:applications}.
 
-R
-\add{Also point out to previous research with recurrence plots.}
+For our computation of recurrence matrices, we used the Chebyshev norm. Chebyshev norm has multiple benefits \add{mention some}, and we observed more subtle patterns on matrices computed using Chebyshev norm as opposed to those computed using Euclidean $L_2$ norm. For comparison, see Figure \ref{fig:norm-comp}.
 
-Lastly, inspired by success of Gramian Angular Fields for sequence classification \cite{wang2015imaging}, we decided to try cosine similarity.
+Our last method of input representation is inspired by success of Gramian Angular Fields (GAFs) for sequence classification \cite{wang2015imaging} using convolutional neural networks. To obtain GAF matrix from a scalar time series $x_1, x_2, \dots, x_N$, one first scales the time series into interval $(-1, 1)$, and then each value $x_i$ of the time series is converted into complex number with mode and radius given as
+\begin{align*}
+\phi_i &= \arccos (x_i), \\
+r_i &= i/N.
+\end{align*}
+This way, temporal dependencies are conserved through the radius. Then, instead of scalar product, an operation $\oplus$ is defined as
+\begin{align*}
+  x_i \oplus x_j = \cos(\phi_i + \phi_j)
+\end{align*}
+and a quasi-Gram $NxN$ matrix $G$ is computed as
+\begin{align*}
+  G = \begin{pmatrix}
+      \cos(\phi_1 \oplus \phi_1)  & \cos(\phi_1 \oplus \phi_2) & \dots & \cos(\phi_1 \oplus \phi_N) \\
+      \cos(\phi_2 \oplus \phi_1)  & \cos(\phi_2 \oplus \phi_2) &  \dots & \cos(\phi_2 \oplus \phi_N)  \\
+      \vdots & \vdots & \dots & \vdots \\
+      \cos(\phi_N \oplus \phi_1)  & \cos(\phi_N \oplus \phi_2)  & \dots & \cos(\phi_N \oplus \phi_N)
+     \end{pmatrix}.
+\end{align*}
+
+Since GAFs which are defined only for single channel time-series, we modify this approach, use spatial embedding, thus obtaining a multi-channel time series $\mathbf{x}_1, \mathbf{x}_2,\dots, \mathbf{x}_N$, and then compute cosine similarities between each pair of those vectors as
+\begin{align*}
+  G = \begin{pmatrix}
+    \frac{\mathbf{x}_1 \cdot \mathbf{x}_1}{\norm{\mathbf{x}_1} \norm{\mathbf{x}_1}} & \frac{\mathbf{x}_1 \cdot \mathbf{x}_2}{\norm{\mathbf{x}_1} \norm{\mathbf{x}_2}} & \dots & \frac{\mathbf{x}_1 \cdot \mathbf{x}_N}{\norm{\mathbf{x}_1} \norm{\mathbf{x}_N}} \\
+    \frac{\mathbf{x}_2 \cdot \mathbf{x}_1}{\norm{\mathbf{x}_2} \norm{\mathbf{x}_1}} & \frac{\mathbf{x}_2 \cdot \mathbf{x}_2}{\norm{\mathbf{x}_2} \norm{\mathbf{x}_2}} & \dots & \frac{\mathbf{x}_2 \cdot \mathbf{x}_N}{\norm{\mathbf{x}_2} \norm{\mathbf{x}_N}} \\
+    \vdots & \vdots & \dots & \vdots \\
+    \frac{\mathbf{x}_N \cdot \mathbf{x}_1}{\norm{\mathbf{x}_N} \norm{\mathbf{x}_1}} & \frac{\mathbf{x}_N \cdot \mathbf{x}_2}{\norm{\mathbf{x}_N} \norm{\mathbf{x}_2}} & \dots & \frac{\mathbf{x}_N \cdot \mathbf{x}_N}{\norm{\mathbf{x}_N} \norm{\mathbf{x}_N}} \\
+      \end{pmatrix}.
+\end{align*}
+
+Since both recurrence plot and cosine similarity matrix are symmetric, we applied the following procedure for computing them. For a given subseries length $l_s$, we computed recurrence plot of subseries $2l_s$, and considered only lower left quadrant. This way, the inherent redundancy was completely removed, while preserving some of the information - the lower left quadrant contains relationships (i.e. distances or similarities) between time states occuring in the previous subseries of length $l_s$. 
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{./Images/recplots/euclidean.png}
+  \caption{Euclidean norm}
+  % \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{./Images/recplots/chebyshev.png}
+  \caption{Chebyshev norm}
+  % \label{fig:sub2}
+\end{subfigure}
+\caption{Recurrence plots computed using different norms. We can see that the figure on the right hand side has sligthly crisper patterns.}
+\label{fig:norm-comp}
+\end{figure}
+
+Another possibility is to learn on scalp images, but, as explained in \cite{schirrmeister2017deep}. \add{Extend.}
 
 \subsection{Used architectures}
 Explain how the CSP described above influences the proposed architectures. \cite{schirrmeister2017deep} Plots, number of parameters. We used ELUs, they worked better than ReLU, say what their benefits are.
@@ -2483,10 +2529,10 @@ We used 5-fold cross validation. SHAL performs noticably better on REM than DEEP
 \hline
 \textbf{Dataset} & \multicolumn{2}{c}{\textbf{DEP}} \vline & \multicolumn{2}{c}{\textbf{REM}} \vline \\ \hline
  & \textbf{Neg.} & \textbf{Pos.} & \textbf{Neg.} & \textbf{Pos.}  \\ \hline 
-Training & 3278 & 3230 & 5348 & 5442 \\ \hline 
-Validation & 826 & 802 & 1349 & 1349 \\ \hline 
-Test & 1038 & 997 & 1669 & 1704 \\ \hline 
-Overall & 5142 & 5029 & 8366 & 8495 \\ \hline 
+Training & 3278 & 3230 & 2684 & 2705 \\ \hline 
+Validation & 826 & 802 & 686 & 662 \\ \hline 
+Test & 1038 & 997 & 830 & 855 \\ \hline 
+Overall & 5142 & 5029 & 4200 & 4222 \\ \hline 
 \end{tabular}
 \caption{Negative / positive samples in training, validation, test sets.}
 % \label{tab:depcl}
@@ -2517,18 +2563,18 @@ REM & $0-f_{\text{fin}}$ & SHAL &  $86.11 \pm 0.38 \%$    \\ \hline
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{Label} & \textbf{Freq.} & \textbf{Meth.} & \textbf{Acc.} \\ \hline
-DEP & $0-f_{\text{fin}}$ & RP &  \\ \hline 
- & $4-f_{\text{fin}}$ & RP &  \\ \hline 
- & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
- & $4-f_{\text{fin}}$ & GAF &  \\ \hline 
- & $0-f_{\text{fin}}$ & CS &  \\ \hline 
- & $4-f_{\text{fin}}$ & CS &  \\ \hline 
-REM & $0-f_{\text{fin}}$ & RP &  \\ \hline 
- & $4-f_{\text{fin}}$ & RP &  \\ \hline 
- & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
- & $4-f_{\text{fin}}$ &  GAF &  \\ \hline 
- & $0-f_{\text{fin}}$ & CS &  \\ \hline 
- & $4-f_{\text{fin}}$ & CS &  \\ \hline 
+DEP & $0-f_{\text{fin}}$ & RP & $63.02 \pm 1.48 \%$ \\ \hline 
+ & $4-f_{\text{fin}}$ & RP &   \\ \hline 
+%  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
+%  & $4-f_{\text{fin}}$ & GAF &  \\ \hline 
+ & $0-f_{\text{fin}}$ & CS & $59.05 \pm 1.52 \%$  \\ \hline 
+ & $4-f_{\text{fin}}$ & CS & $58.65 \pm 0.69 \%$ \\ \hline 
+REM & $0-f_{\text{fin}}$ & RP & $60.96 \pm 3.05 \%$ \\ \hline 
+ & $4-f_{\text{fin}}$ & RP &     \\ \hline 
+%  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
+%  & $4-f_{\text{fin}}$ &  GAF &  \\ \hline 
+ & $0-f_{\text{fin}}$ & CS &  $55.32 \pm 1.68 \%$ \\ \hline 
+ & $4-f_{\text{fin}}$ & CS &  $62.78 \pm 1.18 \%$ \\ \hline 
 \end{tabular}
 \subcaption{Caption.}
 % \label{tab:depcl}
