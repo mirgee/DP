@@ -2427,9 +2427,9 @@ Although CSP usually yields good performance when the signals have been filtered
 
 Using the fact that magnitudes of the CSP eigenvalues are proportional to the amount of variance explained by corresponding signal in the direction corresponding to the eigenvector, the CSP algorithm in Stage 2 is slightly modified to to order the eigenvectors according to the magnitued of their eigenvalues, and only the first and last $m$ filtered signals are selected for further classification. This means selecting only the first and last $m$ rows from the matrix $X_{\text{CSP} = W^TX}$, yielding a matrix $Z \in (2m) \times T$ with row vectors $Z_j$, $j=1, \dots, 2m$. The final feature vector $\mathbf{f}$ is composed as logarithm of the contribution of variance of each row vector to the total variance as follows: \cite{ang2008filter}
 
-\begin{align*}
+\begin{align} \label{eq:logvar}
   f_j = \log \left( \frac{\text{var}(Z_j)}{\sum_{i=1}^{2m} \text{var}(Z_i)} \right).
-\end{align*}
+\end{align}
 
 \info[inline]{It was originally proposed for people with impeded motor control (e.g. disabled people) in context of BCI. But we show that similar method can be used to diagnose DEP and REMIS.}
 
@@ -2464,10 +2464,10 @@ This way, temporal dependencies are conserved through the radius. Then, instead 
 and a quasi-Gram $NxN$ matrix $G$ is computed as
 \begin{align*}
   G = \begin{pmatrix}
-      \cos(\phi_1 \oplus \phi_1)  & \cos(\phi_1 \oplus \phi_2) & \dots & \cos(\phi_1 \oplus \phi_N) \\
-      \cos(\phi_2 \oplus \phi_1)  & \cos(\phi_2 \oplus \phi_2) &  \dots & \cos(\phi_2 \oplus \phi_N)  \\
+      \cos(\phi_1 + \phi_1)  & \cos(\phi_1 + \phi_2) & \dots & \cos(\phi_1 + \phi_N) \\
+      \cos(\phi_2 + \phi_1)  & \cos(\phi_2 + \phi_2) &  \dots & \cos(\phi_2 + \phi_N)  \\
       \vdots & \vdots & \dots & \vdots \\
-      \cos(\phi_N \oplus \phi_1)  & \cos(\phi_N \oplus \phi_2)  & \dots & \cos(\phi_N \oplus \phi_N)
+      \cos(\phi_N + \phi_1)  & \cos(\phi_N + \phi_2)  & \dots & \cos(\phi_N + \phi_N)
      \end{pmatrix}.
 \end{align*}
 
@@ -2506,9 +2506,20 @@ Another possibility is to learn on scalp images, but, as explained in \cite{schi
 \subsection{Used architectures}
 Explain how the CSP described above influences the proposed architectures. \cite{schirrmeister2017deep} Plots, number of parameters. We used ELUs, they worked better than ReLU, say what their benefits are.
 
-\subsubsection{Shallow CSP-like network}
+\subsubsection{Raw data}
+Our choice of CNN architectures for the raw data input was inspired by those used in \cite{schirrmeister2017deep}, which were, in turn, inspired by the FBCSP pipeline described in Section \ref{sec:csp}. 
 
-\subsubsection{Deep networks}
+The first architecture, called \emph{deep} (see Figure), is more generic of the two architectures used, bearing resemblence to the architectures which proved successful in traditional computer vision tasks. It consists of four convolutional blocks with batch normalization ($\epsilon = 10^{-5}$, $\text{momentum} = 0.1$) and ELU non-linearity, followed by max pooling and dropout ($p = 0.5$). The batch normalization was applied before the activation function. The convolution was performed only along the temporal dimension, with kernel size $(1,3)$, stride $1$. The pooling operation was also performed only along the temporal dimension, with kernel size $(1,3)$, stride $3$. The first convolutional layer is an exception - to explicitly seperate the linear transformation into combination of temporal and spatial convolution, this layer is split into two layers with no activation function in between. First, a temporal convolution with kernel size $(1,10)$ is performed, followed by a spatial convolution across all channels with kernel size $(19,1)$. Note that the first operation can be seen as analogue of band-pass filtering, and the second as spatial filtering, as performed by CSP algorithm, with the difference that the filters are ``constructed'' by gradient descent. Batch normalization and pooling operations are also performed as described above. 
+
+The second architecture, called \emph{shallow} (see Figure ), is more specialized, tailored to mimic the transformations performed by the FBCSP pipeline. The first and only convolutional layer is split in the same way as in the deep architecture described above, and batch normalization is also applied before the activation. However, squaring non-linearity was used as activation function for the layer instead, followed by average pooling. This can be seen as approximation of computing mean power. Moreover, following the recommendations mentioned in \cite{schirrmeister2017deep}, larger kernel size $(1,25)$ is used for the temporal filtering in this network. Then, logarithm non-linearity is applied, analogous to the mean log-variance computation in FBCSP, see (\ref{eq:logvar}). One of the advantages of this architecture over FBCSP that it can learn the structure of temporal changes in the representation of ``band-powers''.
+
+In both deep and shallow architectures, the classification is performed by classification layer with 2D convolution of kernel size of the last layer, 2 filters, and logistic activation to produce probability estimate for each class. For optimization, we used stochastic gradient descent with Nesterov momentum $0.99$, decay $10^{-5}$, learning rate $0.01$ for batch size $128$, and learning rate $0.001$ for batch size $64$ (since lower batch size leads to more updates per epoch). For details on training, see Section \ref{sec:results}.
+
+We also attempted different configurations: increasing / decreasing the number of layers in the deep network, increasing / decreasing the kernel sizes, ReLU activation functions, and Adam / rmsprop optimizers. However, we found any of these changes leading to degradation in performance.
+
+\add[inline]{Add illustrations of the architectures.}
+
+\subsubsection{Image-encoded data}
 Here describe the two deep networks I used, how they differ (don't know yet).
 
 % \subsubsection{Deep VGG-like network}
@@ -2521,7 +2532,7 @@ How we selected the datasets. Differences between previous chapter - need more d
 \subsection{Preprocessing}
 Filtering, running average and standard deviation.
 
-\subsection{Results}
+\subsection{Results} \label{sec:results}
 We used 5-fold cross validation. SHAL performs noticably better on REM than DEEP. Filtering has not much effect, but helps slightly for REM, but does not help on DEP.
 \begin{table}[tbp]
 \centering
@@ -2564,13 +2575,13 @@ REM & $0-f_{\text{fin}}$ & SHAL &  $86.11 \pm 0.38 \%$    \\ \hline
 \hline
 \textbf{Label} & \textbf{Freq.} & \textbf{Meth.} & \textbf{Acc.} \\ \hline
 DEP & $0-f_{\text{fin}}$ & RP & $63.02 \pm 1.48 \%$ \\ \hline 
- & $4-f_{\text{fin}}$ & RP &   \\ \hline 
+ & $4-f_{\text{fin}}$ & RP & $61.31 \pm 0.48 \%$   \\ \hline 
 %  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
 %  & $4-f_{\text{fin}}$ & GAF &  \\ \hline 
  & $0-f_{\text{fin}}$ & CS & $59.05 \pm 1.52 \%$  \\ \hline 
  & $4-f_{\text{fin}}$ & CS & $58.65 \pm 0.69 \%$ \\ \hline 
 REM & $0-f_{\text{fin}}$ & RP & $60.96 \pm 3.05 \%$ \\ \hline 
- & $4-f_{\text{fin}}$ & RP &     \\ \hline 
+ & $4-f_{\text{fin}}$ & RP &  $64.95 \pm 1.78 \%$    \\ \hline 
 %  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
 %  & $4-f_{\text{fin}}$ &  GAF &  \\ \hline 
  & $0-f_{\text{fin}}$ & CS &  $55.32 \pm 1.68 \%$ \\ \hline 
