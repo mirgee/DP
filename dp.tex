@@ -1387,7 +1387,7 @@ Generally, the number of values $n$ for which to calculate the scaled range $R(n
 
 \subsection{Sample entropy}
 \info[inline]{Time lag 1.}
-\subsection{Frequency band amplitudes}
+\subsection{Frequency band amplitudes} \label{sec:band-ampl}<++>
 We also analyzed mean frequency amplitudes in alpha, beta, gamma, delta and theta frequency bands, and found no differences between the studied groups. See Figure \ref{fig:mba}.
 
 \begin{figure} 
@@ -2268,8 +2268,6 @@ For the following, the reader needs to understand the term \textbf{equivariance}
 
 For our purposes, we can view $G$ as a group of transformations, and then equivariance as a commutative property of a function with regards to the transformations. In other words, computing the function and then applying the transformation has the same effect as applying the transformation and then computing the function.
 
-TODO: This is probably too basic to be here
-
 \textbf{Gradient descent} is a first order iterative method of finding an extremum a differentiable function $f : \RR \rightarrow \RR^n$, $f \in C^1$, based on continually moving a point in its domain in the direction of negative of its gradient at that point, until the absolute value of the gradient (or the step size) is below a certain threshold. See Algorithm \ref{alg:gd}.
 
 \begin{algorithm}
@@ -2287,7 +2285,7 @@ TODO: This is probably too basic to be here
 \end{algorithmic}
 \end{algorithm}
 
-\textbf{Stochastic gradient descent}\dots
+\add[inline]{Add description of stochastic gradient descent, Nesterov and momentum?}
 
 \subsection{History}
 
@@ -2307,7 +2305,7 @@ One of the oldest neural network architectures, fully connected multi-layer perc
 \begin{description}
   \item[parameter explosion:] the number of parameters of such network is exponential in the number of layers, increasing the capacity of the network and therefore need for more data,
   \item[no invariance:] no invariance even with respect to common geometrical transformation such as translation, rotation and scaling,
-  \item[ignoring input topology:] natural ./Images exhibit strong local structure and high correlation between intensities of neighboring pixels, but FC-MLPs are unstructed - inputs can be presented in any order.
+  \item[ignoring input topology:] natural images exhibit strong local structure and high correlation between intensities of neighboring pixels, but FC-MLPs are unstructed - inputs can be presented in any order.
 \end{description}
 
 Although the main idea dates back to 1980, when K. Fukushima introduced neocognitron \cite{fukushima1982}, the back-propagation algorithm was not known at the time. The first convolutional architecture successfuly applied on an image pattern recognition problem by attempting to solve the aforementioned problems, dubbed LeNet-5, was proposed in 1998 by Y. LeCun, L. Bottou, Y. Bengio and P. Haffner \cite{LeCun1998}.
@@ -2347,11 +2345,11 @@ In shallow neural networks, locality of receptive fields implies locality of ``i
 \subsubsection{Shared weights}
 With \emph{shared weights}, neural units in a layer with differing receptive fields have the same feature map and the same feature detecting operation (convolution with feature map kernel followed by additive bias and a application of a non-linear function) is performed on differing parts of the image (see Figure \ref{fig:shared_weights}). A single convolutional layer is composed of multiple feature detecting planes.
 
-Shared weights principle exploits the fact that in natural ./Images, a function of small number of neighboring pixels can be useful in multiple parts of the image. For example, an edge detector can be used accross the entire image to detect edges in the first layer, an object detector can then be used to detect presence of edges in particular arrangements in the next layer, etc.
+Shared weights principle exploits the fact that in natural images, a function of small number of neighboring pixels can be useful in multiple parts of the image. For example, an edge detector can be used accross the entire image to detect edges in the first layer, an object detector can then be used to detect presence of edges in particular arrangements in the next layer, etc.
 
 Although it does not reduce the time complexity of the feedforward pass, it does reduce the memory requirements. If the kernel size is $k$, $m$ the number of inputs, $n$ the number of outputs, the number of parameters per layer is $k$ instead of $m \times n$ (per feature detecting plane) in a fully connected case. Since $k$ is usually in practice several orders of magnitude smaller than $m$, and usually $m$ and $n$ are comparable in size, the memory savings are highly significant. \cite{goodfellow2016}
 
-One of the drawbacks of classical CNNs is that although convolution in combination with weight sharing causes layer output to be equivariant to translation of the input, this is not the case for scaling and rotation. Moreover, equivariance to input may not be always desirable. Consider a case of face detection, where all training and test ./Images are centered. Then, the relative positions of individual features are important, and it may be favorable to fix feature detectors (and thus weights) to certain locations in the image.
+One of the drawbacks of classical CNNs is that although convolution in combination with weight sharing causes layer output to be equivariant to translation of the input, this is not the case for scaling and rotation. Moreover, equivariance to input may not be always desirable. Consider a case of face detection, where all training and test images are centered. Then, the relative positions of individual features are important, and it may be favorable to fix feature detectors (and thus weights) to certain locations in the image.
 
 \subsubsection{Pooling}
 \begin{figure} 
@@ -2375,7 +2373,7 @@ The rationale behind applying a non-linearity is it makes the network capable of
 
 The purpose of spatial subsampling is to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.'' \cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance - roughly speaking, an ``approximate'' translation invariance.
 
-Although the combination of convolution and pooling performs well in many practical situations, it has multiple drawbacks. For example, the learned representations are not rotation invariant and thus, to mitigate this, the capacity of the network has to be increased and the training dataset must be enhanced to contain examples of rotated features, often extending the amount of data necessary and training time. A number of alternative approaches were suggested in the litarature.\footnote{For instance, Hinton's \emph{CapsNet}, described e.g. in \cite{sabour2017}, is an attempt to transform the manifold of ./Images of similar shape (which is highly non-linear in the space of pixel intensities) to a space where it is globally linear by the way of using so called capsules instead of traditional convolutional layers.} For another example of a limitation, see Figure \ref{fig:drawbacks}.
+Although the combination of convolution and pooling performs well in many practical situations, it has multiple drawbacks. For example, the learned representations are not rotation invariant and thus, to mitigate this, the capacity of the network has to be increased and the training dataset must be enhanced to contain examples of rotated features, often extending the amount of data necessary and training time. A number of alternative approaches were suggested in the litarature.\footnote{For instance, Hinton's \emph{CapsNet}, described e.g. in \cite{sabour2017}, is an attempt to transform the manifold of images of similar shape (which is highly non-linear in the space of pixel intensities) to a space where it is globally linear by the way of using so called capsules instead of traditional convolutional layers.} For another example of a limitation, see Figure \ref{fig:drawbacks}.
 
 \begin{figure} 
 \centering
@@ -2386,6 +2384,8 @@ Although the combination of convolution and pooling performs well in many practi
 \end{figure}
 
 \section{Common Spatial Patterns (CSP)}
+The method of Common Spatial Patterns (CSP) was originally proposed for people with impeded motor control (e.g. disabled people) in context of brain-computer interfaces, and thus most studies focus on its use in classification of motion performed or visualized by the subject. In our study, we will apply convolutional neural network architectures inspired by FBCSP for depression diagnosis and prediction of future remission of the disease.
+
 As mentioned repeatedly in the previous text, the task of finding patterns in EEG signal associated with particular mind state or motor action present us with numerous challenges. CSP, and in FBCSP (see Section \ref{sec:fbcsp}) in particular, are methods devised in attempt to overcome mainly two of them. Firstly, information about different temporally overlapping brain activities is conveyed in parallel in multiple frequency bands. For example, resting wakeful state comprises distinct idle rhythms over different cortical areas (such as $\alpha$-rhythm characteristic of idling visual cortex in the occipital area), which are overlapping with $\mu$-rhythms produced in sensorimotor areas both during imagined and performed movement. Secondly, the spatial origin of those signals is important for associating them with said mind states or motor actions. For example, different parts of the sensorimotor cortex over the central sulcus map directly to movements of distinct bodyparts. This is further complicated by the fact that EEG apparatus has inherently low spatial resolution due to small number of electrodes and poor volume conduction. 
 
 Spatial filtering, then, is process of addressing this second challenge by accentuating signals from some areas, while attenuating others. And CSP analysis is a data-driven approach of achieving this by mutually maximizing the variance of spatially filtered signal associated with one activity, while minimizing the variance of filtered signal associated with other activity, thus making the signals independent (as Gaussian random processes). \cite{blankertz2008optimizing} In the following section, we will explain the process in detail.
@@ -2430,8 +2430,6 @@ Using the fact that magnitudes of the CSP eigenvalues are proportional to the am
 \begin{align} \label{eq:logvar}
   f_j = \log \left( \frac{\text{var}(Z_j)}{\sum_{i=1}^{2m} \text{var}(Z_i)} \right).
 \end{align}
-
-\info[inline]{It was originally proposed for people with impeded motor control (e.g. disabled people) in context of BCI. But we show that similar method can be used to diagnose DEP and REMIS.}
 
 \begin{figure} 
 \centering
@@ -2501,46 +2499,48 @@ Since both recurrence plot and cosine similarity matrix are symmetric, we applie
 \label{fig:norm-comp}
 \end{figure}
 
-Another possibility is to learn on scalp images, but, as explained in \cite{schirrmeister2017deep}. \add{Extend.}
+\info[inline]{Another possibility is to learn on flattened scalp images of topographical distributions of different band powers. However, as explained in \cite{schirrmeister2017deep}, this presents two main challanges. As we have verified in the previous chapter (see Section \ref{sec:band-ampl}), the relevant variance is probably spatially global in nature, and not hierarchically compositional to make use of CNN. On the other hand, the temporal patterns are more likely to be hierarchically compositional.}
 
 \subsection{Used architectures}
-Explain how the CSP described above influences the proposed architectures. \cite{schirrmeister2017deep} Plots, number of parameters. We used ELUs, they worked better than ReLU, say what their benefits are.
+Our choice of CNN architectures was heavily inspired by, and almost identical to, those used in \cite{schirrmeister2017deep}. These architectures, and in particular the second one (in order of description below), were designed by the authors to be analogous to the FBCSP pipeline described in detail in Section \ref{sec:csp}. 
 
-\subsubsection{Raw data}
-Our choice of CNN architectures for the raw data input was inspired by those used in \cite{schirrmeister2017deep}, which were, in turn, inspired by the FBCSP pipeline described in Section \ref{sec:csp}. 
-
-The first architecture, called \emph{deep} (see Figure), is more generic of the two architectures used, bearing resemblence to the architectures which proved successful in traditional computer vision tasks. It consists of four convolutional blocks with batch normalization ($\epsilon = 10^{-5}$, $\text{momentum} = 0.1$) and ELU non-linearity, followed by max pooling and dropout ($p = 0.5$). The batch normalization was applied before the activation function. The convolution was performed only along the temporal dimension, with kernel size $(1,3)$, stride $1$. The pooling operation was also performed only along the temporal dimension, with kernel size $(1,3)$, stride $3$. The first convolutional layer is an exception - to explicitly seperate the linear transformation into combination of temporal and spatial convolution, this layer is split into two layers with no activation function in between. First, a temporal convolution with kernel size $(1,10)$ is performed, followed by a spatial convolution across all channels with kernel size $(19,1)$. Note that the first operation can be seen as analogue of band-pass filtering, and the second as spatial filtering, as performed by CSP algorithm, with the difference that the filters are ``constructed'' by gradient descent. Batch normalization and pooling operations are also performed as described above. 
+The first architecture, called \emph{deep} (see Figure \ref{fig:deep}), is more generic of the two architectures used, bearing resemblence to the architectures which proved successful in traditional computer vision tasks. It consists of four convolutional blocks with batch normalization ($\epsilon = 10^{-5}$, $\text{momentum} = 0.1$) and ELU non-linearity, followed by max pooling and dropout ($p = 0.5$). The batch normalization was applied before the activation function. The convolution was performed only along the temporal dimension, with kernel size $(1,3)$, stride $1$. The pooling operation was also performed only along the temporal dimension, with kernel size $(1,3)$, stride $3$. For image input, we used traditional 2D convolution with kernel size $(3,3)$. The first convolutional layer is an exception - to explicitly seperate the linear transformation into combination of temporal and spatial convolution, this layer is split into two layers with no activation function in between. First, a temporal convolution with kernel size $(1,10)$ is performed, followed by a spatial convolution across all channels with kernel size $(19,1)$. Note that the first operation can be seen as analogue of band-pass filtering, and the second as spatial filtering, as performed by CSP algorithm, with the difference that the filters are ``constructed'' by gradient descent. Batch normalization and pooling operations are also performed as described above. 
 
 The second architecture, called \emph{shallow} (see Figure \ref{fig:shal}), is more specialized, tailored to mimic the transformations performed by the FBCSP pipeline. The first and only convolutional layer is split in the same way as in the deep architecture described above, and batch normalization is also applied before the activation. However, squaring non-linearity was used as activation function for the layer instead, followed by average pooling. This can be seen as approximation of computing mean power. Moreover, following the recommendations mentioned in \cite{schirrmeister2017deep}, larger kernel size $(1,25)$ is used for the temporal filtering in this network. Then, logarithm non-linearity is applied, analogous to the mean log-variance computation in FBCSP, see (\ref{eq:logvar}). One of the advantages of this architecture over FBCSP that it can learn the structure of temporal changes in the representation of ``band-powers''.
 
-In both deep and shallow architectures, the classification is performed by classification layer with 2D convolution of kernel size of the last layer, 2 filters, and logistic activation to produce probability estimate for each class. For optimization, we used stochastic gradient descent with Nesterov momentum $0.99$, decay $10^{-5}$, learning rate $0.01$ for batch size $128$, and learning rate $0.001$ for batch size $64$ (since lower batch size leads to more updates per epoch). For details on training, see Section \ref{sec:results}.
+In both deep and shallow architectures, the classification is performed by classification layer with 2D convolution of kernel size of the last layer, 2 filters, and logistic activation to produce probability estimate for each class. For optimization, we used stochastic gradient descent with Nesterov momentum $0.99$, decay $10^{-5}$, learning rate $0.01$ for batch size $128$ (which we used for raw data), and learning rate $0.001$ for batch size $64$ (which we used for image data due to hardware limitations). This last change was made because lower batch size leads to more updates per epoch.
 
-We also attempted different configurations: increasing / decreasing the number of layers in the deep network, increasing / decreasing the kernel sizes, ReLU activation functions, and Adam / rmsprop optimizers. However, we found any of these changes leading to degradation in performance.
+We also attempted different configurations: increasing or decreasing the number of layers in the deep network, increasing or decreasing the kernel sizes, ReLU activation functions, and Adam or rmsprop optimizers. However, we found any of these changes leading to degradation in performance. 
 
-\add[inline]{Add illustrations of the architectures.}
+For image-encoded data, i.e. recurrence plots and cosine similarities, we also tried the architecture (along with the same hyperparameters) used in \cite{garcia2018classification}, which resulted in overall accuracy of 0.942 and 0.804 recall on classification task of 6 activies using recurrence plots and CNNs (as mentioned in Section \ref{sec:applications}), evaluated using 10-fold cross validation on over 10 000 samples. However, we were unable to replicate the result. This may be because of the difference in input image sizes, number of used input channels (the authors had only 4 electrodes available, and used all of them as input channels, whereas we used spatial embedding). 
 
-\subsubsection{Image-encoded data}
-Here describe the two deep networks I used, how they differ (don't know yet).
+Moreover, we also evaluated multiple simpler architectures. The best performing (both on image-encoded and raw data) was a VGG-like model with 3 convolution-pooling modules (convolution kernels $(3,3)$, pooling kernels $(2,2)$, ReLU activation functions) with 8, 16 and 16 filters respectively. These were followed by dropout ($p=0.5$), and fully connected sigmoid classification layer. This model, optimized by rmsprop, achieved $73\%$ accuracy on stand-out test set on raw data, and below $60\%$ on the image-encoded data. All attempts of modifying capacity and regularization, i.e. adding batch normalization, adding or removing layers, increasing or decreasing the number of filters, as well as adding weight normalization or changing the optimizer, lead to deterioration of performance.
 
-% \subsubsection{Deep VGG-like network}
-
-For recurrence plots and cosine similarities, we also tried the architecture (along with the same hyperparameters) used in \cite{garcia2018classification}, which resulted in overall accuracy of 0.942 and 0.804 recall on classification task of 6 activies using recurrence plots and CNNs, evaluated using 10-fold cross validation on over 10 000 samples. However, we were unable to replicate the result. This may be because of the difference in input image sizes, number of used input channels (the authors had only 4 electrodes available, and used all of them as input channels, whereas we used spatial embedding). 
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./Images/archs/deep.png}
+\caption{Deep architecture for evaluation on the raw data. For evaluation on image-encoded data, the kernel sizes were changed - see text for details.}
+\label{fig:deep}
+\end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=.7\linewidth]{./Images/archs/shal.png}
-\caption{Shallow architecture.}
+\caption{Shallow architecture, inspired by FBCSP algorithm, which achieved outstanding performance on the raw data.}
 \label{fig:shal}
 \end{figure}
 
-\subsection{Dataset}
-How we selected the datasets. Differences between previous chapter - need more data, so whole time series. 
-
-\subsection{Preprocessing}
-Filtering, running average and standard deviation.
-
 \subsection{Results} \label{sec:results}
-We used 5-fold cross validation. SHAL performs noticably better on REM than DEEP. Filtering has not much effect, but helps slightly for REM, but does not help on DEP.
+Data: How we chose the labels, how we split the data. Only before for remission.
+
+Preprocessing: Filtering, running average and standard deviation.
+
+Evaluation: We used 5-fold cross validation, selected the best performing model by evaluation on validation set, run for 200 epochs.
+
+Results: SHAL performs noticably better on REM than DEEP. Filtering has not much effect, but helps slightly for REM, but does not help on DEP.
+
+Conclusions: SHAL has state of the art performance on REM. It would be nice to evaluate against pure FBCSP, and try more traditional configuration to see difference in performance. 
+
 \begin{table}[tbp]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
@@ -2552,7 +2552,7 @@ Validation & 826 & 802 & 686 & 662 \\ \hline
 Test & 1038 & 997 & 830 & 855 \\ \hline 
 Overall & 5142 & 5029 & 4200 & 4222 \\ \hline 
 \end{tabular}
-\caption{Negative / positive samples in training, validation, test sets.}
+\caption{Number of negative / positive samples in training, validation, test sets.}
 % \label{tab:depcl}
 \end{table}
 
@@ -2565,14 +2565,14 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 \textbf{Label} & \textbf{Freq.} & \textbf{Arch.} & \textbf{Acc.} \\ \hline
 DEP & $0-f_{\text{fin}}$ & SHAL &  $84.53 \pm 1.29 \%$    \\ \hline 
  & $4-f_{\text{fin}}$ & SHAL &     $84.16 \pm 1.05 \%$    \\ \hline 
- & $0-f_{\text{fin}}$ & DEEP &     $85.65 \pm 0.71 \%$    \\ \hline 
+ & $0-f_{\text{fin}}$ & DEEP &     $\mathbf{85.65} \pm 0.71 \%$    \\ \hline 
  & $4-f_{\text{fin}}$ & DEEP &     $84.63 \pm 2.02 \%$    \\ \hline 
-REM & $0-f_{\text{fin}}$ & SHAL &  $86.11 \pm 0.38 \%$    \\ \hline 
- & $4-f_{\text{fin}}$ & SHAL &     $86.33 \pm 0.59 \%$    \\ \hline 
- & $0-f_{\text{fin}}$ & DEEP &     $83.87 \pm 2.24 \%$    \\ \hline 
- & $4-f_{\text{fin}}$ & DEEP &     $84.22 \pm 2.49 \%$    \\ \hline 
+REM & $0-f_{\text{fin}}$ & SHAL &  $\mathbf{93.90} \pm 2.34 \%$    \\ \hline 
+ & $4-f_{\text{fin}}$ & SHAL &     $93.47 \pm 2.54 \%$    \\ \hline 
+ & $0-f_{\text{fin}}$ & DEEP &     $88.03 \pm 1.02 \%$    \\ \hline 
+ & $4-f_{\text{fin}}$ & DEEP &     $86.33 \pm 2.30 \%$    \\ \hline 
 \end{tabular}
-\subcaption{Caption.}
+\subcaption{Raw data}
 % \label{tab:depcl}
 }
 \hfill
@@ -2594,15 +2594,17 @@ REM & $0-f_{\text{fin}}$ & RP & $60.96 \pm 3.05 \%$ \\ \hline
  & $0-f_{\text{fin}}$ & CS &  $55.32 \pm 1.68 \%$ \\ \hline 
  & $4-f_{\text{fin}}$ & CS &  $62.78 \pm 1.18 \%$ \\ \hline 
 \end{tabular}
-\subcaption{Caption.}
+\subcaption{Image-econded data}
 % \label{tab:depcl}
 }
+\caption{Evaluation of accuracies of the shallow (SHAL) and deep (DEEP) architectures on the raw and image-encoded data in classification of depression state (DEP) or prediction of future remission (REM). RP - recurrence plot, CS - cosine similarity.}
+\end{table}
 
 \add[inline]{We might want to show the missclasifications - how close were they? Are people acting, or is the measurement relatively objective? Or maybe confusing matrices.}
-\add[inline]{How about seeing different activations?}
+\add[inline]{How about seeing hidden layer activations typical of particular class?}
 \info[inline]{Batchsize 64 128 doesn't matter. The learning rate was decreased with batch size.}
 \info[inline]{CHanges to number of any parameter, including adding layers made the results worse. Interestingly, simpler models overfit the training set very quickly, and regularization hurt performance. Hence, this model is probably at least close to local optima in hyperparameter space.}
-\end{table}
+\info[inline]{Maybe measure shallow model with more traditional activations to see how much performance is due to FCP.}
 
 \chapter*{Conclusion}
 
