@@ -2530,16 +2530,22 @@ Moreover, we also evaluated multiple simpler architectures. The best performing 
 \label{fig:shal}
 \end{figure}
 
-\subsection{Results} \label{sec:results}
-Data: How we chose the labels, how we split the data. Only before for remission.
+\subsection{Dataset}
+For experiments in this chapter, we decided to use the entire recordings, in contrast to our approach in the previous chapter, where we used only the beginning in each recording. This is mainly because the classification algorithms we used in this chapter have larger variance, and thus are easily overfit on small datasets. Thus, each of the recordings, after downsampling to $250$ Hz (see Section \ref{sec:dataset}) was cut into multiple subrecordings of length 256, each subrecording forming a data sample. The subrecording length was selected as a tradeoff between the amount of obtained samples and information\add{Is information the right term? The amount of variance?} contained within each sample. For this sampling frequency, this corresponds to approximately a second of recording, which was shown to contain enough information to classify depression with satisfactory accuracy.\add{Cite this!!!} Moreover, some GPU cards are optimized for working on data chunks multiples of two in size.\add{Make more precise.} We also tried increasing the length to 512, but found no improvement in performance.
+
+After splitting the recordings, we assigned positive, neutral or negative label to each subrecording in order to split the dataset into three groups based on depression score of the subject at the time of the recording for depression classification, or based on the subject's before to after treatment depression score for remission classification (in which case only before treatment recordings were further used). The neutral class was then removed and not further considered. 
+
+The threshold values separating these classes were selected such that the classes remained relatively balanced and that enough samples were present in each class to train and evaluate a model of moderate capacity. In the case of depression classification, the amount of inter-class variance is inherently limited by nature of the provided data - patients were not randomly sampled, but visited the institution to seek professional help. In attempt to partially remedy this issue, the depression score threshold was set such that 71 patients remained in each depressed and healthy classes, leaving 124 neutral subjects. This corresponds to depressions score ranges $\langle 0, 17 \rangle $ for healthy, $(17, 27)$ for neutral, and $\langle 27, 34 \rangle$ for depressed. In the case of remission classification, our ability to potentially increase inter-class variance in this way is more limited due the amount of available data, since only before treatment recordings are used. Thus, we removed only 14 neutral subjects, leaving 59 non-remitting and 60 remitting subjects.
 
 Preprocessing: Filtering, running average and standard deviation.
+Signals were preprocessed before either image-encoding or direct classification. First, the electrode voltages were converted to mV to improve numerical stability. Then, optionally, a high-pass butterworth filter of order 3 with 4 Hz cutoff frequency was applied. It has been suggested that in some cases, filtering the singals may improve classification performance.\add{Elaborate, cite, mayber refer to discussion in previous chapter.} In image-encoded case, the signals were encoded at this stage. Finally, Welford's algorithm for running mean and standard deviation was used to compute the mean and variance over the whole dataset, and the dataset was then centered and normalized according to the found values.
 
+\subsection{Results} \label{sec:results}
 Evaluation: We used 5-fold cross validation, selected the best performing model by evaluation on validation set, run for 200 epochs.
 
 Results: SHAL performs noticably better on REM than DEEP. Filtering has not much effect, but helps slightly for REM, but does not help on DEP.
 
-Conclusions: SHAL has state of the art performance on REM. It would be nice to evaluate against pure FBCSP, and try more traditional configuration to see difference in performance. 
+Conclusions: SHAL has state of the art performance on REM. It would be nice to evaluate against pure FBCSP, and try more traditional configuration to see difference in performance. Combination of CNN and recurrence plots is likely not especially effective.
 
 \begin{table}[tbp]
 \centering
@@ -2581,14 +2587,14 @@ REM & $0-f_{\text{fin}}$ & SHAL &  $\mathbf{93.90} \pm 2.34 \%$    \\ \hline
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{Label} & \textbf{Freq.} & \textbf{Meth.} & \textbf{Acc.} \\ \hline
-DEP & $0-f_{\text{fin}}$ & RP & $63.02 \pm 1.48 \%$ \\ \hline 
+DEP & $0-f_{\text{fin}}$ & RP & $\mathbf{63.02} \pm 1.48 \%$ \\ \hline 
  & $4-f_{\text{fin}}$ & RP & $61.31 \pm 0.48 \%$   \\ \hline 
 %  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
 %  & $4-f_{\text{fin}}$ & GAF &  \\ \hline 
  & $0-f_{\text{fin}}$ & CS & $59.05 \pm 1.52 \%$  \\ \hline 
  & $4-f_{\text{fin}}$ & CS & $58.65 \pm 0.69 \%$ \\ \hline 
 REM & $0-f_{\text{fin}}$ & RP & $60.96 \pm 3.05 \%$ \\ \hline 
- & $4-f_{\text{fin}}$ & RP &  $64.95 \pm 1.78 \%$    \\ \hline 
+& $4-f_{\text{fin}}$ & RP &  $\mathbf{64.95} \pm 1.78 \%$    \\ \hline 
 %  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
 %  & $4-f_{\text{fin}}$ &  GAF &  \\ \hline 
  & $0-f_{\text{fin}}$ & CS &  $55.32 \pm 1.68 \%$ \\ \hline 
