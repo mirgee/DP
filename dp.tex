@@ -329,10 +329,6 @@ Artificial Intelligence Center, FEE, CTU Prague
 \glsaddall
 \printnoidxglossary[type=\acronymtype,title=Acronyms]
 
-\listoffigures
-
-\listoftables
-
 \renewcommand{\nomname}{List of Symbols}
 
 \mbox{}
@@ -350,6 +346,10 @@ Artificial Intelligence Center, FEE, CTU Prague
 \nomenclature{$R_A$}{Radius of the attractor} 
 
 \printnomenclature
+
+\listoffigures
+
+\listoftables
 
 \newpage{}
 
@@ -1366,7 +1366,7 @@ The $E_1$ statistic of AFN usually stops increasing for approximately the same v
 \end{figure}
 
 \subsection{Largest Lyapunov Exponents} \label{sec:lle-exp}
-\subsubsection{Manual Analysis}
+\subsubsection{Manual Analysis} \label{sec:lle-man-anal}
 For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000.\unsure{Why? This is unexpected.} 
 
 Figure \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. This is because the average divergence cannot exceed the diameter of the attractor, which is finite, since the attractor is bounded in the phase space. Therefore, selecting proper embedding dimension based on divergence plots is a balancing act between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
@@ -1380,13 +1380,11 @@ With increasing time delay $\tau$, we observe gradually damped oscillation-like 
 \end{align*}
 This means that for a given $y_i$, possible values of $y_{i+\tau}$ are restricted to a line parallel to the direction of the $m$-th basis vector. Analogously, $y_{i+2\tau}$, $y_{i+3\tau}$, \dots, $y_{i+(m-1)\tau}$ are restricted to $2, 3, \dots, m-1$ dimensional hyperplanes in the $m$ dimensional embedding space. As explained in Section \ref{sec:rosenstein}, Rosenstein's algorithm finds pairs of vectors $y_i$ and $y_{n(i,m)}$ with certain properties, and computes the evolution of their distances over time. This means that the possible values of $y_{i+\tau}$ and $y_{n(i,m)+\tau}$ are restricted to lie on two hyperplanes parallel to the $m$-th basis vector. Therefore, if $d_i(0) = \norm{y_i - y_{n(i,m)}}$ is their initial distance, then the maximum possible distance after evolution by $\tau$ timesteps is $\norm{ y_{i+\tau} - y_{k+\tau} } = \sqrt{ (d_i(0))^2 + A_m^2 }$, where $A_m$ is the maximum amplitude $\max_{i \in N(m, \tau)}|x_i|$. However, generally, the maximum distance is $A_m \sqrt{m}$. Thus, we may expect the average distances fluctuate with period $\tau$.
 
-There are several methods for alleviating this effect, but it cannot be evaded completely, since it is a join property of the time delay embedding and the data \cite{fell1994resonance}. One may choose smaller $\tau$, choose the evolution time $t_e < \tau$ or $t_e \geq \tau m$ (. Alternatively, one may choose different time delays $\tau_i$ for individual vector coordinates. The benefit of the first three options is that they still enable hardware acceleration provided by vectorized operations. Lastly, some algorithms, such as a modification of Wolf's algorithm \cite{roschke1995nonlinear}, attempt to minimize the effect implicitly.
-
-\info[inline]{We computed LLE for fixed $m$ and $\tau$, and then by selecting them automatically. Describe the reasoning for selecting the fixed ones, and the process of automatic selection via the method in the previous section.}
+There are several methods for alleviating this effect, but it cannot be evaded completely, since it is a join property of the time delay embedding and the data \cite{fell1994resonance}. One may choose smaller $\tau$, choose the evolution time $t_e < \tau$ or $t_e \geq \tau m$. Alternatively, one may choose different time delays $\tau_i$ for individual vector coordinates. The benefit of the first three options is that they still enable hardware acceleration provided by vectorized operations. Lastly, some algorithms, such as a modification of Wolf's algorithm \cite{roschke1995nonlinear}, attempt to minimize the effect implicitly.
 
 \unsure[inline]{Can this occur due to measurement projection? Also, even if the largest Lyapunov exponent is positive, in dissipative systems (i.e. those possessing an attractor, see Section \ref{sec:attractor}) the sum of all Lyapunov exponents is negative, and thus, even on average, states will diverge in some directions. These effects can be compensated for by using proper averaging statistics \cite{kantz2004}.}
 
-\subsubsection{Automatic Selection Procedure}
+\subsubsection{Automatic Selection Procedure} \label{sec:lle-auto}
 To compute the LLE estimates with automatic selection of proper embedding parameters, we proceeded as follows. Selection of time delay was done using autocorrelation function with threshold $1-1/e$. Results ranged from 2 to 5, depending on the channel. The selected $\tau$ was used to compute the embedding dimension with smallest FNN percentage from embedding dimensions in range from 1 to 20, i.e. $m_1 = \argmin_{m' \in \{1,\dots,20\}} \mathrm{FNN}(m')$. The tolerance parameters were $R=2.5$, $A=2.0$. Moreover, we found the first embedding dimension $m_2$ for which $E_1(m_2) - E_1(m_2-1) < 0.008$. The estimates $m_1$ and $m_2$ computed in this manner were usually similar, and ranging from 8 to 11, depending on the channel. The final embedding dimension $m$ was selected as their average $m = \ceil{m_1 + m_2)/2}$. The length of the scaling region $t_e = m\tau$ and the Theiler window, as mentioned, $w_t = 50$.
 
 \begin{figure} 
@@ -1397,16 +1395,14 @@ To compute the LLE estimates with automatic selection of proper embedding parame
 \label{fig:lle-comp}
 \end{figure}
 
-\subsubsection{Literature review}
-Emotion recognition using LLE from EEG signals was performed in \cite{aftanas1997non} with embedding dimension $m=10$ and time delay $\tau=3$. No reasoning behind this choice was provided. The remaining studies we examined either used various thresholds of autocorrelation function (see Section \ref{sec:acorr}) or delayed mutual information (see Section \ref{sec:dmi}) for time delay selection.
-
+\subsubsection{Literature Review}
 In analysis of EEG signals recorded during epileptic seizures, Babloyantz \cite{babloyantz1986low} obtained embedding dimension estimate of $5$ using correlation dimension saturation. Estimate of $7$ was reached by the same means in \cite{blanco1995stationarity}. 
 
 Using the correlation dimension saturation, the following estimates have been obtained: 5 \cite{babloyantz1986low}, 7 \cite{blanco1995stationarity}, 6-8 (depending on sleep stage) \cite{gallez1991predictability}. We found similar estimates using correlation dimension maximum (as mentioned in Section \ref{sec:embdim-exp}, we observed no saturation) with time delay $\tau=1$.
 
 By analyzing records ECT seizures, manually separating them into more and less regular, and inspecting multiple values of LLE as a measure of separation between these classes, 7 was selected as optimal embedding dimension in \cite{krystal1997largest}.
 
-Remaining studies we evaluated, including some analyzing depression, used embedding dimension 10 \cite{roschke1995nonlinear, fell1993deterministic, roschke1993calculation, roschke1995nonlineardeppression}.
+Remaining studies we evaluated, including some analyzing depression, used embedding dimension 10 \cite{roschke1995nonlinear, fell1993deterministic, roschke1993calculation}. Especially relevant is \cite{roschke1995nonlineardeppression}, where depression data were analyzed, including the dependence of LLE on the embedding dimension. The authors decided to use various values of time delay depending on the embedding dimension corrdinate (for rationale, see Section \ref{sec:lle-man-anal}). Emotion recognition using LLE from EEG signals was performed in \cite{aftanas1997non} with embedding dimension $m=10$ and time delay $\tau=3$. No reasoning behind this choice was provided. 
 
 \begin{table}[tbp]
 \resizebox{\textwidth}{!}{
@@ -1422,9 +1418,16 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
 10 & - & zero-crossing of $A(\tau)$ & sleep & \cite{fell1993deterministic} \\ \hline
 10 & - & random & depression & \cite{roschke1995nonlineardeppression} \\ \hline
 \end{tabular}}
+\caption{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $250-256 Hz$.}
 \end{table}
 
+The range results we obtained using various algorithms and observed in literature highlights the fact the embedding parameters selection algorithms, as well as visual inspection of the divergence plots largely unreliable, and that the optimal values depend on particular dataset and problem. Therefore, we decided to compute LLE's 
+
+In summary, we obtained a wide range of results using traditional parameter selection techniques, with the most powerful algorithm, ILD, indicating sligthly lower values of time delay. Most of the embedding dimension estimation algorithms, including ILD, agree with the literature that the optimal embedding embedding dimension should be set around 10. We proceeded with computing multiple sets of LLE labels for the dataset, each with a different member of the following set of input parameters $(m, \tau)$: $(7, 3)$, $(7,6)$, $(10,3)$, $(10, 6)$, $(15, 4)$, automatic (as described in Section \ref{sec:lle-auto}). Then, we analyzed the label distributions between studied groups, as presented in Section \ref{sec:distanal}, where we present results only for the most discriminative pairs of parameters, which was $m=10$, $\tau=3$.
+
+
 \subsection{Correlation Dimension} \label{sec:corrdim-exp}
+\subsubsection{Manual Analysis}
 \info[inline]{For corr dim, we also used two ways to compute it - automatic and fixed. Explain here why have we chosen $m=10$ and $\tau=3$.}
 
 To compute the correlation sum $C(r)$, we used classical Grassberger-Procaccia algorithm described in Section \ref{sec:corrdim} using Chebyshev metric, $w_t = 50$, for values of $r$ either in geometrical progression of 100 values from 0.05 to 10 or by an automatic procedure described further. Then, these $(r, C(r))$ pairs were used to compute local least square fits of the equation $C(r) = r^{D_2}$ inside windows of length 7 for each pair. \add{This paragraph can be much improved (wording, etc.).}
@@ -1433,7 +1436,8 @@ Figure \ref{fig:cr} shows log-log plots of normalized correlations sum $C(r)$ ag
 
 Figure \ref{fig:loc-d2} shows the log plot of local slope of of $\log C(r)$ as a function of $r$. There are no apparent scaling regions at all. Morever, by comparing with the same plot for iAAFT surrogate of the same time series (see Figure \ref{fig:loc-d2-comp}), we cannot even reject the hypothesis of a linear stochastic process. 
 
-We decided to compute the correlation dimension as follows. First, as with computation of the Lyapunov exponent, we use a moving window of length 15000 datapoints and shift 100 to locate 60 s section of the time series with the lowest p-value for the $\chi^2$ stationarity test described in Section . \add{Add description of the test.} Then, we create embeddings for embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
+\subsubsection{Automatic Selection Procedure}
+We decided to compute the correlation dimension as follows. We create embeddings for embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
 \begin{align*}
   \log r_{\mathrm{upper}} = \log r_{\mathrm{lower}} + \frac{1}{10} \left( \log r_{\mathrm{max}} - \log r_{\mathrm{lower}} \right), 
 \end{align*}
@@ -1472,6 +1476,25 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
   \caption{Correlation dimension as function of the embedding dimension $m$.}
 \label{fig:em-corrdim}
 \end{figure}
+
+\subsubsection{Literature Review}
+
+\begin{table}[tbp]
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+$\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{Application} & \textbf{Reference} \\ \hline
+3-30 & saturation & DMI & depression & \cite{hosseinifard2013} \\ \hline
+ - &  ``unfolding dimension'' (see text) & objective function minimization & intraindividual classification & \cite{schmid1996indications} \\ \hline
+ 2-20 (scaling region 16-20) & saturation & $A(\tau)$, threshold $1/e$ & awake / sleep classification & \cite{pereda1998non} \\ \hline
+ 12 & - & 8 & mental state classification & \cite{dvorak1986some} \\ \hline
+ 2-12 & saturation & 5 & schizophrenia & \cite{koukkou1993dimensional} \\ \hline
+\end{tabular}}
+\caption{200 - 256 Hz.}
+\end{table}
+
+Explain unfolding dimension \cite{schmid1996indications}. They layed out fully automatic, albeit complicated, procedure for selecting the embedding parameters.
+
 
 \subsection{Detrended Fluctuation Analysis}
 \add[inline]{Show plots, how and why we chose the params so that the fit is optimal.}
