@@ -94,6 +94,37 @@
 \makeatother
 
 \usepackage{babel}
+
+\usepackage[acronym,nomain,nonumberlist]{glossaries}
+% \makeglossaries
+\makenoidxglossaries
+
+\newacronym{lle}{LLE}{Largest Lyapunov exponent}
+\newacronym{ect}{ECT}{Electroconvulsive therapy}
+\newacronym{ild}{ILD}{Integral local deformation}
+\newacronym{dmi}{DMI}{Delayed mutual information}
+\newacronym{fnn}{FNN}{False nearest neighbors}
+\newacronym{afn}{AFN}{Average false neighbors}
+\newacronym{aaft}{AAFT}{Amplitude adjusted Fourier transform}
+\newacronym{iaaft}{iAAFT}{Improved amplitude adjusted Fourier transform}
+\newacronym{adfd}{ADFD}{Average displacement from diagonal}
+\newacronym{eeg}{EEG}{Electroencephalography, electroencephalogram}
+\newacronym{hfd}{HFD}{Higuchi fractal dimension}
+\newacronym{pca}{PCA}{Principal components analysis}
+\newacronym{svd}{SVD}{Singular value decomposition}
+\newacronym{ftpr}{FTPR}{Fourier transform phase randomization}
+\newacronym{se}{SE}{Sample entropy}
+\newacronym{he}{HE}{Hurst exponent}
+\newacronym{dfa}{DFA}{Detrended fluctuation analysis}
+\newacronym{fgn}{fGn}{Fractional Gaussian noise}
+\newacronym{fBm}{fBm}{Fractional Brownian motion}
+\newacronym{rp}{RP}{Recurrence plot}
+\newacronym{cs}{CS}{Cosine similarity}
+\newacronym{cd}{CD}{Correlation dimension}
+
+\usepackage{nomencl}
+\makenomenclature
+
 \begin{document}
 
 \def\documentdate{\today}
@@ -295,12 +326,32 @@ Artificial Intelligence Center, FEE, CTU Prague
 
 \thispagestyle{empty}
 
+\glsaddall
+\printnoidxglossary[type=\acronymtype,title=Acronyms]
+
 \listoffigures
 
 \listoftables
 
-\newpage{}
+\renewcommand{\nomname}{List of Symbols}
 
+\mbox{}
+\nomenclature{$A(\tau)$}{Autocorrelation of a time series as a function of time delay}
+\nomenclature{$\tau$}{Time delay}
+\nomenclature{$m$}{Embedding dimension}
+\nomenclature{$s$}{Measurement function}
+\nomenclature{$\mathbf{F}$}{Dynamics of a dynamical system as a vector field}
+\nomenclature{$I(\tau)$}{Delayed mutual information as a function of time delay}
+\nomenclature{$D_2(A)$}{Corelation dimension of an attractor $A$}
+\nomenclature{$x_i$}{i-th point in a univariate time series}
+\nomenclature{$\mathbf{x}_i$}{i-th point in the embedding space} 
+\nomenclature{$N$}{Length of a time series} 
+\nomenclature{$N_{(m, \tau)}$}{Length of a trajectory in the embedding space} 
+\nomenclature{$R_A$}{Radius of the attractor} 
+
+\printnomenclature
+
+\newpage{}
 
 \chapter{Introduction}
 \section{Depression and its Diagnosis}
@@ -333,7 +384,7 @@ In the final chapter, we conclude with summary of our results, and potential ave
 
 % \addcontentsline{toc}{chapter}{Introduction}
 
-\chapter{Non-linear time series analysis}
+\chapter{Non-linear Time Series Analysis}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The most simple of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description.
 
 Those examples represent two classes of processes existent before the rise of non-linear dynamics: \cite{andreas2000}
@@ -492,7 +543,7 @@ For these systems, after sufficient passage of time, all future states will cont
 \label{fig:attractors}
 \end{figure}
 
-Since most physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are relatively complex, characteristic of dynamical systems with extending volumes in some directions. This property results fast divergence of two initial states, one of which has nonzero component in the direction of growth, i.e. sensitive dependence on the initial conditions. However, since atractors are bounded, the divergence eventually stops and the two trajectories fold together. This continuous expansion and folding may create an attractor with a \emph{fractal structure} (an example of such an attractor is shown on Figure \ref{fig:self-similarity}) \cite{andreas2000}. For our purposes it is sufficient to say that this means that these attractors can be characterized as having (quantifiable) self-similarity.\footnote{Cantor set being a canonical example of self-similarity.} However, the following definition related to fractals will be useful in Section \ref{sec:embedding}:
+Since most physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are relatively complex, characteristic of dynamical systems with extending volumes in some directions. This property results fast divergence of two initial states, one of which has nonzero component in the direction of growth, i.e. sensitive dependence on the initial conditions. However, since atractors are bounded, the divergence eventually stops and the two trajectories fold together. This continuous expansion and folding may create an attractor with a \emph{fractal structure}, which, for our purposes, can be understood to mean ``possessing a quantifiable self-similarity'' (an example of such an attractor is shown on Figure \ref{fig:self-similarity}) \cite{andreas2000}. This self-similarity can be quantified by a class of scalar measures called \emph{fractal dimensions}. Indeed, we will use one of the members of this class - correlation dimension - in our experiments, and will treat it in detail. Let us give another example of a fractal dimension, called box-counting dimension, be useful for understanding the implications of Taken's embedding theorem (\ref{thm:takens}) in Section \ref{sec:embedding}:
 \begin{dfn}[\cite{falconer2004}] \label{def:box-counting}
   Let $F$ be any non-empty bounded subset of $\RR^n$, and let $N_\epsilon(F)$ be the smallest number of sets of diameter at most $\epsilon$ which can cover $F$. Then, the \textbf{box-counting dimension} (also known as Minkowski–Bouligand dimension) is defined as
   \begin{align} \label{eq:box-counting}
@@ -500,7 +551,6 @@ Since most physiogenerated signals are chaotic, their analysis is concerned prim
   \end{align}
   if it exists.
 \end{dfn}
-
 Intuitively, the number of mesh cubes of side $\epsilon$ intersecting $F$ gives an indication about how irregular the set is when inspected at scale $\epsilon$, and the box-counting dimension reflects ``how rapidly'' the irregularities develop as $\epsilon \rightarrow 0$ \cite{falconer2004}. 
 
 \begin{figure} 
@@ -571,13 +621,13 @@ This idea has a simile in the existence theorems in the theory of differential e
 
 Taken's theorem, although of theoretical importance, is not necessarily useful in practice, since even dense sets can have measure zero. Moreover, it is restricted to smooth manifolds. An add came ten years later, when T. Sauer both generalized Takens' result as follows (in a simplified form):
 \begin{thm}[Sauer, \cite{sauer1991}] \label{thm:sauer}
-  Let $A$ be a compact fractal with box-counting dimension $d_A$, and let $A$ be a subset of a $m$-dimensional manifold. Then
+  Let $A$ be a compact fractal with box-counting dimension $d_A$ (see Definition \ref{def:box-counting}), and let $A$ be a subset of a $m$-dimensional manifold. Then a member of the set
   \begin{align*}
     \lbrace \Phi: A \rightarrow \RR^{m} | \Phi \in C^1, m > 2d_A \rbrace \text{ is an embedding with probability } 1.
   \end{align*}
 \end{thm}
 
-In conclusion, Theorem \ref{thm:takens} and Theorem \ref{thm:sauer} together ensure that when $m$ is chosen such that $m > d_A$i (which may be a considerable reduction in dimension compared to $m \geq 2d+1$), then $\Phi$ a true embedding of the underlying attractor for almost any $\tau$ (note only sufficiency of the result - $\textbf{x}_n$ may be an embedding even for smaller $m$).
+Theorem \ref{thm:takens} and Theorem \ref{thm:sauer} together ensure that when $m$ is chosen such that $m > d_A$ (which may be a considerable reduction in dimension compared to $m \geq 2d+1$), then $\Phi$ a true embedding of the underlying attractor for almost any $\tau$ (note only sufficiency of the result - $\textbf{x}_n$ may be an embedding even for smaller $m$).
 
 A fascinating consequence of Theorem \ref{thm:sauer} when applied to a sequence of measurements recorded from a physical system is that a successfully reconstructed attractor does not describe the time series, but the system itself. In the words of Theiler: ``If one believes that the brain (say) is a deterministic system, then it may be possible to study the brain by looking at the electrical output of a single neuron. This example is an ambitious one, but the point is that the delay-time embedding makes it possible for one to analyze the self-organizing behavior of a complex dynamical system without knowing the full state at any given time'' \cite{theiler1990estimating}.
 
@@ -1173,7 +1223,7 @@ In some studies, band-pass filtering was used to remove frequencies which are ph
 
 \section{Estimation of Non-linear Measures}
 \subsection{Our Procedure}
-It is well known that the results of algorithms for estimation of non-linear measures presented in Section \ref{sec:nonlin-meas} depend on the choice not only on the amount of noise in the data, the way of data preprocessing and the choice of the algorithm, but also, to a considerable degree, on the embedding parameters and other input parameters \cite{fell1994resonance}. Therefore, their choice is of substantial importance.
+It is well known that the results of algorithms for estimation of non-linear measures presented in Section \ref{sec:nonlin-meas} depend on the choice not only on the amount of noise in the data, the way of data preprocessing and the choice of the algorithm, but also, to a considerable degree, on the embedding parameters and other input parameters \cite{fell1994resonance, das2002applicability}. Therefore, their choice is of substantial importance.
 
 Our procedure for their selection was as follows. For each non-linear measure, we created a list of parameters to try. Because most of the algorithms are relatively computationally expensive, length of the list should be limited. Then, we proceeded to label the data for each item on the list andd evaluated it. In Section \ref{sec:results-nl} we present the results for the most discriminative parameters. For creating the list, we used one or more of the following methods (depending on the non-linear measure in question):
 \begin{enumerate}
@@ -1195,7 +1245,6 @@ To reduce the effects of possible nonstationarity, we attempted to find the most
   \caption{A comparison of the first $4 s$ of a time series and its surrogate.}
 \label{fig:ts}
 \end{figure}
-
 \subsubsection{Time Delay}
 In order to estimate the time delay, we used the following techniques:
 \begin{enumerate}
@@ -1291,20 +1340,14 @@ Integral local deformation & 4                                    \\ \hline
 \label{fig:ild}
 \end{figure}
 
-\subsubsection{Embedding Dimension}
-For estimating the embedding dimension, we used combination of \emph{false nearest neighbors} (FNN) algorithm described in Section \ref{sec:fnn} and average false neighbors (AFN) described in Section \ref{sec:afn}. The convergence of ILD curves and saturation of correlation dimension also provides insight into optimal choice of embedding dimension.
+\subsubsection{Embedding Dimension} \label{sec:embdim-exp}
+For estimating the embedding dimension, we used combination of \emph{false nearest neighbors} (FNN) algorithm described in Section \ref{sec:fnn} and average false neighbors (AFN) described in Section \ref{sec:afn}. The convergence of ILD curves and saturation of correlation dimension also provides insight into optimal choice of embedding dimension, but, as mentioned, is impractical due to high computational cost. As explained in Section \ref{sec:corrdim}, correlation dimension is expected to saturate for high enough choices of embedding dimension. However, we found that instead of saturating, it tended to decrease after reaching a maximum as a function of $m$, see Figure \ref{fig:em-corrdim}. This may be because the attractor is not represented adequately in high embedding dimensions with limited amount of data. Moreover, the computational costs of this method are also considerable.
 
-The percentage of reported false neighbors depends strongly on the selected values of $R$ and $A$ from equations (\ref{eq:first-criterion}) and (\ref{eq:second-criterion}). This is illustrated on Figure \ref{fig:fnn-comp}, showing the percentage of false neighbors reported by the respective criteria for varying values of $A$ and $R$, and for several values of time delay $\tau$. 
+As expected, the percentage of reported false neighbors depends strongly on the selected values of $R$ and $A$ from equations (\ref{eq:first-criterion}) and (\ref{eq:second-criterion}). This is illustrated on Figure \ref{fig:fnn-comp}, showing the percentage of false neighbors reported by the respective criteria for varying values of $A$ and $R$, and for several values of time delay $\tau$. The percentages reported by the criterion I are almost independent of $\tau$, whereas increasing $\tau$ tends to increase the percentage reported by criterion II. For high enough $\tau$, criterion II will report all neighbors as false. 
 
-The percentages reported by the criterion I are almost independent of $\tau$, whereas increasing $\tau$ tends to increase the percentage reported by criterion II. For high enough $\tau$, criterion II will report all neighbors as false. 
+The apparent independence of the results of the criterion I on $\tau$ indicates that, regardless of $\tau$, the same percentage of near neighbors changes their distance proportionally with increase in $m$. As explained in Section \ref{sec:fnn}, \add{Actually explain it there - nearest $\neq$ close, etc\dots, \cite{kennel1992determining}} this behavior that can be expected of randomly generated uniformly distributed sequence of numbers. Indeed, behavior of the criterion II is consistent with this hypothesis - it eventually increases to 100\% for all values of $A$, essentially indicating infinite dimension. By selecting proper parameters and using both criteria cojointly, however, FNN can still be used to obtain reasonable results, consistent with estimates obtained by ILD, AFN, and the literature. We will use this fact in our procedure of automatic selection of embedding parameters. \add{Report average $m$ computed by ANN and FNN, $R=2.5$, $A=2.0$, $\Delta E_1 \leq 0.005$ for this patient using a histogram.}
 
-The apparent independence of the results of the criterion I on $\tau$ is indicates that, regardless of $\tau$, the same percentage of near neighbors changes their distance proportionally with increase in $m$. As explained in Section \ref{sec:fnn}, \add{Actually explain it there - nearest $\neq$ close, etc\dots, \cite{kennel1992determining}} this behavior that can be expected of randomly generated uniformly distributed sequence of numbers. Indeed, behavior of the criterion II is consistent with this hypothesis - it eventually increases to 100\% for all values of $A$, essentially indicating infinite dimension.
-
-By selecting proper parameters and using both criteria cojointly, however, FNN can still be used to obtain reasonable results, consistent with estimates obtained by ILD and AFN. \add{Report average $m$ computed by ANN and FNN, $R=2.5$, $A=2.0$, $\Delta E_1 \leq 0.005$ for this patient using a histogram.}
-
-The $E_1$ statistic of AFN usually stops increasing for approximately the same value as reported by criterion I of FNN for $R=2.5$, see Figure \ref{fig:afn-comp}. The $E_2$ statistic, tends to oscillate in small neighborhood of value $1$, which is an indecation of nondeterminism \cite{Cao1997}.
-
-We plotted the value of correlation dimension against $m$ for various values of $\tau$ (see Figure \ref{fig:em-corrdim}) - for details about the computation, see Section \ref{sec:corrdim-exp}.\add{Add statistics of $m$ computed this way.}
+The $E_1$ statistic of AFN usually stops increasing for approximately the same value as reported by criterion I of FNN for $R=2.5$, see Figure \ref{fig:afn-comp}. The $E_2$ statistic, tends to oscillate in small neighborhood of value $1$, which is an indication of nondeterminism \cite{Cao1997}.
 
 \begin{figure} 
 \centering
@@ -1323,9 +1366,10 @@ We plotted the value of correlation dimension against $m$ for various values of 
 \end{figure}
 
 \subsection{Largest Lyapunov Exponents} \label{sec:lle-exp}
-For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $t_w$ length of 50 (200 ms). We found that the results were similar for values $t_w$ of 10, 50, 100 and 1000.\unsure{Why? This is unexpected.} 
+\subsubsection{Manual Analysis}
+For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000.\unsure{Why? This is unexpected.} 
 
-Figure \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Let us remind the reader that longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension may appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. Therefore, selecting proper embedding dimension based on divergence plots is a balancing act between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
+Figure \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. This is because the average divergence cannot exceed the diameter of the attractor, which is finite, since the attractor is bounded in the phase space. Therefore, selecting proper embedding dimension based on divergence plots is a balancing act between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
 
 With increasing time delay $\tau$, we observe gradually damped oscillation-like behavior with period $\tau$ and amplitudes also increasing with $\tau$. Average divergence we computed using Kantz' algorithm also exhibits this behavior. Oscillation-like behavior was observed for white noise data in \cite{Rosenstein1993}, and for periodic data with period equal to the dominant period of the system in \cite{kantz2004}. One possible explanation is as follows \cite{fell1994resonance}. Let $x_1, x_2, \dots, x_N$ represent sampled time series, and $y_i \in \RR^{m}$ an embedded point in the reconstructed orbit. Then
 \begin{align*}
@@ -1336,13 +1380,14 @@ With increasing time delay $\tau$, we observe gradually damped oscillation-like 
 \end{align*}
 This means that for a given $y_i$, possible values of $y_{i+\tau}$ are restricted to a line parallel to the direction of the $m$-th basis vector. Analogously, $y_{i+2\tau}$, $y_{i+3\tau}$, \dots, $y_{i+(m-1)\tau}$ are restricted to $2, 3, \dots, m-1$ dimensional hyperplanes in the $m$ dimensional embedding space. As explained in Section \ref{sec:rosenstein}, Rosenstein's algorithm finds pairs of vectors $y_i$ and $y_{n(i,m)}$ with certain properties, and computes the evolution of their distances over time. This means that the possible values of $y_{i+\tau}$ and $y_{n(i,m)+\tau}$ are restricted to lie on two hyperplanes parallel to the $m$-th basis vector. Therefore, if $d_i(0) = \norm{y_i - y_{n(i,m)}}$ is their initial distance, then the maximum possible distance after evolution by $\tau$ timesteps is $\norm{ y_{i+\tau} - y_{k+\tau} } = \sqrt{ (d_i(0))^2 + A_m^2 }$, where $A_m$ is the maximum amplitude $\max_{i \in N(m, \tau)}|x_i|$. However, generally, the maximum distance is $A_m \sqrt{m}$. Thus, we may expect the average distances fluctuate with period $\tau$.
 
-There are several methods for alleviating this effect, but it cannot be evaded completely, since it is a join property of the time delay embedding and the data \cite{fell1994resonance}. One may choose smaller $\tau$, choose the evolution time $t_e < \tau$ or $t_e > \tau (m-1)$. Alternatively, one may choose different time delays $\tau_i$ for individual vector coordinates. The benefit of the first three options is that they still enable hardware acceleration provided by vectorized operations. Lastly, some algorithms, such as a modification of Wolf's algorithm \cite{roschke1995nonlinear}, attempt to minimize the effect implicitly.
+There are several methods for alleviating this effect, but it cannot be evaded completely, since it is a join property of the time delay embedding and the data \cite{fell1994resonance}. One may choose smaller $\tau$, choose the evolution time $t_e < \tau$ or $t_e \geq \tau m$ (. Alternatively, one may choose different time delays $\tau_i$ for individual vector coordinates. The benefit of the first three options is that they still enable hardware acceleration provided by vectorized operations. Lastly, some algorithms, such as a modification of Wolf's algorithm \cite{roschke1995nonlinear}, attempt to minimize the effect implicitly.
 
 \info[inline]{We computed LLE for fixed $m$ and $\tau$, and then by selecting them automatically. Describe the reasoning for selecting the fixed ones, and the process of automatic selection via the method in the previous section.}
 
 \unsure[inline]{Can this occur due to measurement projection? Also, even if the largest Lyapunov exponent is positive, in dissipative systems (i.e. those possessing an attractor, see Section \ref{sec:attractor}) the sum of all Lyapunov exponents is negative, and thus, even on average, states will diverge in some directions. These effects can be compensated for by using proper averaging statistics \cite{kantz2004}.}
 
-To compute the LLE estimates with automatic selection of proper embedding parameters, we proceeded as follows.  First, we found the 60 s subsection of the time series with the lowest p-value of the $\chi^2$ stationarity test using moving window of length 15000 and slide 100. Selection of time delay was done using autocorrelation function with threshold $1-1/e$. The selected $\tau$ was used to compute the embedding dimension with smallest FNN percentage from embedding dimensions in range from 1 to 20, i.e. $m_1 = \argmin_{m' \in \{1,\dots,20\}} \mathrm{FNN}(m')$. The tolerance parameters wer $R=2.5$, $A=2.0$ and $w_t = 50$. Moreover, we found the first embedding dimension $m_2$ for which $E_1(m_2) - E_1(m_2-1) < 0.008$. \add{Add the average $m$'s computed this way.} The selected embedding dimension was $m = \ceil{m_1 + m_2)/2}$. The length of the scaling region $t_{\mathrm{max}} = m\tau$ and the Theiler window $t_w = 50$.
+\subsubsection{Automatic Selection Procedure}
+To compute the LLE estimates with automatic selection of proper embedding parameters, we proceeded as follows. Selection of time delay was done using autocorrelation function with threshold $1-1/e$. Results ranged from 2 to 5, depending on the channel. The selected $\tau$ was used to compute the embedding dimension with smallest FNN percentage from embedding dimensions in range from 1 to 20, i.e. $m_1 = \argmin_{m' \in \{1,\dots,20\}} \mathrm{FNN}(m')$. The tolerance parameters were $R=2.5$, $A=2.0$. Moreover, we found the first embedding dimension $m_2$ for which $E_1(m_2) - E_1(m_2-1) < 0.008$. The estimates $m_1$ and $m_2$ computed in this manner were usually similar, and ranging from 8 to 11, depending on the channel. The final embedding dimension $m$ was selected as their average $m = \ceil{m_1 + m_2)/2}$. The length of the scaling region $t_e = m\tau$ and the Theiler window, as mentioned, $w_t = 50$.
 
 \begin{figure} 
 \centering
@@ -1351,6 +1396,33 @@ To compute the LLE estimates with automatic selection of proper embedding parame
   \caption{Average divergence plots for varying values of $m$ and $\tau$.}
 \label{fig:lle-comp}
 \end{figure}
+
+\subsubsection{Literature review}
+Emotion recognition using LLE from EEG signals was performed in \cite{aftanas1997non} with embedding dimension $m=10$ and time delay $\tau=3$. No reasoning behind this choice was provided. The remaining studies we examined either used various thresholds of autocorrelation function (see Section \ref{sec:acorr}) or delayed mutual information (see Section \ref{sec:dmi}) for time delay selection.
+
+In analysis of EEG signals recorded during epileptic seizures, Babloyantz \cite{babloyantz1986low} obtained embedding dimension estimate of $5$ using correlation dimension saturation. Estimate of $7$ was reached by the same means in \cite{blanco1995stationarity}. 
+
+Using the correlation dimension saturation, the following estimates have been obtained: 5 \cite{babloyantz1986low}, 7 \cite{blanco1995stationarity}, 6-8 (depending on sleep stage) \cite{gallez1991predictability}. We found similar estimates using correlation dimension maximum (as mentioned in Section \ref{sec:embdim-exp}, we observed no saturation) with time delay $\tau=1$.
+
+By analyzing records ECT seizures, manually separating them into more and less regular, and inspecting multiple values of LLE as a measure of separation between these classes, 7 was selected as optimal embedding dimension in \cite{krystal1997largest}.
+
+Remaining studies we evaluated, including some analyzing depression, used embedding dimension 10 \cite{roschke1995nonlinear, fell1993deterministic, roschke1993calculation, roschke1995nonlineardeppression}.
+
+\begin{table}[tbp]
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+$\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{Application} & \textbf{Reference} \\ \hline
+5 & $D_2$ saturation & - & epileptic seizures &  \cite{babloyantz1986low} \\ \hline
+7 & $D_2$ saturation & 5 & stationarity estimation & \cite{blanco1995stationarity}  \\ \hline
+6-8 & $D_2$ saturation & DMI & measuring variance in $D_2$ during sleep & \cite{gallez1991predictability} \\ \hline
+7 & - & 10 & measuring regularity during ECT seizures & \cite{krystal1997largest} \\ \hline
+10 & - & 3 & emotion recognition & \cite{aftanas1997non}  \\ \hline
+10 & - & zero-crossing of $A(\tau)$ & sleep in schizophrenia & \cite{roschke1995nonlinear} \\ \hline
+10 & - & zero-crossing of $A(\tau)$ & sleep & \cite{fell1993deterministic} \\ \hline
+10 & - & random & depression & \cite{roschke1995nonlineardeppression} \\ \hline
+\end{tabular}}
+\end{table}
 
 \subsection{Correlation Dimension} \label{sec:corrdim-exp}
 \info[inline]{For corr dim, we also used two ways to compute it - automatic and fixed. Explain here why have we chosen $m=10$ and $\tau=3$.}
