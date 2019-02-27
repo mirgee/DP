@@ -405,7 +405,7 @@ Although the science of EEG signal analysis as a diagnostic tool brings compelli
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{Images/stationarycomparison.png} }
-  \caption{A comparison of stationary and non-stationary time series. (Source: Protonk)}
+  \caption[Stationary and non-stationary time series comparison]{A comparison of stationary and non-stationary time series. (Source: Protonk)}
 \label{fig:statnonstatcomp}
 \end{figure}
 
@@ -535,7 +535,7 @@ For these systems, after sufficient passage of time, all future states will cont
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{Images/attractors.png} }
-  \caption{Visualization of four common attractor types (units are arbitrary). Left to right, top to bottom:
+  \caption[Illustration of attractor types.]{Visualization of four common attractor types (units are arbitrary). Left to right, top to bottom:
     \textbf{Point attractor} is the only type of attractor of linear deterministic dissipative systems. It consist of a single final state to which all points from the corresponding region of attraction evolve to.
     \textbf{Limit cycle} corresponds to a periodic dynamical system. It is formed by set of states visited periodically, consituting a trajectory through the state space.
     \textbf{Torus attractor} corresponds to a quasi-periodic dynamical system, resulting (in this example) from a superposition of two periodic oscillations.
@@ -557,7 +557,7 @@ Intuitively, the number of mesh cubes of side $\epsilon$ intersecting $F$ gives 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{Images/self-similarity.png}}
-  \caption{Noise-reduced visualization of successive enlargements of highly self-similar attractor \cite{kantz2004}.}
+  \caption[Illustration of self-similarity.]{Noise-reduced visualization of successive enlargements of highly self-similar attractor \cite{kantz2004}.}
 \label{fig:self-similarity}
 \end{figure}
 
@@ -663,7 +663,7 @@ In summary, picking the proper value of $\tau$ is a balancing act between redund
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{Images/delay.png} }
-  \caption{Time delay reconstructions of the Lorenz attractor for different values of $\tau$. Figure on the left hand side shows choice of small $\tau$ and represents the case of redundance - the states concentrate along the main diagonal. Figure in the middle shows a successful reconstruction (although not an embedding, for which $m \geq 3$ is required). Figure on the right hand side shows a choice of large $\tau$ and represents the case of irrelevance - the reconstruction lacks apparent structure \cite{andreas2000}.}
+  \caption[Effects of time-delay on reconstruction.]{Time delay reconstructions of the Lorenz attractor for different values of $\tau$. Figure on the left hand side shows choice of small $\tau$ and represents the case of redundance - the states concentrate along the main diagonal. Figure in the middle shows a successful reconstruction (although not an embedding, for which $m \geq 3$ is required). Figure on the right hand side shows a choice of large $\tau$ and represents the case of irrelevance - the reconstruction lacks apparent structure \cite{andreas2000}.}
 \label{fig:delay}
 \end{figure}
 
@@ -919,7 +919,7 @@ For example, if we require the ratio of the average distance to the nearest neig
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{Images/corrdim.png} }
-  \caption{Example computation of the correlation dimension \cite{stam2005}. The axes are dimensionless. In the clockwise direction starting from the upper left hand side, the figures show the original time series, the reconstructed attractor, logarithmic plot of the correlation integrals $C(r)$ for different values of the embedding dimension $m$ (starting with $m=2$ in the uppermost line, and increasing by one with each line below), and their derivatives, corresponding to the correlation dimension $D_2$. In the derivatives plot, the vertical line signifies the cutoff of $\log r$ after which the values become imprecise due to numerical instability. We can see that the derivatives converge to approximately $2$ with decreasing radius $r$.}
+  \caption[Example of $D_2$ computation.]{Example computation of the correlation dimension \cite{stam2005}. The axes are dimensionless. In the clockwise direction starting from the upper left hand side, the figures show the original time series, the reconstructed attractor, logarithmic plot of the correlation integrals $C(r)$ for different values of the embedding dimension $m$ (starting with $m=2$ in the uppermost line, and increasing by one with each line below), and their derivatives, corresponding to the correlation dimension $D_2$. In the derivatives plot, the vertical line signifies the cutoff of $\log r$ after which the values become imprecise due to numerical instability. We can see that the derivatives converge to approximately $2$ with decreasing radius $r$.}
 \label{fig:corrdim}
 \end{figure}
 
@@ -982,7 +982,7 @@ Typical behavior of the correlation sum is shown in Figure \ref{fig:exp-cr}. We 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.6\textwidth]{Images/typ-cr.png} }
-  \caption{Plot of typical behavior of the non-normalized corretion sum $C(r)$ with regions relevant to $D_2$ estimation (both axes are logarithmically scaled) \cite{andreas2000}. It is important to observe that either too low or too high values of $r$ lead to poor estimation of the derivative: the former caused by statistical fluctuations, and the latter by the fact that the maximum pairwise distance is bounded. Using too high embedding dimension may also lead to poor estimations due to autocorrelation effects (an umbrella term for effects due to sampling and nonstationarity). To compare with our results, see Figure \ref{fig:cr}. }
+  \caption[Typical behavior of $C(r)$.]{Plot of typical behavior of the non-normalized corretion sum $C(r)$ with regions relevant to $D_2$ estimation (both axes are logarithmically scaled) \cite{andreas2000}. It is important to observe that either too low or too high values of $r$ lead to poor estimation of the derivative: the former caused by statistical fluctuations, and the latter by the fact that the maximum pairwise distance is bounded. Using too high embedding dimension may also lead to poor estimations due to autocorrelation effects (an umbrella term for effects due to sampling and nonstationarity). To compare with our results, see Figure \ref{fig:cr}. }
 \label{fig:exp-cr}
 \end{figure}
 
@@ -996,7 +996,7 @@ In our implementation, we perform a least squares fit of values $(\log r, \log C
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.6\textwidth]{Images/typ-localcr.png} }
-  \caption{Plot of a typical local correlation dimension estimates for embedding dimensions from $m=2$ to $m=22$ (from bottom to top) in favorable case \cite{andreas2000}. Note mainly the scaling region where the slope estimates converge to the value of $2$. To compare with our results, see Figure \ref{fig:loc-d2}.}
+  \caption[Typical behavior of local $D_2$.]{Plot of a typical local correlation dimension estimates for embedding dimensions from $m=2$ to $m=22$ (from bottom to top) in favorable case \cite{andreas2000}. Note mainly the scaling region where the slope estimates converge to the value of $2$. To compare with our results, see Figure \ref{fig:loc-d2}.}
 \label{fig:exp-localcr}
 \end{figure}
 
@@ -1110,7 +1110,7 @@ To this end, we construct a Monte Carlo hypothesis test of non-linearity. We cho
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{Images/surr_schema.png} }
-  \caption{A schematic depiction of surrogate data testing process for the null hypothesis of a linear process \cite{andreas2000}.}
+  \caption[Illustration of surrogate data testing process.]{A schematic depiction of surrogate data testing process for the null hypothesis of a linear process \cite{andreas2000}.}
 \label{fig:surr-schema}
 \end{figure}
 
@@ -1202,7 +1202,7 @@ We should recognize limitations of this dataset:
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{Images/electrodes.png} }
-  \caption{The International 10-20 system for placement of EEG electrodes used in our dataset. (Source: Wikimedia Commons)}
+  \caption[International 10-20 electrode placement system.]{The International 10-20 system for placement of EEG electrodes used in our dataset. (Source: Wikimedia Commons)}
 \label{fig:electrodes}
 \end{figure}
 
@@ -1210,7 +1210,7 @@ We should recognize limitations of this dataset:
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/data.png} }
-  \caption{An example recording for patient 1, first session. Horizontal line shows seconds, vertical line shows voltage scaled for purpose of visualization. }
+  \caption[Example EEG signal recording.]{An example recording for patient 1, first session. Horizontal line shows seconds, vertical line shows voltage scaled for purpose of visualization. }
 \label{fig:data}
 \end{figure}
 
@@ -1242,7 +1242,7 @@ To reduce the effects of possible nonstationarity, we attempted to find the most
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/ts.png} }
-  \caption{A comparison of the first $4 s$ of a time series and its surrogate.}
+  \caption[Comparison of a time series and its surrogate.]{A comparison of the first $4 s$ of a time series and its $AAFT$ surrogate.}
 \label{fig:ts}
 \end{figure}
 \subsubsection{Time Delay}
@@ -1296,7 +1296,7 @@ Integral local deformation & 4                                    \\ \hline
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/recon.png} }
-  \caption{State space reconstruction for embedding dimension $m=3$ for various values of time delay $\tau$. Only first 40 seconds of the recording used for purpose of visualization. The axes represent the state vector coordinates. One may observe the increasing complexity and slowly progressing expansion of the attractor from a line to a random cloud of points. }
+  \caption[State space reconstructions for varying $\tau$.]{State space reconstruction for embedding dimension $m=3$ for various values of time delay $\tau$. Only first 40 seconds of the recording used for purpose of visualization. The axes represent the state vector coordinates. One may observe the increasing complexity and slowly progressing expansion of the attractor from a line to a random cloud of points. }
 \label{fig:recon}
 \end{figure}
 
@@ -1304,7 +1304,7 @@ Integral local deformation & 4                                    \\ \hline
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/dmi_acorr.png} }
-  \caption{Delayed mutual information (DMI) and autocorrelation as functions of $\tau$. The red line shows threshold values $1-1/e$ and $1/e$ respectively. The plots of surrogate data are equivalent. For this time series, DMI estimates optimal $\tau=10$, and autocorrelation $\tau=4$ or $\tau=6$. We can see that the estimates vary significantly across those techniques, but judging by Figure \ref{fig:recon}, the autocorrelation estimates seem more reasonable.}
+  \caption[DMI and $A(\tau)$ for a sample recording.]{Delayed mutual information (DMI) and autocorrelation as functions of $\tau$. The red line shows threshold values $1-1/e$ and $1/e$ respectively. The plots of surrogate data are equivalent. For this time series, DMI estimates optimal $\tau=10$, and autocorrelation $\tau=4$ or $\tau=6$. We can see that the estimates vary significantly across those techniques, but judging by Figure \ref{fig:recon}, the autocorrelation estimates seem more reasonable.}
 \label{fig:dmi-acorr}
 \end{figure}
 
@@ -1312,7 +1312,7 @@ Integral local deformation & 4                                    \\ \hline
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/dmi_acorr_hist.png} }
-  \caption{Distributions of time delays across the dataset computed using delayed mutual information and autocorrelation for threshold $1/e$.}
+  \caption[Distribution of $\tau$ across channels.]{Distributions of time delays across channels computed using delayed mutual information and autocorrelation for threshold $1/e$.}
 \label{fig:dmi-acorr-hist}
 \end{figure}
 
@@ -1320,7 +1320,7 @@ Integral local deformation & 4                                    \\ \hline
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/pca_svd.png} }
-  \caption{Plot of singular values as functions of $\tau$ for $m=10$. The two largest singular values corresponding to the main diagonals of the attractor are clearly visible. The singular values are approximately for $\tau=12$ before a collapse in the reconstruction immediately for the following values of $\tau$.}
+  \caption[Singular values as functions of $\tau$ for various $m$.]{Plot of singular values as functions of $\tau$ for $m=10$. The two largest singular values corresponding to the main diagonals of the attractor are clearly visible. The singular values are approximately for $\tau=12$ before a collapse in the reconstruction immediately for the following values of $\tau$.}
 \label{fig:pca-svd}
 \end{figure}
 
@@ -1328,7 +1328,7 @@ Integral local deformation & 4                                    \\ \hline
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/adfd.png} }
-  \caption{Plot of average displacement from diagonal for embedding dimensions 5, 10, and 15. The dashed green lines represent derivatives or respectives curves, the dots mark the minimal values of $\tau$ for which the derivative of $\mathrm{ADFD}(\tau)$ reaches $40\%$ of its initial value. }
+  \caption[ADFD as functions of $\tau$ for various $m$.]{Plot of average displacement from diagonal for embedding dimensions 5, 10, and 15. The dashed green lines represent derivatives or respectives curves, the dots mark the minimal values of $\tau$ for which the derivative of $\mathrm{ADFD}(\tau)$ reaches $40\%$ of its initial value. }
 \label{fig:adfd}
 \end{figure}
 
@@ -1336,7 +1336,7 @@ Integral local deformation & 4                                    \\ \hline
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/ild.png} }
-  \caption{Plot of integral local deformation for varying values of the embedding dimension $m$. The individual curves converge with clear minimum at $\tau=4$. The parameters used for this computation are $q_{\mathrm{max}} = 10$, $t_e = 3$, $N_{\mathrm{ref}} = N_v$, $k=20$ and $w_t = 10$ (see Section \ref{sec:ild}).}
+  \caption[ILD as functions of $\tau$ for various $m$.]{Plot of integral local deformation for varying values of the embedding dimension $m$. The individual curves converge with clear minimum at $\tau=4$. The parameters used for this computation are $q_{\mathrm{max}} = 10$, $t_e = 3$, $N_{\mathrm{ref}} = N_v$, $k=20$ and $w_t = 10$ (see Section \ref{sec:ild}).}
 \label{fig:ild}
 \end{figure}
 
@@ -1353,7 +1353,7 @@ The $E_1$ statistic of AFN usually stops increasing for approximately the same v
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/fnn_comp.png} }
-  \caption{The effect of values of the tolerance parameters on the percentage of false neighbors reported by I. criterion (\ref{eq:first-criterion}) and II. criterion (\ref{eq:second-criterion}), Theiler window $w_t = 50$.}
+  \caption[The effect of tolerance parameters on percentage of FNN.]{The effect of values of the tolerance parameters on the percentage of false neighbors reported by I. criterion (\ref{eq:first-criterion}) and II. criterion (\ref{eq:second-criterion}), Theiler window $w_t = 50$.}
 \label{fig:fnn-comp}
 \end{figure}
 
@@ -1361,7 +1361,7 @@ The $E_1$ statistic of AFN usually stops increasing for approximately the same v
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/afn_comp.png} }
-  \caption{The results of AFN for varying values of time delay $\tau$, Theiler window $w_t = 50$.  }
+  \caption[AFN for varying values of $\tau$.]{The results of AFN for varying values of time delay $\tau$, Theiler window $w_t = 50$.  }
 \label{fig:afn-comp}
 \end{figure}
 
@@ -1391,7 +1391,7 @@ To compute the LLE estimates with automatic selection of proper embedding parame
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.9\textwidth]{Images/lle_comp.png} }
-  \caption{Average divergence plots for varying values of $m$ and $\tau$.}
+  \caption[Effects of embedding parameters on average divergence plots.]{Average divergence plots for varying values of $m$ and $\tau$.}
 \label{fig:lle-comp}
 \end{figure}
 
@@ -1418,7 +1418,7 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
 10 & - & zero-crossing of $A(\tau)$ & sleep & \cite{fell1993deterministic} \\ \hline
 10 & - & random & depression & \cite{roschke1995nonlineardeppression} \\ \hline
 \end{tabular}}
-\caption{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $250-256 Hz$.}
+\caption[Literature review of $\lambda_1$ embedding parameters]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $250-256 Hz$.}
 \end{table}
 
 The range results we obtained using various algorithms and observed in literature highlights the fact the embedding parameters selection algorithms, as well as visual inspection of the divergence plots largely unreliable, and that the optimal values depend on particular dataset and problem. Therefore, we decided to compute LLE's 
@@ -1449,7 +1449,7 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/cr.png} }
-  \caption{Normalized correlation sum as a function of radius $r$ for dimensions in range from $5$ to $30$ (from left to right).}
+  \caption[Normalized $C(r)$ for various $m$.]{Normalized correlation sum as a function of radius $r$ for embedding dimension dimensions in range from $5$ to $30$ (from left to right).}
   \label{fig:cr}
 \end{figure}
 
@@ -1457,7 +1457,7 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.95\textwidth]{./Images/local_d_2/large.png} }
-  \caption{Local correlation dimension $D_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from bottom to top) and time delays $\tau = 4$ and $\tau = 8$.}
+  \caption[Local $D_2(r)$ for various $m$.]{Local correlation dimension $D_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from bottom to top) and time delays $\tau = 4$ and $\tau = 8$.}
   \label{fig:loc-d2}
 \end{figure}
 
@@ -1465,7 +1465,7 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.95\textwidth]{./Images/local_d_2/large_surr.png} }
-  \caption{Local correlation dimension $D_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from bottom to top) and time delays $\tau = 4$ and $\tau = 8$ for the original series (blue) and its surrogate series computed using iAAFT.}
+  \caption[Local $D_2(r)$ for various $m$ in comparison with a surrogate.]{Local correlation dimension $D_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from bottom to top) and time delays $\tau = 4$ and $\tau = 8$ for the original series (blue) and its surrogate series computed using iAAFT.}
   \label{fig:loc-d2-comp}
 \end{figure}
 
@@ -1473,7 +1473,7 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{./Images/em_corrdim.png} }
-  \caption{Correlation dimension as function of the embedding dimension $m$.}
+  \caption[Global $D_2$ as function of $m$.]{Correlation dimension as function of the embedding dimension $m$.}
 \label{fig:em-corrdim}
 \end{figure}
 
@@ -1490,10 +1490,10 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
  12 & - & 8 & mental state classification & \cite{dvorak1986some} \\ \hline
  2-12 & saturation & 5 & schizophrenia & \cite{koukkou1993dimensional} \\ \hline
 \end{tabular}}
-\caption{200 - 256 Hz.}
+\caption[Literature review of $D_2$ embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
 \end{table}
 
-Explain unfolding dimension \cite{schmid1996indications}. They layed out fully automatic, albeit complicated, procedure for selecting the embedding parameters.
+In \cite{schmid1996indications}, the authors layed out fully automatic, albeit complicated, algorithm for selecting the embedding parameters. They suggest modelling correlation dimension biparametrically as a function of embedding dimension $m$ as $D_2(m) = b_0(1-e^{-b_1m}$, where $b_0$, $b_1$ are parameters. They call $m^* \coloneqq 1/b_1$ the unfolding dimension, since ``it represents the embedding dimension at which the attractor has unfolded up to $1/e$ of its full extent, namely, the asymptotic $D_2$ value: $b_0$'' \cite{schmid1996indications}. The optimal embedding dimension $m$ is selected as the next integer greater than the embedding dimension at which the exponential fit has approached 95\% of its expontial value $b_0$. 
 
 
 \subsection{Detrended Fluctuation Analysis}
@@ -1503,7 +1503,7 @@ Explain unfolding dimension \cite{schmid1996indications}. They layed out fully a
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{./Images/dfa_fit.png} }
-  \caption{Computation of DFA.}
+  \caption[Computation of DFA.]{Computation of DFA.}
 \label{fig:dfa-fit}
 \end{figure}
 
@@ -1526,7 +1526,7 @@ We also analyzed mean frequency amplitudes in alpha, beta, gamma, delta and thet
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.7\textwidth]{./Images/mba.png} }
-  \caption{Typical range of mean band amplitudes in channel FP1.}
+  \caption[Typical range of mean band amplitudes.]{Typical range of mean band amplitudes in channel FP1.}
 \label{fig:mba}
 \end{figure}
 
@@ -1539,7 +1539,7 @@ An example of a result of such analysis for the largest Lyapunov exponent (embed
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{./Images/surrogate/lyap_10_3_50.png} }
-  \caption{Example distribution of the largest Lyapunov exponent (embedding dimension 10, time delay 3) for 19 surrogate samples and the original for all channels. The number next to each channel name represents the confidence in sigma, computed as in equation \ref{eq:sigma}.}
+  \caption[Example distribution of $\lambda_1$.]{Example distribution of the largest Lyapunov exponent (embedding dimension 10, time delay 3) for 19 surrogate samples and the original for all channels. The number next to each channel name represents the confidence in sigma, computed as in equation \ref{eq:sigma}.}
 \label{fig:surr-lyap}
 \end{figure}
 
@@ -1841,7 +1841,7 @@ Pz       & 0.713 $\pm$ 0.092 & 0.730 $\pm$ 0.121 & 0.863 &       \\ \hline
   \centering
   \noindent\makebox[\textwidth]{%
     \includegraphics[width=1.4\textwidth]{./Images/bars/bef_aft.png} }
-    \caption{Values of individual measures computed before and after treatment.}
+    \caption[Values of measures before and after treatment.]{Values of individual measures computed before and after treatment.}
    \label{fig:befaft}
   \end{figure}
 
@@ -1849,7 +1849,7 @@ Pz       & 0.713 $\pm$ 0.092 & 0.730 $\pm$ 0.121 & 0.863 &       \\ \hline
   \centering
   \noindent\makebox[\textwidth]{%
     \includegraphics[width=1.4\textwidth]{./Images/bars/resp_non1.png} }
-    \caption{Comparison of mean values of largest Lyapunov exponent and correlation dimension between responders and non-responders computed using embedding dimension $m=10$ and time delay $\tau=3$.}
+    \caption[Comparison of mean $\lambda_1$ and $D_2$ between responders and non-responders with fixed parameters.]{Comparison of mean values of largest Lyapunov exponent and correlation dimension between responders and non-responders computed using embedding dimension $m=10$ and time delay $\tau=3$.}
    \label{fig:respnon1}
   \end{figure}
 
@@ -1857,7 +1857,7 @@ Pz       & 0.713 $\pm$ 0.092 & 0.730 $\pm$ 0.121 & 0.863 &       \\ \hline
   \centering
   \noindent\makebox[\textwidth]{%
     \includegraphics[width=1.4\textwidth]{./Images/bars/resp_non1_auto.png} }
-    \caption{Comparison of mean values of largest Lyapunov exponent and correlation dimension between responders and non-responders computed using automatic procedure described in Section .}
+    \caption[Comparison of mean $\lambda_1$ and $D_2$ between responders and non-responders with automatically selected parameters.]{Comparison of mean values of largest Lyapunov exponent and correlation dimension between responders and non-responders computed using automatic procedure described in Section .}
    \label{fig:respnon1auto}
   \end{figure}
 
@@ -1865,7 +1865,7 @@ Pz       & 0.713 $\pm$ 0.092 & 0.730 $\pm$ 0.121 & 0.863 &       \\ \hline
   \centering
   \noindent\makebox[\textwidth]{%
     \includegraphics[width=1.4\textwidth]{./Images/bars/resp_non2.png} }
-    \caption{Comparison of mean values of computed detrended fluctuation analysis and sample entropy between responders and non-responders.}
+    \caption[Comparison of mean DFA na SE between responders and non-responders.]{Comparison of mean values of computed detrended fluctuation analysis and sample entropy between responders and non-responders.}
    \label{fig:respnon2}
   \end{figure}
 \end{landscape}
@@ -1885,7 +1885,7 @@ Furthermore, we inspected the correlations between the individual measures and c
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/lyapdepdist.png} }
-  \caption{Distributions of the largest Lyapunov exponents between healthy and depressed patients. Most notable differences can be observed in the left and right temporal areas, T3 and T6. The distributions seem generally normal (however, this is not true for all measures).}
+  \caption[Distributions of $\lambda_1$ between healthy and depressed patients.]{Distributions of the largest Lyapunov exponents between healthy and depressed patients. Most notable differences can be observed in the left and right temporal areas, T3 and T6. The distributions seem generally normal (however, this is not true for all measures).}
  \label{fig:lyapdepdist}
 \end{figure}
 
@@ -1893,7 +1893,7 @@ Furthermore, we inspected the correlations between the individual measures and c
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/dfadepcorr.png} }
-  \caption{Trend of values of DFA as a function of depression score. The correlation is not significantly ($p$ < 0.05) negative for F3, F4, P3, Cz. Similar trend is present in Hurst exponent, Higuchi fractal dimension and sample entropy.}
+  \caption[Trends in DFA as a function of depression score.]{Trend of values of DFA as a function of depression score. The correlation is not significantly ($p$ < 0.05) negative for F3, F4, P3, Cz. Similar trend is present in Hurst exponent, Higuchi fractal dimension and sample entropy.}
  \label{fig:dfadepcorr}
 \end{figure}
 
@@ -1901,7 +1901,7 @@ Furthermore, we inspected the correlations between the individual measures and c
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/lyapdepcorr.png} }
-  \caption{Trend of values of largest Lyapunov exponent as a function of depression score. The correlation is not significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, C3, F7, F8, T3. }
+  \caption[Trends in $\lambda_1$ as function of depression score.]{Trends of values of largest Lyapunov exponent as a function of depression score. The correlation is not significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, C3, F7, F8, T3. }
  \label{fig:lyapdepcorr}
 \end{figure}
 
@@ -2448,7 +2448,7 @@ Although the main idea dates back to 1980, when K. Fukushima introduced neocogni
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{./Images/lenet-5.png} }
-  \caption{LeNet-5 architecture \cite{lecun1999}.}
+  \caption[LeNet-5 architecture diagram.]{LeNet-5 architecture \cite{lecun1999}.}
 \label{fig:lenet-5}
 \end{figure}
 
@@ -2466,7 +2466,7 @@ Bearing resemblence to visual processing in biological organisms \footnote{As ea
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{./Images/receptive_field.png} }
-  \caption{Receptive field \cite{goodfellow2016}.}
+  \caption[Receptive field.]{Receptive field \cite{goodfellow2016}.}
 \label{fig:receptive_field}
 \end{figure}
 
@@ -2488,7 +2488,7 @@ One of the drawbacks of classical CNNs is that although convolution in combinati
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{./Images/shared_weights.png} }
-  \caption{Shared weights \cite{goodfellow2016}.}
+  \caption[Shared weights.]{Shared weights \cite{goodfellow2016}.}
 \label{fig:shared_weights}
 \end{figure}
 
@@ -2511,7 +2511,7 @@ Although the combination of convolution and pooling performs well in many practi
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{./Images/drawbacks.png} }
-  \caption{Examples of drawbacks of the pooling operation. Max pooling discards all except the maximum element, and valuable information may thus be lost. Average pooling considers all the values, and the information about their contrast is reduced. Moreover, extreme values may have undesired effects on the result \cite{yu2014}.}
+  \caption[Drawbacks of pooling operation.]{Examples of drawbacks of the pooling operation. Max pooling discards all except the maximum element, and valuable information may thus be lost. Average pooling considers all the values, and the information about their contrast is reduced. Moreover, extreme values may have undesired effects on the result \cite{yu2014}.}
 \label{fig:drawbacks}
 \end{figure}
 
@@ -2550,7 +2550,7 @@ This method, although loosely based on PCA, is better suited for supervised clas
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.7\textwidth]{./Images/csp/csp_merged.png} }
-  \caption{CSP}
+  \caption[Schema of CSP algorithm.]{CSP.}
 \label{fig:csp}
 \end{figure}
 
@@ -2567,7 +2567,7 @@ Using the fact that magnitudes of the CSP eigenvalues are proportional to the am
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{./Images/fbcsp.png} }
-  \caption{FBCSP}\cite{ang2008filter} 
+  \caption[Schema of FBCSP algorithm.]{FBCSP}\cite{ang2008filter} 
 \label{fig:fbcsp}
 \end{figure}
 
@@ -2634,7 +2634,7 @@ Since both recurrence plot and cosine similarity matrix are symmetric, we applie
   \caption{Chebyshev norm}
   % \label{fig:sub2}
 \end{subfigure}
-\caption{Recurrence plots computed using different norms. We can see that the figure on the right hand side has sligthly crisper patterns.}
+\caption[Comparison of Euclidean and Chebyshev norms on RP.]{Recurrence plots computed using different norms. We can see that the figure on the right hand side has sligthly crisper patterns.}
 \label{fig:norm-comp}
 \end{figure}
 
@@ -2662,14 +2662,14 @@ Moreover, we also evaluated multiple simpler architectures. The best performing 
 \begin{figure}
 \centering
 \includegraphics[width=0.7\linewidth]{./Images/archs/deep.png}
-\caption{Deep architecture for evaluation on the raw data. For evaluation on image-encoded data, the kernel sizes were changed - see text for details.}
+\caption[Deep architecture diagram.]{Deep architecture for evaluation on the raw data. For evaluation on image-encoded data, the kernel sizes were changed - see text for details.}
 \label{fig:deep}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=.7\linewidth]{./Images/archs/shal.png}
-\caption{Shallow architecture, inspired by FBCSP algorithm, which achieved outstanding performance on the raw data.}
+\caption[Shallow architecture diagram.]{Shallow architecture, inspired by FBCSP algorithm, which achieved outstanding performance on the raw data.}
 \label{fig:shal}
 \end{figure}
 
@@ -2711,7 +2711,7 @@ REM & $0-f_{\text{fin}}$ & SHAL &  $\mathbf{93.90} \pm 2.34 \%$    \\ \hline
  & $0-f_{\text{fin}}$ & DEEP &     $88.03 \pm 1.02 \%$    \\ \hline 
  & $4-f_{\text{fin}}$ & DEEP &     $86.33 \pm 2.30 \%$    \\ \hline 
 \end{tabular}
-\subcaption{Raw data}
+\subcaption{Raw data.}
 % \label{tab:depcl}
 }
 \hfill
@@ -2733,10 +2733,10 @@ REM & $0-f_{\text{fin}}$ & RP & $60.96 \pm 3.05 \%$ \\ \hline
  & $0-f_{\text{fin}}$ & CS &  $55.32 \pm 1.68 \%$ \\ \hline 
  & $4-f_{\text{fin}}$ & CS &  $62.78 \pm 1.18 \%$ \\ \hline 
 \end{tabular}
-\subcaption{Image-econded data}
+\subcaption{Image-encoded data.}
 % \label{tab:depcl}
 }
-\caption{Evaluation of accuracies of the shallow (SHAL) and deep (DEEP) architectures on the raw and image-encoded data in classification of depression state (DEP) or prediction of future remission (REM). RP - recurrence plot, CS - cosine similarity.}
+\caption{Evaluation of accuracies of the shallow (SHAL) and deep (DEEP) architectures on the raw and image-encoded data in classification of depression state (DEP) or prediction of future remission (REM).}
 \end{table}
 
 \add[inline]{We might want to show the missclasifications - how close were they? Are people acting, or is the measurement relatively objective? Or maybe confusing matrices.}
