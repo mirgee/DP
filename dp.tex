@@ -996,7 +996,7 @@ In our implementation, we perform a least squares fit of values $(\log r, \log C
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.6\textwidth]{Images/typ-localcr.png} }
-  \caption[Typical behavior of local $D_2$.]{Plot of a typical local correlation dimension estimates for embedding dimensions from $m=2$ to $m=22$ (from bottom to top) in favorable case \cite{andreas2000}. Note mainly the scaling region where the slope estimates converge to the value of $2$. To compare with our results, see Figure \ref{fig:loc-d2}.}
+  \caption[Typical behavior of local $D_2$ in favorable case.]{Plot of a typical local correlation dimension estimates for embedding dimensions from $m=2$ to $m=22$ (from bottom to top) in favorable case \cite{andreas2000}. Note mainly the scaling region where the slope estimates converge to the value of $2$. To compare with our results, see Figure \ref{fig:loc-d2}. The results has been generated using time series with 1600 datapoints.}
 \label{fig:exp-localcr}
 \end{figure}
 
@@ -1367,7 +1367,7 @@ The $E_1$ statistic of AFN usually stops increasing for approximately the same v
 
 \subsection{Largest Lyapunov Exponents} \label{sec:lle-exp}
 \subsubsection{Manual Analysis} \label{sec:lle-man-anal}
-For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000.\unsure{Why? This is unexpected.} 
+For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000.\unsure{Why? This is unexpected.} This section shows analysis of results for patient number 75, second session, FP1 electrode.
 
 Figure \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. This is because the average divergence cannot exceed the diameter of the attractor, which is finite, since the attractor is bounded in the phase space. Therefore, selecting proper embedding dimension based on divergence plots is a balancing act between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
 
@@ -1428,28 +1428,19 @@ In summary, we obtained a wide range of results using traditional parameter sele
 
 \subsection{Correlation Dimension} \label{sec:corrdim-exp}
 \subsubsection{Manual Analysis}
-\info[inline]{For corr dim, we also used two ways to compute it - automatic and fixed. Explain here why have we chosen $m=10$ and $\tau=3$.}
+For computation of correlation dimension, we used Grassberger-Procaccia algorithm described in Section \ref{sec:corrdim}, using Chebyshev metric (as suggested in \cite{andreas2000}), Theiler window $w_t = 50$, for values of $r$ either in geometrical progression of 100 values from 0.05 to 10. Hereby we analyze the results for patient number 75, second session, FP1 electrode.
 
-To compute the correlation sum $C(r)$, we used classical Grassberger-Procaccia algorithm described in Section \ref{sec:corrdim} using Chebyshev metric, $w_t = 50$, for values of $r$ either in geometrical progression of 100 values from 0.05 to 10 or by an automatic procedure described further. Then, these $(r, C(r))$ pairs were used to compute local least square fits of the equation $C(r) = r^{D_2}$ inside windows of length 7 for each pair. \add{This paragraph can be much improved (wording, etc.).}
+Plots of normalized correlation sums $C(r)$ as functions of radius $r$ (both axis are logarithmically scaled) for embedding dimensions $m=5,7,11, \dots, 29$ can be seen in Figure \ref{fig:cr}. Different time delay $\tau$ has been used for each plot. The reader may want to compare these results with Figure \ref{fig:exp-cr}. There are clear straight lines indicating expected relationship $C(r) \propto r^{D_2}$. Also, as expected, we can see that the lines shift to the right, increasing their slopes with $m$. The effect of time delay is noticeably weaker than in LLE estimation.
 
-Figure \ref{fig:cr} shows log-log plots of normalized correlations sum $C(r)$ against radius $r$ for varying values of time delay $\tau$. There are clear straight lines indicating expected relationship $C(r) \propto r^{D_2}$. We can see that the lines shift to the right, increasing their slopes with $m$. The correlation sum is almost independent of time delay.
+Figure \ref{fig:loc-d2} shows the local slope of $\log C(r)$ as a function of $r$ (axis logarithmically scaled). The local slope has been approximated for each value of $r_i$ by considering its 6 neighbors $\log r_{i-3}$, $\log r_{i+3}$, and fitting a line through the seven points $(\log r_{i-3}, \log C(r_{i-3})), \dots,(\log r_{i+3}, \log C(r_{i+3})$ and minimizing least squares error. In contrast with the ideal case presented in Figure \ref{fig:exp-localcr}, there are no apparent scaling regions at all, which means we cannot provide theoretically meaningful finite estimate of $D_2$ using this method. Morever, by comparing with the same plot for iAAFT surrogate of the same time series (see Figure \ref{fig:loc-d2-comp}), we cannot even reject the hypothesis of a linear stochastic process. These results are not unique for this sample - we obtained similar results for all other examined samples.
 
-Figure \ref{fig:loc-d2} shows the log plot of local slope of of $\log C(r)$ as a function of $r$. There are no apparent scaling regions at all. Morever, by comparing with the same plot for iAAFT surrogate of the same time series (see Figure \ref{fig:loc-d2-comp}), we cannot even reject the hypothesis of a linear stochastic process. 
-
-\subsubsection{Automatic Selection Procedure}
-We decided to compute the correlation dimension as follows. We create embeddings for embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
-\begin{align*}
-  \log r_{\mathrm{upper}} = \log r_{\mathrm{lower}} + \frac{1}{10} \left( \log r_{\mathrm{max}} - \log r_{\mathrm{lower}} \right), 
-\end{align*}
-where $r_{\mathrm{max}}$ denotes the largest ocurring pairwise distance on the attractor. This approach of automatic selection radius bounds for evaluation of $D_2$ is borrowed from \cite{andreas2000}.
-
-Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the embedding dimension $m$ for varying values of the embedding dimension $\tau$. There $D_2$ are no signs of saturation, correlation dimension reaches a global maximum and then starts to decrease. \add{Conclusion? No finite value, or no chaos?}
+On the other hand, as explained in Section \ref{sec:surrogate-analysis-theory}, even rejecting the null hypothesis is not a sufficient proof of non-linearity. In addition, this effect is known to happen due to noise, and many studies have failed to significantly distinguish EEG data from surrogates \cite{andreas2000}. 
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/cr.png} }
-  \caption[Normalized $C(r)$ for various $m$.]{Normalized correlation sum as a function of radius $r$ for embedding dimension dimensions in range from $5$ to $30$ (from left to right).}
+  \caption[Normalized $C(r)$ for various $m$.]{Normalized correlation sum $C(r)$ as a function of radius $r$ for embedding dimensions $m=5, 7, 9, \dots, 29$ (lowest $m$ at the bottom, highest at the top) and time delays $\tau=2,4,6,8$.}
   \label{fig:cr}
 \end{figure}
 
@@ -1457,7 +1448,7 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.95\textwidth]{./Images/local_d_2/large.png} }
-  \caption[Local $D_2(r)$ for various $m$.]{Local correlation dimension $D_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from bottom to top) and time delays $\tau = 4$ and $\tau = 8$.}
+  \caption[Local $D_2(r)$ for various $m$.]{Local correlation dimension $D_2$ as a function of radius $r$ for embedding dimensions $m=5, 7, 9, \dots, 29$ (lowest $m$ at the bottom, highest at the top) and time delays $\tau = 4$ and $\tau = 8$.}
   \label{fig:loc-d2}
 \end{figure}
 
@@ -1465,9 +1456,18 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.95\textwidth]{./Images/local_d_2/large_surr.png} }
-  \caption[Local $D_2(r)$ for various $m$ in comparison with a surrogate.]{Local correlation dimension $D_2$ as a function of radius $r$ for dimensions in range from $5$ to $30$ (from bottom to top) and time delays $\tau = 4$ and $\tau = 8$ for the original series (blue) and its surrogate series computed using iAAFT.}
+  \caption[Local $D_2(r)$ for various $m$ in comparison with a surrogate.]{Local correlation dimension $D_2$ as a function of radius $r$ for embedding dimensions $m=5, 7, 9, \dots, 29$ (lowest $m$ at the bottom, highest at the top) and time delays $\tau = 4$ and $\tau = 8$ for the original series (blue) and its surrogate series computed using iAAFT.}
   \label{fig:loc-d2-comp}
 \end{figure}
+
+\subsubsection{Automatic Selection Procedure}
+To compute correlation dimension automatically, we proceeded as follows. We create embeddings for embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
+\begin{align*}
+  \log r_{\mathrm{upper}} = \log r_{\mathrm{lower}} + \frac{1}{10} \left( \log r_{\mathrm{max}} - \log r_{\mathrm{lower}} \right), 
+\end{align*}
+where $r_{\mathrm{max}}$ denotes the largest ocurring pairwise distance on the attractor. This approach of automatic selection radius bounds for evaluation of $D_2$ is borrowed from \cite{andreas2000}. Then, we computed the slope of the correlation integral $C(r)$ over this scaling region for each of those embeddings using the method explained in previous section, and select the global maximum as the final value.
+
+Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the embedding dimension $m$ for varying values of the embedding dimension $\tau$. There are no signs of saturation, correlation dimension reaches a global maximum and then starts to decrease. This may be because of insufficient data. The reached maximum value of $D_2$, however, is reasonably consistent with results obtained by various methods in the literature \cite{pereda1998non, dvorak1986some, koukkou1993dimensional}.
 
 \begin{figure} 
 \centering
@@ -1478,7 +1478,6 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
 \end{figure}
 
 \subsubsection{Literature Review}
-
 \begin{table}[tbp]
 \resizebox{\textwidth}{!}{
 \begin{tabular}{|c|c|c|c|c|}
@@ -1493,8 +1492,11 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
 \caption[Literature review of $D_2$ embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
 \end{table}
 
-In \cite{schmid1996indications}, the authors layed out fully automatic, albeit complicated, algorithm for selecting the embedding parameters. They suggest modelling correlation dimension biparametrically as a function of embedding dimension $m$ as $D_2(m) = b_0(1-e^{-b_1m}$, where $b_0$, $b_1$ are parameters. They call $m^* \coloneqq 1/b_1$ the unfolding dimension, since ``it represents the embedding dimension at which the attractor has unfolded up to $1/e$ of its full extent, namely, the asymptotic $D_2$ value: $b_0$'' \cite{schmid1996indications}. The optimal embedding dimension $m$ is selected as the next integer greater than the embedding dimension at which the exponential fit has approached 95\% of its expontial value $b_0$. 
+In \cite{schmid1996indications}, the authors layed out fully automatic, albeit complicated, algorithm for selecting the embedding parameters. They suggest modelling correlation dimension biparametrically as a function of embedding dimension $m$ as $D_2(m) = b_0(1-e^{-b_1m}$, where $b_0$, $b_1$ are parameters. They call $m^* \coloneqq 1/b_1$ the unfolding dimension, since ``it represents the embedding dimension at which the attractor has unfolded up to $1/e$ of its full extent, namely, the asymptotic $D_2$ value: $b_0$'' \cite{schmid1996indications}. The optimal embedding dimension $m$ is selected as the next integer greater than the embedding dimension at which the exponential fit has approached 95\% of its expontial value $b_0$. The remaining studies used either threshold crossing of the autocorrelation function $A(\tau)$ or fixed value for selection of time delay $\tau$.
 
+% Most of the studies where $D_2$ has been estimated from an EEG signal omit the step of searching of the optimal scaling region. Indeed, as reviewed in \cite{andreas2000}, 
+
+In summary, our experiments show lack of scaling regions in local $D_2$, indicating that no theoretically meaningful interpretation of correlation dimension is possible. Similar behavior is observed in surrogate data, hence even the null hypothesis of a linear stochatic process cannot be rejected. Moreover, our automatic procedure fails to saturate - however, this may be due to limited amount of data. Many studies reviewed in \cite{andreas2000} failed to reveal finite embedding dimension on EEG data using the local slopes approach. The studies we examined all omitted the step of searching for optimal scaling region, and still succeeded in using $D_2$ for classification, simply by fitting the $C(r)$ curve. Hence, we decided to use the same approach, along with our automatic approach.
 
 \subsection{Detrended Fluctuation Analysis}
 \add[inline]{Show plots, how and why we chose the params so that the fit is optimal.}
