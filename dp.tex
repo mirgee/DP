@@ -1427,7 +1427,7 @@ In summary, we obtained a wide range of results using traditional parameter sele
 
 
 \subsection{Correlation Dimension} \label{sec:corrdim-exp}
-\subsubsection{Manual Analysis}
+\subsubsection{Manual Analysis} \label{sec:corrdim-anal}
 For computation of correlation dimension, we used Grassberger-Procaccia algorithm described in Section \ref{sec:corrdim}, using Chebyshev metric (as suggested in \cite{andreas2000}), Theiler window $w_t = 50$, for values of $r$ either in geometrical progression of 100 values from 0.05 to 10. Hereby we analyze the results for patient number 75, second session, FP1 electrode.
 
 Plots of normalized correlation sums $C(r)$ as functions of radius $r$ (both axis are logarithmically scaled) for embedding dimensions $m=5,7,11, \dots, 29$ can be seen in Figure \ref{fig:cr}. Different time delay $\tau$ has been used for each plot. The reader may want to compare these results with Figure \ref{fig:exp-cr}. There are clear straight lines indicating expected relationship $C(r) \propto r^{D_2}$. Also, as expected, we can see that the lines shift to the right, increasing their slopes with $m$. The effect of time delay is noticeably weaker than in LLE estimation.
@@ -1499,6 +1499,8 @@ In \cite{schmid1996indications}, the authors layed out fully automatic, albeit c
 In summary, our experiments show lack of scaling regions in local $D_2$, indicating that no theoretically meaningful interpretation of correlation dimension is possible. Similar behavior is observed in surrogate data, hence even the null hypothesis of a linear stochatic process cannot be rejected. Moreover, our automatic procedure fails to saturate - however, this may be due to limited amount of data. Many studies reviewed in \cite{andreas2000} failed to reveal finite embedding dimension on EEG data using the local slopes approach. The studies we examined all omitted the step of searching for optimal scaling region, and still succeeded in using $D_2$ for classification, simply by fitting the $C(r)$ curve. 
 
 For these reasons, we decided to use the same approach (in addition to our automatic approach). We selected fixed pairs out of all combinations of the following values of $m=10, 15, 20, 25$ and $\tau=4, 8$ and computed correlation dimension for each sample with each pairs of embedding parameters by fitting the $\log C(r)$ against $\log r$ curve with a line using least squares fo values of $r$ geometrically progressing from $0.05$ to $10$. Moreover, we also computed correlation dimension for each sample using our automatic approach described above.
+
+Another approach we tried, following the suggestion in \cite{andreas2000}, is to cut each sample into a number of small (overlapping) ``moving windows'', and perform the steps of estimating embedding parameters and computing correlation dimension for each of those windows. As we noted in \ref{sec:req-corr}, increasing the time series length is theoretically assumed to improve the estimates. On the other hand, shortening the time series may ameliorate the issue of apparent non-stationarity of EEG signal we observed in Section \ref{sec:corrdim-anal}, since for a short time intervals, the signal may be assumed approximately non-stationary \cite{andreas2000}.
 
 \subsection{Detrended Fluctuation Analysis}
 \add[inline]{Show plots, how and why we chose the params so that the fit is optimal.}
