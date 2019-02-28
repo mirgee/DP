@@ -974,7 +974,7 @@ Thus, in the discrete case, the correlation sum $C(r)$ can be computed as
 \begin{align} \label{eq:corrsum}
   C(r) \coloneqq C(r,2) = \frac{2}{N_{(m,\tau)}(N_{(m,\tau)}-1)} \sum_{i<j} \Phi(r-\norm{\textbf{x}_i - \textbf{x}_j}).
 \end{align}
-which corresponds to the fraction of points in the phase space whose distance is smaller than $r$. Under certain reasonable conditions, correlation sum is an unbiased estimator of the correlation integral \cite{ScholarpediaGpa}.
+which corresponds to the fraction of pairs of points in the phase space whose distance is smaller than $r$. Under certain reasonable conditions, correlation sum is an unbiased estimator of the correlation integral \cite{ScholarpediaGpa}. In our application, we also use a lower bound on the distance of pairs of points, which is called a Theiler window, noted $w_t$.
 
 Typical behavior of the correlation sum is shown in Figure \ref{fig:exp-cr}. We can see that the curves are forced to meet at the same point for all $m$ - for high enough $r$, all points are counted and $C(r)=1$ (or $C(r) = \binom{N_{(m,\tau)}}{2}$ not normalized). As the lines shift to the right with increasing $m$ and stay parallel in the proper scaling region, the slope near that point necessarily increases with $m$. For high enough $m$, the scaling region disappears. Moreover, the values of $C(r)$ are inaccurate for small $r$ due to noise and for small $C(r)$ due to statistical fluctuations (corresponding to horizontal lines). Thus, there is only a limited interval of $r$ and limited set of embedding dimensions $m$ for which an accurate estimation of $D_2$ can be made \cite{andreas2000}.
 
@@ -1011,7 +1011,7 @@ For large enough $r$, $D_2^{(m)}(r)$ converges to zero. This result, which can b
 \end{align*}
 where $\rho$ is the maximum error. This implies an exponential increase of minimum required dataset size with embedded dimension. For example, $N_{(m, \tau)} = 5^m$ for $\rho = 5\%$ \cite{andreas2000}.
 
-\subsection{Detrended Fluctuation Analysis}
+\subsection{Detrended Fluctuation Analysis} \label{sec:dfa-theory}
 Physiological time series, such as EEG, may exhibit so called statistical self-affine properties. Self-affinity is a special case of self-similarity, which occurs when one or more small parts of a fractal object is exactly or approximately similar to itself. When self-similarity is expressed in terms of statistical properties (e.g. mean value and variance of a part of time series are scaled version of its overall mean and variance), then the object is called statistically self-similar.\footnote{An example of statistically self-similar object are are naval coastlines.} Self-similarity, in turn, differs from self-affinity in that self-affine objects witness similarity anisotropically, i.e. after applying an anisotropic affine transformation. \footnote{The measured property of a self-similar process (e.g. the size of a flower on Romanesco cauliflower) do not follow normal distributions, but power law distributions. Hence, mode and mean of provide a poor representation of this representation. These processes do not have a scale at which to measure these statistics to characterize them, and are therefore called scale-free.} \cite{hardstone2012detrended} Stated more formally:
 
 \begin{dfn}[\cite{beran2017statistics}] \label{def:self-affin}
@@ -1029,14 +1029,16 @@ DFA is a method of estimating $H$ without making prior assumptions about station
   y_k = \sum_{i=1}^{k} \left( x_i - \langle x \rangle \right).
 \end{align*}
 The resulting time series $y$ is then divided into segments of varying length $m$ (each value of $m$ representing a time scale). A local linear least-squares fit is applied to each of these segments. Let us designate the resulting piecewise linear fit as $y_m(k)$. The integrated time series is then detrended by subtracting the local linear fit. The root mean square error is then given by 
-\begin{align*}
+\begin{align} \label{eq:dfa-fm}
   F(m) \coloneqq \sqrt{ \frac{1}{N} \sum_{i=1}^{N} \left( y_i - y_m(i) \right)^2 }.
-\end{align*}
+\end{align}
 Finally, if a log-log plot $F(m)$ as a function $m$ shows a linear scaling region (i.e. the original time series exhibits self-similar, scale-free properties described above), the slope of this line approximates $H$ and represents the result of DFA analysis \cite{lee2007detrended}.
 
 \add[inline]{Maybe add some more intuitive explanation.}
 
-The importance of DFA for EEG analysis comes from the observation that it can reveal so called long-range temporal correlations (LRTC) in neuronal activity. Long-range temporal correlations, or long-range dependence, is a phenomenon which occurs when the average rate of decay of statistical dependence between increasingly (temporally) distant points in the time series is slower than exponential. Large-scale patterns in EEG activity may be characteristic of baseline processing during eyes-closed wakeful condition in healthy human brain. These parameters computed from the theta amplitudes were shown to be negatively correlated with (Hamilton) depression score, thus suggesting that depressed patients display abnormally small autocorrelations on large scale \cite{linkenkaer2005breakdown}. In our study, we observed similar results, see Section \ref{sec:analdepdif}.
+The importance of DFA for EEG analysis comes from the observation that it can reveal so called long-range temporal correlations (LRTC) in neuronal activity, and so even for non-stationary time series \cite{lee2007detrended}. This is especially important because EEG signals are non-stationary in some cases, and, as we will see in Section \ref{sec:corrdim-anal}, some other frequently used measures, such as LLE and CD, theoretically depend on stationarity property. 
+
+Long-range temporal correlations, or long-range dependence, is a phenomenon which occurs when the average rate of decay of statistical dependence between increasingly (temporally) distant points in the time series is slower than exponential. Large-scale patterns in EEG activity may be characteristic of baseline processing during eyes-closed wakeful condition in healthy human brain. These parameters computed from the theta amplitudes were shown to be negatively correlated with (Hamilton) depression score, thus suggesting that depressed patients display abnormally small autocorrelations on large scale \cite{linkenkaer2005breakdown}. In our study, we observed similar results, see Section \ref{sec:analdepdif}.
 
 \subsection{Hurst Exponent} \label{sec:hurst-theory}
 As mentioned in the previous section, similarly to the Hurst parameter in DFA, Hurst exponent is a measure of presence of long-range temporal dependencies in the time series. It was developed from Edwin H. Hurst observation when researching the optimal (or minimal required) storage sizing of river dams. Supposing there is a constant reservoir outflow equal to the mean annual water discharge, required storage size corresponds to the range (i.e. the difference between the maximum and the minimum value) of a cumulative sums of deviations from the mean annual discharge. We shall call this value, as a function of the number of years, $R(n)$ \cite{hurst1956problem}. After manually analyzing about a hundred records of natural phenomena, Hurst was able to demonstrate this value, on average and after normalizing by the standard deviation of the original time series, follows the following trend:
@@ -1227,10 +1229,12 @@ It is well known that the results of algorithms for estimation of non-linear mea
 
 Our procedure for their selection was as follows. For each non-linear measure, we created a list of parameters to try. Because most of the algorithms are relatively computationally expensive, length of the list should be limited. Then, we proceeded to label the data for each item on the list andd evaluated it. In Section \ref{sec:results-nl} we present the results for the most discriminative parameters. For creating the list, we used one or more of the following methods (depending on the non-linear measure in question):
 \begin{enumerate}
-  \item Apply knowledge of the algorithm and techniques for estimation of embedding parameters (see Section \ref{sec:nonlin-meas}) and use themin combination to find fixed optimal parameters by analyzing the results and applying these techniques for all samples.
+  \item Apply knowledge of the algorithm and techniques for estimation of embedding parameters (see Section \ref{sec:nonlin-meas}) and use them in combination to find fixed optimal parameters by analyzing the results and applying these techniques for all samples.
   \item Apply the same knowledge for creating an automatic pipeline, which will select the optimal parameters for each sample. 
   \item Review the literature on use of the non-linear measure in question on EEG data, and search what parameters were used. 
 \end{enumerate}
+
+For correlation dimension and the largetst Lyapunov exponent, which are known to be harder to estimate, we used all three steps. For the remaining measures, the steps were limited to the first and last one.
 
 More details are presented in the rest of this section.
 
@@ -1492,18 +1496,18 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
 \caption[Literature review of $D_2$ embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
 \end{table}
 
-In \cite{schmid1996indications}, the authors layed out fully automatic, albeit complicated, algorithm for selecting the embedding parameters. They suggest modelling correlation dimension biparametrically as a function of embedding dimension $m$ as $D_2(m) = b_0(1-e^{-b_1m}$, where $b_0$, $b_1$ are parameters. They call $m^* \coloneqq 1/b_1$ the unfolding dimension, since ``it represents the embedding dimension at which the attractor has unfolded up to $1/e$ of its full extent, namely, the asymptotic $D_2$ value: $b_0$'' \cite{schmid1996indications}. The optimal embedding dimension $m$ is selected as the next integer greater than the embedding dimension at which the exponential fit has approached 95\% of its expontial value $b_0$. The remaining studies used either threshold crossing of the autocorrelation function $A(\tau)$ or fixed value for selection of time delay $\tau$.
+In \cite{schmid1996indications}, the authors layed out fully automatic, albeit complicated, algorithm for selecting the embedding parameters. They suggest modelling correlation dimension biparametrically as a function of embedding dimension $m$ as $D_2(m) = b_0(1-e^{-b_1m}$, where $b_0$, $b_1$ are parameters. They call $m^* \coloneqq 1/b_1$ the unfolding dimension, since ``it represents the embedding dimension at which the attractor has unfolded up to $1/e$ of its full extent, namely, the asymptotic $D_2$ value: $b_0$'' \cite{schmid1996indications}. The optimal embedding dimension $m$ is selected as the next integer greater than the embedding dimension at which the exponential fit has approached 95\% of its expontial value $b_0$. The remaining studies used either threshold crossing of the autocorrelation function $A(\tau)$ or fixed value for selection of time delay $\tau$. Although \cite{pereda1998non} used $1/e$ as the threshold for the autocorrelation function, we found that the threshold $1-1/e$ results in better discrimination between studied groups using correlation dimension.
 
 % Most of the studies where $D_2$ has been estimated from an EEG signal omit the step of searching of the optimal scaling region. Indeed, as reviewed in \cite{andreas2000}, 
 
 In summary, our experiments show lack of scaling regions in local $D_2$, indicating that no theoretically meaningful interpretation of correlation dimension is possible. Similar behavior is observed in surrogate data, hence even the null hypothesis of a linear stochatic process cannot be rejected. Moreover, our automatic procedure fails to saturate - however, this may be due to limited amount of data. Many studies reviewed in \cite{andreas2000} failed to reveal finite embedding dimension on EEG data using the local slopes approach. The studies we examined all omitted the step of searching for optimal scaling region, and still succeeded in using $D_2$ for classification, simply by fitting the $C(r)$ curve. 
 
-For these reasons, we decided to use the same approach (in addition to our automatic approach). We selected fixed pairs out of all combinations of the following values of $m=10, 15, 20, 25$ and $\tau=4, 8$ and computed correlation dimension for each sample with each pairs of embedding parameters by fitting the $\log C(r)$ against $\log r$ curve with a line using least squares fo values of $r$ geometrically progressing from $0.05$ to $10$. Moreover, we also computed correlation dimension for each sample using our automatic approach described above.
+For these reasons, we decided to use the same approach (in addition to our automatic approach). We selected fixed pairs out of all combinations of the following values of $m=10, 15, 20, 25$ and $\tau=4, 8$ and computed correlation dimension for each sample with each pairs of embedding parameters by fitting the $\log C(r)$ against $\log r$ curve with a line using least squares fo values of $r$ geometrically progressing from $0.05$ to $10$. The most discriminative pairs of parameters were $m=15$, $\tau=4$, in accordance with our ILD algorithm. Moreover, we also computed correlation dimension for each sample using our automatic approach described above. For both, we used Theiler window $w_t = 50$.
 
 Another approach we tried, following the suggestion in \cite{andreas2000}, is to cut each sample into a number of small (overlapping) ``moving windows'', and perform the steps of estimating embedding parameters and computing correlation dimension for each of those windows. As we noted in \ref{sec:req-corr}, increasing the time series length is theoretically assumed to improve the estimates. On the other hand, shortening the time series may ameliorate the issue of apparent non-stationarity of EEG signal we observed in Section \ref{sec:corrdim-anal}, since for a short time intervals, the signal may be assumed approximately non-stationary \cite{andreas2000}.
 
 \subsection{Detrended Fluctuation Analysis}
-\add[inline]{Show plots, how and why we chose the params so that the fit is optimal.}
+To compute DFA, we used the method of fitting a scaling region on curve of $\log F(m)$ against $\log m$ (see (\ref{eq:dfa-fm})), as explained in Section \ref{sec:dfa-theory}. Following the suggestions in \cite{hardstone2012detrended}, we defined the set of segment lengths $m$ to be spread equidistantly a logarithmic scale. We determined the optimal bounds on $m$ by setting the lower bound to $4$ (fitting a line through less points is prone to error), and gradually increasing the upper bound until a scaling region appeared on the curve of $\log F(m)$ against $\log m$. This curve was then plotted across multiple channels and patients, to determine the interval where the scaling region usually appeared. The resulting interval $r\in(4, 320)$ was approximately same for all samples. An example can seen clearly on Figure \ref{fig:dfa-fit}.
 
 \begin{figure} 
 \centering
@@ -1513,10 +1517,7 @@ Another approach we tried, following the suggestion in \cite{andreas2000}, is to
 \label{fig:dfa-fit}
 \end{figure}
 
-Figure \ref{fig:dfa-fit} how we fitted the scaling region in the log-log plot of $F(n)$.
-
-Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to beta frequency (3-7 Hz). However, the resulting values were too large, and we found no differences between the studied groups.
-
+Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to each one of alpha (8-13 Hz), beta (16-37 Hz), and theta (4-7 Hz) frequencies, which were all found to be associated with depression \cite{lee2007detrended, bachmann2013, linkenkaer2005breakdown}. The bounds of the scaling region were modified using the method above to $r \in (4, 100)$. For each of those frequencies, the resulting DFA estimates we found no differences between the studied groups.
 \subsection{Hurst Exponent}
 Generally, the number of values $n$ for which to calculate the scaled range $R(n) / \sigma(n)$ is a tradeoff between the length and number of the considered subsequences. In order to avoid both small and large values of $n$, we used 15 values of $n$ spaced evenly on the middle 25 \% of the logarithmic scale between 0 and $\ln N$
 
