@@ -31,7 +31,7 @@
 % \usepackage[nomarkers]{endfloat}
 
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
-\usepackage{xcolor}  % Coloured text etc.
+\usepackage[x11names, rgb]{xcolor}  % Coloured text etc.
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 \newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
 \newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
@@ -125,29 +125,11 @@
 \usepackage{nomencl}
 \makenomenclature
 
+
 \usepackage{forest}
-\useforestlibrary{edges}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, shadows}
+\colorlet{linecol}{black!75}
 
-%\usepackage{tikz}
-\usetikzlibrary{shadows}
-
-\tikzset{
-  basic/.style = {
-    draw, text width=2cm, thin, align=center,
-    drop shadow, font=\sffamily
-    },
-  root/.style = {
-    basic, rounded corners=2pt,
-    text width=2cm,
-   fill=blue!15},
-  level 2/.style = {
-    basic, rounded corners=6pt,
-    fill=blue!30, text width=8em},
-  level 3/.style = {
-    basic,
-    align=left,
-    fill=pink!60, text width=6.5em}
-}
 \begin{document}
 \def\documentdate{\today}
 
@@ -406,35 +388,86 @@ In the final chapter, we conclude with summary of our results, and potential ave
 
 % \addcontentsline{toc}{chapter}{Introduction}
 
-\add[inline]{For some reason I can't insert the diagram in this file, but can in another \ldots Spent multiple hours on this\ldots}
-
+\pgfkeys{/forest,
+  my rounded corners/.append style={rounded corners=2pt},
+}
+\begin{figure}
+  \centering
+  \small
 \begin{forest}
-[Data, root
-    [Nonlinear analysis, 
-        level 2, for tree={grow'=0,  folder}, 
-        for children={level 3},
-        [Preprocessing]
-        [State Space Reconstruction]
-        [Computing Measures]
-        [Classification]
+for tree={
+      % font=\sffamily,
+      line width=1pt,
+      draw=linecol,
+      drop shadow,
+      fit=rectangle,
+      edge={thick, >={Triangle[]}, ->},
+      where level=0{%
+        l sep+=5pt,
+        % calign=child,
+        % calign child=1,
+        % inner color=PaleGreen1!80,
+        % outer color=PaleGreen1,
+        fill=green,
+        align=center,
+        my rounded corners,
+        for descendants={%
+          calign=first,
+        },
+      }{%
+        where level=1{%
+          inner color=Green2!80,
+          outer color=Green2,
+          my rounded corners,
+          align=center,
+          parent anchor=west,
+          tier=three ways,
+          for descendants={%
+            child anchor=west,
+            parent anchor=west,
+            align=left,
+            anchor=west,
+            inner color=MistyRose1!80,
+            outer color=MistyRose1,
+            edge path={%
+              \noexpand\path[\forestoption{edge}]
+              % (!to tier=three ways.parent anchor)|-(.child anchor)\forestoption{edge label};
+              ($(!to tier=three ways.parent anchor)+(0.5\pgflinewidth,0)$)|-(.child anchor)\forestoption{edge label};
+            },
+          },
+        }{}%
+      },
+  }
+[Data, 
+    [Nonlinear Analysis
+        [Preprocessing
+          [State Space Reconstruction
+            [Computing Measures
+              [Classification]
+            ]
+          ]
+        ]
     ]
     [Deep Learning, 
-        level 2, for tree={grow'=0,  folder}, 
-        for children={level 3},
-        [Preprocessing]
-        [Input Representation]
-        [Architecture Design]
-        [Classification]]]
+        [Preprocessing
+          [Input Representation
+            [Architecture Design
+                [Classification]
+            ]
+          ]
+        ]
+    ]
+]
 \end{forest}
-
-
-\begin{figure} 
-\centering
-\noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.8\textwidth]{Images/summary.png} }
-  \caption[Diagram of the thesis.]{Diagram of the thesis.}
+\caption[Diagram of the thesis.]{Diagram of the thesis.}
 \label{fig:diagram}
 \end{figure}
+
+% \begin{figure} 
+% \centering
+% \noindent\makebox[\textwidth]{%
+%   \includegraphics[width=0.8\textwidth]{Images/summary.png} }
+% \end{figure}
 
 \chapter{Non-linear Time Series Analysis}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The most simple of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description.
