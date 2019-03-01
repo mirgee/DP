@@ -1064,9 +1064,9 @@ is computed. This procedure is performed for chosen values of $n$. As observed b
   (R/S)_n \propto cn^K.
 \end{align*}
 The Hurst exponent $K$ then can be obtained using linear regression as slope of the line
-\begin{align*}
+\begin{align} \label{eq:hurst-rs}
   \log (R/S)_n = \log c + K \log n .
-\end{align*}
+\end{align}
 
 Interestingly, if the measured quantites resulted from mutually completely independent events (i.e. white noise, with its corresponding cumulative sum, random walk), the relationship in equation (\ref{eq:resc-range}) is replaced with
 \begin{equation*}
@@ -1516,20 +1516,28 @@ For these reasons, we decided to use the same approach (in addition to our autom
 Another approach we tried, following the suggestion in \cite{andreas2000}, is to cut each sample into a number of small (overlapping) ``moving windows'', and perform the steps of estimating embedding parameters and computing correlation dimension for each of those windows. As we noted in \ref{sec:req-corr}, increasing the time series length is theoretically assumed to improve the estimates. On the other hand, shortening the time series may ameliorate the issue of apparent non-stationarity of EEG signal we observed in Section \ref{sec:corrdim-anal}, since for a short time intervals, the signal may be assumed approximately non-stationary \cite{andreas2000}.
 
 \subsection{Detrended Fluctuation Analysis}
-To compute DFA, we used the method of fitting a scaling region on curve of log-fluctuations $\log F(n)$ against logorarithm of segment lengths $\log n$ (see (\ref{eq:dfa-fm})), as explained in Section \ref{sec:dfa-theory}. Following the suggestions in \cite{hardstone2012detrended}, we defined the set of segment lengths $n$ to be spread equidistantly a logarithmic scale (by multiplying by factor 1.1), with the lower bound of $4$ (fitting a line through less points may be prone to error). The upper bound was gradually increased, until a scaling region appeared on the curve of $\log F(n)$ against $\log n$ (see Figure \ref{fig:dfa-fit}). This curve was then plotted across multiple channels and patients, to determine the interval where the scaling region usually appeared, and if an automatic procedure for finding a scaling region is necessary. However, the interval was approximately same for all samples, and appear for values of $n\in(50, 320)$.
+To compute DFA, we used the method of fitting a scaling region on curve of log-fluctuations $\log F(n)$ against logorarithm of segment lengths $\log n$ (see (\ref{eq:dfa-fm})), as explained in Section \ref{sec:dfa-theory}. Following the suggestions in \cite{hardstone2012detrended}, we defined the set of segment lengths $n$ to be spread equidistantly on a logarithmic scale (by multiplying by factor 1.1), with the lower bound of $4$ (fitting a line through less points may be prone to error). The upper bound was gradually increased, until a scaling region appeared on the curve of $\log F(n)$ against $\log n$ (see Figure \ref{fig:dfa-fit}). This curve was then plotted across multiple channels and patients, to determine the interval where the scaling region usually appeared, and if an automatic procedure for finding a scaling region is necessary. However, the interval was approximately same for all samples, and appear for values of $n\in(50, 320)$.
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
-  \includegraphics[width=0.5\textwidth]{./Images/dfa_fit.png} }
-  \caption[Computation of DFA.]{This figure shows logarithm of root mean squared errors $\log F(n)$ (see equation (\ref{eq:dfa-fm})) plotted against logarithm of the segment length $n$ for FP1 electrode, patient 75, second session. We can observe clear scaling region for values of $n\in(50, 320)$.}
+  \includegraphics[width=\textwidth]{./Images/dfa_fit.png} }
+  \caption[Computation of DFA.]{These figures show logarithm of root mean squared errors $\log F(n)$ (see equation (\ref{eq:dfa-fm})) plotted against logarithm of the segment length $n$. On the left hand side, each curve corresponds to one electrode for patient 75, second session. We can observe clear common scaling region for values of $n\in(50, 320)$. On the right hand side, an example regression line fitted to the scaling region of one curve is shown.}
 \label{fig:dfa-fit}
 \end{figure}
 
 Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to each one of alpha (8-13 Hz), beta (16-37 Hz), and theta (4-7 Hz) frequencies, which were all found to be associated with depression \cite{lee2007detrended, bachmann2013, linkenkaer2005breakdown}. The bounds of the scaling region were modified using the method above to $r \in (4, 100)$. However, for DFA estimates obtained using this method, we obtained no significant differences between the studied groups using the tests performed in Section \ref{sec:distanal}.
 
 \subsection{Hurst Exponent}
-Generally, the number of values $n$ for which to calculate the scaled range $R(n) / \sigma(n)$ is a tradeoff between the length and number of the considered subsequences. In order to avoid both small and large values of $n$, we used 15 values of $n$ spaced evenly on the middle 25 \% of the logarithmic scale between 0 and $\ln N$.
+Generally, the number of values $n$ for which to calculate the scaled range $R(n) / \sigma(n)$ is a tradeoff between the length and number of the considered subsequences. % In order to avoid both small and large values of $n$, we used 15 values of $n$ spaced evenly on the middle 25 \% of the logarithmic scale between 0 and $\ln N$.
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=\textwidth]{./Images/hurst_fit.png} }
+  \caption[Computation of HE.]{These figures show logarithm of the scaled range (see equation (\ref{eq:hurst-rs})) plotted against logarithm of the segment length $n$. On the left hand side, each curve corresponds to one electrode for patient 75, second session. We can observe clear common scaling region for values of $n\in(0, 20)$. On the right hand side, an example regression line fitted to the scaling region of one curve is shown.}
+\label{fig:hurst-fit}
+\end{figure}
 
 \subsection{Higuchi Fractal Dimension}
 \info[inline]{We could have tried optimizing the params more.}
