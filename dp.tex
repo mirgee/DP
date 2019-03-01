@@ -122,6 +122,17 @@
 \newacronym{cs}{CS}{Cosine similarity}
 \newacronym{cd}{CD}{Correlation dimension}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,positioning,shadows,trees}
+\tikzset{
+  basic/.style  = {draw, text width=2cm, drop shadow, font=\sffamily, rectangle},
+  root/.style   = {basic, rounded corners=2pt, thin, align=center,
+                   fill=blue!15},
+  level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=blue!30,
+                   text width=8em},
+  level 3/.style = {basic, thin, align=left, fill=pink!60, text width=6.5em}
+}
+
 \usepackage{nomencl}
 \makenomenclature
 
@@ -383,6 +394,16 @@ In \textbf{Chapter 3}, we present the results of our deep learning approach, inc
 In the final chapter, we conclude with summary of our results, and potential avenues and directions for future work.
 
 % \addcontentsline{toc}{chapter}{Introduction}
+
+\add[inline]{For some reason I can't insert the diagram in this file, but can in another \ldots Spent multiple hours on this\ldots}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=0.8\textwidth]{Images/summary.png} }
+  \caption[Diagram of the thesis.]{Diagram of the thesis.}
+\label{fig:diagram}
+\end{figure}
 
 \chapter{Non-linear Time Series Analysis}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The most simple of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description.
