@@ -1028,11 +1028,11 @@ DFA is a method of estimating $H$ without making prior assumptions about station
 \begin{align*}
   y_k = \sum_{i=1}^{k} \left( x_i - \langle x \rangle \right).
 \end{align*}
-The resulting time series $y$ is then divided into segments of varying length $m$ (each value of $m$ representing a time scale). A local linear least-squares fit is applied to each of these segments. Let us designate the resulting piecewise linear fit as $y_m(k)$. The integrated time series is then detrended by subtracting the local linear fit. The root mean square error is then given by 
+The resulting time series $y$ is then divided into segments of varying length $n$ (each value of $n$ representing a time scale). A local linear least-squares fit is applied to each of these segments. Let us designate the resulting piecewise linear fit as $y_n(k)$. The integrated time series is then detrended by subtracting the local linear fit. The root mean square error is then given by 
 \begin{align} \label{eq:dfa-fm}
-  F(m) \coloneqq \sqrt{ \frac{1}{N} \sum_{i=1}^{N} \left( y_i - y_m(i) \right)^2 }.
+  F(n) \coloneqq \sqrt{ \frac{1}{N} \sum_{i=1}^{N} \left( y_i - y_n(i) \right)^2 }.
 \end{align}
-Finally, if a log-log plot $F(m)$ as a function $m$ shows a linear scaling region (i.e. the original time series exhibits self-similar, scale-free properties described above), the slope of this line approximates $H$ and represents the result of DFA analysis \cite{lee2007detrended}.
+Finally, if a log-log plot $F(n)$ as a function $n$ shows a linear scaling region (i.e. the original time series exhibits self-similar, scale-free properties described above), the slope of this line approximates $H$ and represents the result of DFA analysis \cite{lee2007detrended}.
 
 \add[inline]{Maybe add some more intuitive explanation.}
 
@@ -1047,18 +1047,28 @@ As mentioned in the previous section, similarly to the Hurst parameter in DFA, H
 \end{equation}
 In this equation, $R(n) / \sigma(n)$ is called the rescaled range, and $K$ is called the Hurst exponent \cite{hurst1957suggested}. Obviously, it is always the case that $0 \leq K \leq 1$.
 
-The algorithm we used for computing estimation of the Hurst exponent is as follows. The time series is split into multiple subseries of varying length $n$, and cumulative mean adjusted is computed for each. Range $R(n)$ is computed from this cumulative time series, and $\sigma(n)$ from the origingal time series. In other words, let us have time series $x$, with values $x_1, x_2, \dots, x_N$. For each subseries $x^{(n)}$ of length $n$, we compute
+The algorithm we used for computing estimation of the Hurst exponent is as follows \cite{weron2002estimating}. Let us have time series $x$, with values $x_1, x_2, \dots, x_N$. The time series is split into $d$ non-overlapping subseries $x^{(m)}$, $m\in 1,2,\dots,d$ of fixed length $n$. Sample mean $\langle x^{(m)} \rangle$ and standard deviation $\sigma(m)$ is computed for each. Each subseries $x^{(m)}$ is then normalized, and cumulative time series is computed as 
 \begin{align*}
-  z_k^{(n)} &= \sum_{i=1}^{n} (x_i - \langle x^{(n)} \rangle) \qquad \mathrm{for }\, k=1,\dots,n \\
-  R(n) &= \max_{i=1,\dots,n}{z_i} - \min_{i=1,\dots,n}{z_i}
+  z_k^{(m)} &= \sum_{i=1}^{k} (x_i^{(m)} - \langle x^{(m)} \rangle) \qquad \mathrm{for }\, k=1,\dots,n .
 \end{align*}
-and
+Range $R(m)$ is then computed for each subseries as
 \begin{align*}
-  \sigma(n) &= \sqrt{ \frac{1}{n} \sum_{i=1}^n ( x_i - \langle x^{(j)} \rangle ) }.
+  R(m) &= \max_{i=1,\dots,n}{z_i^{(m)}} - \min_{i=1,\dots,n}{z_i^{(m)}}.
 \end{align*}
-Finally, the Hurst exponent $K$ is computed by fitting the plot of the logarithm of scaled range \\ $\log R(n) / \sigma(n)$ versus $\log n$.
+Then, the mean value of the rescaled range
+\begin{align*}
+  (R/S)_n = \frac{1}{d} \sum_{m=1}^d R(m)/S(m)
+\end{align*}
+is computed. This procedure is performed for chosen values of $n$. As observed by Hurst \cite{hurst1956problem}, and later proven by Mandelbrot \cite{mandelbrot1975limit}, the rescaled range asymptotically follows the relation
+\begin{align*}
+  (R/S)_n \propto cn^K.
+\end{align*}
+The Hurst exponent $K$ then can be obtained using linear regression as slope of the line
+\begin{align*}
+  \log (R/S)_n = \log c + K \log n .
+\end{align*}
 
-Interestingly, if the quantites observed resulted from mutually completely independent events (i.e. white noise, with its corresponding cumulative sum, random walk), the relationship in equation (\ref{eq:resc-range}) is replaced with
+Interestingly, if the measured quantites resulted from mutually completely independent events (i.e. white noise, with its corresponding cumulative sum, random walk), the relationship in equation (\ref{eq:resc-range}) is replaced with
 \begin{equation*}
   R(n) / \sigma(n) \propto 1.25 \sqrt{N},
 \end{equation*}
@@ -1178,7 +1188,6 @@ Some authors suggests that the since most plausible research target for explaini
 The approach of estimating a finite embedding dimension (see Section \ref{sec:state-space-reconstruction}), however, has been doubted by some of the most prominent figures in the field of non-linear dynamical analysis, such as the originators of Grassberger-Procaccia algorithm (see Section \ref{sec:corrdim}). There is very little evidence for the seemingly improbable hypothesis that such complex system with many extrinsic influences and interactions, such as the brain, would exhibit a level of comlexity comparable to e.g. a Lorenz system. Presumably, the the observed estimates of low dimension are due to artifacts or limited data size \cite{grassberger1986climatic, procaccia1988complex}. However, as we will see in Section \ref{sec:applications}, the techniqes derived from these theories still provide some useful information and are successfully applied in many practical situations. Therefore, it seems to be the case that indeed, brain dynamics are much more complex than we are forced to assume based on the theory, but non-linear dynamical analysis still manages to capture some of its important aspects.
 
 \chapter{Non-linear Analysis Approach}
-
 \section{Dataset} \label{sec:dataset}
 The EEG recordings were performed by and obtained from the Czech National Institute of Mental Health. The dataset comprises total of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58). Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS) \cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points: 
 \begin{description}
@@ -1234,7 +1243,7 @@ Our procedure for their selection was as follows. For each non-linear measure, w
   \item Review the literature on use of the non-linear measure in question on EEG data, and search what parameters were used. 
 \end{enumerate}
 
-For correlation dimension and the largetst Lyapunov exponent, which are known to be harder to estimate, we used all three steps. For the remaining measures, the steps were limited to the first and last one.
+For correlation dimension and the largest Lyapunov exponent, which are known to be harder to estimate, we used all three steps. For the remaining measures, the steps were limited to the first and last one.
 
 More details are presented in the rest of this section.
 
@@ -1507,19 +1516,20 @@ For these reasons, we decided to use the same approach (in addition to our autom
 Another approach we tried, following the suggestion in \cite{andreas2000}, is to cut each sample into a number of small (overlapping) ``moving windows'', and perform the steps of estimating embedding parameters and computing correlation dimension for each of those windows. As we noted in \ref{sec:req-corr}, increasing the time series length is theoretically assumed to improve the estimates. On the other hand, shortening the time series may ameliorate the issue of apparent non-stationarity of EEG signal we observed in Section \ref{sec:corrdim-anal}, since for a short time intervals, the signal may be assumed approximately non-stationary \cite{andreas2000}.
 
 \subsection{Detrended Fluctuation Analysis}
-To compute DFA, we used the method of fitting a scaling region on curve of $\log F(m)$ against $\log m$ (see (\ref{eq:dfa-fm})), as explained in Section \ref{sec:dfa-theory}. Following the suggestions in \cite{hardstone2012detrended}, we defined the set of segment lengths $m$ to be spread equidistantly a logarithmic scale. We determined the optimal bounds on $m$ by setting the lower bound to $4$ (fitting a line through less points is prone to error), and gradually increasing the upper bound until a scaling region appeared on the curve of $\log F(m)$ against $\log m$. This curve was then plotted across multiple channels and patients, to determine the interval where the scaling region usually appeared. The resulting interval $r\in(4, 320)$ was approximately same for all samples. An example can seen clearly on Figure \ref{fig:dfa-fit}.
+To compute DFA, we used the method of fitting a scaling region on curve of log-fluctuations $\log F(n)$ against logorarithm of segment lengths $\log n$ (see (\ref{eq:dfa-fm})), as explained in Section \ref{sec:dfa-theory}. Following the suggestions in \cite{hardstone2012detrended}, we defined the set of segment lengths $n$ to be spread equidistantly a logarithmic scale (by multiplying by factor 1.1), with the lower bound of $4$ (fitting a line through less points may be prone to error). The upper bound was gradually increased, until a scaling region appeared on the curve of $\log F(n)$ against $\log n$ (see Figure \ref{fig:dfa-fit}). This curve was then plotted across multiple channels and patients, to determine the interval where the scaling region usually appeared, and if an automatic procedure for finding a scaling region is necessary. However, the interval was approximately same for all samples, and appear for values of $n\in(50, 320)$.
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{./Images/dfa_fit.png} }
-  \caption[Computation of DFA.]{Computation of DFA.}
+  \caption[Computation of DFA.]{This figure shows logarithm of root mean squared errors $\log F(n)$ (see equation (\ref{eq:dfa-fm})) plotted against logarithm of the segment length $n$ for FP1 electrode, patient 75, second session. We can observe clear scaling region for values of $n\in(50, 320)$.}
 \label{fig:dfa-fit}
 \end{figure}
 
-Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to each one of alpha (8-13 Hz), beta (16-37 Hz), and theta (4-7 Hz) frequencies, which were all found to be associated with depression \cite{lee2007detrended, bachmann2013, linkenkaer2005breakdown}. The bounds of the scaling region were modified using the method above to $r \in (4, 100)$. For each of those frequencies, the resulting DFA estimates we found no differences between the studied groups.
+Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to each one of alpha (8-13 Hz), beta (16-37 Hz), and theta (4-7 Hz) frequencies, which were all found to be associated with depression \cite{lee2007detrended, bachmann2013, linkenkaer2005breakdown}. The bounds of the scaling region were modified using the method above to $r \in (4, 100)$. However, for DFA estimates obtained using this method, we obtained no significant differences between the studied groups using the tests performed in Section \ref{sec:distanal}.
+
 \subsection{Hurst Exponent}
-Generally, the number of values $n$ for which to calculate the scaled range $R(n) / \sigma(n)$ is a tradeoff between the length and number of the considered subsequences. In order to avoid both small and large values of $n$, we used 15 values of $n$ spaced evenly on the middle 25 \% of the logarithmic scale between 0 and $\ln N$
+Generally, the number of values $n$ for which to calculate the scaled range $R(n) / \sigma(n)$ is a tradeoff between the length and number of the considered subsequences. In order to avoid both small and large values of $n$, we used 15 values of $n$ spaced evenly on the middle 25 \% of the logarithmic scale between 0 and $\ln N$.
 
 \subsection{Higuchi Fractal Dimension}
 \info[inline]{We could have tried optimizing the params more.}
