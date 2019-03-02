@@ -1626,9 +1626,16 @@ Maybe surprisingly, most of the literature omits discussions of their choice of 
 \end{figure}
 
 \subsection{Higuchi Fractal Dimension}
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=\textwidth]{./Images/hfd_anal.png} }
+  \caption[Dependance of HFD on $k_{\mathrm{max}}$ parameter.]{Figure on the left hand side shows values of Higuchi fractal dimension as a function of $k_{\mathrm{max}}$ parameter for all channels of patient number 75, second session. We can see that HFD values plateau for $k_{\mathrm{max}} > 200$ for all channels. On the other hand, variance among channels disappears. Figure on the right hand side shows logarithm of mean curve length $L(k)$ as a function of $\log k$. There is a clear linear trend with slight fluctuations for higher values of $k$.}
+\label{fig:hfd-anal}
+\end{figure}
 The algorithm for estimating Higuchi fractal dimension, as described Section \ref{sec:hfd-theory}, requires selecting the values $k$ for which $L(k)$ is to be computed. Since this can be done relatively fast, we do this by selecting values equidistant on logarithmic scale $k_1, k_2, \dots, k_{\mathrm{max}}$, where $k_{\mathrm{max}}$ is the single input parameter. Inded, in this, we follow most of the studies we evaluated.
 
-It has been suggested that the parameter $k_{\mathrm{max}}$ can be selected by plotting values of HFD as a function of $k_{\mathrm{max}}$, and selecting the value of $k_{\mathrm{max}}$ where the values of HFD plateau. Our results can be seen in Figure . 
+It has been suggested that the parameter $k_{\mathrm{max}}$ can be selected by plotting values of HFD as a function of $k_{\mathrm{max}}$, and selecting the value of $k_{\mathrm{max}}$ where the values of HFD plateau. Our results can be seen in Figure \ref{fig:hfd-anal}. 
 
 In \cite{bachmann2013}, the authors computed HFD for each patient as follows. They used 5 second sliding windows with 0.5 second shift and computed local HFD for each of those windows using $k_{\mathrm{max}}=50$, thus obtaining 591 values per recording. The final HFD for each electrode was obtained by averaging all local HFDs. We tried using the same approach. However, the labels obtained in this way were less discriminative in our study.
 
