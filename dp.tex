@@ -29,6 +29,15 @@
 % \usepackage{subfig}
 \usepackage{makecell}
 % \usepackage[nomarkers]{endfloat}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\hypersetup{%
+    colorlinks,
+    linktoc=all
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
 
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage[x11names, rgb]{xcolor}  % Coloured text etc.
@@ -393,7 +402,6 @@ In the final chapter, we conclude with summary of our results, and potential ave
 }
 \begin{figure}
   \centering
-  \small
 \begin{forest}
 for tree={
       % font=\sffamily,
@@ -438,21 +446,21 @@ for tree={
         }{}%
       },
   }
-[Data, 
+  [EEG Signals with Metadata, 
     [Nonlinear Analysis
-        [Preprocessing
-          [State Space Reconstruction
-            [Computing Measures
-              [Classification]
+      [Preprocessing\\\scriptsize{labelling, curation}
+          [State Space Reconstruction\\\scriptsize{embedding dimension, time lag,...}
+            [Computing Measures\\\scriptsize{LLE, CD, DFA, HE, HD, SE}
+              [Classification\\\scriptsize{LR, SVM}]
             ]
           ]
         ]
     ]
     [Deep Learning, 
-        [Preprocessing
-          [Input Representation
-            [Architecture Design
-                [Classification]
+      [Preprocessing\\\scriptsize{filtering}
+          [Input Representation\\\scriptsize{RP, CS, raw data}
+            [Architecture Design\\\scriptsize{CSP, FBCSP}
+              [Classification\\\scriptsize{CNN}]
             ]
           ]
         ]
@@ -463,11 +471,6 @@ for tree={
 \label{fig:diagram}
 \end{figure}
 
-% \begin{figure} 
-% \centering
-% \noindent\makebox[\textwidth]{%
-%   \includegraphics[width=0.8\textwidth]{Images/summary.png} }
-% \end{figure}
 
 \chapter{Non-linear Time Series Analysis}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The most simple of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description.
@@ -1141,9 +1144,9 @@ Range $R(m)$ is then computed for each subseries as
   R(m) &= \max_{i=1,\dots,n}{z_i^{(m)}} - \min_{i=1,\dots,n}{z_i^{(m)}}.
 \end{align*}
 Then, the mean value of the rescaled range
-\begin{align*}
+\begin{align}\label{eq:hurst-mean}
   (R/S)_n = \frac{1}{d} \sum_{m=1}^d R(m)/S(m)
-\end{align*}
+\end{align}
 is computed. This procedure is performed for chosen values of $n$. As observed by Hurst \cite{hurst1956problem}, and later proven by Mandelbrot \cite{mandelbrot1975limit}, the rescaled range asymptotically follows the relation
 \begin{align*}
   (R/S)_n \propto cn^K.
@@ -1612,9 +1615,8 @@ To compute DFA, we used the method of fitting a scaling region on curve of log-f
 \end{figure}
 
 Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to each one of alpha (8-13 Hz), beta (16-37 Hz), and theta (4-7 Hz) frequencies, which were all found to be associated with depression \cite{lee2007detrended, bachmann2013, linkenkaer2005breakdown}. The bounds of the scaling region were modified using the method above to $r \in (4, 100)$. However, for DFA estimates obtained using this method, we obtained no significant differences between the studied groups using the tests performed in Section \ref{sec:distanal}.
-
 \subsection{Hurst Exponent}
-Generally, the number of values $n$ for which to calculate the scaled range $R(n) / \sigma(n)$ is a tradeoff between the length and number of the considered subsequences. % In order to avoid both small and large values of $n$, we used 15 values of $n$ spaced evenly on the middle 25 \% of the logarithmic scale between 0 and $\ln N$.
+Maybe surprisingly, most of the literature omits discussions of their choice of the values $n$ for which to calculate the scaled range $(R/S)_n$. However, we may expect that higher values of subinterval lengths $n$ will result in smaller number of subsequences $d$, and thus less precise estimate of the mean $(R/S)_n$ in (\ref{eq:hurst-mean}). This effect will also be increasingly pronounced with decreasing original time series length $N$. Indeed, in Figure \ref{fig:hurst-fit}, which shows the mean rescaled ranges $(R/S)_n$ as a function of the subsequence length $n$ (both axes are logarithmically scaled) for all electrodes and of the measurements, we may observe larger fluctuations for larger values of $n$, likely because of increasing uncertainty due to this effect. It has been observed that small $n$ also lead to large deviations from the linear slope \cite{weron2002estimating}, because the relationship (\ref{eq:resc-range}) is asymptotic, and thus valid only for large $n$. However, in our case, we have not encountered this phenomenon. Therefore, we have decided to compute the Hurst exponent as the slope of the log $R/S$ curve for the values if $n\in(0,20)$ spaced equidistantly on the logarithmic scale.
 
 \begin{figure} 
 \centering
@@ -1625,7 +1627,20 @@ Generally, the number of values $n$ for which to calculate the scaled range $R(n
 \end{figure}
 
 \subsection{Higuchi Fractal Dimension}
-\info[inline]{We could have tried optimizing the params more.}
+
+\begin{table}[tbp]
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+$\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{Application} & \textbf{Reference} \\ \hline
+3-30 & saturation & DMI & depression & \cite{hosseinifard2013} \\ \hline
+ - &  ``unfolding dimension'' (see text) & objective function minimization & intraindividual classification & \cite{schmid1996indications} \\ \hline
+ 2-20 (scaling region 16-20) & saturation & $A(\tau)$, threshold $1/e$ & awake / sleep classification & \cite{pereda1998non} \\ \hline
+ 12 & - & 8 & mental state classification & \cite{dvorak1986some} \\ \hline
+ 2-12 & saturation & 5 & schizophrenia & \cite{koukkou1993dimensional} \\ \hline
+\end{tabular}}
+\caption[Literature review of $D_2$ embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
+\end{table}
 
 \subsection{Sample Entropy}
 \info[inline]{Time lag 1.}
