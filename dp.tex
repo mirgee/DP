@@ -1162,25 +1162,24 @@ Interestingly, if the measured quantites resulted from mutually completely indep
 \end{equation*}
 as can be easily verified by flipping a set of coins. \footnote{Hurst himself actually made experiments, tossing 10 coins 1000 times. It took him almost 6 hours \cite{feder2013fractals}.} \cite{hurst1957suggested} This allows us to recognize stochastic processes with mutually uncorrelated values. The value of Hurst exponent for white noise is $K=1/2$, and many natural processes, such as rainfalls, river water level heights, temperatures and pressures, annual growth of tree rings, and even financial markets have $K > 1/2$, suggesting long-term temporal correlations in the processes. Values of $0 \leq K < 1/2$, on the other hand, suggest long-time negative correlations, i.e. high values being often followed by low values in the future \cite{hurst1956problem}.
 
-\subsection{Higuchi Fractal Dimension}
-In this section, it will be beneficial to change our usual notation for the purpose of readability. Let us have time series $x(1), x(2), \dots, x(N)$. We construct a new time series, $x_k^m$, as 
+\subsection{Higuchi Fractal Dimension} \label{sec:hfd-theory}
+In this section, it will be beneficial to change our usual notation for the purpose of readability. Let us have time series $x(1), x(2), \dots, x(N)$. We select a $k \in \NN$ and construct $k$ new time series, denoted $x_k^m$ for $m=1,2,\dots,k$, as 
 \begin{align*}
-  x(m), x(m+k), x(m+2k), \dots, x(m + \floor{\frac{N-m}{k} \cdot k}), \qquad m=1,2,\dots,k, \qquad m,k \in \NN,
+  x(m), x(m+k), x(m+2k), \dots, x(m + \floor{\frac{N-m}{k}} \cdot k), \qquad m=1,2,\dots,k, \qquad m,k \in \NN,
 \end{align*}
-where $m$ is the initial time, and $k$ is the interval time. In this way, we sample $k$ ``subseries'' where the interval (or $\mathrm{size}$, see equation (\ref{eq:dim-intuitive})) is precisely $k$. Then, we define ``length of the curve'' $x_k^m$ (or $\mathrm{bulk}$, see equation (\ref{eq:dim-intuitive})) as follows:
+where $m$ is represents the initial time, and $k$ the interval time. In this way, we sample $k$ subseries where the delay between successive points, or $\mathrm{size}$ in equation (\ref{eq:dim-intuitive}), is precisely $k$ for each. Then, we define normalized average length $L_m^k$ of each $x_k^m$, or its $\mathrm{bulk}$ in equation (\ref{eq:dim-intuitive}), as follows
 \begin{align*}
-  L_m^k = \left( \sum_{i=1}^{\floor{\frac{N-m}{k}}} | x(m+ik) - x(m+(i-1)k) | \right) \frac{N-1}{\floor{\frac{N-m}{k}} \cdot k} \cdot \frac{1}{k},
+  L_m^k = \left( \sum_{i=1}^{\floor{\frac{N-m}{k}}} | x(m+ik) - x(m+(i-1)k) | \right) \frac{N-1}{\floor{\frac{N-m}{k}} \cdot k},
 \end{align*}
-where $\frac{N-1}{\floor{\frac{N-m}{k}} \cdot k}$ is a normalization factor. Length of the original curve as a function of $k$ is then defined as the average $\langle L(k) \rangle$ over $k$ values of $L_m(k)$. If $\langle L(k) \rangle \propto k^{-D_H}$ for some value of $D_H$, then the curve can be considered fractal with fractal dimension $D_H$, which can be estimated by least-squares fitting the logarithm of the length $\log{ \langle L(k) \rangle }$ as a function of $\log{k}$ \cite{higuchi1988approach}.
+where $\frac{N-1}{\floor{\frac{N-m}{k}} \cdot k}$ is a normalization factor. Length of the original curve as a function of $k$ is then defined as the average $L(k) \coloneqq \langle L_m^k \rangle_m$ over $k$ values of $L_m^k$. If $L(k) \propto k^{-D_H}$ for some value of $D_H$, then the curve can be considered fractal with fractal dimension $D_H$, which can be estimated by least-squares fitting the logarithm of the length $\log{L(k)}$ as a function of $\log{k}$ \cite{higuchi1988approach}.
 
-In summary, Higuchi fractal dimension is can be computed, in analogy with correlation dimension and equation (\ref{eq:d2-partial}), as
+In summary, Higuchi fractal dimension can be defined, in analogy with correlation dimension and equation (\ref{eq:d2-partial}), as
 \begin{align*}
-  D_H = \frac{\partial \log{\langle L(k) \rangle}}{\partial \log{k}}.
+  D_H = -\frac{\partial \log{L(k)}}{\partial \log{k}}.
 \end{align*}
-Moreover, comparing with equation (\ref{eq:dim-intuitive}), can see that $\mathrm{bulk} = \langle L(k) \rangle$ and $\mathrm{size} = k$. 
+In other words, one may see Higuchi fractal dimension as measure of irregularity, which in turn is measured as logarithmic rate of average variation of successive points \cite{ahmadlou2012}. Comparing with equation (\ref{eq:dim-intuitive}), can see that $\mathrm{bulk}$ is corresponds to the mean curve length over multiple subsampled time series $L(k)$ as a function of their $\mathrm{size}$, which is the delay length $k$. 
 
-\info[inline]{Benefits: fast computation.}
-\add[inline]{Add some successful application to EEG.}
+In comparison with correlation dimension, one of the benefits of Higuchi fractal dimension is its relatively fast computation.
 
 \subsection{Sample Entropy}
 Understood in the context of dynamical systems, entropy is the rate at which a given system produces information. It is equal to the sum of all positive Lyapunov exponents of the system's attractor, and positive entropy indicates presence of chaotic dynamics \cite{andreas2000}. Computing entropy from a physiological time series directly using the information-theoretical definition, is, however, problematic. The time series produced during measurements on biological systems are often short and noisy. Moreover, in EEG analysis, the impact of noise is especially severe. To combat this issue, many methods of computing entropy for such time series has been devised. Sample entropy represents an improvement on other entropy measure popular in clinical settings, called approximate entropy, which has been successfully applied on EEG to classify diseases such as schizophrenia, epilepsy, and addiction \cite{yun2012decreased}.
@@ -1627,19 +1626,24 @@ Maybe surprisingly, most of the literature omits discussions of their choice of 
 \end{figure}
 
 \subsection{Higuchi Fractal Dimension}
+The algorithm for estimating Higuchi fractal dimension, as described Section \ref{sec:hfd-theory}, requires selecting the values $k$ for which $L(k)$ is to be computed. Since this can be done relatively fast, we do this by selecting values equidistant on logarithmic scale $k_1, k_2, \dots, k_{\mathrm{max}}$, where $k_{\mathrm{max}}$ is the single input parameter. Inded, in this, we follow most of the studies we evaluated.
+
+It has been suggested that the parameter $k_{\mathrm{max}}$ can be selected by plotting values of HFD as a function of $k_{\mathrm{max}}$, and selecting the value of $k_{\mathrm{max}}$ where the values of HFD plateau. Our results can be seen in Figure . 
+
+In \cite{bachmann2013}, the authors computed HFD for each patient as follows. They used 5 second sliding windows with 0.5 second shift and computed local HFD for each of those windows using $k_{\mathrm{max}}=50$, thus obtaining 591 values per recording. The final HFD for each electrode was obtained by averaging all local HFDs. We tried using the same approach. However, the labels obtained in this way were less discriminative in our study.
+
+\add[inline]{Add figures, what we did and why, maybe few more studies.}
 
 \begin{table}[tbp]
-\resizebox{\textwidth}{!}{
+  \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-$\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{Application} & \textbf{Reference} \\ \hline
-3-30 & saturation & DMI & depression & \cite{hosseinifard2013} \\ \hline
- - &  ``unfolding dimension'' (see text) & objective function minimization & intraindividual classification & \cite{schmid1996indications} \\ \hline
- 2-20 (scaling region 16-20) & saturation & $A(\tau)$, threshold $1/e$ & awake / sleep classification & \cite{pereda1998non} \\ \hline
- 12 & - & 8 & mental state classification & \cite{dvorak1986some} \\ \hline
- 2-12 & saturation & 5 & schizophrenia & \cite{koukkou1993dimensional} \\ \hline
-\end{tabular}}
-\caption[Literature review of $D_2$ embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
+$\mathbf{k_{\mathrm{max}}}$ & \textbf{sampling frequency} & \textbf{recording time} & \textbf{Application} & \textbf{Reference} \\ \hline
+30 & 256 Hz & 5 min & depression & \cite{hosseinifard2013} \\ \hline
+50 & 256 Hz & 5 s & depression & \cite{bachmann2013} \\ \hline
+48 & 169.55 Hz & 5 min & depression & \cite{gomez2009use} \\ \hline
+\end{tabular}
+\caption[Literature review of HFD $k_{\mathrm{max}}$ parameter.]{Summary of choices for the $k_{\mathrm{max}}$ parameter we found across literature.}
 \end{table}
 
 \subsection{Sample Entropy}
