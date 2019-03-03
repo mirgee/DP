@@ -1181,22 +1181,25 @@ In other words, one may see Higuchi fractal dimension as measure of irregularity
 
 In comparison with correlation dimension, one of the benefits of Higuchi fractal dimension is its relatively fast computation.
 
-\subsection{Sample Entropy}
-Understood in the context of dynamical systems, entropy is the rate at which a given system produces information. It is equal to the sum of all positive Lyapunov exponents of the system's attractor, and positive entropy indicates presence of chaotic dynamics \cite{andreas2000}. Computing entropy from a physiological time series directly using the information-theoretical definition, is, however, problematic. The time series produced during measurements on biological systems are often short and noisy. Moreover, in EEG analysis, the impact of noise is especially severe. To combat this issue, many methods of computing entropy for such time series has been devised. Sample entropy represents an improvement on other entropy measure popular in clinical settings, called approximate entropy, which has been successfully applied on EEG to classify diseases such as schizophrenia, epilepsy, and addiction \cite{yun2012decreased}.
+\subsection{Sample Entropy} \label{sec:se-theory}
+Understood in the context of dynamical systems, entropy is the rate at which a given system produces information. It is equal to the sum of all positive Lyapunov exponents of the system's attractor, and positive entropy indicates presence of chaotic dynamics \cite{andreas2000}. Computing entropy from a physiological time series directly using the information-theoretical definition, is, however, problematic. The time series produced during measurements on biological systems are often short and noisy. Moreover, in EEG analysis, the impact of noise is especially severe. To combat this issue, many methods of computing entropy for such time series has been devised. Sample entropy represents an improvement \cite{richman2000physiological} on other entropy measure popular in clinical settings, called approximate entropy, which has been successfully applied on EEG to classify diseases such as schizophrenia, epilepsy, and addiction \cite{yun2012decreased}.
 
-For a given embedding dimension $m$ and tolerance parameter $r$, sample entropy can be defined as the negative natural logarithm of the conditional probability that two subseqences of the time series of length $m$ which are similar, i.e. their distance is less than $r$ (excluding self-matches\footnote{This is one of the differences of sample entropy from approximate entropy.}), will remain similar after including the next point, i.e. when their respective lengths are increased to $m+1$. Thus, sample entropy is thus a measure of predictability (the opposite of regularity), lower value of sample entropy indicates more self-similarity, or, in a certain sense, less complexity. In other words:
+For a given embedding dimension $m$ and tolerance parameter $r$, sample entropy can be defined as the negative natural logarithm of the conditional probability that two subseqences of the time series of length $m$ which are similar, i.e. their distance is less than $r$ (excluding self-matches\footnote{This is one of the differences of sample entropy from approximate entropy.}), will remain similar after including the next point, i.e. when their respective lengths are increased to $m+1$. Thus, sample entropy is a measure of predictability, lower value of sample entropy indicates more self-similarity, or, in a certain sense, less complexity. More concrete definition may be stated as follows:
 \begin{dfn}[\cite{richman2000physiological}]
-  Let us have a time series $x_1, x_2, \dots, x_N$, and let $X_m(i) = \left( x_i, x_{i+1}, \dots, x_{i+m-1} \right)$ be the $i$-th vector in the embedding of dimension $m$, and $\norm{\cdot}_{\infty}$ be the Chebyshev metric\footnote{Any metric can be used, but Chebyshev metric is recommended by the original authors \cite{richman2000physiological}.}. Then, \textbf{sample entropy} is defined as
+  Let us have a time series $x_1, x_2, \dots, x_N$, and let $\mathbf{x}_i^{(m)} = \left( x_i, x_{i+1}, \dots, x_{i+m-1} \right)$ be the $i$-th vector in the embedding of dimension $m$, and $\norm{\cdot}_{\infty}$ be the Chebyshev metric\footnote{Any metric can be used, but Chebyshev metric is recommended by the original authors \cite{richman2000physiological}.}. Then, \textbf{sample entropy} is defined as
   \begin{align*}
-    \mathrm{SampEn}(m, r, N) = -\ln \frac{A^m(r)}{B^m(r)},
+    \mathrm{SampEn}(m, r) = -\ln \frac{A^m(r)}{B^m(r)},
   \end{align*}
   where
   \begin{description}
-    \item[$A^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{X_{m+1}(i) - X_{m+1}(j)}_{\infty} < r$, $i \neq j$, and 
-    \item[$B^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{X_{m}(i) - X_{m}(j)}_{\infty} < r$, $i \neq j$.
+    \item[$A^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{\mathbf{x}_i^{(m+1)} \mathbf{x}_j^{(m+1)}}_{\infty} < r$, $i \neq j$, and 
+    \item[$B^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{\mathbf{x}_i^{(m)} \mathbf{x}_j^{(m)}}_{\infty} < r$, $i \neq j$.
   \end{description}
+  We call the value $r$ \emph{tolerance}.
 \end{dfn}
-Obviously, it is always $A^m(r) \leq B^m(r)$, hence sample entropy is always non-negative. If $A^m(r) = B^m(r)=0$, no regularity has been detected, and $B^m(r) \neq 0$ with $A^m(r)=0$ corresponds to (the above mentioned) conditional probability of 0, and infinite value of sample entropy. The recommended value of $r$ is $0.2 * \mathrm{std}(x)$ \cite{richman2000physiological}.
+Obviously, it is always $A^m(r) \leq B^m(r)$, hence sample entropy is always non-negative. If $A^m(r) = B^m(r)=0$, no regularity has been detected, and $B^m(r) \neq 0$ with $A^m(r)=0$ corresponds to (the above mentioned) conditional probability of 0, and infinite value of sample entropy. The value of tolerance $r$ recommended by the authors is $0.2 * \sigma(x)$, where $\sigma(x)$ is the standard deviation of the original time series \cite{richman2000physiological}.
+
+The algorithm for computing sample entropy first constructs the embedding vectors for embedding dimensions $m$ and $m+1$. For each embedding dimension, it counts the number of pairs of vectors $\mathbf{x}_i, \mathbf{x}_j$ where $i \neq j$, for which $\norm{ \mathbf{x}_i - \mathbf{x}_j }_{\infty} < r$. The negative natural logarithm of the ratio of number of those pairs for dimension $m+1$ and the number of pairs for dimension $m$ is the result.
 
 Sample entropy has been successfully employed for diagnosing depression \cite{acharya2015novel, hauge2011nonlinear}. It was shown to be significantly different between middle aged and elderly women during sleep \cite{bruce2009sample}. \add{Extend this section a little bit.}
 
@@ -1602,7 +1605,9 @@ For these reasons, we decided to use the same approach (in addition to our autom
 
 Another approach we tried, following the suggestion in \cite{andreas2000}, is to cut each sample into a number of small (overlapping) ``moving windows'', and perform the steps of estimating embedding parameters and computing correlation dimension for each of those windows. As we noted in \ref{sec:req-corr}, increasing the time series length is theoretically assumed to improve the estimates. On the other hand, shortening the time series may ameliorate the issue of apparent non-stationarity of EEG signal we observed in Section \ref{sec:corrdim-anal}, since for a short time intervals, the signal may be assumed approximately non-stationary \cite{andreas2000}.
 
-\subsection{Detrended Fluctuation Analysis}
+\subsection{Detrended Fluctuation Analysis} \label{sec:dfa-exp}
+For explanation of the concept of detrended fluctuation analysis, please see Section \ref{sec:dfa-theory}.
+
 To compute DFA, we used the method of fitting a scaling region on curve of log-fluctuations $\log F(n)$ against logorarithm of segment lengths $\log n$ (see (\ref{eq:dfa-fm})), as explained in Section \ref{sec:dfa-theory}. Following the suggestions in \cite{hardstone2012detrended}, we defined the set of segment lengths $n$ to be spread equidistantly on a logarithmic scale (by multiplying by factor 1.1), with the lower bound of $4$ (fitting a line through less points may be prone to error). The upper bound was gradually increased, until a scaling region appeared on the curve of $\log F(n)$ against $\log n$ (see Figure \ref{fig:dfa-fit}). This curve was then plotted across multiple channels and patients, to determine the interval where the scaling region usually appeared, and if an automatic procedure for finding a scaling region is necessary. However, the interval was approximately same for all samples, and appear for values of $n\in(50, 320)$.
 
 \begin{figure} 
@@ -1614,7 +1619,9 @@ To compute DFA, we used the method of fitting a scaling region on curve of log-f
 \end{figure}
 
 Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to each one of alpha (8-13 Hz), beta (16-37 Hz), and theta (4-7 Hz) frequencies, which were all found to be associated with depression \cite{lee2007detrended, bachmann2013, linkenkaer2005breakdown}. The bounds of the scaling region were modified using the method above to $r \in (4, 100)$. However, for DFA estimates obtained using this method, we obtained no significant differences between the studied groups using the tests performed in Section \ref{sec:distanal}.
-\subsection{Hurst Exponent}
+\subsection{Hurst Exponent} \label{sec:hurst-exp}
+For explanation of the concept of Hurst exponent, please see Section \ref{sec:hurst-theory}.
+
 Maybe surprisingly, most of the literature omits discussions of their choice of the values $n$ for which to calculate the scaled range $(R/S)_n$. However, we may expect that higher values of subinterval lengths $n$ will result in smaller number of subsequences $d$, and thus less precise estimate of the mean $(R/S)_n$ in (\ref{eq:hurst-mean}). This effect will also be increasingly pronounced with decreasing original time series length $N$. Indeed, in Figure \ref{fig:hurst-fit}, which shows the mean rescaled ranges $(R/S)_n$ as a function of the subsequence length $n$ (both axes are logarithmically scaled) for all electrodes and of the measurements, we may observe larger fluctuations for larger values of $n$, likely because of increasing uncertainty due to this effect. It has been observed that small $n$ also lead to large deviations from the linear slope \cite{weron2002estimating}, because the relationship (\ref{eq:resc-range}) is asymptotic, and thus valid only for large $n$. However, in our case, we have not encountered this phenomenon. Therefore, we have decided to compute the Hurst exponent as the slope of the log $R/S$ curve for the values if $n\in(0,20)$ spaced equidistantly on the logarithmic scale.
 
 \begin{figure} 
@@ -1625,7 +1632,7 @@ Maybe surprisingly, most of the literature omits discussions of their choice of 
 \label{fig:hurst-fit}
 \end{figure}
 
-\subsection{Higuchi Fractal Dimension}
+\subsection{Higuchi Fractal Dimension} \label{sec:hfd-exp}
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
@@ -1633,28 +1640,56 @@ Maybe surprisingly, most of the literature omits discussions of their choice of 
   \caption[Dependance of HFD on $k_{\mathrm{max}}$ parameter.]{Figure on the left hand side shows values of Higuchi fractal dimension as a function of $k_{\mathrm{max}}$ parameter for all channels of patient number 75, second session. We can see that HFD values plateau for $k_{\mathrm{max}} > 200$ for all channels. On the other hand, variance among channels disappears. Figure on the right hand side shows logarithm of mean curve length $L(k)$ as a function of $\log k$. There is a clear linear trend with slight fluctuations for higher values of $k$.}
 \label{fig:hfd-anal}
 \end{figure}
+For explanation of the concept of Higuchi fractal dimension, please see Section \ref{sec:hfd-theory}.
+
 The algorithm for estimating Higuchi fractal dimension, as described Section \ref{sec:hfd-theory}, requires selecting the values $k$ for which $L(k)$ is to be computed. Since this can be done relatively fast, we do this by selecting values equidistant on logarithmic scale $k_1, k_2, \dots, k_{\mathrm{max}}$, where $k_{\mathrm{max}}$ is the single input parameter. Inded, in this, we follow most of the studies we evaluated.
 
 It has been suggested that the parameter $k_{\mathrm{max}}$ can be selected by plotting values of HFD as a function of $k_{\mathrm{max}}$, and selecting the value of $k_{\mathrm{max}}$ where the values of HFD plateau. Our results can be seen in Figure \ref{fig:hfd-anal}. 
 
-In \cite{bachmann2013}, the authors computed HFD for each patient as follows. They used 5 second sliding windows with 0.5 second shift and computed local HFD for each of those windows using $k_{\mathrm{max}}=50$, thus obtaining 591 values per recording. The final HFD for each electrode was obtained by averaging all local HFDs. We tried using the same approach. However, the labels obtained in this way were less discriminative in our study.
+In \cite{bachmann2013}, the authors computed HFD for each patient as follows. They used 5 second sliding windows with 0.5 second shift and computed local HFD for each of those windows using $k_{\mathrm{max}}=50$, thus obtaining 591 values per recording. The final HFD for each electrode was obtained by averaging all local HFDs. We tried using the same approach. However, the labels obtained in this way were less discriminative in our study. Finally, we computed labels from the entire recording for values $k_{\mathrm{max}}=7, 30, 50, 100, 200$, where $k_{\mathrm{max}}=50$ was shown to be the most discriminative.
 
-\add[inline]{Add figures, what we did and why, maybe few more studies.}
+\add[inline]{Maybe few more studies.}
 
 \begin{table}[tbp]
   \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-$\mathbf{k_{\mathrm{max}}}$ & \textbf{sampling frequency} & \textbf{recording time} & \textbf{Application} & \textbf{Reference} \\ \hline
+$\mathbf{k_{\mathrm{max}}}$ & \textbf{Sampling Frequency} & \textbf{Recording Time} & \textbf{Application} & \textbf{Reference} \\ \hline
 30 & 256 Hz & 5 min & depression & \cite{hosseinifard2013} \\ \hline
 50 & 256 Hz & 5 s & depression & \cite{bachmann2013} \\ \hline
 48 & 169.55 Hz & 5 min & depression & \cite{gomez2009use} \\ \hline
 \end{tabular}
-\caption[Literature review of HFD $k_{\mathrm{max}}$ parameter.]{Summary of choices for the $k_{\mathrm{max}}$ parameter we found across literature.}
+\caption[Literature review of choice for HFD $k_{\mathrm{max}}$ parameter.]{Summary of choices for the $k_{\mathrm{max}}$ parameter for Higuchi fractal dimension applied to EEG we found across literature.}
 \end{table}
 
-\subsection{Sample Entropy}
-\info[inline]{Time lag 1.}
+\subsection{Sample Entropy} \label{sec:se-exp}
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=\textwidth]{./Images/se_anal.png} }
+  \caption[Histograms of distances in embedding space.]{Histograms of pairwise distances between vectors in embedding space for gradually increasing embedding dimension $m$. The vertical red line indicates the value of the tolerance parameter $r=0.2*\sigma(x)$. We can see histograms shifting to the right with increasing embedding dimension and progressively overlapping more. This means that for high embedding dimensions, sample entropy will be small for any value of tolerance parameter $r$.}
+\label{fig:se-anal}
+\end{figure}
+
+For explanation of the concept of sample entropy, please see Section \ref{sec:se-theory}.
+
+Embedding dimension $m$ is usually set to 1 or 2 and tolerance parameter $r$ is usually set at $0.1*\sigma(x)$ to $0.25*\sigma(x)$ \cite{jie2014emotion}. As can be seen in Table \ref{tab:se-exp}, in all of the studies we evaluated, in spite of various applications and time series lengths, the same values were selected for $m$ and $\tau$, in particular, $m=2$ and $r=0.2*\sigma(x)$, where $\sigma(x)$ denotes standard deviation of the original time series. In Figure \ref{fig:se-anal}, we can see why this is a reasonable choice. It shows histograms of pairwise distances in the embedding space for two successive embedding dimensions. With increasing embedding dimension, the histograms gradually overlap more, and for very high embedding dimensions, sample entropy becomes small for any $r$. Moreover, the histograms shift to the right, which necessitates higher value of $r$, but $r$ is a measure of the degree to which vectors are judged ``similar'', and thus should be kept low - for $r \geq \max_{i\in\{1,2,\dots,N\}} x_i$, all vectors be counted in both embedding spaces and sample entropy is (approximately) zero.\footnote{The lowest value sample entropy can reach is $-\ln(2/\left( (N-m-1)(N-m)\right))$ \cite{richman2000physiological}.} For these reasons, we decided to follow the concensus, and selected $m=2$ and $r=0.2*\sigma(x)$.
+
+\begin{table}[tbp]
+  \centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$\mathbf{r}$ & $\mathbf{m}$ & \textbf{Sampling Frequency} & \textbf{Recording Time} & \textbf{Application} & \textbf{Reference} \\ \hline
+$0.2 * \sigma(x)$ & 2 & - & 256 min & depression & \cite{hauge2011nonlinear} \\ \hline
+$0.2 * \sigma(x)$ & 2 & 256 Hz & 5 min  & depression & \cite{acharya2015novel} \\ \hline
+$0.2 * \sigma(x)$ & 2 & 512 Hz & 63 s & emotion recognition & \cite{jie2014emotion} \\ \hline
+$0.2 * \sigma(x)$ & 2 & 173.6 Hz & 23.6 s & epilepsy & \cite{song2012automatic} \\ \hline
+$0.2 * \sigma(x)$ & 2 & 173.6 Hz & 23.6 s & epilepsy & \cite{acharya2012automated} \\ \hline
+$0.2 * \sigma(x)$ & 2 & 128 Hz & 30 s & denoising & \cite{mahajan2015unsupervised} \\ \hline
+\end{tabular}
+\caption[Literature review of SE $r$ and $m$ parameters.]{Summary of choices for the embedding dimension $m$ and tolerance $r$ parameters for sample entropy applied to EEG signals we found across literature. Note that all choices for $m$ and $r$ are the same.}
+\label{tab:se-exp}
+\end{table}
 \subsection{Frequency band amplitudes} \label{sec:band-ampl}
 We also analyzed mean frequency amplitudes in alpha, beta, gamma, delta and theta frequency bands, and found no differences between the studied groups. See Figure \ref{fig:mba}.
 
