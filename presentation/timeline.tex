@@ -1,0 +1,47 @@
+\usetikzlibrary{arrows,positioning,decorations.pathreplacing}
+
+\begin{tikzpicture}[
+    every node/.style = {align=center},
+          Line/.style = {-angle 90, shorten >=2pt},
+    Brace/.style args = {#1}{semithick, decorate, decoration={brace,#1,raise=8pt,
+                             pre=moveto,pre length=0pt,post=moveto,post length=0pt,amplitude=15pt}},
+            ys/.style = {yshift=#1}
+                    ]
+\linespread{0.8}                    
+\coordinate (a) at (0,0);
+\coordinate[right=22mm of a]    (b);
+\coordinate[right=18mm of b]    (c);
+\coordinate[right= 5mm of c]    (d);
+\coordinate[right=25mm of d]    (e);
+\coordinate[right= 5mm of e]    (f);
+\coordinate[right=10mm of f]    (g);
+
+ \draw[Line]  (a)  --  (f) --  (g) node[below left] {weeks};
+\foreach \x in {0,...,7} \draw (\x,0.1) -- (\x,-0.1) node[below] {\x};
+\draw[Brace] (a) -- node[above=22pt] {Treatment}(e);
+% \draw[Brace] (c) -- node[above=3pt] {Infectious period} (f);
+% \draw[Brace=mirror] (d) -- node[below=3pt] {Symptomatic\\period} (e);
+% \draw[Line] ([ys=11mm] a) node[above] {Time of\\infection} -- (a);
+\draw[Line, shorten >=17pt] ([ys=-11mm]  c) node[below] {EEG recorded\\DS measured\\Prognosis} -- (c);
+% \draw[Line] ([ys=7mm]  f) -- (f);
+\draw[Line, shorten >=17pt] ([ys=-11mm] a) node[below] {Drugs administred\\EEG recorded\\DS measured\\Diagnosis} -- (a);\draw[Line, shorten >=17pt] ([ys=-11mm]  e) node[below]{Evaluation} -- (e);
+
+\coordinate (a) at (0,-31mm);
+\coordinate[right=22mm of a]    (b);
+\coordinate[right=18mm of b]    (c);
+\coordinate[right= 5mm of c]    (d);
+\coordinate[right=25mm of d]    (e);
+\coordinate[right= 5mm of e]    (f);
+\coordinate[right=10mm of f]    (g);
+
+ \draw[Line]  (a)  --  (f) --  (g) node[below left] {weeks};
+\foreach \x in {0,...,7} \draw (\x,-32mm) -- (\x,-30mm) node[below=2mm] {\x};
+% \draw[Brace] (a) -- node[above=22pt] {Treatment}(e);
+% \draw[Brace] (c) -- node[above=3pt] {Infectious period} (f);
+% \draw[Brace=mirror] (d) -- node[below=3pt] {Symptomatic\\period} (e);
+% \draw[Line] ([ys=11mm] a) node[above] {Time of\\infection} -- (a);
+\draw[Line, shorten >=17pt] ([ys=-11mm]  c) node[below] {EEG recorded\\DS measured\\\textcolor{red}{Evaluation}} -- (c);
+% \draw[Line] ([ys=7mm]  f) -- (f);
+\draw[Line, shorten >=17pt] ([ys=-11mm] a) node[below] {Drugs administred\\EEG recorded\\DS measured\\Diagnosis\\\textcolor{red}{Prognosis}} -- (a);
+% \draw[Line, shorten >=17pt] ([ys=-11mm]  e) node[below]{Evaluation} -- (e);
+\end{tikzpicture}

@@ -1,0 +1,39 @@
+PROBLEM STATEMENT
+* Depression diagnosis is time consuming, requires professionals -> looking for cheap methods of diagnosis
+* EEG is good - cheap
+* Are there depression biomarkers in depression?
+
+* Sometimes, drs. are not interested only in diagnosis, but also prognosis for the patient - how do they respond to treatment
+* This is even more difficult to asses
+* Very little work has been done on this
+
+  APPROACHES
+  * I have been looking into the literature, there is a long history of using methods of non-linear dynamical analysis of the system, mostly on small datasets (very carefully preprocessed)
+  * More recently also DL has been applied
+  * So I decided to try to try to apply these methods on larger dataset
+
+THE DATA
+* Show how the data looks like (graphs, histograms, tables, any viz)
+
+NLDA
+* Measures like ..., can go into detail in questions
+* Not easy, have to select embedding parameters - need automatic procedure
+* Show few examples, show e.g. ILD which I implemented
+* Show results
+
+DL
+* NL analysis inspires -> convert data to image -> CNN, another poss. just raw data, CNN also may work
+* Tried traditional architectures successful at image recongition, not very good
+* Came across a paper which used architecture inspired by technique called FBCSP -> implemented
+* Results
+
+LIMITATIONS
+* Signals in closeby parts are correlated (see Stam to formulate better), use information better
+* ...?
+
+FUTURE WORK
+* Implement app with NN which may assist doctors easily (working on it)
+* Do NNs encode the NL measures? Looking at the weights, they look at similar channels
+* ...?
+
+THANK YOU FOR YOUR ATTENTION
