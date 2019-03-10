@@ -2581,14 +2581,18 @@ The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov e
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{./Images/scalp_corr_all.png}
-  \caption[Topographic correlation map.]{Topographic map of correlation coefficients on a scalp for depression diagnosis and remission prognosis respectively. Color at each channel marks the value of Pearson's correlation coefficient between the value of corresponding measure and label across all patients.}
+  \caption[Topographic correlation map.]{Topographic map of correlation coefficients on a scalp for depression diagnosis and remission prognosis respectively. Color at each channel marks the value of Pearson's correlation coefficient between the value of corresponding measure and label across all patients. The colors are then interpolated for smooth transitions.}
   \label{fig:scalp-corrs}
 \end{figure}
 
 
+\section{Implementation}
+All the code used for this section is publicly available at, as well as on the CD accompanying this text. Used programming language was Python. The plots were produced using \href{https://matplotlib.org/}{matplotlib} library. Other used libraries include \href{http://www.numpy.org/}{numpy} for vectorized computations, \href{https://scipy.org/scipylib/index.html}{scipy} for signal processing algorithms, \href{http://pandas.pydata.org/}{pandas} for data storage and manipulation, and \href{http://ipython.org/}{ipython} for development.
+
+For computation of nonlinear measures, we used slightly modified versions of \href{https://github.com/CSchoel/nolds}{nolds} library by C. Schölzel and published under MIT Licence, and \href{https://github.com/manu-mannattil/nolitsa}{nolitsa} library by M. Mannatil and published under 3-clause BSD licence.
+
 \chapter{Deep Learning Approach}
 \section{Convolutional Neural Networks}
-
 \subsection{Mathematical Background}
 \begin{dfn}
   Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a functional defined as
