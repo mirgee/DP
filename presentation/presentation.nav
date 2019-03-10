@@ -58,12 +58,14 @@
 \headcommand {\beamer@appendixpages {21}}
 \headcommand {\slideentry {4}{0}{5}{21/21}{}{1}}
 \headcommand {\beamer@framepages {21}{21}}
-\headcommand {\slideentry {4}{0}{6}{22/22}{}{1}}
-\headcommand {\beamer@framepages {22}{22}}
-\headcommand {\beamer@partpages {21}{22}}
-\headcommand {\beamer@subsectionpages {21}{22}}
-\headcommand {\beamer@sectionpages {21}{22}}
-\headcommand {\beamer@documentpages {22}}
-\headcommand {\def \inserttotalframenumber {2}}
+\headcommand {\slideentry {4}{0}{5}{21/22}{}{1}}
+\headcommand {\beamer@framepages {21}{22}}
+\headcommand {\slideentry {4}{0}{6}{23/23}{}{1}}
+\headcommand {\beamer@framepages {23}{23}}
+\headcommand {\beamer@partpages {21}{23}}
+\headcommand {\beamer@subsectionpages {21}{23}}
+\headcommand {\beamer@sectionpages {21}{23}}
+\headcommand {\beamer@documentpages {23}}
+\headcommand {\def \inserttotalframenumber {3}}
 \headcommand {\def \inserttotalframenumber {14}}
-\headcommand {\def \appendixtotalframenumber {2}}
+\headcommand {\def \appendixtotalframenumber {3}}

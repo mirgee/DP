@@ -38,6 +38,14 @@
     citecolor={blue!50!black},
     urlcolor={blue!80!black}
 }
+\usepackage{multirow}
+\usepackage{regexpatch}
+\makeatletter
+% Change the `-` delimiter to an active character
+\xpatchparametertext\@@@cmidrule{-}{\cA-}{}{}
+\xpatchparametertext\@cline{-}{\cA-}{}{}
+\makeatother
+
 
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage[x11names, rgb]{xcolor}  % Coloured text etc.
@@ -355,12 +363,12 @@ Artificial Intelligence Center, FEE, CTU Prague
 \nomenclature{$x_i$}{i-th point in a univariate time series}
 \nomenclature{$\mathbf{x}_i$}{i-th point in the embedding space} 
 \nomenclature{$N$}{Length of a time series} 
-\nomenclature{$N_{(m, \tau)}$}{Length of a trajectory in the embedding space} 
+% \nomenclature{$N_{(m, \tau)}$}{Length of a trajectory in the reconstruction with embedding dimension $m$ and time delay $\tau$} 
 \nomenclature{$R_A$}{Radius of the attractor} 
 \nomenclature{\Phi}{Embedding function} 
 \nomenclature{$t_s, \delta t$}{Sampling time} 
 \nomenclature{$f_s$}{Sampling frequency} 
-\nomenclature{$N_{(m,\tau)}$}{Number of vectors in time-delay reconstrution with embedding dimension $m$ and delay $\tau$.} 
+\nomenclature{$N_{(m,\tau)}$}{Number of vectors in time-delay reconstrution with embedding dimension $m$ and time delay $\tau$} 
 
 \printnomenclature
 
@@ -555,7 +563,7 @@ It is important to note the obvious fact that in the case of EEG signal analysis
 \begin{align*} \label{eq:meas-fun}
   s(\mathbf{\xi}(t)) = \mathbf{x}(t) + \mathbf{\eta}(t),
 \end{align*}
-where $\mathbf{\eta(t)}$ is measurement noise, which encompasses the measurement error and the noise coming from the measurement conditions. In the following text, we will usually disregard the measurement function and assume we have direct access to $\mathbf{\xi}(t)$ and thus assuming the observed state equals the true state $\mathbf{x}(t) \equiv \mathbf{\xi}(t)$, since is usually neglected in the explained theory. Nevertheless, it is important to remember that the noise term have affect the results we obtain using the theory explained theory. % We will return to this issue in Section \ref{sec:embedding}.
+where $\mathbf{\eta}(t)$ is measurement noise, which encompasses the measurement error and the noise coming from the measurement conditions. In the following text, we will usually disregard the measurement function and assume we have direct access to $\mathbf{\xi}(t)$ and thus assuming the observed state equals the true state $\mathbf{x}(t) \equiv \mathbf{\xi}(t)$, since is usually neglected in the explained theory. Nevertheless, it is important to remember that the noise term have affect the results we obtain using the theory explained theory. % We will return to this issue in Section \ref{sec:embedding}.
 
 % $s(\xi(t))$ for some (generally noninvertible) measurement function $s: \RR^d \rightarrow \RR^{d'}$, where $d' \ll d$. Morover, the time between subsequent measurements is limited by a sampling frequency and the values of the variables themselves are taken and stored with a limited precision.
 
@@ -772,13 +780,16 @@ In summary, picking the proper value of $\tau$ is a balancing act between redund
 From the above, we understand that each of a successful reconstruction should provide valuable information about the state of the system. This may mean ``reasonably'' low statistical correlation between values of coordinates of the reconstructed vectors $\mathbf{x}_n$. Thus, a natural method of estimating the optimal time delay is studying the \emph{autocorrelation function} $A$, and picking the first $\tau$ where $A(\tau)$ decays below a threshold value - commonly used are $A(0)/e$ \cite{stam2005}, $1-A(0)/e$ \cite{kantz2004}, or even the first local minimum \cite{albano1993reliability, abarbanel2012analysis} or the first $0$ crossing \cite{kantz2004}.
 
 \begin{dfn}[\cite{kantz2004}]
-  Let $x$ be a scalar time series of measurements $x_1, x_2, \cdots, x_N$. \textbf{Autocorrelation} $A : \RR \rightarrow \RR$ for time delay $\tau$ is given by
+  Let $x$ be a scalar time series of measurements $x_1, x_2, \cdots, x_N$. \textbf{Autocorrelation} $A : \NN \rightarrow \RR$ for time delay $\tau$ is given by
   \begin{align*}
     % A(\tau) = \frac{1}{\sigma^2} \langle (s_n - \langle s_n \rangle )(s_{n-\tau} - \langle s_n \rangle) \rangle \\
-    A(\tau) = \frac{E[(x_i - \overline{x})(x_{i-\tau} - \overline{x})]}{\sigma^2}, 
+    % A(\tau) = \frac{E[(x_i - \overline{x})(x_{i-\tau} - \overline{x})]}{\sigma^2}, 
+    A(\tau) = \frac{1}{\sigma^2 (N-\tau)}\sum_{i=1}^{N-\tau}(x_i - \overline{x})(x_{i+\tau}+\overline{x})
   \end{align*}
   where $\overline{x}$ is the mean of the time series, and $\sigma^2$ is its standard deviation.
 \end{dfn}
+
+Note that $\sigma^2$ normalizes autocorrelation function to $A(0) = 1$. White noise produced $A(\tau) = 0$ for all $\tau \neq 0$. Filtered noise and chaotic time series can be expected to have $A(\tau)$ slowly decaying to zero with increasing time delay \cite{andreas2000}.
 
 Computing the autocorrelation function is not only useful for examining the stationarity of the time series, but it also gives a geometrical insight into the shape of the attractor: if we approximate the cloud of reconstructed vectors $\mathbf{x}_n \in \RR^m$ by an ellipsoid, lengths of its semi-axis are given by the square root of the eigenvalues of its auto-covariance matrix. In two dimensions, zero of the covariance matrix corresponds to those eigenvalues being equal, i.e. $x_t$ and $x_{t+\tau}$ being completely uncorrelated \cite{kantz2004}. An obvious objection is that correlation between $x_t$ and $x_{t+\tau}$ says nothing about correlation between $x_t$ and $x_{t+2\tau}$, etc. Indeed, this method computes correlations only between two successive coordinates, but since it neglects possible correlations between other pairs of coordinates, it is mostly useful for low dimensional systems.
 
@@ -2060,7 +2071,7 @@ First, we looked at histograms of computed measures between the two groups. Ther
 
 Moreover, we investigated the differences in the distributions using Kolmogorov-Smirnov test.\footnote{Kruskal-Wallis test showed differences only for the largest Lyapunov exponent and Higuchi fractal dimension.} Table \ref{tab:depmeans} shows the results. The p-value cutoffs for significance ratings are 0.05, 0.01, 0.005. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
 
-Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for all remaining features except for correlation dimension. Of course, these results are expected given the previous observations.\unsure{Is this true?} However, the correlation becomes less significant when the classes are extended to include more recordings.
+Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for all remaining features except for correlation dimension. Of course, these results are expected given the previous observations\unsure{Is this true?}. However, the correlation becomes less significant when the classes are extended to include more recordings.
 
 \begin{figure} 
 \centering
@@ -2493,50 +2504,52 @@ There seems to be little consistency in the selected features of the same measur
 \begin{table}[tbp]
 \centering
 \scriptsize
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{Measure} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-score} & \textbf{Channels} \\ \hline
-LLE, SE & SVM (lin.) & \textbf{0.75} $\pm$ 0.10 & 0.77 $\pm$ 0.09 & 0.75 $\pm$ 0.10 & 0.75 $\pm$ 0.10 & \makecell{\emph{LLE}: C4, T3, T6, Pz \\
+\textbf{Measure} & \textbf{Classifier} & \multicolumn{2}{c}{\textbf{Accuracy}} \vline & \multicolumn{2}{c}{\textbf{Precision}} \vline & \multicolumn{2}{c}{\textbf{Recall}} \vline & \multicolumn{2}{c}{\textbf{F-score}} \vline & \textbf{Channels} \\ \hline
+& & \textbf{Mean} & \textbf{Std} & \textbf{Mean} & \textbf{Std} & \textbf{Mean} & \textbf{Std} & \textbf{Mean} & \textbf{Std} & \\ \hline
+LLE, SE & SVM (lin.) & \textbf{0.75} & 0.10 & 0.77 & 0.09 & 0.75 & 0.10 & 0.75 & 0.10 & \makecell{\emph{LLE}: C4, T3, T6, Pz \\
                                                                                                          \emph{SE}: C3, P4} \\ \hline 
-LLE, CD & SVM (lin.) & 0.74 $\pm$ 0.04 & 0.76 $\pm$ 0.04 & 0.74 $\pm$ 0.04 & 0.74 $\pm$ 0.05 & \makecell{\emph{LLE}: F3, F7, T6 \\
+LLE, CD & SVM (lin.) & 0.74 & 0.04 & 0.76 & 0.04 & 0.74 & 0.04 & 0.74 & 0.05 & \makecell{\emph{LLE}: F3, F7, T6 \\
                                                                                                          \emph{CD}: O1, O2, T5 } \\ \hline 
-LLE, HE & SVM (lin.) & 0.73 $\pm$ 0.06 & 0.74 $\pm$ 0.06 & 0.73 $\pm$ 0.06 & 0.73 $\pm$ 0.06 & \makecell{\emph{LLE}: P3, T3, T6, Pz \\
+LLE, HE & SVM (lin.) & 0.73 & 0.06 & 0.74 & 0.06 & 0.73 & 0.06 & 0.73 & 0.06 & \makecell{\emph{LLE}: P3, T3, T6, Pz \\
                                                                                                          \emph{HE}: C3, T3} \\ \hline 
-LLE, SE, DFA & SVM (lin.) & 0.73 $\pm$ 0.09 & 0.74 $\pm$ 0.10 & 0.73 $\pm$ 0.09 & 0.73 $\pm$ 0.09 & \makecell{\emph{LLE}: T6, Fz \\
+LLE, SE, DFA & SVM (lin.) & 0.73 & 0.09 & 0.74 & 0.10 & 0.73 & 0.09 & 0.73 & 0.09 & \makecell{\emph{LLE}: T6, Fz \\
                                                                                                          \emph{SE}: T6 \\ 
                                                                                                          \emph{DFA}: P4} \\ \hline 
-CD, HD & LR & 0.73 $\pm$ 0.10 & 0.74 $\pm$ 0.11 & 0.73 $\pm$ 0.10 & 0.73 $\pm$ 0.10 & \makecell{\emph{CD}: F3, Fz \\
-                                                                                                \emph{HD}: P3, Cz} \\ \hhline{=|=|=|=|=|=|=}
-LLE & SVM (lin.) & 0.72 $\pm$ 0.04 & 0.73 $\pm$ 0.04 & 0.72 $\pm$ 0.04 & 0.72 $\pm$ 0.04 & T3, T5, T6, Pz \\ \hline
-CD & SVM (lin.) & 0.71 $\pm$ 0.05 & 0.72 $\pm$ 0.05 & 0.71 $\pm$ 0.05 & 0.71 $\pm$ 0.05 & F3, C4, P3, F8, T5, T6, Fz, Cz \\ \hline 
-SE & LR & 0.68 $\pm$ 0.12 & 0.69 $\pm$ 0.12 & 0.68 $\pm$ 0.12 & 0.68 $\pm$ 0.12 & C4, O2, T6 \\ \hline
-HD & SVM (rbf) & 0.67 $\pm$ 0.11 & 0.67 $\pm$ 0.12 & 0.67 $\pm$ 0.11 & 0.67 $\pm$ 0.11 & C3, C4, P4, T6, Cz \\ \hline
-DFA & LR & 0.67 $\pm$ 0.16 & 0.68 $\pm$ 0.17 & 0.67 $\pm$ 0.16 & 0.67 $\pm$ 0.16 & F8, O2 \\ \hline
-HE & LR & 0.67 $\pm$ 0.17 & 0.68 $\pm$ 0.18 & 0.67 $\pm$ 0.17 & 0.67 $\pm$ 0.17 & O2, T4 \\ \hline
+CD, HD & LR & 0.73 & 0.10 & 0.74 & 0.11 & 0.73 & 0.10 & 0.73 & 0.10 & \makecell{\emph{CD}: F3, Fz \\
+                                                                                                \emph{HD}: P3, Cz} \\ \hhline{=|=|=|=|=|=|=|=|=|=|=}
+LLE & SVM (lin.) & 0.72 & 0.04 & 0.73 & 0.04 & 0.72 & 0.04 & 0.72 & 0.04 & T3, T5, T6, Pz \\ \hline
+CD & SVM (lin.) & 0.71 & 0.05 & 0.72 & 0.05 & 0.71 & 0.05 & 0.71 & 0.05 & F3, C4, P3, F8, T5, T6, Fz, Cz \\ \hline 
+SE & LR & 0.68 & 0.12 & 0.69 & 0.12 & 0.68 & 0.12 & 0.68 & 0.12 & C4, O2, T6 \\ \hline
+HD & SVM (rbf) & 0.67 & 0.11 & 0.67 & 0.12 & 0.67 & 0.11 & 0.67 & 0.11 & C3, C4, P4, T6, Cz \\ \hline
+DFA & LR & 0.67 & 0.16 & 0.68 & 0.17 & 0.67 & 0.16 & 0.67 & 0.16 & F8, O2 \\ \hline
+HE & LR & 0.67 & 0.17 & 0.68 & 0.18 & 0.67 & 0.17 & 0.67 & 0.17 & O2, T4 \\ \hline
 \end{tabular}
 \caption{Evaluation of depression classification. The two classes consist of 50 / 50 recordings with the smallest / highest associated depression score out of recordings performed both before and after administration of drugs.}
 \label{tab:depcl}
 
 \bigskip
 
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{Measure} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-score} & \textbf{Channels} \\ \hline
-LLE, SE & SVM (lin.) & \textbf{0.75} $\pm$ 0.10 & 0.77 $\pm$ 0.09 & 0.75 $\pm$ 0.10 & 0.75 $\pm$ 0.10 & \makecell{\emph{LLE}: FP2, F3, O1, T4, T6 \\
+% \textbf{Measure} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-score} & \textbf{Channels} \\ \hline
+\textbf{Measure} & \textbf{Classifier} & \multicolumn{2}{c}{\textbf{Accuracy}} \vline & \multicolumn{2}{c}{\textbf{Precision}} \vline & \multicolumn{2}{c}{\textbf{Recall}} \vline & \multicolumn{2}{c}{\textbf{F-score}} \vline & \textbf{Channels} \\ \hline
+& & \textbf{Mean} & \textbf{Std} & \textbf{Mean} & \textbf{Std} & \textbf{Mean} & \textbf{Std} & \textbf{Mean} & \textbf{Std} & \\ \hline
+LLE, SE & SVM (lin.) & \textbf{0.75} & 0.10 & 0.77 & 0.09 & 0.75 & 0.10 & 0.75 & 0.10 & \makecell{\emph{LLE}: FP2, F3, O1, T4, T6 \\
                                                                                                          \emph{SE}: F3, C3, T6 }  \\ \hline
-LLE, CD& SVM (lin.) & \textbf{0.75} $\pm$ 0.11 & 0.76 $\pm$ 0.11 & 0.75 $\pm$ 0.11 & 0.75 $\pm$ 0.11 & \makecell{\emph{LLE}: F3, O2, T5, T6 \\
-                                                                                                        \emph{CD}: FP2, F4, O2 } \\ \hhline{=|=|=|=|=|=|=}
-LLE & LR & 0.71  $\pm$ 0.08  & 0.73  $\pm$ 0.08  & 0.71  $\pm$ 0.08  & 0.70  $\pm$ 0.09  & F3, F4, T5, T6 \\ \hline 
-CD & LR & 0.67 $\pm$ 0.09 & 0.70 $\pm$ 0.11 & 0.67 $\pm$ 0.09 & 0.65 $\pm$ 0.10 & F3, F4, O2, Pz \\ \hline
-HD & LR & 0.66 $\pm$ 0.05 & 0.72 $\pm$ 0.08 & 0.66 $\pm$ 0.05 & 0.64 $\pm$ 0.05 & F3, F8 \\ \hline
-SE & LR & 0.66 $\pm$ 0.09 & 0.66 $\pm$ 0.09 & 0.66 $\pm$ 0.09 & 0.65 $\pm$ 0.10 & FP1, F3, P3, Cz \\ \hline
-DFA & SVM (lin.) & 0.64 $\pm$ 0.15 & 0.65 $\pm$ 0.15 & 0.64 $\pm$ 0.15 & 0.63 $\pm$ 0.15 & T3, T4, Cz \\ \hline
-HE & SVM (rbf) & 0.63 $\pm$ 0.09 & 0.64 $\pm$ 0.10 & 0.63 $\pm$ 0.09 & 0.62 $\pm$ 0.09 & C3, T6 \\ \hline
+LLE, CD& SVM (lin.) & \textbf{0.75} & 0.11 & 0.76 & 0.11 & 0.75 & 0.11 & 0.75 & 0.11 & \makecell{\emph{LLE}: F3, O2, T5, T6 \\
+                                                                                                        \emph{CD}: FP2, F4, O2 } \\ \hhline{=|=|=|=|=|=|=|=|=|=|=}
+LLE & LR & 0.71  & 0.08  & 0.73  & 0.08  & 0.71  & 0.08  & 0.70  & 0.09  & F3, F4, T5, T6 \\ \hline 
+CD & LR & 0.67 & 0.09 & 0.70 & 0.11 & 0.67 & 0.09 & 0.65 & 0.10 & F3, F4, O2, Pz \\ \hline
+HD & LR & 0.66 & 0.05 & 0.72 & 0.08 & 0.66 & 0.05 & 0.64 & 0.05 & F3, F8 \\ \hline
+SE & LR & 0.66 & 0.09 & 0.66 & 0.09 & 0.66 & 0.09 & 0.65 & 0.10 & FP1, F3, P3, Cz \\ \hline
+DFA & SVM (lin.) & 0.64 & 0.15 & 0.65 & 0.15 & 0.64 & 0.15 & 0.63 & 0.15 & T3, T4, Cz \\ \hline
+HE & SVM (rbf) & 0.63 & 0.09 & 0.64 & 0.10 & 0.63 & 0.09 & 0.62 & 0.09 & C3, T6 \\ \hline
 \end{tabular}
 \caption{Evaluation of remission classification. Only recordings obtained before drug administration were considered. The two classes consist of the 50 patients with the highest and least improvement in depression score after the drug administration (as measured by ratio of the two depression scores).}
 \label{tab:respcl}
 \end{table}
-
 \subsection{Remission Prognosis}
 Let us remind the reader of the definition of change from Section \ref{sec:analrespdif} as the ratio of the depression score reported on the second session (after administration of drugs) to the depression score reported on the first session (before administration of drugs). The recordings were separated into two classes as follows:
 \begin{description}
@@ -2544,7 +2557,34 @@ Let us remind the reader of the definition of change from Section \ref{sec:analr
   \item[Remitting]: 50 recordings made before administration of drugs with the highest change.
 \end{description}
 
-The results can be seen in Table \ref{tab:respcl}.
+The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov exponent was the most predictive nonlinear measure. Unlike for the depression diagnosis, sample entropy and correlation dimension were the only other nonlinear measures which were able to achieve accuracy above $70 \%$ both in combination with other measures and as stand-alone features. Interestingly, F3 channel seems to be preferred considerably more for remission prognosis than for depression diagnosis.
+
+% \begin{figure}
+% \centering
+% \begin{subfigure}{\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{./Images/scalp_corr.png}
+%   \caption{Correlations with depresssion.}
+%   % \label{fig:sub1}
+% \end{subfigure}%
+% \\
+% \begin{subfigure}{\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{./Images/scalp_corr_change.png}
+%   \caption{Correlations with change.}
+%   % \label{fig:sub2}
+% \end{subfigure}
+% \caption[Scalp plot of correlations.]{\ldots}
+% \label{fig:scalp-corrs}
+% \end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{./Images/scalp_corr_all.png}
+  \caption[Topographic correlation map.]{Topographic map of correlation coefficients on a scalp for depression diagnosis and remission prognosis respectively. Color at each channel marks the value of Pearson's correlation coefficient between the value of corresponding measure and label across all patients.}
+  \label{fig:scalp-corrs}
+\end{figure}
+
 
 \chapter{Deep Learning Approach}
 \section{Convolutional Neural Networks}
@@ -2753,7 +2793,7 @@ Using the fact that magnitudes of the CSP eigenvalues are proportional to the am
 \end{figure}
 
 
-\section{Dataset}
+\section{Dataset} \label{sec:dl-dataset}
 For experiments in this chapter, we decided to use the entire recordings, in contrast to our approach in the previous chapter, where we used only the beginning in each recording. This is mainly because the classification algorithms we used in this chapter have larger variance, and thus are easily overfit on small datasets. Thus, each of the recordings, after downsampling to $250$ Hz (see Section \ref{sec:dataset}) was cut into multiple subrecordings of length 256, each subrecording forming a data sample. The subrecording length was selected as a tradeoff between the amount of obtained samples and information\add{Is information the right term? The amount of variance?} contained within each sample. For this sampling frequency, this corresponds to approximately a second of recording, which was shown to contain enough information to classify depression with satisfactory accuracy.\add{Cite this!!!} Moreover, some GPU cards are optimized for working on data chunks multiples of two in size.\add{Make more precise.} We also tried increasing the length to 512, but found no improvement in performance.
 
 After splitting the recordings, we assigned positive, neutral or negative label to each subrecording in order to split the dataset into three groups based on depression score of the subject at the time of the recording for depression classification, or based on the subject's before to after treatment depression score for remission classification (in which case only before treatment recordings were further used). The neutral class was then removed and not further considered. 
@@ -2764,11 +2804,11 @@ The threshold values separating these classes were selected such that the classe
 \section{Input Representation}
 Before applying any machine learning technique to the classification problem at hand, the question of optimal input representation needs to be answered. To this end, multiple factors need to be considered. Firstly, what is the dimensionality of the input relative to the resulting number of samples, and does it allow construction of sufficiently complex architectures compared to complexity of the classification problem? Secondly, does each input sample contain enough information to perform successful classification? Thirdly, is the input representation appropriate for the kind of data, i.e. does it help or hinder successful classification? In our case, for all the methods considered, answer to the first question is a function of recording slice length used to generate the input. Answering the remaining questions, however, is difficult without prior experiments on similar datasets. For this reason, research on applying known techniques to new problems is useful.
 
-Since well designed neural networks are characteristically able to learn feature maps given enough data, one obvious possibility is to use raw data. This approach has multiple benefits. First one, as we will see, is relatively low dimensionality. Global, and local features, no prior bias. Our first choice, then, was then to select 
+Since well designed neural networks are characteristically able to learn feature maps given enough data, one obvious possibility is to use raw data. This approach has multiple benefits. First one, as we will see, is relatively low dimensionality. Global, and local features, no prior bias. Our first choice, then, was then to segment each recording into subrecordings of fixed length $l=256$, and for each subrecording, order all its $C=19$ channels into rows of a $C \times l$ matrix. Each of those matrices was then used as input sample.
 
-As mentioned in Chapter 1, brain is a nonlinear dynamical system. Another possibility, therefore, is to represent the input data as recurrence plots, mentioned in Section \ref{sec:recplot}. The obvious drawbacks are redundancy due to symmetry and high dimensionality. On the other hand, recurrence plots are known to capture properties of the system which are difficult to obtain using other methods in some cases \cite{eckmann1987}. Morever, they have already been applied with success to classification of physical activites using convolutional neural networks \cite{garcia2018classification}, and even some qualitative differences in recurrence plots have been observed between depressed and healthy patients \cite{acharya2015computer}. We have discussed more applications in \ref{sec:applications}.
+As mentioned in Chapter 1, we consider the brain to be a nonlinear dynamical system. Another possibility, therefore, is to represent the input data as recurrence plots, which have considerable potential for representing properties of the dynamical system, as mentioned in Section \ref{sec:recplot}. The obvious drawbacks are redundancy due to symmetry and high dimensionality, which is quadratic in the trajectory length. On the other hand, recurrence plots are known to capture properties of the system which are difficult to obtain using other methods in some cases \cite{eckmann1987}. Morever, they have already been applied with success to classification of physical activites using convolutional neural networks \cite{garcia2018classification}, and even some qualitative differences in recurrence plots have been observed between depressed and healthy patients \cite{acharya2015computer}. We have discussed more applications in \ref{sec:applications}.
 
-For our computation of recurrence matrices, we used the Chebyshev norm. Chebyshev norm has multiple benefits \add{mention some}, and we observed more subtle patterns on matrices computed using Chebyshev norm as opposed to those computed using Euclidean $L_2$ norm. For comparison, see Figure \ref{fig:norm-comp}.
+For our computation of recurrence matrices, we used the Chebyshev norm. Chebyshev norm has multiple benefits, such as relatively low computational cost and distances independent of embedding dimension. Moreover, we observed subtler patterns on matrices computed using Chebyshev norm as opposed to those computed using Euclidean $L_2$ norm. For comparison, see Figure \ref{fig:norm-comp}.
 
 Our last method of input representation is inspired by success of Gramian Angular Fields (GAFs) for sequence classification \cite{wang2015imaging} using convolutional neural networks. To obtain GAF matrix from a scalar time series $x_1, x_2, \dots, x_N$, one first scales the time series into interval $(-1, 1)$, and then each value $x_i$ of the time series is converted into complex number with mode and radius given as
 \begin{align*}
@@ -2806,13 +2846,13 @@ Since both recurrence plot and cosine similarity matrix are symmetric, we applie
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{./Images/recplots/euclidean.png}
-  \caption{Euclidean norm}
+  \caption{Euclidean norm.}
   % \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{./Images/recplots/chebyshev.png}
-  \caption{Chebyshev norm}
+  \caption{Chebyshev norm.}
   % \label{fig:sub2}
 \end{subfigure}
 \caption[Comparison of Euclidean and Chebyshev norms on RP.]{Recurrence plots computed using different norms. We can see that the figure on the right hand side has sligthly crisper patterns.}
@@ -2821,11 +2861,11 @@ Since both recurrence plot and cosine similarity matrix are symmetric, we applie
 
 \info[inline]{Another possibility is to learn on flattened scalp images of topographical distributions of different band powers. However, as explained in \cite{schirrmeister2017deep}, this presents two main challanges. As we have verified in the previous chapter (see Section \ref{sec:band-ampl}), the relevant variance is probably spatially global in nature, and not hierarchically compositional to make use of CNN. On the other hand, the temporal patterns are more likely to be hierarchically compositional.}
 
-\section{Preprocessing}
+\section{Preprocessing} \label{sec:dl-preprocess}
 Preprocessing: Filtering, running average and standard deviation.
 Signals were preprocessed before either image-encoding or direct classification. First, the electrode voltages were converted to mV to improve numerical stability. Then, optionally, a high-pass butterworth filter of order 3 with 4 Hz cutoff frequency was applied. It has been suggested that in some cases, filtering the singals may improve classification performance.\add{Elaborate, cite, mayber refer to discussion in previous chapter.} In image-encoded case, the signals were encoded at this stage. Finally, Welford's algorithm for running mean and standard deviation was used to compute the mean and variance over the whole dataset, and the dataset was then centered and normalized according to the found values.
 
-\section{Architecture}
+\section{Architecture} \label{sec:dl-arch}
 Our choice of CNN architectures was heavily inspired by, and almost identical to, those used in \cite{schirrmeister2017deep}. These architectures, and in particular the second one (in order of description below), were designed by the authors to be analogous to the FBCSP pipeline described in detail in Section \ref{sec:csp}. 
 
 The first architecture, called \emph{deep} (see Figure \ref{fig:deep}), is more generic of the two architectures used, bearing resemblence to the architectures which proved successful in traditional computer vision tasks. It consists of four convolutional blocks with batch normalization ($\epsilon = 10^{-5}$, $\text{momentum} = 0.1$) and ELU nonlinearity, followed by max pooling and dropout ($p = 0.5$). The batch normalization was applied before the activation function. The convolution was performed only along the temporal dimension, with kernel size $(1,3)$, stride $1$. The pooling operation was also performed only along the temporal dimension, with kernel size $(1,3)$, stride $3$. For image input, we used traditional 2D convolution with kernel size $(3,3)$. The first convolutional layer is an exception - to explicitly seperate the linear transformation into combination of temporal and spatial convolution, this layer is split into two layers with no activation function in between. First, a temporal convolution with kernel size $(1,10)$ is performed, followed by a spatial convolution across all channels with kernel size $(19,1)$. Note that the first operation can be seen as analogue of band-pass filtering, and the second as spatial filtering, as performed by CSP algorithm, with the difference that the filters are ``constructed'' by gradient descent. Batch normalization and pooling operations are also performed as described above. 
@@ -2854,10 +2894,12 @@ Moreover, we also evaluated multiple simpler architectures. The best performing 
 \label{fig:shal}
 \end{figure}
 
-\section{Results} \label{sec:results}
-Evaluation: We used 5-fold cross validation, selected the best performing model by evaluation on validation set, run for 200 epochs.
+\section{Results} \label{sec:dl-results}
+% Evaluation: We used 5-fold cross validation, selected the best performing model by evaluation on validation set, run for 200 epochs.
 
-Results: SHAL performs noticably better on REM than DEEP. Filtering has not much effect, but helps slightly for REM, but does not help on DEP.
+The models were trained for 200 epochs. In each epoch, the current iteration of the model was evaluated using 5-fold cross validation with shuffling. The model which achieved the highest mean accuracy over all iterations was then selected for evaluation on the test set, which was again performed using 5-fold cross validation. Using 5-fold cross validation on the dataset splits we used (see Section \ref{sec:dl-dataset}) results in the number of samples for each of training, validation and test sets shown in Table \ref{tab:setsize}.
+
+The results can be seen in Table \ref{tab:dl-res}, where we use SHAL to denote the shallow architecture and DEEP to denote the deep architecture (see Section \ref{sec:dl-arch}). The unfiltered input is denoted $0-f_{\text{fin}}$, and $4-f_{\text{fin}}$ signifies that high pass filter with cutoff frequency of $4 Hz$ was applied to the input (see Section \ref{sec:dl-preprocess}). Firstly, performs noticably better on REM than DEEP. Filtering has not much effect, but helps slightly for REM, but does not help on DEP. 
 
 Conclusions: SHAL has state of the art performance on REM. It would be nice to evaluate against pure FBCSP, and try more traditional configuration to see difference in performance. Combination of CNN and recurrence plots is likely not especially effective.
 
@@ -2866,31 +2908,32 @@ Conclusions: SHAL has state of the art performance on REM. It would be nice to e
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Dataset} & \multicolumn{2}{c}{\textbf{DEP}} \vline & \multicolumn{2}{c}{\textbf{REM}} \vline \\ \hline
- & \textbf{Neg.} & \textbf{Pos.} & \textbf{Neg.} & \textbf{Pos.}  \\ \hline 
+& \textbf{Neg.} & \textbf{Pos.} & \textbf{Neg.} & \textbf{Pos.} \\ \hline
 Training & 3278 & 3230 & 2684 & 2705 \\ \hline 
 Validation & 826 & 802 & 686 & 662 \\ \hline 
 Test & 1038 & 997 & 830 & 855 \\ \hline 
 Overall & 5142 & 5029 & 4200 & 4222 \\ \hline 
 \end{tabular}
 \caption{Number of negative / positive samples in training, validation, test sets.}
-% \label{tab:depcl}
+\label{tab:setsize}
 \end{table}
 
 \begin{table}[tbp]
 \centering
   \parbox{.49\linewidth}{
 \centering
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Label} & \textbf{Freq.} & \textbf{Arch.} & \textbf{Acc.} \\ \hline
-DEP & $0-f_{\text{fin}}$ & SHAL &  $84.53 \pm 1.29 \%$    \\ \hline 
- & $4-f_{\text{fin}}$ & SHAL &     $84.16 \pm 1.05 \%$    \\ \hline 
- & $0-f_{\text{fin}}$ & DEEP &     $\mathbf{85.65} \pm 0.71 \%$    \\ \hline 
- & $4-f_{\text{fin}}$ & DEEP &     $84.63 \pm 2.02 \%$    \\ \hline 
-REM & $0-f_{\text{fin}}$ & SHAL &  $\mathbf{93.90} \pm 2.34 \%$    \\ \hline 
- & $4-f_{\text{fin}}$ & SHAL &     $93.47 \pm 2.54 \%$    \\ \hline 
- & $0-f_{\text{fin}}$ & DEEP &     $88.03 \pm 1.02 \%$    \\ \hline 
- & $4-f_{\text{fin}}$ & DEEP &     $86.33 \pm 2.30 \%$    \\ \hline 
+\textbf{Label} & \textbf{Freq.} & \textbf{Arch.} & \multicolumn{2}{c}{\textbf{Accuracy}} \vline \\ \hline
+& & & \textbf{Mean} & \textbf{Std} \\ \hline
+\multirow{4}{*}{DEP} & $0-f_{\text{fin}}$ & SHAL &  $0.85$ & $0.13$    \\ \cline{2-5}
+                     & $4-f_{\text{fin}}$ & SHAL &     $0.84$ & $0.11$    \\ \cline{2-5} 
+                     & $0-f_{\text{fin}}$ & DEEP &     $\mathbf{0.86}$ & $0.01$    \\ \cline{2-5} 
+                     & $4-f_{\text{fin}}$ & DEEP &     $0.85$ & $0.02$    \\ \hline
+\multirow{4}{*}{REM} & $0-f_{\text{fin}}$ & SHAL &  $\mathbf{0.94}$ & $0.02$    \\ \cline{2-5} 
+                     & $4-f_{\text{fin}}$ & SHAL &     $0.94$ & $0.03$    \\ \cline{2-5} 
+                     & $0-f_{\text{fin}}$ & DEEP &     $0.88$ & $0.01$    \\ \cline{2-5} 
+                     & $4-f_{\text{fin}}$ & DEEP &     $0.86$ & $0.02$    \\ \hline
 \end{tabular}
 \subcaption{Raw data.}
 % \label{tab:depcl}
@@ -2898,26 +2941,24 @@ REM & $0-f_{\text{fin}}$ & SHAL &  $\mathbf{93.90} \pm 2.34 \%$    \\ \hline
 \hfill
   \parbox{.49\linewidth}{
 \centering
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{Label} & \textbf{Freq.} & \textbf{Meth.} & \textbf{Acc.} \\ \hline
-DEP & $0-f_{\text{fin}}$ & RP & $\mathbf{63.02} \pm 1.48 \%$ \\ \hline 
- & $4-f_{\text{fin}}$ & RP & $61.31 \pm 0.48 \%$   \\ \hline 
-%  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
-%  & $4-f_{\text{fin}}$ & GAF &  \\ \hline 
- & $0-f_{\text{fin}}$ & CS & $59.05 \pm 1.52 \%$  \\ \hline 
- & $4-f_{\text{fin}}$ & CS & $58.65 \pm 0.69 \%$ \\ \hline 
-REM & $0-f_{\text{fin}}$ & RP & $60.96 \pm 3.05 \%$ \\ \hline 
-& $4-f_{\text{fin}}$ & RP &  $\mathbf{64.95} \pm 1.78 \%$    \\ \hline 
-%  & $0-f_{\text{fin}}$ & GAF &  \\ \hline 
-%  & $4-f_{\text{fin}}$ &  GAF &  \\ \hline 
- & $0-f_{\text{fin}}$ & CS &  $55.32 \pm 1.68 \%$ \\ \hline 
- & $4-f_{\text{fin}}$ & CS &  $62.78 \pm 1.18 \%$ \\ \hline 
+\textbf{Label} & \textbf{Freq.} & \textbf{Meth.} & \multicolumn{2}{c}{\textbf{Accuracy}} \vline \\ \hline
+& & & \textbf{Mean} & \textbf{Std} \\ \hline
+\multirow{4}{*}{DEP} & $0-f_{\text{fin}}$ & RP &   $\mathbf{0.63}$ & $0.02$ \\ \cline{2-5}      
+                     & $4-f_{\text{fin}}$ & RP &      $0.61$ & $0.01$   \\ \cline{2-5}             
+                     & $0-f_{\text{fin}}$ & CS &      $0.59$ & $0.02$  \\ \cline{2-5}              
+                     & $4-f_{\text{fin}}$ & CS &      $0.58$ & $0.01$ \\ \hline
+\multirow{4}{*}{REM} & $0-f_{\text{fin}}$ & RP &   $0.61$ & $0.03$ \\ \cline{2-5}               
+                     & $4-f_{\text{fin}}$ & RP &       $\mathbf{0.65}$ & $0.02$    \\ \cline{2-5}   
+                     & $0-f_{\text{fin}}$ & CS &      $0.55$ & $0.02$ \\ \cline{2-5}               
+                     & $4-f_{\text{fin}}$ & CS &      $0.63$ & $0.01$ \\ \hline               
 \end{tabular}
 \subcaption{Image-encoded data.}
 % \label{tab:depcl}
 }
 \caption{Evaluation of accuracies of the shallow (SHAL) and deep (DEEP) architectures on the raw and image-encoded data in classification of depression state (DEP) or prediction of future remission (REM).}
+\label{tab:dl-res}
 \end{table}
 
 \add[inline]{We might want to show the missclasifications - how close were they? Are people acting, or is the measurement relatively objective? Or maybe confusing matrices.}
