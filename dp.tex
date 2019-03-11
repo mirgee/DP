@@ -340,6 +340,7 @@ Artificial Intelligence Center, FEE, CTU Prague
 ~\newpage{}
 
 \pagestyle{plain}
+\pagenumbering{roman} %
 
 \tableofcontents{}
 
@@ -353,22 +354,22 @@ Artificial Intelligence Center, FEE, CTU Prague
 \renewcommand{\nomname}{List of Symbols}
 
 \mbox{}
-\nomenclature{$A(\tau)$}{Autocorrelation of a time series as a function of time delay}
-\nomenclature{$\tau$}{Time delay}
-\nomenclature{$m$}{Embedding dimension}
-\nomenclature{$s$}{Measurement function}
-\nomenclature{$\mathbf{F}$}{Dynamics of a dynamical system as a vector field}
-\nomenclature{$I(\tau)$}{Delayed mutual information as a function of time delay}
-\nomenclature{$D_2(A)$}{Corelation dimension of an attractor $A$}
-\nomenclature{$x_i$}{i-th point in a univariate time series}
-\nomenclature{$\mathbf{x}_i$}{i-th point in the embedding space} 
-\nomenclature{$N$}{Length of a time series} 
+\nomenclature{$A(\tau)$}{Autocorrelation of a time series as a function of time delay.}
+\nomenclature{$\tau$}{Time delay.}
+\nomenclature{$m$}{Embedding dimension.}
+\nomenclature{$s$}{Measurement function.}
+\nomenclature{$\mathbf{F}$}{Dynamics of a dynamical system as a vector field.}
+\nomenclature{$I(\tau)$}{Delayed mutual information as a function of time delay.}
+\nomenclature{$D_2(A)$}{Corelation dimension of an attractor $A$.}
+\nomenclature{$x_i$}{i-th point in a univariate time series.}
+\nomenclature{$\mathbf{x}_i$}{i-th point in the embedding space.}
+\nomenclature{$N$}{Length of a time series.} 
 % \nomenclature{$N_{(m, \tau)}$}{Length of a trajectory in the reconstruction with embedding dimension $m$ and time delay $\tau$} 
-\nomenclature{$R_A$}{Radius of the attractor} 
-\nomenclature{\Phi}{Embedding function} 
-\nomenclature{$t_s, \delta t$}{Sampling time} 
-\nomenclature{$f_s$}{Sampling frequency} 
-\nomenclature{$N_{(m,\tau)}$}{Number of vectors in time-delay reconstrution with embedding dimension $m$ and time delay $\tau$} 
+\nomenclature{$R_A$}{Radius of the attractor.}
+\nomenclature{$\Phi$}{Embedding function.}
+\nomenclature{$t_s, \delta t$}{Sampling time.}
+\nomenclature{$f_s$}{Sampling frequency.}
+\nomenclature{$N_{(m,\tau)}$}{Number of vectors in time-delay reconstrution with embedding dimension $m$ and time delay $\tau$.}
 
 \printnomenclature
 
@@ -378,6 +379,9 @@ Artificial Intelligence Center, FEE, CTU Prague
 
 \newpage{}
 
+~\newpage{}
+
+\pagenumbering{arabic} % restart page numbers at one, now in arabic style
 \chapter{Introduction}
 \section{Depression and its Diagnosis}
 Depression is one of the most common brain disorders - it affacts 121-300 million people worldwide, and this number is expected to increase in the future \cite{rodriguez2015, whodepression}. Over 20 million people in the United States alone have this mood disorder, but only 50\% have been diagnosed \cite{smith2013diagnosis}. Although effective treatments are known, World Health Organization (WHO) estimates that fewer than half of affected receive those treatments. According to WHO, major barriers include insufficient resources, lack of properly trained practitioners, inaccurate assessment and misdiagnosis \cite{whodepression}. Moreover, the diagnosis is further complicated by the fact that depressive symptoms often mimic other disorders, and coexisting conditions may confound diagnosis \cite{smith2013diagnosis}. Indeed, self-assessed questionnaires are often inaccurate, and structured or semi-structured interviews (SDIs) require time and expertise of trained professionals. 
@@ -567,8 +571,6 @@ where $\mathbf{\eta}(t)$ is measurement noise, which encompasses the measurement
 
 % $s(\xi(t))$ for some (generally noninvertible) measurement function $s: \RR^d \rightarrow \RR^{d'}$, where $d' \ll d$. Morover, the time between subsequent measurements is limited by a sampling frequency and the values of the variables themselves are taken and stored with a limited precision.
 
-\add[inline]{Add a few examples (Lorenz, Rossler, Mackey-Glass). Create my own plots instead of reusing.}
-
 \subsection{Attractor} \label{sec:attractor}
 Depending on the properties of $\mathbf{F}$, there are several possibilities of how the system might evolve when as $t \rightarrow \infty$. In the following, we will focus on so called dissipative dynamical systems (of which brain is considered a member \cite{stam2005}).
 \begin{dfn}[\cite{kantz2004}]
@@ -579,7 +581,7 @@ Depending on the properties of $\mathbf{F}$, there are several possibilities of 
   where $\mathbf{J}_{\mathbf{F}}$ is the Jacobian of vector field $\mathbf{F}$ and the expectation is taken over the state space $M$. In other words, average state space volume of a set of initial conditions of non-zero measure is contracted as the system evolves. 
 \end{dfn}
 
-For these systems, after sufficient passage of time, all future states will continue evolving on a bounded, time-invariant subset of $M$. This subset is a geometrical object called an \textbf{attractor}. Example of four basic attractors, point, limit, torus and chaotic attractors, can be seen in Figure \ref{fig:attractors}.
+For these systems, after sufficient passage of time, all future states will continue evolving on a bounded, time-invariant subset of $M$. This subset is a geometrical object called an \textbf{attractor}. Example of four basic attractors, point, limit, torus and chaotic attractors, can be seen in Figure \ref{fig:attractors}. Examples of several chaotic attractors are shown in Figure \ref{fig:attractor-examples} \cite{strogatz1996nonlinear, grassberger1983measuring, mackey1977oscillation}.
 
 \begin{figure} 
 \centering
@@ -599,6 +601,14 @@ For these systems, after sufficient passage of time, all future states will cont
   \includegraphics[width=0.8\textwidth]{Images/self-similarity.png}}
   \caption[Illustration of self-similarity.]{Noise-reduced visualization of successive enlargements of highly self-similar attractor \cite{kantz2004}.}
 \label{fig:self-similarity}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{./Images/dataset.png} }
+  \caption[Attractor examples.]{Lorenz, Roessler and Mackey-Glass attractors generated from corresponding systems of differential equations \cite{strogatz1996nonlinear}. These systems are known to exhibit chaotic dynamics for certain parameter values \cite{grassberger1983measuring}.}
+\label{fig:attractor-examples}
 \end{figure}
 
 Statistical methods can be used to analyze observations of a complex system. Another branch of mathematics providing us with powerful tools to study systems with apparently complex behavior is chaos theory, which studies so called chaotic systems. These systems exhibit dynamics which extend volumes of clusters of initially nearby states in some directions. Although there is mixed evidence on low dimensional chaos in the brain and in the biological systems in general, its techniques have found many successful applications in their analysis \cite{skinner1994low}. 
@@ -716,7 +726,7 @@ It had been already known since 1936, that every $n$-dimensional differentiable 
 
 Time delay embedding is a technique of state space reconstruction, which achieves the same goal, but with a single measured quantity. It was first introduced into the field of nonlinear dynamical system analysis by N. H. Packard in 1980 (although it was already being used in different fields in 1950s \cite{andreas2000}). Studying the Rossler system, Packard noticed that by sampling a single coordinate, he was able to obtain a faithful phase-space representation of the original system by simply using a value of a coordinate with its values at two previous times \cite{packard1980}. In other he demonstrated numerically that past and future measurements of one variable contain information about the unobserved variables and can be used to define the present state.
 
-In particular, for each time $t$, we define an embedding window $\tau_w$, and use measurements obtained at times $t'$ for $t+\tau_w \leq t' \leq t$. To this goal, we use $m$ measurements, $\tau$ elements apart. Here, $\tau$ is called \emph{lag} or \emph{time delay}, and is measured in number of samples.\footnote{Some authors use the time units $\tau \Delta t$, where $\Delta t = t_s = 1/f_s$ is the sampling period.} Using the notation in the Section \ref{sec:embedding}, the time delay reconstruction is then formed by the following vectors
+In particular, for each time $t$, we define an embedding window $\tau_w$, and use measurements obtained at times $t'$ for $t \leq t' \leq t + \tau_w$. To this goal, we use $m$ measurements, $\tau$ elements apart. Here, $\tau$ is called \emph{lag} or \emph{time delay}, and is measured in number of samples.\footnote{Some authors use the time units $\tau \Delta t$, where $\Delta t = t_s = 1/f_s$ is the sampling period.} Using the notation in the Section \ref{sec:embedding}, the time delay reconstruction is then formed by the following vectors
 \begin{align}
   \textbf{x}_n = (x_n, x_{n+\tau}, x_{n+2\tau}, \ldots, x_{n+(m-2)\tau}, x_{n+(m-1)\tau}) \, ,
 \end{align}
@@ -1314,14 +1324,6 @@ The experiment lasted 4 weeks. At the beginning of week 1, each subject's depres
 
 During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz), see Figure \ref{fig:electrodes} for reference. EEG signals of 99 subjects were recorded at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz. A typical recoding can be seen in Figure \ref{fig:data}.
 
-We should recognize limitations of this dataset:
-\begin{itemize}
-  \item That the patients were not randomly selected - all the patients entered the study because they were experiencing problems negatively impacting their lives. Thus, as a study of depression biomarkers, the experiment lacks truly symptom absent group. However, the patients did differ significantly in severity of the disease.
-  \item For a study of brain regions associated with depression, this study lacks data on patients' handedness, which may be relevant for distribution of activity in the hemispheres.
-  \item For a study of remission, this dataset lacks a control group given no drugs.
-  \item For a study of treatment effects, patients were assigned different cominations of drugs, making an attempt of finding the singular cause of any observed effects impossible.
-\end{itemize}
-
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
@@ -1333,10 +1335,26 @@ We should recognize limitations of this dataset:
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{./Images/dataset.png} }
+  \caption[Dataset visualization.]{Dataset visualization.}
+\label{fig:dataset-viz}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/data.png} }
   \caption[Example EEG signal recording.]{An example recording for patient 1, first session. Horizontal line shows seconds, vertical line shows voltage scaled for purpose of visualization. }
 \label{fig:data}
 \end{figure}
+
+We should recognize limitations of this dataset:
+\begin{itemize}
+  \item That the patients were not randomly selected - all the patients entered the study because they were experiencing problems negatively impacting their lives. Thus, as a study of depression biomarkers, the experiment lacks truly symptom absent group. However, the patients did differ significantly in severity of the disease.
+  \item For a study of brain regions associated with depression, this study lacks data on patients' handedness, which may be relevant for distribution of activity in the hemispheres.
+  \item For a study of remission, this dataset lacks a control group given no drugs.
+  \item For a study of treatment effects, patients were assigned different cominations of drugs, making an attempt of finding the singular cause of any observed effects impossible.
+\end{itemize}
 
 \section{Preprocessing}
 Recordings of $f_s = 1000$ Hz were downsampled (decimated) by factor $4$ to $250$ Hz using the Fourier method (also known as trigonometric interpolation), i.e. by performing discrete Fourier transform on the original series, dividing it into $2*1000/250=8$ intervals, removing all but the first and the last intervals (thus removing the highest positive and negative frequencies, corresponding to low-pass filtering), and performing inverse discrete Fourier transform. This procedure assumes that the signal is periodic, and may have some influence on the obtained results. However, it was observed that this effect is almost negligible, even for considerably higher decimation factors \cite{diab2013effect}.
@@ -1366,7 +1384,7 @@ To reduce the effects of possible nonstationarity, we attempted to find the most
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/ts.png} }
-  \caption[Comparison of a time series and its surrogate.]{A comparison of the first $4 s$ of a time series and its $AAFT$ surrogate.}
+  \caption[Comparison of a time series and its surrogate.]{A comparison of the first $4 s$ of a time series and its AAFT surrogate.}
 \label{fig:ts}
 \end{figure}
 \subsubsection{Time Delay}
@@ -1412,7 +1430,7 @@ SVD analysis               & 6                                    \\ \hline
 Average displacement       & 2, 3                                 \\ \hline
 Integral local deformation & 4                                    \\ \hline
 \end{tabular}
-\caption{Optimal time delay estimates of the individual examined techniques for patient 75, second session. The }
+\caption[Time delay estimates.]{Estimates of the optimal time delay of the individual examined techniques for patient 75, second session. The estimates vary widely based on used technique, but have relatively low variance across patients.}
 \label{tab:delay-est}
 \end{table}
 
@@ -1542,10 +1560,8 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
 10 & - & zero-crossing of $A(\tau)$ & sleep & \cite{fell1993deterministic} \\ \hline
 10 & - & random & depression & \cite{roschke1995nonlineardeppression} \\ \hline
 \end{tabular}}
-\caption[Literature review of $\lambda_1$ embedding parameters]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $250-256 Hz$.}
+\caption[Literature review of LLE embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $250-256 Hz$. The range results we obtained using various algorithms and observed in literature highlights the fact that the embedding parameters selection algorithms, as well as visual inspection of the divergence plots largely are unreliable, and that the optimal values depend on particular dataset and problem.}
 \end{table}
-
-The range results we obtained using various algorithms and observed in literature highlights the fact the embedding parameters selection algorithms, as well as visual inspection of the divergence plots largely unreliable, and that the optimal values depend on particular dataset and problem. Therefore, we decided to compute LLE's 
 
 In summary, we obtained a wide range of results using traditional parameter selection techniques, with the most powerful algorithm, ILD, indicating sligthly lower values of time delay. Most of the embedding dimension estimation algorithms, including ILD, agree with the literature that the optimal embedding embedding dimension should be set around 10. We proceeded with computing multiple sets of LLE labels for the dataset, each with a different member of the following set of input parameters $(m, \tau)$: $(7, 3)$, $(7,6)$, $(10,3)$, $(10, 6)$, $(15, 4)$, automatic (as described in Section \ref{sec:lle-auto}). Then, we analyzed the label distributions between studied groups, as presented in Section \ref{sec:distanal}, where we present results only for the most discriminative pairs of parameters, which was $m=10$, $\tau=3$.
 
@@ -1613,7 +1629,7 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
  12 & - & 8 & mental state classification & \cite{dvorak1986some} \\ \hline
  2-12 & saturation & 5 & schizophrenia & \cite{koukkou1993dimensional} \\ \hline
 \end{tabular}}
-\caption[Literature review of $D_2$ embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
+\caption[Literature review of CD embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
 \end{table}
 
 In \cite{schmid1996indications}, the authors layed out fully automatic, albeit complicated, algorithm for selecting the embedding parameters. They suggest modelling correlation dimension biparametrically as a function of embedding dimension $m$ as $D_2(m) = b_0(1-e^{-b_1m})$, where $b_0$, $b_1$ are parameters. They call $m^* \coloneqq 1/b_1$ the unfolding dimension, since ``it represents the embedding dimension at which the attractor has unfolded up to $1/e$ of its full extent, namely, the asymptotic $D_2$ value: $b_0$'' \cite{schmid1996indications}. The optimal embedding dimension $m$ is selected as the next integer greater than the embedding dimension at which the exponential fit has approached 95\% of its expontial value $b_0$. The remaining studies used either threshold crossing of the autocorrelation function $A(\tau)$ or fixed value for selection of time delay $\tau$. Although \cite{pereda1998non} used $1/e$ as the threshold for the autocorrelation function, we found that the threshold $1-1/e$ results in better discrimination between studied groups using correlation dimension.
@@ -1776,7 +1792,7 @@ Fz       & 10.257 $\pm$ 1.004 & 10.117 $\pm$ 1.096 & 0.161 &       \\ \hline
 Cz       & 10.204 $\pm$ 0.906 & 10.075 $\pm$ 0.998 & 0.273 &       \\ \hline
 Pz       & 10.490 $\pm$ 0.897 & 10.408 $\pm$ 1.032 & 0.735 &       \\ \hline
 \end{tabular}
-\caption{Mean values of $\lambda_1$ of all patients before and after treatment.}
+\caption[Mean values of LLE, before and after comparison.]{Mean values of $\lambda_1$ of all patients before and after treatment.}
 \label{tab:lleba}
 \end{table}
 
@@ -1807,7 +1823,7 @@ Fz       & 7.339 $\pm$ 0.535 & 7.350 $\pm$ 0.525 & 0.987 &       \\ \hline
 Cz       & 7.359 $\pm$ 0.566 & 7.354 $\pm$ 0.533 & 0.998 &       \\ \hline
 Pz       & 7.199 $\pm$ 0.494 & 7.210 $\pm$ 0.543 & 0.888 &       \\ \hline
 \end{tabular}
-\caption{Mean values of $D_2$ of all patients before and after treatment.}
+\caption[Mean values of CD, before and after comparison.]{Mean values of $D_2$ of all patients before and after treatment.}
 \label{tab:d2ba}
 \end{table}
 
@@ -1838,7 +1854,7 @@ Fz       & 0.747 $\pm$ 0.107 & 0.762 $\pm$ 0.124 & 0.506 &       \\ \hline
 Cz       & 0.756 $\pm$ 0.096 & 0.767 $\pm$ 0.110 & 0.840 &       \\ \hline
 Pz       & 0.716 $\pm$ 0.093 & 0.728 $\pm$ 0.113 & 0.996 &       \\ \hline
 \end{tabular}
-\caption{Mean values of sample entropy of all patients before and after treatment.}
+\caption[Mean values of SE, before and after comparison.]{Mean values of sample entropy of all patients before and after treatment.}
 \label{tab:seba}
 \end{table}
 
@@ -1900,7 +1916,7 @@ Cz       & 10.383 $\pm$ 0.867 & 10.291 $\pm$ 0.939 & 0.924 &       \\ \hline
 Pz       & 10.744 $\pm$ 0.894 & 10.630 $\pm$ 1.023 & 0.423 &       \\ \hline
 \end{tabular}
 }
-\caption{Mean values of $\lambda_1$ of responding / non-responding patients before and after treatment.}
+\caption[]{Mean values of $\lambda_1$ of responding / non-responding patients before and after treatment.}
 \label{tab:llebaresp}
 \end{table}
 
@@ -1962,7 +1978,7 @@ Cz       & 7.380 $\pm$ 0.536 & 7.326 $\pm$ 0.490 & 0.902 &       \\ \hline
 Pz       & 7.195 $\pm$ 0.498 & 7.262 $\pm$ 0.499 & 0.548 &       \\ \hline
 \end{tabular}
 }
-\caption{Mean values of $D_2$ of responding / non-respoding patients before and after treatment.}
+\caption[]{Mean values of $D_2$ of responding / non-respoding patients before and after treatment.}
 \label{tab:d2baresp}
 \end{table}
 
@@ -2466,7 +2482,7 @@ Pz       & 9.964 $\pm$ 0.917 & 10.249 $\pm$ 1.132 & 0.131 &       \\ \hline
 \end{tabular}
 \subcaption{Correlation dimension}
 }
-\caption{Comparison of mean values of measures computed from recordings obtained during the first session for 50 remitting (patients responding positively to treatment) patients and 50 patients retaining (or worsening their) symptoms.}
+\caption[Comparison of mean measure values between responding and nonresponding patients.]{Comparison of mean values of measures computed from recordings obtained during the first session for 50 remitting (patients responding positively to treatment) patients and 50 patients retaining (or worsening their) symptoms.}
 \label{tab:remmeans}
 \end{table}
 
@@ -2526,7 +2542,7 @@ HD & SVM (rbf) & 0.67 & 0.11 & 0.67 & 0.12 & 0.67 & 0.11 & 0.67 & 0.11 & C3, C4,
 DFA & LR & 0.67 & 0.16 & 0.68 & 0.17 & 0.67 & 0.16 & 0.67 & 0.16 & F8, O2 \\ \hline
 HE & LR & 0.67 & 0.17 & 0.68 & 0.18 & 0.67 & 0.17 & 0.67 & 0.17 & O2, T4 \\ \hline
 \end{tabular}
-\caption{Evaluation of depression classification. The two classes consist of 50 / 50 recordings with the smallest / highest associated depression score out of recordings performed both before and after administration of drugs.}
+\caption[Evaluation of depression diagnosis.]{Evaluation of depression classification. The two classes consist of 50 / 50 recordings with the smallest / highest associated depression score out of recordings performed both before and after administration of drugs.}
 \label{tab:depcl}
 
 \bigskip
@@ -2547,7 +2563,7 @@ SE & LR & 0.66 & 0.09 & 0.66 & 0.09 & 0.66 & 0.09 & 0.65 & 0.10 & FP1, F3, P3, C
 DFA & SVM (lin.) & 0.64 & 0.15 & 0.65 & 0.15 & 0.64 & 0.15 & 0.63 & 0.15 & T3, T4, Cz \\ \hline
 HE & SVM (rbf) & 0.63 & 0.09 & 0.64 & 0.10 & 0.63 & 0.09 & 0.62 & 0.09 & C3, T6 \\ \hline
 \end{tabular}
-\caption{Evaluation of remission classification. Only recordings obtained before drug administration were considered. The two classes consist of the 50 patients with the highest and least improvement in depression score after the drug administration (as measured by ratio of the two depression scores).}
+\caption[Evaluation of remission prognosis.]{Evaluation of remission classification. Only recordings obtained before drug administration were considered. The two classes consist of the 50 patients with the highest and least improvement in depression score after the drug administration (as measured by ratio of the two depression scores).}
 \label{tab:respcl}
 \end{table}
 \subsection{Remission Prognosis}
@@ -2804,7 +2820,6 @@ After splitting the recordings, we assigned positive, neutral or negative label 
 
 The threshold values separating these classes were selected such that the classes remained relatively balanced and that enough samples were present in each class to train and evaluate a model of moderate capacity. In the case of depression classification, the amount of inter-class variance is inherently limited by nature of the provided data - patients were not randomly sampled, but visited the institution to seek professional help. In attempt to partially remedy this issue, the depression score threshold was set such that 71 patients remained in each depressed and healthy classes, leaving 124 neutral subjects. This corresponds to depressions score ranges $\langle 0, 17 \rangle $ for healthy, $(17, 27)$ for neutral, and $\langle 27, 34 \rangle$ for depressed. In the case of remission classification, our ability to potentially increase inter-class variance in this way is more limited due the amount of available data, since only before treatment recordings are used. Thus, we removed only 14 neutral subjects, leaving 59 non-remitting and 60 remitting subjects.
 
-
 \section{Input Representation}
 Before applying any machine learning technique to the classification problem at hand, the question of optimal input representation needs to be answered. To this end, multiple factors need to be considered. Firstly, what is the dimensionality of the input relative to the resulting number of samples, and does it allow construction of sufficiently complex architectures compared to complexity of the classification problem? Secondly, does each input sample contain enough information to perform successful classification? Thirdly, is the input representation appropriate for the kind of data, i.e. does it help or hinder successful classification? In our case, for all the methods considered, answer to the first question is a function of recording slice length used to generate the input. Answering the remaining questions, however, is difficult without prior experiments on similar datasets. For this reason, research on applying known techniques to new problems is useful.
 
@@ -2866,7 +2881,7 @@ Since both recurrence plot and cosine similarity matrix are symmetric, we applie
 \info[inline]{Another possibility is to learn on flattened scalp images of topographical distributions of different band powers. However, as explained in \cite{schirrmeister2017deep}, this presents two main challanges. As we have verified in the previous chapter (see Section \ref{sec:band-ampl}), the relevant variance is probably spatially global in nature, and not hierarchically compositional to make use of CNN. On the other hand, the temporal patterns are more likely to be hierarchically compositional.}
 
 \section{Preprocessing} \label{sec:dl-preprocess}
-Preprocessing: Filtering, running average and standard deviation.
+% Preprocessing: Filtering, running average and standard deviation.
 Signals were preprocessed before either image-encoding or direct classification. First, the electrode voltages were converted to mV to improve numerical stability. Then, optionally, a high-pass butterworth filter of order 3 with 4 Hz cutoff frequency was applied. It has been suggested that in some cases, filtering the singals may improve classification performance.\add{Elaborate, cite, mayber refer to discussion in previous chapter.} In image-encoded case, the signals were encoded at this stage. Finally, Welford's algorithm for running mean and standard deviation was used to compute the mean and variance over the whole dataset, and the dataset was then centered and normalized according to the found values.
 
 \section{Architecture} \label{sec:dl-arch}
@@ -2899,13 +2914,12 @@ Moreover, we also evaluated multiple simpler architectures. The best performing 
 \end{figure}
 
 \section{Results} \label{sec:dl-results}
-% Evaluation: We used 5-fold cross validation, selected the best performing model by evaluation on validation set, run for 200 epochs.
 
 The models were trained for 200 epochs. In each epoch, the current iteration of the model was evaluated using 5-fold cross validation with shuffling. The model which achieved the highest mean accuracy over all iterations was then selected for evaluation on the test set, which was again performed using 5-fold cross validation. Using 5-fold cross validation on the dataset splits we used (see Section \ref{sec:dl-dataset}) results in the number of samples for each of training, validation and test sets shown in Table \ref{tab:setsize}.
 
-The results can be seen in Table \ref{tab:dl-res}, where we use SHAL to denote the shallow architecture and DEEP to denote the deep architecture (see Section \ref{sec:dl-arch}). The unfiltered input is denoted $0-f_{\text{fin}}$, and $4-f_{\text{fin}}$ signifies that high pass filter with cutoff frequency of $4 Hz$ was applied to the input (see Section \ref{sec:dl-preprocess}). Firstly, performs noticably better on REM than DEEP. Filtering has not much effect, but helps slightly for REM, but does not help on DEP. 
+The results can be seen in Table \ref{tab:dl-res}, where we use SHAL to denote the shallow architecture and DEEP to denote the deep architecture (see Section \ref{sec:dl-arch}). The unfiltered input is denoted $0-f_{\text{fin}}$, and $4-f_{\text{fin}}$ signifies that high pass filter with cutoff frequency of $4 Hz$ was applied to the input (see Section \ref{sec:dl-preprocess}). Firstly, the shallow architecture performs noticeably better on the prognosis task than the deep architecture. Secondly, filtering has not much effect, but seems to improve the results slightly for the prognosis task, but does not help on the diagnosis task. Finally, both recurrence plots and cosine similarities do not seem to be especially effective effective encoding techniques for convolutional neural networks.
 
-Conclusions: SHAL has state of the art performance on REM. It would be nice to evaluate against pure FBCSP, and try more traditional configuration to see difference in performance. Combination of CNN and recurrence plots is likely not especially effective.
+% Conclusions: SHAL has state of the art performance on REM. It would be nice to evaluate against pure FBCSP, and try more traditional configuration to see difference in performance. Combination of CNN and recurrence plots is likely not especially effective.
 
 \begin{table}[tbp]
 \centering
@@ -2918,7 +2932,7 @@ Validation & 826 & 802 & 686 & 662 \\ \hline
 Test & 1038 & 997 & 830 & 855 \\ \hline 
 Overall & 5142 & 5029 & 4200 & 4222 \\ \hline 
 \end{tabular}
-\caption{Number of negative / positive samples in training, validation, test sets.}
+\caption[Training, validation, and test set sizes.]{Number of negative / positive samples in training, validation, test sets.}
 \label{tab:setsize}
 \end{table}
 
@@ -2961,7 +2975,7 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 \subcaption{Image-encoded data.}
 % \label{tab:depcl}
 }
-\caption{Evaluation of accuracies of the shallow (SHAL) and deep (DEEP) architectures on the raw and image-encoded data in classification of depression state (DEP) or prediction of future remission (REM).}
+\caption[Evaluation of CNN architectures.]{Evaluation of accuracies of the shallow (SHAL) and deep (DEEP) architectures on the raw and image-encoded data in classification of depression state (DEP) or prediction of future remission (REM).}
 \label{tab:dl-res}
 \end{table}
 

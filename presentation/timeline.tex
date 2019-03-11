@@ -22,9 +22,9 @@
 % \draw[Brace] (c) -- node[above=3pt] {Infectious period} (f);
 % \draw[Brace=mirror] (d) -- node[below=3pt] {Symptomatic\\period} (e);
 % \draw[Line] ([ys=11mm] a) node[above] {Time of\\infection} -- (a);
-\draw[Line, shorten >=17pt] ([ys=-11mm]  c) node[below] {EEG recorded\\DS measured\\Prognosis} -- (c);
+\draw[Line, shorten >=17pt] ([ys=-11mm]  c) node[below] {EEG recorded\\DS measured\\Prognosis\\Change treatment?} -- (c);
 % \draw[Line] ([ys=7mm]  f) -- (f);
-\draw[Line, shorten >=17pt] ([ys=-11mm] a) node[below] {Drugs administred\\EEG recorded\\DS measured\\Diagnosis} -- (a);\draw[Line, shorten >=17pt] ([ys=-11mm]  e) node[below]{Evaluation} -- (e);
+\draw[Line, shorten >=17pt] ([ys=-11mm] a) node[below] {EEG recorded\\DS measured\\Diagnosis\\Drugs administred} -- (a);\draw[Line, shorten >=17pt] ([ys=-11mm]  e) node[below]{DS measured\\Evaluation} -- (e);
 
 \coordinate (a) at (0,-31mm);
 \coordinate[right=22mm of a]    (b);
@@ -42,6 +42,6 @@
 % \draw[Line] ([ys=11mm] a) node[above] {Time of\\infection} -- (a);
 \draw[Line, shorten >=17pt] ([ys=-11mm]  c) node[below] {EEG recorded\\DS measured\\\textcolor{red}{Evaluation}} -- (c);
 % \draw[Line] ([ys=7mm]  f) -- (f);
-\draw[Line, shorten >=17pt] ([ys=-11mm] a) node[below] {Drugs administred\\EEG recorded\\DS measured\\Diagnosis\\\textcolor{red}{Prognosis}} -- (a);
+\draw[Line, shorten >=17pt] ([ys=-11mm] a) node[below] {EEG recorded\\DS measured\\Diagnosis\\Drugs administred\\\textcolor{red}{Prognosis}} -- (a);
 % \draw[Line, shorten >=17pt] ([ys=-11mm]  e) node[below]{Evaluation} -- (e);
 \end{tikzpicture}

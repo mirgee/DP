@@ -22,6 +22,7 @@
 \usepackage{caption}
 \captionsetup{labelformat=empty,labelsep=none}
 \usepackage{picture}
+\usepackage[11pt]{moresize}
 \usetikzlibrary{arrows.meta, shapes.geometric, calc, shadows}
 \colorlet{linecol}{black!75}
 
@@ -56,23 +57,27 @@
 
 \section{Problem Statement and Approach} 
 %------------------------------------------------
-\begin{frame}{Depression Diagnosis and Prognosis is Expensive}
+\begin{frame}{Depression Treatment is Expensive}
 	\begin{columns}
 		\column{0.5\textwidth}
         \begin{itemize}
-          \item MDD has high prevalence and impact \cite{olbrich2013eeg, whodepression}
-          \item Diagnosis requires time of trained professionals \cite{whodepression}
-          \item EEG may be 
+          \item MDD
             \begin{itemize}
-              \item accessible diagnosis-aid tool \cite{schultz2012}
-              \item also effective at prognosis? {\scriptsize studied very little!} 
+                % 800 000 suicides / year 
+              \item<2-> 300 million suffering worldwide \cite{olbrich2013eeg, whodepression}
+              \item<3-> diagnosis requires time of trained professionals \cite{whodepression}
+            \end{itemize}
+          \item EEG 
+            \begin{itemize}
+              \item<4-> accessible diagnosis-aid tool \cite{schultz2012}?
+              \item<5-> also effective at prognosis? {\scriptsize studied very little!} 
             \end{itemize}
         \end{itemize}
         \vfill
-        Research into effective analysis techniques is ongoing\ldots
+        \visible<5->{Research into effective analysis techniques is ongoing\ldots}
 		\column{0.5\textwidth}
             \begin{figure}
-                \includegraphics[width=0.9\linewidth]{./Images/electrodes.png}
+                \includegraphics<1->[width=0.9\linewidth]{./Images/electrodes.png}
                 \caption{\scriptsize \cite{10-20-system}}
                 % \\
                 \includegraphics[width=\linewidth]{./Images/signal.png}
@@ -91,10 +96,10 @@
 \begin{frame}{Our Dataset}
 	\begin{columns}
 		\column{0.5\textwidth}
-        Relatively large:
+        \visible<1->{Relatively large:}
         \begin{itemize}
-            \item 133 patients
-            \item EEG recordings
+            \item<2-> 133 patients
+            \item<3-> EEG recordings
               \begin{itemize}
                 \item 19 channels
                 \item 250 Hz or 1000 Hz
@@ -112,7 +117,7 @@
               %       \item Depression score measured
               %     \end{itemize}
               % \end{itemize}
-              \item Metadata
+              \item<4-> Metadata
                   \begin{itemize}
                       \item Depression scores
                           \begin{itemize}
@@ -122,7 +127,8 @@
                        \item Age, gender, drugs
                   \end{itemize}
         \end{itemize}
-					
+        \vfill
+        \visible<5->{Obtained from Czech National Institute of Mental Health}
 		\column{0.5\textwidth}
 			\includegraphics[width=\linewidth]{./Images/depscores_2.png}
 	\end{columns}
@@ -319,23 +325,26 @@ for tree={
 \begin{frame}{Results}
 
 \begin{table}[tbp]
-\scriptsize
+% \ssmall
+\fontsize{7pt}{10pt}
+\selectfont
   \parbox{0.495\linewidth}{
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{Measure} & \textbf{Classifier} & \textbf{Accuracy} \\ \hline
-LLE, CD & SVM (lin.) & \textbf{0.74} $\pm$ 0.04 \\ \hline 
-LLE, SE & SVM (lin.) & 0.75 $\pm$ 0.10 \\ \hline 
-LLE, HE & SVM (lin.) & 0.73 $\pm$ 0.06 \\ \hline 
-LLE, SE, DFA & SVM (lin.) & 0.73 $\pm$ 0.09 \\ \hline 
-CD, HD & LR & 0.73 $\pm$ 0.10 \\ \hhline{=|=|=|=}
-LLE & SVM (lin.) & \textbf{0.72} $\pm$ 0.04 \\ \hline
-CD & SVM (lin.) & 0.71 $\pm$ 0.05 \\ \hline 
-SE & LR & 0.68 $\pm$ 0.12 \\ \hline
-HD & SVM (rbf) & 0.67 $\pm$ 0.11 \\ \hline
-DFA & LR & 0.67 $\pm$ 0.16 \\ \hline
-HE & LR & 0.67 $\pm$ 0.17 \\ \hline
+\textbf{Measure} & \textbf{Classifier} & \multicolumn{2}{c}{\textbf{Accuracy}} \vline \\ \hline
+& & \textbf{Mean} & \textbf{Std} \\ \hline
+LLE, CD & SVM (lin.) & \textbf{0.74} & 0.04 \\ \hline 
+LLE, SE & SVM (lin.) & 0.75 & 0.10 \\ \hline 
+LLE, HE & SVM (lin.) & 0.73 & 0.06 \\ \hline 
+LLE, SE, DFA & SVM (lin.) & 0.73 & 0.09 \\ \hline 
+CD, HD & LR & 0.73 & 0.10 \\ \hhline{=|=|=|=}
+LLE & SVM (lin.) & \textbf{0.72} & 0.04 \\ \hline
+CD & SVM (lin.) & 0.71 & 0.05 \\ \hline 
+SE & LR & 0.68 & 0.12 \\ \hline
+HD & SVM (rbf) & 0.67 & 0.11 \\ \hline
+DFA & LR & 0.67 & 0.16 \\ \hline
+HE & LR & 0.67 & 0.17 \\ \hline
 \end{tabular}
 \subcaption{Depression}
 }
@@ -344,15 +353,16 @@ HE & LR & 0.67 $\pm$ 0.17 \\ \hline
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{Measure} & \textbf{Classifier} & \textbf{Accuracy} \\ \hline
-LLE, CD & SVM (lin.) & \textbf{0.75} $\pm$ 0.11 \\ \hline 
-LLE, SE & SVM (lin.) & 0.75 $\pm$ 0.10 \\ \hhline{=|=|=|=}
-LLE & LR & \textbf{0.71}  $\pm$ 0.08 \\ \hline 
-CD & LR & 0.67 $\pm$ 0.09 \\ \hline
-HD & LR & 0.66 $\pm$ 0.05 \\ \hline
-SE & LR & 0.66 $\pm$ 0.09 \\ \hline
-DFA & SVM (lin.) & 0.64 $\pm$ 0.15 \\ \hline
-HE & SVM (rbf) & 0.63 $\pm$ 0.09 \\ \hline
+\textbf{Measure} & \textbf{Classifier} & \multicolumn{2}{c}{\textbf{Accuracy}} \vline \\ \hline
+& & \textbf{Mean} & \textbf{Std} \\ \hline
+LLE, CD & SVM (lin.) & \textbf{0.75} & 0.11 \\ \hline 
+LLE, SE & SVM (lin.) & 0.75 & 0.10 \\ \hhline{=|=|=|=}
+LLE & LR & \textbf{0.71}  & 0.08 \\ \hline 
+CD & LR & 0.67 & 0.09 \\ \hline
+HD & LR & 0.66 & 0.05 \\ \hline
+SE & LR & 0.66 & 0.09 \\ \hline
+DFA & SVM (lin.) & 0.64 & 0.15 \\ \hline
+HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 \end{tabular}
 \subcaption{Remission}
 }
