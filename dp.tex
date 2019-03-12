@@ -897,7 +897,7 @@ Then, any near neigbor for which the distance increase after transition from dim
 \begin{align} \label{eq:first-criterion}
   \left[ \frac{R_m^2(n,r) - R_{m+1}^2(n,r)}{R_m^2(n,r)} \right]^{1/2} = \frac{ x_{n+k\tau} - x^{(r)}_{n+k\tau} }{R_m(n,r)} > R,
 \end{align}
-where $R \in \RR$ is some threashold. The $m$ for which the relative proportion of false neigbors to all neigbors reaches zero is the embedding dimension suggested by this criterion.
+where $R \in \RR$ is some threashold. The $m$ for which the relative proportion of false neighbors to all neighbors reaches zero is the embedding dimension suggested by this criterion.
 
 This criterion, by itself, is not sufficient for determining proper embedding dimension. When applied to limited amount of white noise data, it erroneously suggested embedding the noise into a low dimensional attractor. This happens because even though a state may be a nearest neigbor, it is not necessarily temporally close, and thus the assumptions above do not hold. The experiments performed by Kennel et al. show for such states it is usually $R_m(n,r) \approx R_A$, where $R_A$ is radius of the attractor. Furthermore, for increasing amount of data, the embedding dimension suggested by this criterion also increased - behavior not observed for relatively small dimensional attractors \cite{kennel1992determining}. 
 
@@ -910,7 +910,7 @@ as false, where $R_A$ may be computed as, for example
   R_A = \frac{1}{N} \sum_{n=1}^{N} \left[ x_n - \overline{x} \right]^2.
 \end{align*}
 
-Although this technique is commonly used, it is not without its drawbacks. An obvious point is that altough it is true that distance between neigbors in unfolded attractor should not grow with increase in dimension, the inverse is not necessarily true, i.e. stable distance between near neighbors with increase in dimension does not guarantee that these neighbors are true. 
+Although this technique is commonly used, it is not without its drawbacks. An obvious point is that altough it is true that distance between neighbors in unfolded attractor should not grow with increase in dimension, the inverse is not necessarily true, i.e. stable distance between near neighbors with increase in dimension does not guarantee that these neighbors are true. 
 
 The authors suggest some values of the tolerance parameters they found useful in their experiments, but, in general, the results of this technique may depend on the choice of $R$ and $A$. Their selection is subjective and somewhat arbitrary. The best course of action is to evaluate the technique for multiple values of $R$ and $A$ and select those with the most ``reasonable'' results.
 
@@ -918,7 +918,7 @@ In practice, it has been found that the results of this method are sensitive not
 
 Also, this method tends to underestimate $m$ for very small $\tau$. Small $\tau$ forces the attractor to lie near the diagonal in $\RR^m$ and further increasing $m$ imposes very little effect on the geometry of the attractor. In effect, most points will appear as true neighbors leading to a wrong conclusion \cite{kugiumtzis1996state}.
 
-Lastly, in presence of measurement noise, the proportion of false neigbors may increase after transition to a higher dimension, since even identical vectors will diverge \cite{kantz2004}.
+Lastly, in presence of measurement noise, the proportion of false neighbors may increase after transition to a higher dimension, since even identical vectors will diverge \cite{kantz2004}.
 
 \subsubsection{Average False Neighbors} \label{sec:afn}
 This technique by Cao \cite{Cao1997} addresses one of the drawbacks of false nearest neighbors mentioned in the previous section - the variance of results based on subjective choice of embedding parameters. It does so by defining two parameter free functions dependent only on the embedding parameters.
@@ -1312,7 +1312,7 @@ The approach of estimating a finite embedding dimension (see Section \ref{sec:st
 
 \chapter{Nonlinear Analysis Approach}
 \section{Dataset} \label{sec:dataset}
-The EEG recordings were performed by and obtained from the Czech National Institute of Mental Health. The dataset comprises total of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58). Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS) \cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points: 
+The EEG recordings were performed by and obtained from the Czech National Institute of Mental Health. The dataset comprises total of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58).\footnote{We use the notation $\text{mean} \pm \text{std}$.} Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS) \cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points: 
 \begin{description}
   \item[0 - 6]: symptom absent,
   \item[7 - 19]: mild depression,
@@ -1322,7 +1322,7 @@ The EEG recordings were performed by and obtained from the Czech National Instit
  
 The experiment lasted 4 weeks. At the beginning of week 1, each subject's depression score was measured, their EEG signal was recorded, and, based on the measurement and patient's history, prescription of up to 4 treatments (drugs or rTMS) was made. After 4 weeks, depression score was remeasured and EEG signal recorded again.
 
-During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz), see Figure \ref{fig:electrodes} for reference. EEG signals of 99 subjects were recorded at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz , and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz. A typical recoding can be seen in Figure \ref{fig:data}.
+During the EEG recording, 19 electrodes were placed on the scalp in accordance with the Internation 10-20 system (FP1, FP2, F3, F4, C3, C4, P3, P4, O1, O2, F7, F8, T3, T4, T5, T6, Fz, Cz, Pz), see Figure \ref{fig:electrodes} for reference. EEG signals of 99 subjects were recorded at sampling frequency $f_s$ of 250 Hz, while 1000 Hz was used for the remaining 34 patients. The patients were not told to close their eyes for the duration of the recording, resulting in unwanted artifacts in the signal. Some of the artifacts were removed manually by the researchers by omitting those parts from the recording, and concatenating the remaining parts. Durations of the resulting measurements range from 23.5 s to 170 s (75.6 $\pm$ 20 s) for $f_s = 250$ Hz, and from 48.8 s to 140.4 s (79.5 $\pm$ 18.4 s) for $f_s = 1000$ Hz. The distributions of depression scores, EEG recording durations, patients' ages and sexes are visualized in Figure \ref{fig:dataset-viz}. A typical recoding can be seen in Figure \ref{fig:data}.
 
 \begin{figure} 
 \centering
@@ -1336,7 +1336,7 @@ During the EEG recording, 19 electrodes were placed on the scalp in accordance w
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{./Images/dataset.png} }
-  \caption[Dataset visualization.]{Dataset visualization.}
+  \caption[Dataset visualization.]{Visualization of the main dataset features. Starting in the upper left hand side and continuing in the clockwise direction, the first figure shows the distributions of depression scores measured on the first and second patient visit respectively. The second figure shows the distributions EEG recording durations on the first and second week respectively. The third figure shows distributions of ages for male and female participants, and the last figure visualizes the number male and female participants.}
 \label{fig:dataset-viz}
 \end{figure}
 
@@ -1354,14 +1354,22 @@ We should recognize limitations of this dataset:
   \item For a study of brain regions associated with depression, this study lacks data on patients' handedness, which may be relevant for distribution of activity in the hemispheres.
   \item For a study of remission, this dataset lacks a control group given no drugs.
   \item For a study of treatment effects, patients were assigned different cominations of drugs, making an attempt of finding the singular cause of any observed effects impossible.
+  \item Durations of the recordings do not allow us to put sufficiently low bound on the maximum error we can theoretically achieve for computation of the lagest Lyapunov exponent and correlation dimension (see Sections \ref{sec:req-lyap} and \ref{sec:req-corr}). 
 \end{itemize}
-
 \section{Preprocessing}
 Recordings of $f_s = 1000$ Hz were downsampled (decimated) by factor $4$ to $250$ Hz using the Fourier method (also known as trigonometric interpolation), i.e. by performing discrete Fourier transform on the original series, dividing it into $2*1000/250=8$ intervals, removing all but the first and the last intervals (thus removing the highest positive and negative frequencies, corresponding to low-pass filtering), and performing inverse discrete Fourier transform. This procedure assumes that the signal is periodic, and may have some influence on the obtained results. However, it was observed that this effect is almost negligible, even for considerably higher decimation factors \cite{diab2013effect}.
 
-In further analysis, unless otherwise specified, recordings were shortened to a fixed length. To balance the data requirements (see Sections \ref{sec:req-lyap} and \ref{sec:req-corr}), decrease in dataset size due to removal of too short recordings, and stationarity (see Section \ref{sec:stationarity}), the threshold was selected to be 60 s (15 000 datapoints per time series), resulting in exclusion of 26 recordings from the total of 266.
+In further analysis, unless otherwise specified, recordings were shortened to fixed length of 60 s (15 000 timesteps). This was done to 
+\begin{enumerate}
+  \item minimize the effect of stationarity (see Section \ref{sec:stationarity}), and at the same time
+  \item include as many timesteps as possible, while
+  \item including as many recordings as possible.
+\end{enumerate}
+This resulted in exclusion of 26 recordings from the total of 266. We have to recognize that, as we saw in Sections \ref{sec:req-lyap} and \ref{sec:req-corr}, this number of timesteps limits us to relatively small embedding dimensions to achieve theoretically low bounds on the maximum error for computation of multiple nonlinear measures.
 
-In some studies, band-pass filtering was used to remove frequencies which are physiologically impossible to produce by neural oscillations (e.g. high-pass filtering with 0.5 Hz threshold or lowpass filtering with 70 Hz threshold) \cite{hosseinifard2013}. Sometimes, it is suggested to notch filter at power line frequencies (40 Hz or 50 Hz). However, some authors suggest that linear filtering may adversely affect the results of nonlinear analysis \cite{andreas2000}. Others, on the other hand, observed that simple linear filtering does not influence the reconstruction of embedding space considerably \cite{Rohrbacker2009}. If quality of the data is sufficient, filtering is not necessary \cite{Jas2017}. By visual inspection, we found our data to be of sufficient quality and therefore decided to not risk influencing the results by filtering. \info{In fact, we tried both, but for filtered the results looked slightly more uniform.}
+In some studies, band-pass filtering was used to remove frequencies which are physiologically impossible to produce by neural oscillations (e.g. high-pass filtering with 0.5 Hz threshold or lowpass filtering with 70 Hz threshold) \cite{hosseinifard2013}. Sometimes, it is suggested to notch filter at power line frequencies (40 Hz or 50 Hz). However, some authors suggest that linear filtering may adversely affect the results of nonlinear analysis \cite{andreas2000}. Others, on the other hand, observed that simple linear filtering does not influence the reconstruction of embedding space considerably \cite{Rohrbacker2009}. If quality of the data is sufficient, filtering is not necessary \cite{Jas2017}. 
+
+To determine the effects of filtering on our datasets, we filtered the data to the 0.5 Hz - 70 Hz range using Butterworth filter of order 3, and performed the preliminary analysis in Section \ref{sec:distanal}. However, we found no improvement, and therefore decided to not risk influencing the final results by filtering.
 
 \section{Estimation of Nonlinear Measures}
 \subsection{Our Procedure}
@@ -2510,6 +2518,25 @@ The recordings were separated into two classes as follows:
   \item[Healthy]: 50 recordings with associated depression score at most 16.
   \item[Depressed]: 50 recordings with associated depression score at least 28.
 \end{description}
+These thresholds are visualized on the distribution of depression scores in the dataset in Figure \ref{fig:labels-dep}.
+
+\begin{figure}
+\centering
+\begin{subfigure}{0.45\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./Images/labels_dep.png}
+  \caption{Label thresholds for depression diagnosis.}
+  \label{fig:labels-dep}
+\end{subfigure}%
+\begin{subfigure}{0.45\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./Images/labels_rem.png}
+  \caption{Label thresholds for response prognosis.}
+  \label{fig:labels-rem}
+\end{subfigure}
+\caption[Label selection for corresponding tasks.]{Label selection for diagnosis and prognosis tasks. The thresholds were selected such that enough samples was present in each class, and such that the classes remained balanced.}
+\label{fig:labels}
+\end{figure}
 
 The results are shown in Table \ref{tab:depcl}. The best performing classifiers in this section were SVMs. The largest Lyapunov exponent was the most predictive out of all considered nonlinear measures, both achieving the highest accuracy out of the single-measure classifiers ($0.72 \pm 0.04$), and being one of the measures in majority of the best performing combined-measure classifiers. It was followed, perhaps surprisingly considering the results obtained in Section \ref{sec:analdepdif}, by correlation dimension ($0.71 \pm 0.05$). Although the accuracy of the remaining classifiers, whose features were obtained using the Kolmogorov-Smirnov test from Section \ref{sec:analdepdif}, was slightly lower (with higher variance), they are also simpler in terms of the number of selected channels.
 
@@ -2814,7 +2841,7 @@ Using the fact that magnitudes of the CSP eigenvalues are proportional to the am
 
 
 \section{Dataset} \label{sec:dl-dataset}
-For experiments in this chapter, we decided to use the entire recordings, in contrast to our approach in the previous chapter, where we used only the beginning in each recording. This is mainly because the classification algorithms we used in this chapter have larger variance, and thus are easily overfit on small datasets. Thus, each of the recordings, after downsampling to $250$ Hz (see Section \ref{sec:dataset}) was cut into multiple subrecordings of length 256, each subrecording forming a data sample. The subrecording length was selected as a tradeoff between the amount of obtained samples and information\add{Is information the right term? The amount of variance?} contained within each sample. For this sampling frequency, this corresponds to approximately a second of recording, which was shown to contain enough information to classify depression with satisfactory accuracy.\add{Cite this!!!} Moreover, some GPU cards are optimized for working on data chunks multiples of two in size.\add{Make more precise.} We also tried increasing the length to 512, but found no improvement in performance.
+For experiments in this chapter, we used the same dataset as in the previous Chapter 1, described in Section \ref{sec:dataset}. However, to increase the number of samples, decided to use the entire recordings, in contrast to our approach in the previous chapter, where we used only the beginning in each recording. This is mainly because the classification algorithms we used in this chapter have larger variance, and thus are easily overfit on small datasets. Thus, each of the recordings, after downsampling to $250$ Hz (see Section \ref{sec:dataset}) was cut into multiple subrecordings of length 256, each subrecording forming a data sample. The subrecording length was selected as a tradeoff between the amount of obtained samples and information\add{Is information the right term? The amount of variance?} contained within each sample. For this sampling frequency, this corresponds to approximately a second of recording, which was shown to contain enough information to classify depression with satisfactory accuracy.\add{Cite this!!!} Moreover, some GPU cards are optimized for working on data chunks multiples of two in size.\add{Make more precise.} We also tried increasing the length to 512, but found no improvement in performance.
 
 After splitting the recordings, we assigned positive, neutral or negative label to each subrecording in order to split the dataset into three groups based on depression score of the subject at the time of the recording for depression classification, or based on the subject's before to after treatment depression score for remission classification (in which case only before treatment recordings were further used). The neutral class was then removed and not further considered. 
 
@@ -2882,7 +2909,7 @@ Since both recurrence plot and cosine similarity matrix are symmetric, we applie
 
 \section{Preprocessing} \label{sec:dl-preprocess}
 % Preprocessing: Filtering, running average and standard deviation.
-Signals were preprocessed before either image-encoding or direct classification. First, the electrode voltages were converted to mV to improve numerical stability. Then, optionally, a high-pass butterworth filter of order 3 with 4 Hz cutoff frequency was applied. It has been suggested that in some cases, filtering the singals may improve classification performance.\add{Elaborate, cite, mayber refer to discussion in previous chapter.} In image-encoded case, the signals were encoded at this stage. Finally, Welford's algorithm for running mean and standard deviation was used to compute the mean and variance over the whole dataset, and the dataset was then centered and normalized according to the found values.
+Signals were preprocessed before either image-encoding or direct classification. First, the electrode voltages were converted to mV to improve numerical stability. Then, optionally, a high-pass Butterworth filter of order 3 with 4 Hz cutoff frequency was applied. It has been suggested that in some cases, filtering the singals may improve classification performance.\add{Elaborate, cite, mayber refer to discussion in previous chapter.} In image-encoded case, the signals were encoded at this stage. Finally, Welford's algorithm for running mean and standard deviation was used to compute the mean and variance over the whole dataset, and the dataset was then centered and normalized according to the found values.
 
 \section{Architecture} \label{sec:dl-arch}
 Our choice of CNN architectures was heavily inspired by, and almost identical to, those used in \cite{schirrmeister2017deep}. These architectures, and in particular the second one (in order of description below), were designed by the authors to be analogous to the FBCSP pipeline described in detail in Section \ref{sec:csp}. 

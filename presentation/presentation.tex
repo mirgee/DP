@@ -137,6 +137,18 @@
 
 %------------------------------------------------
 
+\begin{frame}{Labels}
+  \centering
+    \includegraphics[width=\linewidth]{./Images/labels.png}
+    % \vfill
+    \\
+    \begin{align*}
+      \text{Response} = \frac{\text{Depression score}_{\text{Week 4}}}{\text{Depression score}_{\text{Week 0}}}
+    \end{align*}
+\end{frame}
+
+%------------------------------------------------
+
 \begin{frame}[t]{Our Approach}
 
 \pgfkeys{/forest,
@@ -346,7 +358,7 @@ HD & SVM (rbf) & 0.67 & 0.11 \\ \hline
 DFA & LR & 0.67 & 0.16 \\ \hline
 HE & LR & 0.67 & 0.17 \\ \hline
 \end{tabular}
-\subcaption{Depression}
+\subcaption{Current DS}
 }
 \hfill
   \parbox{0.495\linewidth}{
@@ -364,7 +376,7 @@ SE & LR & 0.66 & 0.09 \\ \hline
 DFA & SVM (lin.) & 0.64 & 0.15 \\ \hline
 HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 \end{tabular}
-\subcaption{Remission}
+\subcaption{Response prediction}
 }
 \end{table}
 \end{frame}
@@ -383,13 +395,13 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{./Images/chebyshev.png}
-  \caption{Recurrence plot}
+  \caption{Recurrence plot (RP)}
   % \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{./Images/cs.png}
-  \caption{Cosine similarity}
+  \caption{Cosine similarity (CS)}
   % \label{fig:sub2}
 \end{subfigure}
 \end{figure}
