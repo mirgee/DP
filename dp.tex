@@ -550,11 +550,11 @@ Although in this study, we will only consider Euclidean state space $M$, the tru
   \begin{align*}
     \frac{d}{dt}\mathbf{\xi}(t) = \mathbf{F}(\mathbf{\xi}(t)), \qquad t \in \RR^+_0,
   \end{align*}
-  such that there exists a mapping $f^t : M \rightarrow M$ satisfying \footnote{This condition is equivalent to satisfaction of the assumptions of the uniqueness theorem of differential equations.}
+  such that there exists a unique\footnote{In other words, we assume that $\mathbf{F}$ satisfied the conditions of the uniqueness theorem of differential equations.} diffeomorphic\footnote{This means that $f^t$ is smooth, and has smooth inverse.} function $f^t : M \rightarrow M$ satisfying 
   \begin{align*}
-   \mathbf{\xi}(t) = f^t(\xi(0)).
+    \mathbf{\xi}(t) = f^t(\mathbf{\xi}(0))
   \end{align*}
-  We will call this mapping \textbf{state evolution function}, and vector field $\mathbf{F}$ \textbf{dynamics of the system}. We call the system linear if $\mathbf{F}$ is a linear vector field.
+  for any initial condition $\mathbf{\xi}(0)$. We will call this mapping \textbf{state evolution function}, and vector field $\mathbf{F}$ \textbf{dynamics of the system}. We call the system linear if $\mathbf{F}$ is a linear vector field.
 \end{dfn}
 
 In late 1800s, H. Poincare\' developed a geometric approach to analyzing the stability (asymptotic evolution) of these systems via examination of the solution $(\xi_1(t), \xi_2(t), \dots, \xi_d(t))$ as a \emph{trajectory} in the phase space $M$ (assuming the solution is known, e.g. measured). These ideas were later extended into deeper understanding of chaos in dynamical systems \cite{strogatz1996nonlinear}. 
@@ -815,29 +815,26 @@ Another commonly used method is to use the first minimum of the \emph{time delay
   \end{align*}
 \end{dfn}
 
-In other words, time delayed mutual information the average mutual information between measurements obtained by the original time series and its $\tau$-shifted (time delayed) counterpart. The optimal $\tau$ is usually selected as $\argmin_{\tau} \mathcal{I}_{\epsilon}(\tau)$.
+In other words, time delayed mutual information is the average mutual information between measurements obtained by the original time series and its $\tau$-shifted (time delayed) counterpart. The optimal $\tau$ is usually selected as $\argmin_{\tau} \mathcal{I}_{\epsilon}(\tau)$.
 
-Although this approach yields coordinates independent in a more general sense than simple linear independence provided by the autocorrelation function, the same criticism applies: minimum dependence between $x_t$ and $x_{t-\tau}$ says nothing about dependencies between other coordinates. Again, using this method is justifiable only for two-dimensional reconstructions. However, delayed mutual information has been generalized for multiple dimensions by its proponent A. M. Fraser using multidimensional distributions into a concept he called \emph{redundancy}, which basically measures the degree to which the reconstructed vectors accumulate around the bisectrix of the embedding space \cite{fraser1989reconstructing}. 
-
-Another criticism of delayed mutual information that some systems exhibit slowly decaying mutual information which has no minima \cite{martinerie1992mutual}. 
+Although this approach yields coordinates independent in a more general sense than simple linear independence provided by the autocorrelation function, the same criticism applies: minimum dependence between $x_t$ and $x_{t-\tau}$ says nothing about dependencies between other coordinates. Again, using this method is justifiable only for two-dimensional reconstructions. However, delayed mutual information has been generalized for multiple dimensions by its proponent A. M. Fraser using multidimensional distributions into a concept he called \emph{redundancy}, which basically measures the degree to which the reconstructed vectors accumulate around the bisectrix of the embedding space \cite{fraser1989reconstructing}. Another criticism of delayed mutual information that some systems exhibit slowly decaying mutual information which has no minima \cite{martinerie1992mutual}. 
 
 \subsubsection{Average Displacement from Diagonal} \label{sec:adfd}
-\textbf{Average displacement from diaognal} is a simple technique which simply measures the average distance of the embedding vectors from their original location:
+\textbf{Average displacement from diagonal} is a simple technique which simply measures the average distance of the embedding vectors from their original location:
 \begin{align*}
   \mathrm{ADFD}(m, \tau) = \frac{1}{N_{(m, \tau)}}\sum_{i=1}^{N_{(m, \tau)}} \norm{ \mathbf{x}_i^{(m, \tau)} - \mathbf{x}_i^{(m, 0)}},
 \end{align*}
 where $\mathbf{x}_i^{(m, \tau)}$ is the $i$-th vector of time delay embedding with embedding dimension $m$ and time delay $\tau$.
 
-Rosenstein et al. presented multiple methods for quantifying expansion from the main diagonal, and found $\mathrm{ADFD}$ to be the most computationally efficient, robust to noise, and accurate \cite{rosenstein1994reconstruction}. They also experimentily identified optimal $\tau$ as the one for which the slope of $\mathrm{ADFD}$ drops below 40\% of its initial value.  
+Rosenstein et al. presented multiple methods for quantifying expansion from the diagonal (the identity line of the attractor), and found $\mathrm{ADFD}$ to be the most computationally efficient, robust to noise, and accurate \cite{rosenstein1994reconstruction}. They also experimentily identified optimal $\tau$ as the one for which the slope of $\mathrm{ADFD}$ drops below 40\% of its initial value.  
 
 \subsubsection{Singular Values Analysis} \label{sec:svd}
-All the approaches described so far address the issue of irrelevance, but not that of redundance. In fact, based mostly on empirical, rather than the most time delay estimation techniques optimize for the following criteria \footnote{However, additional criteria may arise depending on the particular application.}: \cite{kugiumtzis1996state} 
+All the approaches described so far address the issue of redundance by attempting to make the coordinates less correlated or expanding the reconstruction from the identity line. The issue of irrelevance however, needs to be addressed as well. In fact, based mostly on empirical, rather than theoretical grounds, most time delay estimation techniques optimize for the following criteria \cite{kugiumtzis1996state}:
 \begin{enumerate}
   \item The reconstructed attractor must be expanded from the diagonal.
   \item The components of the reconstructed vector $\mathbf{x}_n$ must be uncorrelated.
 \end{enumerate}
-
-Those criteria are noticeably similar, and bias towards larger estimates of $\tau$. This leads many authors to suggest more advanced techniques, such as generalized delayed mutual information mentioned above, or some of those introduced in the following text.
+Those criteria are similar, and bias towards larger estimates of $\tau$. This leads many authors to suggest more advanced techniques, such as generalized delayed mutual information mentioned above, or some of those introduced in the following text.
 
 Principal component analysis, in particular, can be used to measure the volume occupied by the reconstructed attractor. Both overfolded and redundant attractors may be marked by low volume \cite{andreas2000}.
 
@@ -855,18 +852,18 @@ This matrix is symmetric and thus diagonalizable, and also at least non-negative
 
 If the time delay is too small, then all the elements of matrix $\mathbb{C}$ will have similar value $(\mathbb{C})_{ij} \approx A(0)$, and thus there will be one dominant singular value, while others will remain close to zero. This singular value then corresponds to the main diagonal of the attractor.
 
-If the time delay is too large, then the diagonal elements will approach average of the squared time series $(\mathbb{C})_{ii} \approx \langle x^2 \rangle$, while the remaining elements will converge to zero due to decay of the autocorrelation function, $\mathbb{C} \approx c\mathbb{I}$for some constant $c$. This corresponds to the reconstruction forming a featureless noise \cite{andreas2000}.
+If the time delay is too large, then the diagonal elements will approach average of the squared time series $(\mathbb{C})_{ii} \approx \langle x^2 \rangle$, while the remaining elements will converge to zero due to decay of the autocorrelation function, $\mathbb{C} \approx c\mathbb{I}$ for some constant $c$. This corresponds to the reconstruction forming a featureless noise \cite{andreas2000}.
 
-One drawback of this method is that its evaluation is largely subjective. Moreover, it was suggested that although this method is effective noise reduction technique, its effectiveness at delay estimation is less clear - the number of large singular values is sensitive to noise \cite{mees1987singular}.
+One drawback of this method is that it requires evaluation either by a human or a more complicated algorithm. Moreover, it was suggested that although this method is effective noise reduction technique, its effectiveness at delay estimation is less clear - the number of large singular values is sensitive to noise \cite{mees1987singular}.
 
 \subsubsection{Integral Local Deformation} \label{sec:ild}
-The uniqueness theorem of differential equations requires that no trajectories in the state space intersect. Moreover, in real physical systems, it may be reasonable to assume that it is highly unlikely to find closeby trajectories of opposite or orthogonal directions. This property is maintained by a successful embedding, and (if the assumption holds) can occur only in an improper reconstruction.
+In Section \ref{sec:dyn-sys-defs}, we require our dynamical systems to be deterministic, which means that no trajectories in the state space should intersect themselves. Moreover, in real physical systems, it may be reasonable to assume that it is highly unlikely to find closeby trajectories of opposite or orthogonal directions. This property is maintained by a successful embedding, and (if the assumption holds) can occur only in an improper reconstruction.
 
 T. Buzug and G. Pfister presented a quantitative measure of these close trajectory intersections by comparing the the evolutions of reference trajectories with centroids of points on the neighboring trajectories \cite{buzug1992optimal}. For the optimal embedding, divergence between these trajectories should be minimized.
 
-First, multiple random reference points are chosen. Let $\mathbf{x}_i(0)$ be such a reference point at time 0. Then, either a fixed number of nearest neighbors or all neighbors within a given radius and their centroid $\mathbf{x}_i^{com}(0)$ are found. Then, the absolute growth of the distance between the centroid of those originally neighboring points and the reference point after $qt_{ev}$ time steps is found as:
+First, multiple random reference points are chosen. Let $\mathbf{x}_i(0)$ be such a reference point at time 0. Then, either a fixed number of nearest neighbors or all neighbors within a given radius and their centroid $\mathbf{x}_i^{\mathrm{COM}}(0)$ (where COM stands for ``center of mass'') are found. Then, the absolute growth of the distance between the centroid of those originally neighboring points and the reference point after $qt_{ev}$ time steps is found as:
 \begin{align*}
-  \Delta(q,m,\tau) = \norm{\mathbf{x}^{com}(qt_{ev}) - \mathbf{x}_i(qt_{ev})} - \norm{\mathbf{x}_i^{com}(0) - \mathbf{x}_i(0)}.
+  \Delta(q,m,\tau) = \norm{\mathbf{x}^{\mathrm{COM}}(qt_{ev}) - \mathbf{x}_i(qt_{ev})} - \norm{\mathbf{x}_i^{\mathrm{COM}}(0) - \mathbf{x}_i(0)}.
 \end{align*}
 
 The values $\Delta(q,m,\tau)$ are discretely integrated from $q=1$ to $q=q_{max}$:
@@ -875,39 +872,39 @@ The values $\Delta(q,m,\tau)$ are discretely integrated from $q=1$ to $q=q_{max}
 \end{align*}
 This expression, called \textbf{integral local deformation}, is then averaged over $N_{ref}$ reference points and normalized:
 \begin{align*}
-  \mathrm{ILD}(m, \tau) = \langle \mathcal{D}(m, \tau, i) \rangle_i = \frac{t_{ev} \sum_{i=1}^{N_{ref}} \sum_{q=1}^{q_{max}} \left( \Delta(q-1,m,\tau) - \Delta(q,m,\tau) \right)}{2N_{ref} \Delta t \left( \max_{i \in 1, 2, \dots, N} x_i - \min_{i \in 1, 2, \dots, N} x_i \right)}
+  \mathrm{ILD}(m, \tau) = \langle \mathcal{D}(m, \tau, i) \rangle_i = \displaystyle{ \frac{t_{ev} \displaystyle{ \sum_{i=1}^{N_{ref}} } \displaystyle{ \sum_{q=1}^{q_{max}} } \left( \Delta(q-1,m,\tau) - \Delta(q,m,\tau) \right)}{2N_{ref} \Delta t \left( \max_{i \in 1, 2, \dots, N} x_i - \min_{i \in 1, 2, \dots, N} x_i \right)} }
 \end{align*}
 
 Finally, we obtained a measure of non-homogeneity of the average flow in the neighborhood of the points in the reconstructed embedding space as a function $\mathrm{ILD}_m(\tau)$ of the time delay $\tau$ and parameterized by $m$. According to our assumption about the reasonable property of physical dynamical systems, the optimal $\tau$ for each $m$ is the minimum $\argmin_{\tau} \mathrm{ILD}_m(\tau)$.
 
-The ILD algorithm provides the detailed information about the flow of the reconstruction, and is arguably the most powerful out of the algorithms we described, since it is the only one which measures the \emph{dynamical} properties of the reconstruction, not only topological ones \cite{andreas2000}. Moreover, since we may expect that for a sufficiently high $m$, the $\mathrm{ILD}_m(\tau)$ curves will converge \cite{buzug1992optimal}, this techniques allows for simultaneous estimation of both the embedding dimension $m$ and the time delay $\tau$. However, one considerable drawback is much larger computational cost, since for each $m$ and $\tau$, closest neighbors from the entire reconstruction have to be determined for each point.
+The ILD algorithm provides the detailed information about the flow of the reconstruction, and is arguably the most powerful out of the algorithms we described, since it is the only one which measures the \emph{dynamical} properties of the reconstruction, not only topological ones \cite{andreas2000}. Moreover, since we may expect that for a sufficiently high $m$, the $\mathrm{ILD}_m(\tau)$ curves will converge \cite{buzug1992optimal}, this technique allows for simultaneous estimation of both the embedding dimension $m$ and the time delay $\tau$. However, one considerable drawback is much larger computational cost, since for each $m$ and $\tau$, closest neighbors from the entire reconstruction have to be determined for each point.
 
 \subsection{Embedding Dimension Selection}
 \subsubsection{False Nearest Neighbors} \label{sec:fnn}
 Since the dynamics $\textbf{F}$ are assumed to be a \emph{smooth} vector field and the attractor $A$ is a \emph{compact} set in the phase space, its members acquire near neighbors, which should be subject to similar evolution. Therefore, these neighbors should remain close to each other after a short interval of time (even though chaos may introduce exponential divergence between them). This is a useful fact, which can be used, for example, to predict future evolution of a trajectory, or a computation of Lyapunov exponents. The \textbf{false nearest neighbors} algorithm uses them for estimation of embedding dimension \cite{kennel1992determining}.
 
-The main idea is to use the transition from dimension $m$ to dimension $m+1$ in the embedding procedure to differentiate between ``true'' and ``false'' neighbors. If the embedding dimension $m$ is too small, some members of $A$ that are close to each other may not be neighbors in the true state space, simply because the true state space is projected down to a smaller space (see Figure \cite{})\add{Add the figure from Kennel.}. These members are \emph{false neighbors}, all other neighbors are \emph{true}. When the attractor is fully unfolded into large enough dimension and is properly embedded, all neighbors are true.
+The main idea is to use the transition from dimension $m$ to dimension $m+1$ in the embedding procedure to differentiate between ``true'' and ``false'' neighbors. If the embedding dimension $m$ is too small, some members of $A$ that are close to each other may not be neighbors in the true state space, simply because the true state space is projected down to a smaller space\add{Add the figure from Kennel.}. These members are \emph{false neighbors}, all other neighbors are \emph{true}. When the attractor is fully unfolded into large enough dimension and is properly embedded, all neighbors are true.
 
-Let use denote by $y^{(r)}(n)$ the $r$-th nearest neighbor of $y(n)$. Then, let $R_m(n,r)$ denote the Euclidean distance between $y(n)$ and its neighbor:
+Let $n(j,r,m,m)$ denote the index of of $r$-th nearest neighbor of the $m$ dimensional embedding vector $\mathbf{x}_j$. Then, let $R_m(j,r,m)$ denote the Euclidean distance between $\mathbf{x}_j$ and its neighbor:
 \begin{align*}
-  R_m(n,r) = \sqrt{ \sum_{k=0}^{m-1}[ x_{n+k\tau} - x^{(r)}_{n+k\tau} ]^2 }
+  R_m(j,r,m) = \norm { \mathbf{x}_j - \mathbf{x}_{n(j,r,m)} }_2 = \sqrt{ \sum_{k=0}^{m-1}[ x_{j+k\tau} - x_{n(j,r,m)+k\tau} ]^2 }
 \end{align*}
 
 Then, any near neigbor for which the distance increase after transition from dimension $m$ to dimension $m+1$ is large in comparison to the initial distance is marked as false:
 \begin{align} \label{eq:first-criterion}
-  \left[ \frac{R_m^2(n,r) - R_{m+1}^2(n,r)}{R_m^2(n,r)} \right]^{1/2} = \frac{ x_{n+k\tau} - x^{(r)}_{n+k\tau} }{R_m(n,r)} > R,
+  \left[ \frac{R_m^2(j,r,m) - R_{m+1}^2(j,r,m)}{R_m^2(j,r,m)} \right]^{1/2} = \frac{ x_{j+k\tau} - x_{n(j,r,m)+k\tau} }{R_m(j,r,m)} > R,
 \end{align}
 where $R \in \RR$ is some threashold. The $m$ for which the relative proportion of false neighbors to all neighbors reaches zero is the embedding dimension suggested by this criterion.
 
-This criterion, by itself, is not sufficient for determining proper embedding dimension. When applied to limited amount of white noise data, it erroneously suggested embedding the noise into a low dimensional attractor. This happens because even though a state may be a nearest neigbor, it is not necessarily temporally close, and thus the assumptions above do not hold. The experiments performed by Kennel et al. show for such states it is usually $R_m(n,r) \approx R_A$, where $R_A$ is radius of the attractor. Furthermore, for increasing amount of data, the embedding dimension suggested by this criterion also increased - behavior not observed for relatively small dimensional attractors \cite{kennel1992determining}. 
+This criterion, by itself, is not sufficient for determining proper embedding dimension. When applied to limited amount of white noise data, it erroneously suggested embedding the noise into a low dimensional attractor. This happens because even though a state may be a nearest neigbor, it is not necessarily temporally close, and thus the assumptions above do not hold. The experiments performed by Kennel et al. show for such states it is usually $R_m(j,r,m) \approx R_A$, where $R_A$ is radius of the attractor. Furthermore, for increasing amount of data, the embedding dimension suggested by this criterion also increased - behavior not observed for relatively small dimensional attractors \cite{kennel1992determining}. 
 
 Therefore, Kennel et al. propose another criterion in addition to the one above. Since false neighbors which are near, but temporally distant, are usually stretched to the extremeties of the attractor with transition from $m$ to $m+1$, they suggest marking all near neighbors satisfying
 \begin{align} \label{eq:second-criterion}
-  \frac{R_{m+1}(n,r)}{R_A} > A
+  \frac{R_{m+1}(j,r,m)}{R_A} > A
 \end{align}
 as false, where $R_A$ may be computed as, for example 
 \begin{align*}
-  R_A = \frac{1}{N} \sum_{n=1}^{N} \left[ x_n - \overline{x} \right]^2.
+  R_A = \frac{1}{N} \sum_{j=1}^{N} \left[ x_j - \overline{x} \right]^2.
 \end{align*}
 
 Although this technique is commonly used, it is not without its drawbacks. An obvious point is that altough it is true that distance between neighbors in unfolded attractor should not grow with increase in dimension, the inverse is not necessarily true, i.e. stable distance between near neighbors with increase in dimension does not guarantee that these neighbors are true. 
@@ -925,9 +922,9 @@ This technique by Cao \cite{Cao1997} addresses one of the drawbacks of false nea
 
 The first function measures the variation of average ratio of distance of two neighbors in one dimension to the distance of the same neighbors in a higher dimension. More precisely, let
 \begin{align*}
-  E(m) =\frac{1}{N_{(m, \tau)}} \sum_{i=1}^{N_{(m,\tau)}} \frac{ \norm {\mathbf{x}_i^{(m+1)} - \mathbf{x}_{n(i, m)}^{(m+1)} }_{\infty} }{ \norm{ \mathbf{x}_i^{(m)} - \mathbf{x}_{n(i, m)}^{(m)} }_{\infty} },
+  E(m) =\frac{1}{N_{(m, \tau)}} \sum_{i=1}^{N_{(m,\tau)}} \frac{ \norm {\mathbf{x}_i^{(m+1)} - \mathbf{x}_{n(i,1,m)}^{(m+1)} }_{\infty} }{ \norm{ \mathbf{x}_i^{(m)} - \mathbf{x}_{n(i,1,m)}^{(m)} }_{\infty} },
 \end{align*}
-where $n(i,m)$ denotes the nearest neighbor of vector $\mathbf{x}_i$ in dimension $m$, and $\norm{ \cdot }_{\infty}$ denotes the Chebyshev norm \footnote{This norm suggested by the author, but presumably, another norm can be used.}. Then, the first statistic is defined as
+where $n(i,1,m)$ denotes the nearest neighbor of vector $\mathbf{x}_i$ in dimension $m$, and $\norm{ \cdot }_{\infty}$ denotes the Chebyshev norm\footnote{This norm is suggested by the author, but another norm can be used.}. Then, the first statistic is defined as
 \begin{align*}
   E_1(m) = \frac{E(m+1)}{E(m)}.
 \end{align*}
@@ -937,7 +934,7 @@ For systems with infinite embedding dimensions it may be difficult in practice t
 
 Let
 \begin{align*}
-  E^*(m) = \frac{1}{N - m\tau} \sum_{i=1}^{N - m\tau} | x_{i + m\tau} - x_{n(i,m) + m\tau} |.
+  E^*(m) = \frac{1}{N - m\tau} \sum_{i=1}^{N - m\tau} | x_{i + m\tau} - x_{n(i,1,m) + m\tau} |.
 \end{align*}
 Then, similarly to above, the second statistic is defined as
 \begin{align*}
@@ -1763,9 +1760,9 @@ An example of a result of such analysis for the largest Lyapunov exponent (embed
 \subsection{Before and After Treatment Groups}
 As the first step of our analysis, we conducted an investigation of the differences in the nonlinear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time. \add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient recieved personalized method of treatment, and the methods may have differing impact.
 
-We separated the patients into terciles according to the ratio of the depression scores before and after treatment. Out of these three populations, we selected the first and last, containing 46 and 44 samples respectively, to obtain population we call \emph{responding} (responders) to treatment and \emph{nonresponding} (nonresponders) to treatment. The second tercile was not considered in this analysis to minimize the effect of inaccuracy of the self-reported depression score. Comparison of mean values of individual measures between the two populations can be seen in Figures \ref{fig:respnon1}, \ref{fig:respnon1auto} and \ref{fig:respnon2}. Length of an error bar corresponds to one standard deviation.
+We separated the patients into terciles according to the ratio of the depression scores before and after treatment. Out of these three populations, we selected the first and last, containing 46 and 44 samples respectively, to obtain population we call \emph{responding} (responders) to treatment and \emph{nonresponding} (nonresponders) to treatment. The second tercile was not considered in this analysis to minimize the effect of inaccuracy of the self-reported depression score. Comparison of mean values of individual measures between the two populations can be seen in Figures \ref{fig:respnon1}, \ref{fig:respnon1auto} and \ref{fig:respnon2} in the Appendix. Length of an error bar corresponds to one standard deviation.
 
-For each group, we performed two-sided Kolmogorov-Smirnov test \add{Kruskal is better, redirect to distributions.} for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for $D_2$ computed using automatic selection of embedding parameters so in this section, we used $\lambda_1$ and $D_2$ computed for $m = 10$, $\tau=3$, $w_t = 50$. Moreover, we found no significant differences in DFA, so we decided to leave it out of this analysis. \info{However, we found that responders had significantly lower $\lambda_1$ computed using these methods in C3 and C4 electrodes ($6.899\pm1.278$ vs. $7.342\pm1.838$ for C3, $6.731\pm1.116$ vs. $7.365\pm1.475$ for C4) on recording performed before treatment.} The results can be seen in Tables \ref{tab:lleba}, \ref{tab:d2ba} and \ref{tab:seba}. 
+For each group, we performed two-sided Kolmogorov-Smirnov test \add{Kruskal is better, redirect to distributions.} for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for $D_2$ computed using automatic selection of embedding parameters so in this section, we used $\lambda_1$ and $D_2$ computed for $m = 10$, $\tau=3$, $w_t = 50$. Moreover, we found no significant differences in DFA, so we decided to leave it out of this analysis. \info{However, we found that responders had significantly lower $\lambda_1$ computed using these methods in C3 and C4 electrodes ($6.899\pm1.278$ vs. $7.342\pm1.838$ for C3, $6.731\pm1.116$ vs. $7.365\pm1.475$ for C4) on recording performed before treatment.} The results can be seen in Tables \ref{tab:lleba}, \ref{tab:d2ba} and \ref{tab:seba} in the Appendix. 
 
 For all measures computed this way, we found significantly differences in temporal areas, especially T3. The distributions of Largest Lyapunov exponents were also significantly different in the frontal and ``central'' areas, whereas $D_2$ differed mainly in prefrontal areas.\info{Which are associated with depression, but we want to leave that out in this section.} Sample entropy mimics the pattern seen in $\lambda_1$, differing mainly in frontal and ``central'' areas.
 
@@ -1780,7 +1777,7 @@ With the goal of analyzing the differences between the lightest and most severe 
 
 First, we looked at histograms of computed measures between the two groups. There were striking trends in the means of the two distributions in almost all channels for all measures except correlation dimension. Means of depressed recordings are typically shifted to the left of the mean of healthy recordings for all measures except for largest Lyapunov exponent, for which the means are shifted to the right. For correlation dimension, the distributions are similar. Figure \ref{fig:lyapdepdist}, which shows the distributions of the largest Lyapunov exponents for both groups, exemplifies the differences. Another observation is that the distributions are, with exceptions, generally approximately normal.
 
-Moreover, we investigated the differences in the distributions using Kolmogorov-Smirnov test.\footnote{Kruskal-Wallis test showed differences only for the largest Lyapunov exponent and Higuchi fractal dimension.} Table \ref{tab:depmeans} shows the results. The p-value cutoffs for significance ratings are 0.05, 0.01, 0.005. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
+Moreover, we investigated the differences in the distributions using Kolmogorov-Smirnov test.\footnote{Kruskal-Wallis test showed differences only for the largest Lyapunov exponent and Higuchi fractal dimension.} Table \ref{tab:depmeans} in the Appendix shows the results. The p-value cutoffs for significance ratings are 0.05, 0.01, 0.005. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
 
 Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for all remaining features except for correlation dimension. Of course, these results are expected given the previous observations\unsure{Is this true?}. However, the correlation becomes less significant when the classes are extended to include more recordings. We also visualized correlations of individual measures to the labels on topographic scalp in Figure \ref{fig:scalp-corrs}.
 
@@ -2524,9 +2521,7 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 \bibliography{refs}
 
 \appendix
-
 \chapter*{Appendix}
-
 \begin{landscape}
   \begin{figure} 
   \centering
@@ -2560,7 +2555,6 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
    \label{fig:respnon2}
   \end{figure}
 \end{landscape}
-
 
 \begin{table}[tbp]
 \centering

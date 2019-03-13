@@ -60,14 +60,12 @@
 \headcommand {\beamer@appendixpages {30}}
 \headcommand {\slideentry {4}{0}{5}{30/30}{}{1}}
 \headcommand {\beamer@framepages {30}{30}}
-\headcommand {\slideentry {4}{0}{5}{30/31}{}{1}}
-\headcommand {\beamer@framepages {30}{31}}
-\headcommand {\slideentry {4}{0}{6}{32/32}{}{1}}
-\headcommand {\beamer@framepages {32}{32}}
-\headcommand {\beamer@partpages {30}{32}}
-\headcommand {\beamer@subsectionpages {30}{32}}
-\headcommand {\beamer@sectionpages {30}{32}}
-\headcommand {\beamer@documentpages {32}}
-\headcommand {\def \inserttotalframenumber {3}}
+\headcommand {\slideentry {4}{0}{6}{31/31}{}{1}}
+\headcommand {\beamer@framepages {31}{31}}
+\headcommand {\beamer@partpages {30}{31}}
+\headcommand {\beamer@subsectionpages {30}{31}}
+\headcommand {\beamer@sectionpages {30}{31}}
+\headcommand {\beamer@documentpages {31}}
+\headcommand {\def \inserttotalframenumber {2}}
 \headcommand {\def \inserttotalframenumber {15}}
-\headcommand {\def \appendixtotalframenumber {3}}
+\headcommand {\def \appendixtotalframenumber {2}}

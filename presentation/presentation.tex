@@ -32,7 +32,7 @@
 
 \title{Analysis of EEG-based Depression Biomarkers}
 
-\subtitle{Using Machine Learning}
+\subtitle{Using Machine Learning \& Nonlinear Analysis}
 
 \author{Miroslav Kovář}
 
@@ -64,12 +64,12 @@
           \item MDD
             \begin{itemize}
                 % 800 000 suicides / year 
-              \item<2-> 300 million suffering worldwide \cite{olbrich2013eeg, whodepression}
-              \item<3-> diagnosis requires time of trained professionals \cite{whodepression}
+              \item<2-> 300 million suffering worldwide % \footfullcite{olbrich2013eeg, whodepression}
+              \item<3-> diagnosis requires time of trained professionals % \footfullcite{whodepression}
             \end{itemize}
           \item EEG 
             \begin{itemize}
-              \item<4-> accessible diagnosis-aid tool \cite{schultz2012}?
+              \item<4-> accessible diagnosis-aid tool % \footfullcite{schultz2012}?
               \item<5-> also effective at prognosis? {\scriptsize studied very little!} 
             \end{itemize}
         \end{itemize}
@@ -78,8 +78,8 @@
 		\column{0.5\textwidth}
             \begin{figure}
                 \includegraphics<1->[width=0.9\linewidth]{./Images/electrodes.png}
-                \caption{\scriptsize \cite{10-20-system}}
-                % \\
+                % \caption{\scriptsize \footfullcite{10-20-system}}
+                \\
                 \includegraphics[width=\linewidth]{./Images/signal.png}
             \end{figure}
 	\end{columns}
@@ -325,7 +325,7 @@ for tree={
       \begin{itemize}
         \item Literature review
         \item Estimation algorithms (FNN, AFN, ADFD, ILD, \ldots)
-        \item Statistical tests
+        \item Result analysis
       \end{itemize}
   \end{columns}
   \vfill
@@ -554,8 +554,8 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 
 \begin{frame}[allowframebreaks]{References}
 	% \nocite{*} % Display all references regardless of if they were cited
-	\bibliography{../refs.bib}
-	\bibliographystyle{plain}
+    % \bibliography{../refs.bib}
+	% \bibliographystyle{plain}
 \end{frame}
 
 %------------------------------------------------
