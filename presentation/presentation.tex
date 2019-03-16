@@ -25,6 +25,7 @@
 \usepackage[11pt]{moresize}
 \usetikzlibrary{arrows.meta, shapes.geometric, calc, shadows}
 \colorlet{linecol}{black!75}
+\usetikzlibrary{arrows,positioning,decorations.pathreplacing}
 
 %----------------------------------------------------------------------------------------
 %	 TITLE SLIDE
@@ -34,7 +35,7 @@
 
 \subtitle{Using Machine Learning \& Nonlinear Analysis}
 
-\author{Miroslav Kovář}
+\author{Miroslav Kovář\\[1mm]\small{Sebastián Basterrech}}
 
 \titlegraphic{\includegraphics[scale=1.25]{Images/lev.pdf}} % Optional title page image, comment this line to remove it
 
@@ -88,16 +89,26 @@
 %------------------------------------------------
 
 \begin{frame}{Our Goals}
-  \input{timeline.tex}
+  \input{timeline1.tex}
 \end{frame}
+
+\begin{frame}{Our Goals}
+  \input{timeline2.tex}
+\end{frame}
+
+%------------------------------------------------
+
+% \begin{frame}{Our Goals}
+%   \input{timeline.tex}
+% \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}{Our Dataset}
 	\begin{columns}
 		\column{0.5\textwidth}
-        \visible<1->{Relatively large:}
         \begin{itemize}
+            \item<1-> Czech National Institute of Mental Health
             \item<2-> 133 patients
             \item<3-> EEG recordings
               \begin{itemize}
@@ -105,18 +116,6 @@
                 \item 250 Hz or 1000 Hz
                 \item Various duration
               \end{itemize}
-              % \begin{itemize}
-              %   \item 0 weeks
-              %     \begin{itemize}
-              %       \item Start of the treatment
-              %       \item Drug administred
-              %       \item Depression score measured
-              %     \end{itemize}
-              %   \item 4 weeks
-              %     \begin{itemize}
-              %       \item Depression score measured
-              %     \end{itemize}
-              % \end{itemize}
               \item<4-> Metadata
                   \begin{itemize}
                       \item Depression scores
@@ -127,8 +126,6 @@
                        \item Age, gender, drugs
                   \end{itemize}
         \end{itemize}
-        \vfill
-        \visible<5->{Obtained from Czech National Institute of Mental Health}
 		\column{0.5\textwidth}
 			\includegraphics[width=\linewidth]{./Images/depscores_2.png}
 	\end{columns}
@@ -479,14 +476,11 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 \begin{frame}{Summary}
     \centering
     \begin{enumerate}
-        \item NL measures are potentially effective methods for depression diagnosis and prognosis {\scriptsize(despite nonstationarity)}
-        \item CD and LLE seem most discriminative {\scriptsize{(out of evaluated)}}
-            % CD is especially surprising, since no scaling region was found!
-        \item FBCSP-inspired CNN models seem more effective than common models
-        {\scriptsize
-        \item ILD seems most effective embedding parameters estimation algorithm {\scriptsize(out of evaluated)}
-        \item RP and CS do not seem effective data encoding methods for EEG analysis
-        }
+        \item<1-> NL measures are potentially effective methods for depression diagnosis and prognosis {\scriptsize(despite nonstationarity)}
+        \item<2-> LLE, CD and SE seem most discriminative {\scriptsize (out of evaluated)}
+        \item<3-> FBCSP-inspired CNN models seem effective
+        \item<4-> {\scriptsize ILD seems most effective embedding parameters estimation algorithm {\scriptsize(out of evaluated)}}
+        \item<4-> {\scriptsize RP and CS do not seem effective data encoding methods for EEG analysis}
     \end{enumerate}
     
 \end{frame}
@@ -542,6 +536,14 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 
 %------------------------------------------------
 
+\begin{frame}[allowframebreaks]{References}
+	\nocite{*} % Display all references regardless of if they were cited
+    \bibliography{./presentation.bib}
+	 \bibliographystyle{plain}
+\end{frame}
+
+%------------------------------------------------
+
 \begin{frame}[focus]
   \textbf{Questions}
 \end{frame}
@@ -550,18 +552,10 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 %	 CLOSING/SUPPLEMENTARY SLIDES
 %----------------------------------------------------------------------------------------
 
-\appendix
+% \appendix
 
-\begin{frame}[allowframebreaks]{References}
-	% \nocite{*} % Display all references regardless of if they were cited
-    % \bibliography{../refs.bib}
-	% \bibliographystyle{plain}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}{Backup Slides}
-\end{frame}
+%\begin{frame}{Backup Slides}
+%\end{frame}
 
 %----------------------------------------------------------------------------------------
 
