@@ -1564,13 +1564,14 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
 10 & - & 3 & emotion recognition & \cite{aftanas1997non}  \\ \hline
 10 & - & zero-crossing of $A(\tau)$ & sleep in schizophrenia & \cite{roschke1995nonlinear} \\ \hline
 10 & - & zero-crossing of $A(\tau)$ & sleep & \cite{fell1993deterministic} \\ \hline
-10 & - & random & depression & \cite{roschke1995nonlineardeppression} \\ \hline
+10 & - & random & depression & \cite{roschke1995nonlineardeppression} \\ \hhline{=|=|=|=|=}
+10 & - & 3 & - & depression \\ \hline
+11-15 & FNN, AFN average & $1-1/e$ crossing of $A(\tau)$ & depression & - \\ \hline
 \end{tabular}}
 \caption[Literature review of LLE embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $250-256 Hz$. The range results we obtained using various algorithms and observed in literature highlights the fact that the embedding parameters selection algorithms, as well as visual inspection of the divergence plots largely are unreliable, and that the optimal values depend on particular dataset and problem.}
 \end{table}
 
 In summary, we obtained a wide range of results using traditional parameter selection techniques, with the most powerful algorithm, ILD, indicating sligthly lower values of time delay. Most of the embedding dimension estimation algorithms, including ILD, agree with the literature that the optimal embedding embedding dimension should be set around 10. We proceeded with computing multiple sets of LLE labels for the dataset, each with a different member of the following set of input parameters $(m, \tau)$: $(7, 3)$, $(7,6)$, $(10,3)$, $(10, 6)$, $(15, 4)$, automatic (as described in Section \ref{sec:lle-auto}). Then, we analyzed the label distributions between studied groups, as presented in Section \ref{sec:distanal}, where we present results only for the most discriminative pairs of parameters, which was $m=10$, $\tau=3$.
-
 
 \subsection{Correlation Dimension} \label{sec:corrdim-exp}
 \subsubsection{Manual Analysis} \label{sec:corrdim-anal}
@@ -1633,7 +1634,9 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
  - &  ``unfolding dimension'' (see text) & objective function minimization & intraindividual classification & \cite{schmid1996indications} \\ \hline
  2-20 (scaling region 16-20) & saturation & $A(\tau)$, threshold $1/e$ & awake / sleep classification & \cite{pereda1998non} \\ \hline
  12 & - & 8 & mental state classification & \cite{dvorak1986some} \\ \hline
- 2-12 & saturation & 5 & schizophrenia & \cite{koukkou1993dimensional} \\ \hline
+ 2-12 & saturation & 5 & schizophrenia & \cite{koukkou1993dimensional} \\ \hhline{=|=|=|=|=}
+ 15 & - & 4 & depression & - \\ \hline
+ 2-30 & saturation & $1-1/e$ crossing of $A(\tau)$ & depression & - \\ \hline
 \end{tabular}}
 \caption[Literature review of CD embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
 \end{table}
@@ -1728,7 +1731,8 @@ $0.2 * \sigma(x)$ & 2 & 256 Hz & 5 min  & depression & \cite{acharya2015novel} \
 $0.2 * \sigma(x)$ & 2 & 512 Hz & 63 s & emotion recognition & \cite{jie2014emotion} \\ \hline
 $0.2 * \sigma(x)$ & 2 & 173.6 Hz & 23.6 s & epilepsy & \cite{song2012automatic} \\ \hline
 $0.2 * \sigma(x)$ & 2 & 173.6 Hz & 23.6 s & epilepsy & \cite{acharya2012automated} \\ \hline
-$0.2 * \sigma(x)$ & 2 & 128 Hz & 30 s & denoising & \cite{mahajan2015unsupervised} \\ \hline
+$0.2 * \sigma(x)$ & 2 & 128 Hz & 30 s & denoising & \cite{mahajan2015unsupervised} \\ \hhline{=|=|=|=|=|=}
+$0.2 * \sigma(x)$ & 2 & 250 Hz & 60 s & depression & - \\ \hline
 \end{tabular}
 \caption[Literature review of SE $r$ and $m$ parameters.]{Summary of choices for the embedding dimension $m$ and tolerance $r$ parameters for sample entropy applied to EEG signals we found across literature. Note that all choices for $m$ and $r$ are the same.}
 \label{tab:se-exp}
@@ -1756,8 +1760,8 @@ An example of a result of such analysis for the largest Lyapunov exponent (embed
   \caption[Example distribution of $\lambda_1$.]{Example distribution of the largest Lyapunov exponent (embedding dimension 10, time delay 3) for 19 surrogate samples and the original for all channels. The number next to each channel name represents the confidence in sigma, computed as in equation \ref{eq:sigma}.}
 \label{fig:surr-lyap}
 \end{figure}
-
 \section{Analysis of Measure Distributions between Groups} \label{sec:distanal}
+% In this section, we compare the differences between various subgroups in the dataset with measure values obtained using the methods described in the previous section. The hyperparameters we used in this section, summarized in Table , are the same as used in the classification tasks.
 \subsection{Before and After Treatment Groups}
 As the first step of our analysis, we conducted an investigation of the differences in the nonlinear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time.\add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient recieved personalized method of treatment, and the methods may have differing impact.
 
@@ -1812,13 +1816,11 @@ Furthermore, we inspected the correlations between the individual measures and c
 \subsection{Low and High Response Groups} \label{sec:analrespdif}
 Neurocorrelates of remission, or, in other words, positive response to a treatment, are interesting apart from the neurocorrelates of depression itself. Instead of indicating whether a treatment should be prescribed in the first place, the effects of various drugs on the brain may help in designing more individualized treatments, or in developments of new drugs, even for other conditions. However, as noted in Section \ref{sec:dataset}, in our dataset, different kinds of treatments (including rTMS) are mixed for most patients, thus making the singular causes of any observed changes challenging. Nevertheless, we may still attempt to find discrepancies between the responding and stagnant patients. If we assume that any prescribed treatment was beneficial, we may be able identify traits of patients who are difficult to treat. Indeed, medical literature recognizes entire categories of such patients \cite{kane1996factors}.
 
-For each patient, we computed a measure of change in depression scores (and, by extension, of effectivity of the treatment) we call \emph{response} (RES). If $\mathrm{DS}_0$ denotes the depression score measured on the first visit and $\mathrm{DS}_4$ denotes the depression score measured on the second visit after 4 weeks, then response is computed as their ratio $\mathrm{RES} = \mathrm{DS}_4 / \mathrm{DS}_0$. Mean response is 2.47, mode 1.66, standard deviation 3.145637. Most values range from 1 to 5, with a few outliers improving their symptoms 14 and 16-fold respectively. Only 9 patients stagnated exactly or slightly worsened their symptoms (response $\leq$ 1). Subsequently, we sampled 50 patients with the lowest value of response we call \emph{nonresponding} (nonresponders) and 50 patients with the highest value of response we call \emph{responding} (responders). 
-
-% In Table \ref{tab:lleba}, we can see, for example, that the mean values of $\lambda_1$ across channels are significantly diffent between recordings for the responding group, but not for the nonresponders.
+For each patient, we computed a measure of change in depression scores (and, by extension, of effectivity of the treatment) we call \emph{response} (RES). If $\mathrm{DS}_0$ denotes the depression score measured on the first visit and $\mathrm{DS}_4$ denotes the depression score measured on the second visit after 4 weeks, then response is computed as their ratio $\mathrm{RES} = \mathrm{DS}_4 / \mathrm{DS}_0$. Mean response is 2.47, mode 1.66, standard deviation 3.14. Most values range from 1 to 5, with a few outliers improving their symptoms 14 and 16-fold respectively. Only 9 patients stagnated exactly or slightly worsened their symptoms (response $\leq$ 1). Subsequently, we sampled 50 patients with the lowest value of response we call \emph{nonresponding} (nonresponders) and 50 patients with the highest value of response we call \emph{responding} (responders). 
 
 We performed Kruskal-Wallis test to see the differences in the computed measures between the two groups in individual channels, considering only the before treatment recordings. The most significant differences found were in Lyapunov exponent, especially in frontal, parietal, and right temporal areas. Aside from the largest Lyapunov exponent, Higuchi fractal dimension then also showed significant differences in frontal areas, and sample entropy in areas above corpus collosum. The results are shown in Table \ref{tab:remmeans} in the Appendix. For completeness, we also decided to include comparison which includes both before and after treatment recordings, which can be seen in Table \ref{tab:remmeansext}.
 
-Moreover, we also compared before and after treatment recordings of responding, and before and after treatment recordings of nonresponding patients. Significant differences were found only in LLE, CD and SE, for which the results can be seen in Tables \ref{tab:llebaresp}, \ref{tab:d2baresp}, and \ref{tab:sebaresp} respectively.
+Moreover, we also compared before and after treatment recordings of responding, and before and after treatment recordings of nonresponding patients. Significant differences were found only in LLE, CD and SE, for which the results can be seen in the Appendix in Tables \ref{tab:llebaresp}, \ref{tab:d2baresp}, and \ref{tab:sebaresp} respectively. These differences are also visualized in Figures \ref{fig:respnon1}, \ref{fig:respnon2}, and \ref{fig:respnon1auto} in the Appendix. We can see, for example, that the mean values of LLE across channels are slightly higher before treatment for the responding group, but not for the nonresponders.
 
 Of course, analyzing effectivity of treatment is difficult problem, and we realize the many limitations of this analysis. For example, many variables, including age, sex, starting depression score, behavioral changes occuring in the interim period and the kind of treatment, were not accounted for. Moreover, many of the patients selected as nonresponding actually improved their symptoms slightly. In fact, symptoms of only 9 patients of the whole dataset worsened or stayed stagnant. No significant differences between before and after treatment recordings of these ``strictly'' nonresponding patients, were found. Thus, one possibility of strengthening the differences between the responding and nonresponding groups may be to include the after treatment recordings for the ``strictly'' nonresponding group to the nonresponding group. However, we decided against doing this, because some differences in the before and after treatment groups for the ``strictly'' nonresponding patients may have remained insignificant due to small size of this group.
 
@@ -2352,7 +2354,7 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
   \centering
   \noindent\makebox[\textwidth]{%
     \includegraphics[width=1.4\textwidth]{./Images/bars/resp_non1.png} }
-    \caption[Comparison of mean $\lambda_1$ and $D_2$ between responders and nonresponders with fixed parameters.]{Comparison of mean values of largest Lyapunov exponent and correlation dimension between responders and nonresponders computed using embedding dimension $m=10$ and time delay $\tau=3$.}
+    \caption[Comparison of mean $\lambda_1$ and $D_2$ between responders and nonresponders with fixed parameters.]{Comparison of mean values of largest Lyapunov exponent and correlation dimension between responders and nonresponders.}
    \label{fig:respnon1}
   \end{figure}
 
