@@ -1310,12 +1310,12 @@ The approach of estimating a finite embedding dimension (see Section \ref{sec:st
 
 \chapter{Nonlinear Analysis Approach}
 \section{Dataset} \label{sec:dataset}
-The EEG recordings were performed by and obtained from the Czech National Institute of Mental Health. The dataset comprises total of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58).\footnote{We use the notation $\text{mean} \pm \text{std}$.} Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS) \cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points: 
+The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}, and the recording was performed by specialists thereby. It comprises of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58).\footnote{We use the notation $\text{mean} \pm \text{std}$.} Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS) \cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points \cite{herrmann1998sunnybrook}: 
 \begin{description}
   \item[0 - 6]: symptom absent,
   \item[7 - 19]: mild depression,
   \item[20 - 34]: moderate depression,
-  \item[34 - 40]: severe depression \cite{herrmann1998sunnybrook}.
+  \item[34 - 40]: severe depression.
 \end{description}
  
 The experiment lasted 4 weeks. At the beginning of week 1, each subject's depression score was measured, their EEG signal was recorded, and, based on the measurement and patient's history, prescription of up to 4 treatments (drugs or rTMS) was made. After 4 weeks, depression score was remeasured and EEG signal recorded again.
@@ -1326,7 +1326,7 @@ During the EEG recording, 19 electrodes were placed on the scalp in accordance w
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{Images/electrodes.png} }
-  \caption[International 10-20 electrode placement system.]{The International 10-20 system for placement of EEG electrodes used in our dataset. (Source: Wikimedia Commons)}
+  \caption[International 10-20 electrode placement system.]{The International 10-20 system for placement of EEG electrodes used in our dataset. (\cite{10-20-system})}
 \label{fig:electrodes}
 \end{figure}
 
@@ -1357,33 +1357,30 @@ We should recognize limitations of this dataset:
 \section{Preprocessing}
 Recordings of $f_s = 1000$ Hz were downsampled (decimated) by factor $4$ to $250$ Hz using the Fourier method (also known as trigonometric interpolation), i.e. by performing discrete Fourier transform on the original series, dividing it into $2*1000/250=8$ intervals, removing all but the first and the last intervals (thus removing the highest positive and negative frequencies, corresponding to low-pass filtering), and performing inverse discrete Fourier transform. This procedure assumes that the signal is periodic, and may have some influence on the obtained results. However, it was observed that this effect is almost negligible, even for considerably higher decimation factors \cite{diab2013effect}.
 
-In further analysis, unless otherwise specified, recordings were shortened to fixed length of 60 s (15 000 timesteps). This was done to 
+In further analysis, unless otherwise specified, recordings were shortened to fixed length of 60 s (15 000 timesteps). This measure was taken in order to achieve the the following characteristics on the data:
 \begin{enumerate}
-  \item minimize the effect of stationarity (see Section \ref{sec:stationarity}), and at the same time
-  \item include as many timesteps as possible, while
+  \item minimize the stationarity effect (see Section \ref{sec:stationarity}), and at the same time
+  \item include as many timesteps in the recordings (i.e. as high time series length as possible) as possible, while
   \item including as many recordings as possible.
 \end{enumerate}
 This resulted in exclusion of 26 recordings from the total of 266. We have to recognize that, as we saw in Sections \ref{sec:req-lyap} and \ref{sec:req-corr}, this number of timesteps limits us to relatively small embedding dimensions to achieve theoretically low bounds on the maximum error for computation of multiple nonlinear measures.
 
-In some studies, band-pass filtering was used to remove frequencies which are physiologically impossible to produce by neural oscillations (e.g. high-pass filtering with 0.5 Hz threshold or lowpass filtering with 70 Hz threshold) \cite{hosseinifard2013}. Sometimes, it is suggested to notch filter at power line frequencies (40 Hz or 50 Hz). However, some authors suggest that linear filtering may adversely affect the results of nonlinear analysis \cite{andreas2000}. Others, on the other hand, observed that simple linear filtering does not influence the reconstruction of embedding space considerably \cite{Rohrbacker2009}. If quality of the data is sufficient, filtering is not necessary \cite{Jas2017}. 
+In \cite{hosseinifard2013}, band-pass filtering was used to remove frequencies which are physiologically impossible to produce by neural oscillations (e.g. high-pass filtering with 0.5 Hz threshold or lowpass filtering with 70 Hz threshold). Sometimes, it is suggested to notch filter at power line frequencies (40 Hz or 50 Hz). However, some authors suggest that linear filtering may adversely affect the results of nonlinear analysis \cite{andreas2000}. Others, on the other hand, observed that simple linear filtering does not influence the reconstruction of embedding space considerably \cite{Rohrbacker2009}. If quality of the data is sufficient, then filtering is not necessary \cite{Jas2017}. 
 
-To determine the effects of filtering on our datasets, we filtered the data to the 0.5 Hz - 70 Hz range using Butterworth filter of order 3, and performed the preliminary analysis in Section \ref{sec:distanal}. However, we found no improvement, and therefore decided to not risk influencing the final results by filtering.
+To determine the effects of filtering on our datasets, we filtered the data to the 0.5 Hz - 70 Hz range using Butterworth filter of order 3, and then we performed the preliminary analysis described in Section \ref{sec:distanal}. However, we did not find any significant improvement, and therefore we decided to avoid the impact of filtering on the final results.
 
 \section{Estimation of Nonlinear Measures}
 \subsection{Our Procedure}
-It is well known that the results of algorithms for estimation of nonlinear measures presented in Section \ref{sec:nonlin-meas} depend on the choice not only on the amount of noise in the data, the way of data preprocessing and the choice of the algorithm, but also, to a considerable degree, on the embedding parameters and other input parameters \cite{fell1994resonance, das2002applicability}. Therefore, their choice is of substantial importance.
+It is well known that the results of algorithms for estimation of nonlinear measures presented in Section \ref{sec:nonlin-meas} depend not only on the amount of noise in the data, the preprocessing and the choice of the algorithm, but also, to a considerable degree, on the embedding parameters and other input parameters \cite{fell1994resonance, das2002applicability}. Therefore, selection of the algorithm and its parameters is of substantial importance.
 
-Our procedure for their selection was as follows. For each nonlinear measure, we created a list of parameters to try. Because most of the algorithms are relatively computationally expensive, length of the list should be limited. Then, we proceeded to label the data for each item on the list andd evaluated it. In Section \ref{sec:results-nl} we present the results for the most discriminative parameters. For creating the list, we used one or more of the following methods (depending on the nonlinear measure in question):
-\begin{enumerate}
-  \item Apply knowledge of the algorithm and techniques for estimation of embedding parameters (see Section \ref{sec:nonlin-meas}) and use them in combination to find fixed optimal parameters by analyzing the results and applying these techniques for all samples.
-  \item Apply the same knowledge for creating an automatic pipeline, which will select the optimal parameters for each sample. 
-  \item Review the literature on use of the nonlinear measure in question on EEG data, and search what parameters were used. 
-\end{enumerate}
+Our procedure for their selection was as follows. For each nonlinear measure, we created a list of feasible parameters which we subsequentially evaluated in a preliminary analysis. Because most of the algorithms are relatively computationally expensive, length of the list should be limited. Then, we proceeded to label the data for each item on the list and evaluated it. In Section \ref{sec:results-nl} we present the results for the most discriminative parameters. For creating the list, we used the following methods:
+\begin{description}
+  \item[Literature review:] Review the literature on use of the nonlinear measure in question on EEG data, and search what parameters were used. 
+  \item[(Algorithm-assisted) manual estimation:] Estimate the optimal embedding parameters by analyzing the algorithm outputs for multiple samples. Use algorithms for estimating the embedding parameters and analyze their results.
+  \item[Automatic pipeline:] Create automatic pipeline, which will select the optimal parameters for each sample. This step was performed only for correlation dimension and the largest Lyapunov exponent.
+\end{description}
 
-For correlation dimension and the largest Lyapunov exponent, which are known to be harder to estimate, we used all three steps. For the remaining measures, the steps were limited to the first and last one.
-
-\subsection{Nonstationarity}
-To reduce the effects of possible nonstationarity, we attempted to find the most stationary window of the desired length using the stationarity test described in Section \ref{sec:stationarity}. However, we found that selecting the least stationary window using this test did not improve the results as measured by the surrogate data analysis in Section \ref{sec:surrogate-analysis}. This may be beacause the optimal effectiveness of AAFT and iAAFT the first and last point of the window should have the same value \cite{andreas2000}. Moreover, selecting a different time window for each channel may result in inaccurate representation of the mental state by the vector of measures computed across channels. Therefore, it may be beneficial to use the same time window for all channels. If the results are dependent on the time during recording, then it would be advisable to select a fixed time window for all samples. Thus, we decided to skip this window selection step and pick a fixed time window for all channels and all recordings.
+In the following sections, 
 
 \subsection{State Space Reconstruction}
 \begin{figure} 
@@ -1393,8 +1390,8 @@ To reduce the effects of possible nonstationarity, we attempted to find the most
   \caption[Comparison of a time series and its surrogate.]{A comparison of the first $4 s$ of a time series and its AAFT surrogate.}
 \label{fig:ts}
 \end{figure}
-\subsubsection{Time Delay}
-In order to estimate the time delay, we used the following techniques:
+\subsubsection{Time Delay} \label{sec:delay-exp}
+In this section, we present an analysis of the estimation of time delay using several techniques. For illustrative purposes, we explain how these techniques can be used in analysis of, and present the results of these techniques for, the signal obtained from the FP1 electrode of recording of patient 75, second visit. As described in Section \ref{sec:dataset}, the time series, shown in Figure \ref{fig:ts}, was clipped to 60 s (15 000 data points). The selected techniques of time delay analysis were:
 \begin{enumerate}
   \item Reconstruction plots
   \item Autocorrelation $A(\tau)$ (see Section \ref{sec:acorr})
@@ -1404,31 +1401,29 @@ In order to estimate the time delay, we used the following techniques:
   \item Integral local deformation (ILD) (see Section \ref{sec:ild})
 \end{enumerate}
 
-In this section, we will analyze the results of these techniques for time series obtained from FP1 electrode of patient 75, second session, shown in Figure \ref{fig:ts}. The time series was clipped to 60 s (15000 data points). In the following sections, we will explain how these techniques were used to obtain estimates of individual nonlinear measures.
-
 Figure \ref{fig:recon} shows reconstructed trajectories for the first 4 s (1000 data points) of the recording, for varying time delay $\tau$. As expected, the reconstructed attractors for small delays cluster along the main diagonal, expand, and then become increasingly chaotic with larger $\tau$. However, it is impossible to judge objectively on the degree of folding in the attractor from these plots (even for shorter time series), which highlights the importance of qualitative measures for EEG signals.
 
-Typical plots of autocorrelation and delayed mutual information can be seen in Figure \ref{fig:dmi-acorr}. First local minima of DMI and first $\tau$ for which $A(\tau) \leq 1/e$, respectively $A(\tau) \leq 1-1/e$ are marked by yellow dots. For this channel, these are $\tau_{\mathrm{DMI}} = 10$ and $\tau_{A} = 4$, respectively $\tau_{A} = 6$. It is immediately obvious that estimates of these techniqes differ considerably. However, the variance of estimates is small both across channels and across patients for both techniques. To illustrate, we computed the estimates all channels of this recording, and their distribution for both DMI and autocorrelation can be seen in Figure \ref{fig:dmi-acorr-hist}. For this patient, autocorrelation shows less variance and lower suggested time delays. This behavior was observed across patients.
+Typical plots of autocorrelation and delayed mutual information can be seen in Figure \ref{fig:dmi-acorr}. First local minima of DMI and first $\tau$ for which $A(\tau) \leq 1/e$, respectively $A(\tau) \leq 1-1/e$ are marked by yellow dots. For this channel, these are $\tau_{\mathrm{DMI}} = 10$ and $\tau_{A} = 4$, respectively $\tau_{A} = 6$. It is immediately obvious that estimates of these techniques differ considerably. However, the variance of the estimated parameters is small both across channels and across patients for both techniques. To illustrate, we computed the estimates all channels of this recording, and their distribution for both DMI and autocorrelation can be seen in Figure \ref{fig:dmi-acorr-hist}. For the selected patient, autocorrelation shows less variance and lower suggested time delays. This behavior was observed across patients.
 
 \add[inline]{REDO PLOT! IT IS INCORRECT!}
 
-Figure \ref{fig:pca-svd} shows singular values of the PCA reconstruction as functions of $\tau$. The two prominent singular values corresponding to the main axes clearly stand out, as well as the dominant collapse at $\tau=14$. Moreover, upon closer observation, there are multiple other smaller collapses, e.g. one at $\tau=7$. We can see the attractor expanding in the third and fourth dimension for $\tau=3$  (similar behavior is also visible in Figure \ref{fig:recon}), which may suggest $\tau_{\mathrm{SVD}}=3,4$ as optimal. However, one may also choose $\tau_{\mathrm{SVD}}=6$ as optimal, since all the attractor seems mostly unfolded in all the available directions. This highlights how subjective is evaluation of results of this technique. Thus, for automatic evaluation, it is preferrable to use other method.
+Figure \ref{fig:pca-svd} shows singular values of the PCA reconstruction as functions of time delay $\tau$. The two largest singular values corresponding to the main axes of the attractor clearly stand out. Besides the dominant collapse at $\tau=14$, upon closer observation, one may notice multiple smaller collapses, such as one at $\tau=7$. We can see how the attractor expands in the third and fourth dimension for $\tau=3$  (similar behavior is also visible in Figure \ref{fig:recon}), which may suggest $\tau_{\mathrm{SVD}} \in \{3,4\}$ as optimal. However, one may also choose $\tau_{\mathrm{SVD}}=6$ as optimal, since all the attractor seems mostly unfolded in all the available directions. This highlights how subjective is evaluation of results of this technique. Thus, for automatic evaluation, it is preferrable to use other method.
 
 The results obtained by ADFD for embedding dimensions 5, 10 and 15 can be seen in Figure \ref{fig:adfd}; the green dashed lines represent derivatives of the respective curves, and the points mark the minimum value of $\tau$ for which derivative $\mathrm{ADFD}$ drops below $40\%$ of its initial value, as discussed in Section \ref{sec:adfd}. The average displacement tends to increase with $m$, and saturates for relavely small values of $\tau$ - thus, the estimated time delays are (consistently) lower than those obtained by most other techniques. Moreover, ADFD requires prior selection of $m$, while the algorithms for selection of $m$ we use (FFN and AFN), require estimation of $\tau$, making this technique largely impractical.
 
-The result of ILD (of our own implementation according to Buzug's original description \cite{buzug1992optimal}), the most powerful algorithm for estimation of the embedding parameters we used, can be seen in Figure \ref{fig:ild}. There is a clear minimum at $\tau_{\mathrm{ILD}}=4$, and the ILD curves become increasingly similar. Interestingly, the convergence is slower near the minimum. Various classes of behavior were observed across channels and patients; however, since this is highly computationally expensive algorithm - it takes over an hour to generate a single plot - it is impractical to analyze them on datasets of the size of the one used in this study.
+The most powerful algorithm for embedding parameters we used is ILD. We implemented the algorithm based on Buzug's original description \cite{buzug1992optimal}. Figure \ref{fig:ild} shows multiple curves $\mathrm{ILD}(m,\tau)$ as functions of time delay $\tau$ for fixed values of the embedding dimension $m$. There is a clear minimum at $\tau_{\mathrm{ILD}}=4$ for all the curves, and the curves become increasingly similar. Interestingly, the convergence is slower near the minimum. Various classes of behavior were observed across channels and patients; however, since this is highly computationally expensive algorithm, it is impractical to analyze them on datasets of the size of the one used in this study.
 
-As explained in Section \ref{sec:delay}, these techniques should be used only as inspection tools, not as reliable guides for selection of $\tau$. The ultimate goal of the reconstruction is to obtain as accurate values of the nonlinear parameters as possible, and thus selection of the optimal embedding parameters may differ for each of them.\unsure{Find some studies doing this also. Is there a way to justify this theoretically?} Thus, for example, in order to select the proper embedding parameters for computation of the largest Lyapunov exponent, we inspected the scaling regions for multiple values of $m$, $\tau$, Theiler window and other parameters, and picked those with the longest scaling regions (since the length of the scaling regions is proportional to the certainty of the estimate \cite{kennel1992determining}).
+As explained in Section \ref{sec:delay}, these techniques should be used only as inspection tools, not as reliable guides for selection of $\tau$. The ultimate goal of the reconstruction is to obtain as accurate values of the nonlinear parameters as possible, and thus selection of the optimal embedding parameters may differ for each of them. Thus, for example, in order to select the proper embedding parameters for computation of the largest Lyapunov exponent, we inspected the scaling regions for multiple values of $m$, $\tau$, Theiler window and other parameters, and picked those with the longest scaling regions (since the length of the scaling regions is proportional to the certainty of the estimate \cite{kennel1992determining}).
 
 Table \ref{tab:delay-est} shows an overview of estimated values of $\tau$. Autocorrelation, DMI, and singular values analysis report lower values than ADFD and ILD. However, Rosenstein notes that the best estimates of largest Lyapunov exponents were obtain for the autocorrelation threshold of $1-1/e$. For this threshold, the autocorrelation suggests $\tau_A = \tau_{ILD} = 4$ as optimal (and the distributions shift accordingly), thus in agreement with ILD.  
 
-In the Section \ref{sec:lle-exp}, we will show the effects of increasing $\tau$ on the average divergence.
+For comparison of obtained In the Section \ref{sec:lle-exp}, we will show the effects of increasing $\tau$ on the average divergence.
 
 \begin{table}[tbp]
 \centering
 \begin{tabular}{|c|c|}
 \hline
-\textbf{}                  & \textbf{Optimal time delay estimate} \\ \hline
+\textbf{}                  & \textbf{Estimated optimal time delay} \\ \hline
 Reconstruction plot        & -                                    \\ \hline
 Autocorrelation            & 6, 4                                 \\ \hline
 Delayed mutual information & 7                                    \\ \hline
@@ -1436,7 +1431,7 @@ SVD analysis               & 6                                    \\ \hline
 Average displacement       & 2, 3                                 \\ \hline
 Integral local deformation & 4                                    \\ \hline
 \end{tabular}
-\caption[Time delay estimates.]{Estimates of the optimal time delay of the individual examined techniques for patient 75, second session. The estimates vary widely based on used technique, but have relatively low variance across patients.}
+\caption[Estimated optimal time delays.]{Estimated optimal time delay values of the individual examined techniques for patient 75, second session. The results vary widely based on used technique, but have relatively low variance across patients.}
 \label{tab:delay-est}
 \end{table}
 
@@ -1489,7 +1484,7 @@ Integral local deformation & 4                                    \\ \hline
 \end{figure}
 
 \subsubsection{Embedding Dimension} \label{sec:embdim-exp}
-For estimating the embedding dimension, we used combination of \emph{false nearest neighbors} (FNN) algorithm described in Section \ref{sec:fnn} and average false neighbors (AFN) described in Section \ref{sec:afn}. The convergence of ILD curves and saturation of correlation dimension also provides insight into optimal choice of embedding dimension, but, as mentioned, is impractical due to high computational cost. As explained in Section \ref{sec:corrdim}, correlation dimension is expected to saturate for high enough choices of embedding dimension. However, we found that instead of saturating, it tended to decrease after reaching a maximum as a function of $m$, see Figure \ref{fig:em-corrdim}. This may be because the attractor is not represented adequately in high embedding dimensions with limited amount of data. Moreover, the computational costs of this method are also considerable.
+For estimating the embedding dimension, we used combination of \emph{False Nearest Neighbors} (FNN) and Average False Neighbors (AFN) algorithms, described in Sections \ref{sec:fnn} and \ref{sec:afn} respectively. The convergence of ILD curves and saturation of correlation dimension also provides insight into optimal choice of embedding dimension, but, as mentioned, is impractical due to high computational cost. As explained in Section \ref{sec:corrdim}, correlation dimension is expected to saturate for high enough choices of embedding dimension. However, we found that instead of saturating, it tended to decrease after reaching a maximum as a function of $m$, see Figure \ref{fig:em-corrdim}. This may be because the attractor is not represented adequately in high embedding dimensions with limited amount of data. Moreover, the computational costs of this method are also considerable.
 
 As expected, the percentage of reported false neighbors depends strongly on the selected values of $R$ and $A$ from equations (\ref{eq:first-criterion}) and (\ref{eq:second-criterion}). This is illustrated in Figure \ref{fig:fnn-comp}, showing the percentage of false neighbors reported by the respective criteria for varying values of $A$ and $R$, and for several values of time delay $\tau$. The percentages reported by the criterion I are almost independent of $\tau$, whereas increasing $\tau$ tends to increase the percentage reported by criterion II. For high enough $\tau$, criterion II will report all neighbors as false. 
 
@@ -1515,9 +1510,9 @@ The $E_1$ statistic of AFN usually stops increasing for approximately the same v
 
 \subsection{Largest Lyapunov Exponents} \label{sec:lle-exp}
 \subsubsection{Manual Analysis} \label{sec:lle-man-anal}
-For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000.\unsure{Why? This is unexpected.} This section shows analysis of results for patient number 75, second session, FP1 electrode.
+For all computations of the largest Lyapunov exponent, we used the Rosenstein's algorithm \cite{Rosenstein1993} described in Section \ref{sec:rosenstein}, with Theiler window $w_t$ length of 50 (200 ms). We found that the results were similar for values $w_t$ of 10, 50, 100 and 1000. Similar to Section \ref{sec:delay-exp}, here we present an illustrative analysis of the results for the FP1 electrode of the same arbitrarily selected patient.
 
-Figure \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. This is because the average divergence cannot exceed the diameter of the attractor, which is finite, since the attractor is bounded in the phase space. Therefore, selecting proper embedding dimension based on divergence plots is a balancing act between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
+Figure \ref{fig:lle-comp} shows divergence plots for different values of the embedding dimension $m$ and time delay $\tau$. Longer scaling regions correspond to higher certainty of the estimate. The short scaling regions and high slopes for small embedding dimension appear because, when the attractor is not unfolded, near neighbors are not actually close in the phase space and thus their trajectories diverge quickly. With increasing embedding dimension the scaling region clearly lengthens, but the slope also slowly approaches zero, and scaling region gradually disappears. This is because the average divergence cannot exceed the diameter of the attractor, which is finite, since the attractor is bounded in the phase space. Therefore, selecting proper embedding dimension based on divergence plots involves compromising between those two effects. Moreover, notice that the length of the scaling region is approximately $m\tau$. \unsure{How to explain this?}
 
 With increasing time delay $\tau$, we observe gradually damped oscillation-like behavior with period $\tau$ and amplitudes also increasing with $\tau$. Average divergence we computed using Kantz' algorithm also exhibits this behavior. Oscillation-like behavior was observed for white noise data in \cite{Rosenstein1993}, and for periodic data with period equal to the dominant period of the system in \cite{kantz2004}. One possible explanation is as follows \cite{fell1994resonance}. Let $x_1, x_2, \dots, x_N$ represent sampled time series, and $y_i \in \RR^{m}$ an embedded point in the reconstructed orbit. Then
 \begin{align*}
@@ -1528,12 +1523,12 @@ With increasing time delay $\tau$, we observe gradually damped oscillation-like 
 \end{align*}
 This means that for a given $y_i$, possible values of $y_{i+\tau}$ are restricted to a line parallel to the direction of the $m$-th basis vector. Analogously, $y_{i+2\tau}$, $y_{i+3\tau}$, \dots, $y_{i+(m-1)\tau}$ are restricted to $2, 3, \dots, m-1$ dimensional hyperplanes in the $m$ dimensional embedding space. As explained in Section \ref{sec:rosenstein}, Rosenstein's algorithm finds pairs of vectors $y_i$ and $y_{n(i,m)}$ with certain properties, and computes the evolution of their distances over time. This means that the possible values of $y_{i+\tau}$ and $y_{n(i,m)+\tau}$ are restricted to lie on two hyperplanes parallel to the $m$-th basis vector. Therefore, if $d_i(0) = \norm{y_i - y_{n(i,m)}}$ is their initial distance, then the maximum possible distance after evolution by $\tau$ timesteps is $\norm{ y_{i+\tau} - y_{k+\tau} } = \sqrt{ (d_i(0))^2 + A_m^2 }$, where $A_m$ is the maximum amplitude $\max_{i \in N(m, \tau)}|x_i|$. However, generally, the maximum distance is $A_m \sqrt{m}$. Thus, we may expect the average distances fluctuate with period $\tau$.
 
-There are several methods for alleviating this effect, but it cannot be evaded completely, since it is a join property of the time delay embedding and the data \cite{fell1994resonance}. One may choose smaller $\tau$, choose the evolution time $t_e < \tau$ or $t_e \geq \tau m$. Alternatively, one may choose different time delays $\tau_i$ for individual vector coordinates. The benefit of the first three options is that they still enable hardware acceleration provided by vectorized operations. Lastly, some algorithms, such as a modification of Wolf's algorithm \cite{roschke1995nonlinear}, attempt to minimize the effect implicitly.
+There are several methods for mitigating this effect, but it cannot be evaded completely, since it is a join property of the time delay embedding and the data \cite{fell1994resonance}. One may choose smaller $\tau$, choose the evolution time $t_e < \tau$ or $t_e \geq \tau m$. Alternatively, one may choose different time delays $\tau_i$ for individual vector coordinates. The benefit of chossing smaller time delay or bounding the evolution time is that these choices still enable using hardware acceleration provided by vectorized operations in the implementation of the algorithm. Lastly, some algorithms, such as a modification of Wolf's algorithm \cite{roschke1995nonlinear}, attempt to minimize the effect implicitly.
 
 \unsure[inline]{Can this occur due to measurement projection? Also, even if the largest Lyapunov exponent is positive, in dissipative systems (i.e. those possessing an attractor, see Section \ref{sec:attractor}) the sum of all Lyapunov exponents is negative, and thus, even on average, states will diverge in some directions. These effects can be compensated for by using proper averaging statistics \cite{kantz2004}.}
 
 \subsubsection{Automatic Selection Procedure} \label{sec:lle-auto}
-To compute the LLE estimates with automatic selection of proper embedding parameters, we proceeded as follows. Selection of time delay was done using autocorrelation function with threshold $1-1/e$. Results ranged from 2 to 5, depending on the channel. The selected $\tau$ was used to compute the embedding dimension with smallest FNN percentage from embedding dimensions in range from 1 to 20, i.e. $m_1 = \argmin_{m' \in \{1,\dots,20\}} \mathrm{FNN}(m')$. The tolerance parameters were $R=2.5$, $A=2.0$. Moreover, we found the first embedding dimension $m_2$ for which $E_1(m_2) - E_1(m_2-1) < 0.008$. The estimates $m_1$ and $m_2$ computed in this manner were usually similar, and ranging from 8 to 11, depending on the channel. The final embedding dimension $m$ was selected as their average $m = \ceil{m_1 + m_2)/2}$. The length of the scaling region $t_e = m\tau$ and the Theiler window, as mentioned, $w_t = 50$.
+To estimate the LLE values using automatic selection of proper embedding parameters, we proceeded as follows. Selection of time delay was done using autocorrelation function with threshold $1-1/e$. Results ranged from 2 to 5, depending on the channel. The selected $\tau$ was used to compute the embedding dimension with smallest FNN percentage from embedding dimensions in range from 1 to 20, i.e. $m_1 = \argmin_{m' \in \{1,\dots,20\}} \mathrm{FNN}(m')$. The tolerance parameters were $R=2.5$, $A=2.0$. Moreover, we found the first embedding dimension $m_2$ for which $E_1(m_2) - E_1(m_2-1) < 0.008$. The estimates $m_1$ and $m_2$ computed in this manner were usually similar, and ranging from 8 to 11, depending on the channel. The final embedding dimension $m$ was selected as their average $m = \ceil{m_1 + m_2)/2}$. The length of the scaling region $t_e = m\tau$ and the Theiler window, as mentioned, $w_t = 50$.
 
 \begin{figure} 
 \centering
@@ -1544,13 +1539,11 @@ To compute the LLE estimates with automatic selection of proper embedding parame
 \end{figure}
 
 \subsubsection{Literature Review}
-In analysis of EEG signals recorded during epileptic seizures, Babloyantz \cite{babloyantz1986low} obtained embedding dimension estimate of $5$ using correlation dimension saturation. Estimate of $7$ was reached by the same means in \cite{blanco1995stationarity}. 
-
 Using the correlation dimension saturation, the following estimates have been obtained: 5 \cite{babloyantz1986low}, 7 \cite{blanco1995stationarity}, 6-8 (depending on sleep stage) \cite{gallez1991predictability}. We found similar estimates using correlation dimension maximum (as mentioned in Section \ref{sec:embdim-exp}, we observed no saturation) with time delay $\tau=1$.
 
 By analyzing records ECT seizures, manually separating them into more and less regular, and inspecting multiple values of LLE as a measure of separation between these classes, 7 was selected as optimal embedding dimension in \cite{krystal1997largest}.
 
-Remaining studies we evaluated, including some analyzing depression, used embedding dimension 10 \cite{roschke1995nonlinear, fell1993deterministic, roschke1993calculation}. Especially relevant is \cite{roschke1995nonlineardeppression}, where depression data were analyzed, including the dependence of LLE on the embedding dimension. The authors decided to use various values of time delay depending on the embedding dimension corrdinate (for rationale, see Section \ref{sec:lle-man-anal}). Emotion recognition using LLE from EEG signals was performed in \cite{aftanas1997non} with embedding dimension $m=10$ and time delay $\tau=3$. No reasoning behind this choice was provided. 
+Remaining studies we evaluated, including some analyzing depression, used embedding dimension 10 \cite{roschke1995nonlinear, fell1993deterministic, roschke1993calculation}. Especially relevant is \cite{roschke1995nonlineardeppression}, where depression data were analyzed, including the dependence of LLE on the embedding dimension. The authors decided to use various values of time delay depending on the embedding dimension corrdinate (for rationale, see Section \ref{sec:lle-man-anal}). Emotion recognition using LLE from EEG signals was performed in \cite{aftanas1997non} with embedding dimension $m=10$ and time delay $\tau=3$. No reasoning behind this choice was provided. Summary of the reviewed studies can be seen in Table \ref{tab:litrev-lle}.
 
 \begin{table}[tbp]
 \resizebox{\textwidth}{!}{
@@ -1569,6 +1562,7 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
 11-15 & FNN, AFN average & $1-1/e$ crossing of $A(\tau)$ & depression & - \\ \hline
 \end{tabular}}
 \caption[Literature review of LLE embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $250-256 Hz$. The range results we obtained using various algorithms and observed in literature highlights the fact that the embedding parameters selection algorithms, as well as visual inspection of the divergence plots largely are unreliable, and that the optimal values depend on particular dataset and problem.}
+\label{tab:litrev-lle}
 \end{table}
 
 In summary, we obtained a wide range of results using traditional parameter selection techniques, with the most powerful algorithm, ILD, indicating sligthly lower values of time delay. Most of the embedding dimension estimation algorithms, including ILD, agree with the literature that the optimal embedding embedding dimension should be set around 10. We proceeded with computing multiple sets of LLE labels for the dataset, each with a different member of the following set of input parameters $(m, \tau)$: $(7, 3)$, $(7,6)$, $(10,3)$, $(10, 6)$, $(15, 4)$, automatic (as described in Section \ref{sec:lle-auto}). Then, we analyzed the label distributions between studied groups, as presented in Section \ref{sec:distanal}, where we present results only for the most discriminative pairs of parameters, which was $m=10$, $\tau=3$.
@@ -1603,12 +1597,12 @@ On the other hand, as explained in Section \ref{sec:surrogate-analysis-theory}, 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.95\textwidth]{./Images/local_d_2/large_surr.png} }
-  \caption[Local $D_2(r)$ for various $m$ in comparison with a surrogate.]{Local correlation dimension $D_2$ as a function of radius $r$ for embedding dimensions $m=5, 7, 9, \dots, 29$ (lowest $m$ at the bottom, highest at the top) and time delays $\tau = 4$ and $\tau = 8$ for the original series (blue) and its surrogate series computed using iAAFT.}
+  \caption[Local $D_2(r)$ for various $m$ in comparison with a surrogate.]{Local correlation dimension $D_2$ as a function of radius $r$ for embedding dimensions $m=5, 7, 9, \dots, 29$ (lowest $m$ at the bottom, highest at the top) and time delays $\tau = 4$ and $\tau = 8$ for the original series (blue) and its surrogate series computed using iAAFT (red).}
   \label{fig:loc-d2-comp}
 \end{figure}
 
 \subsubsection{Automatic Selection Procedure}
-To compute correlation dimension automatically, we proceeded as follows. We create embeddings for embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
+To compute correlation dimension automatically, we proceeded as follows. We create multiple embeddings with incresing embedding dimensions in range from 2 to 30 with the optimal time lag selected according to the autocorrelation function with threshold $1-1/e$. For each embedding, we evaluate the slope of $\log C(\log r)$ on the interval $[r_{\mathrm{lower}}, r_{\mathrm{upper}}]$, where $r_{\mathrm{lower}}$ corresponds to the average nearest neighbor distance on the reconstructed attractor, $r_{\mathrm{upper}}$ is given by
 \begin{align*}
   \log r_{\mathrm{upper}} = \log r_{\mathrm{lower}} + \frac{1}{10} \left( \log r_{\mathrm{max}} - \log r_{\mathrm{lower}} \right), 
 \end{align*}
@@ -1638,23 +1632,22 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
  15 & - & 4 & depression & - \\ \hline
  2-30 & saturation & $1-1/e$ crossing of $A(\tau)$ & depression & - \\ \hline
 \end{tabular}}
-\caption[Literature review of CD embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range $200-256 Hz$.}
+\caption[Literature review of CD embedding parameters.]{Embedding dimension $m$ and time delay $\tau$ choices found across available literature, along with methods of their selection and particular use case. All the studies used sampling frequency in range 200-256 Hz.}
+\label{tab:litrev-cd}
 \end{table}
 
 In \cite{schmid1996indications}, the authors layed out fully automatic, albeit complicated, algorithm for selecting the embedding parameters. They suggest modelling correlation dimension biparametrically as a function of embedding dimension $m$ as $D_2(m) = b_0(1-e^{-b_1m})$, where $b_0$, $b_1$ are parameters. They call $m^* \coloneqq 1/b_1$ the unfolding dimension, since ``it represents the embedding dimension at which the attractor has unfolded up to $1/e$ of its full extent, namely, the asymptotic $D_2$ value: $b_0$'' \cite{schmid1996indications}. The optimal embedding dimension $m$ is selected as the next integer greater than the embedding dimension at which the exponential fit has approached 95\% of its expontial value $b_0$. The remaining studies used either threshold crossing of the autocorrelation function $A(\tau)$ or fixed value for selection of time delay $\tau$. Although \cite{pereda1998non} used $1/e$ as the threshold for the autocorrelation function, we found that the threshold $1-1/e$ results in better discrimination between studied groups using correlation dimension.
 
 % Most of the studies where $D_2$ has been estimated from an EEG signal omit the step of searching of the optimal scaling region. Indeed, as reviewed in \cite{andreas2000}, 
 
-In summary, our experiments show lack of scaling regions in local $D_2$, indicating that no theoretically meaningful interpretation of correlation dimension is possible. Similar behavior is observed in surrogate data, hence even the null hypothesis of a linear stochatic process cannot be rejected. Moreover, our automatic procedure fails to saturate - however, this may be due to limited amount of data. Many studies reviewed in \cite{andreas2000} failed to reveal finite embedding dimension on EEG data using the local slopes approach. The studies we examined all omitted the step of searching for optimal scaling region, and still succeeded in using $D_2$ for classification, simply by fitting the $C(r)$ curve. 
+In summary, our experiments show lack of scaling regions in local $D_2$, indicating that no theoretically meaningful interpretation of correlation dimension is possible. Similar behavior is observed in surrogate data, hence even the null hypothesis of a linear stochatic process cannot be rejected. Moreover, our automatic procedure fails to saturate - however, this may be due to limited amount of data. Many studies reviewed in \cite{andreas2000} failed to reveal finite embedding dimension on EEG data using the local slopes approach. The studies we examined all omitted the step of searching for optimal scaling region, and still succeeded in using $D_2$ for classification, simply by fitting the $C(r)$ curve. Table \ref{tab:litrev-cd} shows a summary of of the studies we examined.
 
 For these reasons, we decided to use the same approach (in addition to our automatic approach). We selected fixed pairs out of all combinations of the following values of $m=10, 15, 20, 25$ and $\tau=4, 8$ and computed correlation dimension for each sample with each pairs of embedding parameters by fitting the $\log C(r)$ against $\log r$ curve with a line using least squares fo values of $r$ geometrically progressing from $0.05$ to $10$. The most discriminative pairs of parameters were $m=15$, $\tau=4$, in accordance with our ILD algorithm. Moreover, we also computed correlation dimension for each sample using our automatic approach described above. For both, we used Theiler window $w_t = 50$.
 
-Another approach we tried, following the suggestion in \cite{andreas2000}, is to cut each sample into a number of small (overlapping) ``moving windows'', and perform the steps of estimating embedding parameters and computing correlation dimension for each of those windows. As we noted in \ref{sec:req-corr}, increasing the time series length is theoretically assumed to improve the estimates. On the other hand, shortening the time series may ameliorate the issue of apparent non-stationarity of EEG signal we observed in Section \ref{sec:corrdim-anal}, since for a short time intervals, the signal may be assumed approximately nonstationary \cite{andreas2000}.
+Another approach we evaluated, following the suggestion in \cite{andreas2000}, is to cut each sample into a number of small (overlapping) ``moving windows'', and perform the steps of estimating embedding parameters and computing correlation dimension for each of those windows. As we noted in \ref{sec:req-corr}, increasing the time series length is theoretically assumed to improve the estimates. On the other hand, shortening the time series may ameliorate the issue of apparent non-stationarity of EEG signal we observed in Section \ref{sec:corrdim-anal}, since for a short time intervals, the signal may be assumed approximately nonstationary \cite{andreas2000}.
 
 \subsection{Detrended Fluctuation Analysis} \label{sec:dfa-exp}
-For explanation of the concept of detrended fluctuation analysis, please see Section \ref{sec:dfa-theory}.
-
-To compute DFA, we used the method of fitting a scaling region on curve of log-fluctuations $\log F(n)$ against logorarithm of segment lengths $\log n$ (see (\ref{eq:dfa-fm})), as explained in Section \ref{sec:dfa-theory}. Following the suggestions in \cite{hardstone2012detrended}, we defined the set of segment lengths $n$ to be spread equidistantly on a logarithmic scale (by multiplying by factor 1.1), with the lower bound of $4$ (fitting a line through less points may be prone to error). The upper bound was gradually increased, until a scaling region appeared on the curve of $\log F(n)$ against $\log n$ (see Figure \ref{fig:dfa-fit}). This curve was then plotted across multiple channels and patients, to determine the interval where the scaling region usually appeared, and if an automatic procedure for finding a scaling region is necessary. However, the interval was approximately same for all samples, and appear for values of $n\in(50, 320)$.
+The concept of Detrended Fluctuation Analysis (DFA) was described in Section \ref{sec:dfa-theory}. To compute it, we used the method of fitting a scaling region on curve of log-fluctuations $\log F(n)$ against logorarithm of segment lengths $\log n$ (see (\ref{eq:dfa-fm})), as explained in Section \ref{sec:dfa-theory}. Following the suggestions in \cite{hardstone2012detrended}, we defined the set of segment lengths $n$ to be spread equidistantly on a logarithmic scale (by multiplying by factor 1.1), with the lower bound of $4$ (fitting a line through less points may be prone to error). The upper bound was gradually increased, until a scaling region appeared on the curve of $\log F(n)$ against $\log n$ (see Figure \ref{fig:dfa-fit}). This curve was then plotted across multiple channels and patients, to determine the interval where the scaling region usually appeared, and if an automatic procedure for finding a scaling region is necessary. However, the interval was approximately same for all samples, and appear for values of $n\in(50, 320)$.
 
 \begin{figure} 
 \centering
@@ -1664,11 +1657,9 @@ To compute DFA, we used the method of fitting a scaling region on curve of log-f
 \label{fig:dfa-fit}
 \end{figure}
 
-Moreover, following the suggestions in \cite{hardstone2012detrended}, we tried computing DFA of the envelope of the signal band-pass filtered to each one of alpha (8-13 Hz), beta (16-37 Hz), and theta (4-7 Hz) frequencies, which were all found to be associated with depression \cite{lee2007detrended, bachmann2013, linkenkaer2005breakdown}. The bounds of the scaling region were modified using the method above to $r \in (4, 100)$. However, for DFA estimates obtained using this method, we obtained no significant differences between the studied groups using the tests performed in Section \ref{sec:distanal}.
+Moreover, following the suggestions in \cite{hardstone2012detrended}, we evaluated DFA computed from the envelope of the signal band-pass filtered to each one of alpha (8-13 Hz), beta (16-37 Hz), and theta (4-7 Hz) frequencies, which were all found to be associated with depression \cite{lee2007detrended, bachmann2013, linkenkaer2005breakdown}. The bounds of the scaling region were modified using the method above to $r \in (4, 100)$. However, for DFA estimates obtained using this method, we obtained no significant differences between the studied groups using the tests performed in Section \ref{sec:distanal}.
 \subsection{Hurst Exponent} \label{sec:hurst-exp}
-For explanation of the concept of Hurst exponent, please see Section \ref{sec:hurst-theory}.
-
-Maybe surprisingly, most of the literature omits discussions of their choice of the values $n$ for which to calculate the scaled range $(R/S)_n$. However, we may expect that higher values of subinterval lengths $n$ will result in smaller number of subsequences $d$, and thus less precise estimate of the mean $(R/S)_n$ in (\ref{eq:hurst-mean}). This effect will also be increasingly pronounced with decreasing original time series length $N$. Indeed, in Figure \ref{fig:hurst-fit}, which shows the mean rescaled ranges $(R/S)_n$ as a function of the subsequence length $n$ (both axes are logarithmically scaled) for all electrodes and of the measurements, we may observe larger fluctuations for larger values of $n$, likely because of increasing uncertainty due to this effect. It has been observed that small $n$ also lead to large deviations from the linear slope \cite{weron2002estimating}, because the relationship (\ref{eq:resc-range}) is asymptotic, and thus valid only for large $n$. However, in our case, we have not encountered this phenomenon. Therefore, we have decided to compute the Hurst exponent as the slope of the log $R/S$ curve for the values if $n\in(0,20)$ spaced equidistantly on the logarithmic scale.
+Hurst Exponent (HE) was described in Section \ref{sec:dfa-theory}. As far as we know, the literature regarding HE estimation omits description of the chosen values $n$ for which to calculate the scaled range $(R/S)_n$. However, we may expect that higher values of subinterval lengths $n$ will result in smaller number of subsequences $d$, and thus less precise estimate of the mean $(R/S)_n$ in (\ref{eq:hurst-mean}). This effect will also be increasingly pronounced with decreasing original time series length $N$. Indeed, in Figure \ref{fig:hurst-fit}, which shows the mean rescaled ranges $(R/S)_n$ as a function of the subsequence length $n$ (both axes are logarithmically scaled) for all electrodes, we may observe larger fluctuations for larger values of $n$, likely because of increasing uncertainty due to this effect. It has been observed that small values of $n$ also lead to large deviations from the linear slope \cite{weron2002estimating}, because the relationship (\ref{eq:resc-range}) is asymptotic, and thus valid only for large $n$. Nonetheless, in our case, we have not encountered this phenomenon. Therefore, we have decided to compute the Hurst exponent as the slope of the log $R/S$ curve for the values if $n\in(0,20)$ spaced equidistantly on the logarithmic scale.
 
 \begin{figure} 
 \centering
@@ -1686,9 +1677,7 @@ Maybe surprisingly, most of the literature omits discussions of their choice of 
   \caption[Dependance of HFD on $k_{\mathrm{max}}$ parameter.]{Figure on the left hand side shows values of Higuchi fractal dimension as a function of $k_{\mathrm{max}}$ parameter for all channels of patient number 75, second session. We can see that HFD values plateau for $k_{\mathrm{max}} > 200$ for all channels. On the other hand, variance among channels disappears. Figure on the right hand side shows logarithm of mean curve length $L(k)$ as a function of $\log k$. There is a clear linear trend with slight fluctuations for higher values of $k$.}
 \label{fig:hfd-anal}
 \end{figure}
-For explanation of the concept of Higuchi fractal dimension, please see Section \ref{sec:hfd-theory}.
-
-The algorithm for estimating Higuchi fractal dimension, as described Section \ref{sec:hfd-theory}, requires selecting the values $k$ for which $L(k)$ is to be computed. Since this can be done relatively fast, we do this by selecting values equidistant on logarithmic scale $k_1, k_2, \dots, k_{\mathrm{max}}$, where $k_{\mathrm{max}}$ is the single input parameter. Inded, in this, we follow most of the studies we evaluated.
+The algorithm for estimating Higuchi Fractal Dimension (HFD), as described Section \ref{sec:hfd-theory}, requires selecting the values $k$ for which $L(k)$ is to be computed. Since this can be done relatively fast, we do this by selecting values equidistant on logarithmic scale $k_1, k_2, \dots, k_{\mathrm{max}}$, where $k_{\mathrm{max}}$ is the single input parameter. Indeed, by using this approach, we follow most of the studies we evaluated.
 
 It has been suggested that the parameter $k_{\mathrm{max}}$ can be selected by plotting values of HFD as a function of $k_{\mathrm{max}}$, and selecting the value of $k_{\mathrm{max}}$ where the values of HFD plateau. Our results can be seen in Figure \ref{fig:hfd-anal}. 
 
@@ -1700,10 +1689,10 @@ In \cite{bachmann2013}, the authors computed HFD for each patient as follows. Th
   \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-$\mathbf{k_{\mathrm{max}}}$ & \textbf{Sampling Frequency} & \textbf{Recording Time} & \textbf{Application} & \textbf{Reference} \\ \hline
-30 & 256 Hz & 5 min & depression & \cite{hosseinifard2013} \\ \hline
-50 & 256 Hz & 5 s & depression & \cite{bachmann2013} \\ \hline
-48 & 169.55 Hz & 5 min & depression & \cite{gomez2009use} \\ \hline
+$\mathbf{k_{\mathrm{max}}}$ & \textbf{Sampling Frequency} (Hz) & \textbf{Recording Time} & \textbf{Application} & \textbf{Reference} \\ \hline
+30 & 256 & 5 min & depression & \cite{hosseinifard2013} \\ \hline
+50 & 256 & 5 s & depression & \cite{bachmann2013} \\ \hline
+48 & 169.55 & 5 min & depression & \cite{gomez2009use} \\ \hline
 \end{tabular}
 \caption[Literature review of choice for HFD $k_{\mathrm{max}}$ parameter.]{Summary of choices for the $k_{\mathrm{max}}$ parameter for Higuchi fractal dimension applied to EEG we found across literature.}
 \end{table}
@@ -1716,10 +1705,7 @@ $\mathbf{k_{\mathrm{max}}}$ & \textbf{Sampling Frequency} & \textbf{Recording Ti
   \caption[Histograms of distances in embedding space.]{Histograms of pairwise distances between vectors in embedding space for gradually increasing embedding dimension $m$. The vertical red line indicates the value of the tolerance parameter $r=0.2*\sigma(x)$. We can see histograms shifting to the right with increasing embedding dimension and progressively overlapping more. This means that for high embedding dimensions, sample entropy will be small for any value of tolerance parameter $r$.}
 \label{fig:se-anal}
 \end{figure}
-
-For explanation of the concept of sample entropy, please see Section \ref{sec:se-theory}.
-
-Embedding dimension $m$ is usually set to 1 or 2 and tolerance parameter $r$ is usually set at $0.1*\sigma(x)$ to $0.25*\sigma(x)$ \cite{jie2014emotion}. As can be seen in Table \ref{tab:se-exp}, in all of the studies we evaluated, in spite of various applications and time series lengths, the same values were selected for $m$ and $\tau$, in particular, $m=2$ and $r=0.2*\sigma(x)$, where $\sigma(x)$ denotes standard deviation of the original time series. In Figure \ref{fig:se-anal}, we can see why this is a reasonable choice. It shows histograms of pairwise distances in the embedding space for two successive embedding dimensions. With increasing embedding dimension, the histograms gradually overlap more, and for very high embedding dimensions, sample entropy becomes small for any $r$. Moreover, the histograms shift to the right, which necessitates higher value of $r$, but $r$ is a measure of the degree to which vectors are judged ``similar'', and thus should be kept low - for $r \geq \max_{i\in\{1,2,\dots,N\}} x_i$, all vectors be counted in both embedding spaces and sample entropy is (approximately) zero.\footnote{The lowest value sample entropy can reach is $-\ln(2/\left( (N-m-1)(N-m)\right))$ \cite{richman2000physiological}.} For these reasons, we decided to follow the concensus, and selected $m=2$ and $r=0.2*\sigma(x)$.
+The algorithm for computing sample entropy, described in Section \ref{sec:se-theory}, requires selection of the embedding dimension $m$ and the tolerance parameter $r$. Embedding dimension $m$ is usually set to 1 or 2 and tolerance parameter $r$ is usually set at $0.1*\sigma(x)$ to $0.25*\sigma(x)$ \cite{jie2014emotion}. As can be seen in Table \ref{tab:se-exp}, in all of the studies we evaluated, in spite of various applications and time series lengths, the same values were selected for $m$ and $\tau$, in particular, $m=2$ and $r=0.2*\sigma(x)$, where $\sigma(x)$ denotes standard deviation of the original time series. In Figure \ref{fig:se-anal}, we can see why this is a reasonable choice. It shows histograms of pairwise distances in the embedding space for two successive embedding dimensions. With increasing embedding dimension, the histograms gradually overlap more, and for very high embedding dimensions, sample entropy becomes small for any $r$. Moreover, the histograms shift to the right, which requires higher value of $r$, but $r$ is a measure of the degree to which vectors are judged ``similar'', and thus should be kept low - for $r \geq \max_{i\in\{1,2,\dots,N\}} x_i$, all vectors will be counted in both embedding spaces and sample entropy is (approximately) zero.\footnote{The lowest value sample entropy can reach is $-\ln(2/\left( (N-m-1)(N-m)\right))$ \cite{richman2000physiological}.} For these reasons, we decided to follow the general concensus, and selected $m=2$ and $r=0.2*\sigma(x)$~\cite{hauge2011nonlinear, acharya2015novel, jie2014emotion, song2012automatic, acharya2012automated, mahajan2015unsupervised}.
 
 \begin{table}[tbp]
   \centering
@@ -1737,7 +1723,7 @@ $0.2 * \sigma(x)$ & 2 & 250 Hz & 60 s & depression & - \\ \hline
 \caption[Literature review of SE $r$ and $m$ parameters.]{Summary of choices for the embedding dimension $m$ and tolerance $r$ parameters for sample entropy applied to EEG signals we found across literature. Note that all choices for $m$ and $r$ are the same.}
 \label{tab:se-exp}
 \end{table}
-\subsection{Frequency band amplitudes} \label{sec:band-ampl}
+\subsection{Frequency Band Amplitudes} \label{sec:band-ampl}
 We also analyzed mean frequency amplitudes in alpha, beta, gamma, delta and theta frequency bands, and found no differences between the studied groups. See Figure \ref{fig:mba}.
 
 \begin{figure} 
@@ -1748,10 +1734,42 @@ We also analyzed mean frequency amplitudes in alpha, beta, gamma, delta and thet
 \label{fig:mba}
 \end{figure}
 
-\subsection{Surrogate Analysis} \label{sec:surrogate-analysis}
-As mentioned in Section \ref{sec:surrogate-analysis-theory}, surrogate analysis for high condifence levels requires generating surrogate dataset tens of times larger than the original dataset, and computing corresponding nonlinear measures for these surrogate signals. To achieve confidence level $\alpha = 95 \%$ for our dataset, this translates to generating $266*19*38 = 192052$ surrogate samples and computing on them each nonlinear measure considered in our study. Since nonlinear algorithms considered (described in the preceding subsections) are relatively computationally expensive, performing surrogate analysis for all measures and all patients is computationally infeasible. Thus, we analyzed each algorithm (with varying parameters) on a single recording (patient number 75, second session), using 19 surrogate samples. For generating the surrogate data, we used the iAAFT algorithm described in Section \ref{sec:iaaft}. Note that to perform this as a test of nonlinearity, we have to assume that the choice of embedding parameters for the algorithms is correct.
+\subsection{Summary of Parameters}
+In this section, we described our process for selecting the parameters used for computation of the nonlinear measures. In the rest of this chapter, all presented results were obtained using the values of nonlinear measures computed in manner described above. For the purpose of clarity, in Table \ref{tab:paramsum}, we include the summary of the selected parameters.
+\begin{table}[tbp]
+\centering
+\begin{tabular}[t]{|c|c|c|}
+\hline
+\textbf{Measure} & \textbf{Parameter} & \textbf{Value} \\ \hline
+LLE              & $m$                & 10             \\ \cline{2-3}
+                 & $\tau$             & 3              \\ \cline{2-3}
+                 & $w_t$              & 50             \\ \cline{2-3}
+                 & $t_e$              & 30             \\ \hline
+CD               & $m$                & 15             \\ \cline{2-3}
+                 & $\tau$             & 4              \\ \cline{2-3}
+                 & $w_t$              & 50             \\ \cline{2-3}
+                 & metric             & Chebyshev      \\ \cline{2-3}
+                 & $r$                & GP on $(0.05,10)$ \\ \hline
+\end{tabular}
+\begin{tabular}[t]{|c|c|c|}
+\hline
+\textbf{Measure} & \textbf{Parameter} & \textbf{Value} \\ \hline
+DFA              & $n$                & GP on $(4,320)$   \\ \cline{2-3}
+                 & offset             & 50             \\ \cline{2-3}
+                 & segment overlap    & 50\%           \\ \hline
+HE               & $n$                & GP on $(0,20)$   \\ \hline
+HD               & $k_{\mathrm{max}}$ & 50   \\ \hline
+SE               & $m$                & 2   \\ \cline{2-3}
+                 & $r$                & $0.2*\sigma(x)$   \\ \hline
+\end{tabular}
+\caption[Summary of parameters.]{Summary of parameters used for computation of the nonlinear measures. The abbrevation GP refers to geometric progression.}
+\label{tab:paramsum}
+\end{table}
 
-An example of a result of such analysis for the largest Lyapunov exponent (embedding dimension 10, time delay 3) can be seen in Figure \ref{fig:surr-lyap}; the results for other measures were similar. First, we can observe that the distribution of the values computed for the surrogate data does not seem normal for all channels. As mentioned in Section \ref{sec:surrogate-analysis-theory}, this increases the required value sigma to achieve the same confidence, or requires performing a rank based test. It can be easily observed, then, that based on the rank based test, the hypothesis of a linear stochastic process cannot be rejected on (admittedly relatively low) confidence level $\alpha = 1 - 2/(19+1) = 90 \%$ for all channels except FP2, C4, T4, Pz. Obviously, does not necessarily imply that that the process underlying corresponding time series is stochastic, because, for example, there still may be other nonlinear measures (or different choice of embedding parameters) which can discriminate between the original time series and the surrogate data. Neither does it suggest that the choice of embedding parameters is incorrect, because the process underlying corresponding time series may be stochastic. It is simply a failed attempt at disproving the null hypothesis of a stochastic linear process. Moreover, all our analyses concerned only a single patient.
+\subsection{Surrogate Analysis} \label{sec:surrogate-analysis}
+As mentioned in Section \ref{sec:surrogate-analysis-theory}, surrogate analysis for high condifence levels requires generating surrogate dataset tens of times larger than the original dataset, and computing corresponding nonlinear measures for these surrogate signals. For instance, to achieve confidence level $\alpha = 95 \%$ for our dataset, this translates to generating $266*19*38 = 192052$ surrogate samples and computing on them each nonlinear measure considered in our study. Since nonlinear algorithms considered (described in the preceding subsections) are relatively computationally expensive, performing surrogate analysis for all measures and all patients is computationally infeasible. Thus, we analyzed each algorithm (with varying parameters) on a single recording (patient number 75, second session), using 19 surrogate samples. For generating the surrogate data, we used the iAAFT algorithm described in Section \ref{sec:iaaft}. Note that to perform this as a test of nonlinearity, we have to assume that the choice of embedding parameters for the algorithms is correct.
+
+An example of a result of such analysis for the largest Lyapunov exponent (embedding dimension 10, time delay 3) can be seen in Figure \ref{fig:surr-lyap}; the results for other measures were similar. First, we can observe that the distribution of the values computed for the surrogate data does not seem normal for all channels. As mentioned in Section \ref{sec:surrogate-analysis-theory}, this increases the required value sigma to achieve the same confidence, or requires performing a rank based test. It can be easily observed, then, that based on the rank based test, the hypothesis of a linear stochastic process cannot be rejected on (admittedly relatively low) confidence level $\alpha = 1 - 2/(19+1) = 90 \%$ for all channels except FP2, C4, T4, Pz. Obviously, does not necessarily imply that the process underlying corresponding time series is stochastic, because, for example, there still may be other nonlinear measures (or different choice of embedding parameters) which can discriminate between the original time series and the surrogate data. Neither does it suggest that the choice of embedding parameters is incorrect, because the process underlying corresponding time series may be stochastic. It is simply a failed attempt at disproving the null hypothesis of a stochastic linear process. Moreover, all our analyses concerned only a single patient.
 
 \begin{figure} 
 \centering
@@ -1760,8 +1778,9 @@ An example of a result of such analysis for the largest Lyapunov exponent (embed
   \caption[Example distribution of $\lambda_1$.]{Example distribution of the largest Lyapunov exponent (embedding dimension 10, time delay 3) for 19 surrogate samples and the original for all channels. The number next to each channel name represents the confidence in sigma, computed as in equation \ref{eq:sigma}.}
 \label{fig:surr-lyap}
 \end{figure}
+\subsection{Nonstationarity}
+To reduce the effects of possible nonstationarity, we attempted to find the most stationary window of the desired length using the stationarity test described in Section \ref{sec:stationarity}. However, we found that selecting the least stationary window using this test did not improve the results as measured by the surrogate data analysis in Section \ref{sec:surrogate-analysis}. This may be beacause the optimal effectiveness of AAFT and iAAFT the first and last point of the window should have the same value \cite{andreas2000}. Moreover, selecting a different time window for each channel may result in inaccurate representation of the mental state by the vector of measures computed across channels. Therefore, it may be beneficial to use the same time window for all channels. If the results are dependent on the time during recording, then it would be advisable to select a fixed time window for all samples. Thus, we decided to skip this window selection step and pick a fixed time window for all channels and all recordings.
 \section{Analysis of Measure Distributions between Groups} \label{sec:distanal}
-% In this section, we compare the differences between various subgroups in the dataset with measure values obtained using the methods described in the previous section. The hyperparameters we used in this section, summarized in Table , are the same as used in the classification tasks.
 \subsection{Before and After Treatment Groups}
 As the first step of our analysis, we conducted an investigation of the differences in the nonlinear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time.\add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient recieved personalized method of treatment, and the methods may have differing impact.
 
@@ -1780,7 +1799,7 @@ First, we looked at histograms of computed measures between the two groups. Ther
 
 Moreover, we investigated the differences in the distributions using Kruskal-Wallis test. Table \ref{tab:depmeans} in the Appendix shows the results. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
 
-Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for all remaining features except for correlation dimension. Of course, these results are expected given the previous observations\unsure{Is this true?}. However, the correlation becomes less significant when the classes are extended to include more recordings. We also visualized correlations of individual measures to the labels on topographic scalp in Figure \ref{fig:scalp-corrs}.
+Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for all remaining features except for correlation dimension. Of course, these results are expected given the previous observations\unsure{Is this true?}. We also visualized correlations of individual measures to the labels on topographic scalp in Figure \ref{fig:scalp-corrs}.
 
 \begin{figure} 
 \centering
@@ -1825,7 +1844,7 @@ Moreover, we also compared before and after treatment recordings of responding, 
 Of course, analyzing effectivity of treatment is difficult problem, and we realize the many limitations of this analysis. For example, many variables, including age, sex, starting depression score, behavioral changes occuring in the interim period and the kind of treatment, were not accounted for. Moreover, many of the patients selected as nonresponding actually improved their symptoms slightly. In fact, symptoms of only 9 patients of the whole dataset worsened or stayed stagnant. No significant differences between before and after treatment recordings of these ``strictly'' nonresponding patients, were found. Thus, one possibility of strengthening the differences between the responding and nonresponding groups may be to include the after treatment recordings for the ``strictly'' nonresponding group to the nonresponding group. However, we decided against doing this, because some differences in the before and after treatment groups for the ``strictly'' nonresponding patients may have remained insignificant due to small size of this group.
 
 \section{Results} \label{sec:results-nl}
-We used two classifiers: logistic regression (LR) and support vector machine (SVM). One third of randomly selected samples was held out as a test set, the rest was used for training and cross validation. Feature selection was performed on LR with regularization strength 1 and SVM with regularization strenth 1 and linear kernel (i.e. $k(\vec{x_1}, \vec{x_2}) = \vec{x_1} \cdot \vec{x_2}$) using
+We used two classifiers: Logistic Regression (LR) and Support Vector Machine (SVM). One third of randomly selected samples was held out as a test set, the rest was used for training and cross validation. Feature selection was performed on LR with regularization strength 1 and SVM with regularization strength 1 and linear kernel (i.e. $k(\vec{x_1}, \vec{x_2}) = \vec{x_1} \cdot \vec{x_2}$) using
 \begin{itemize}
   \item recursive feature elimination with 3-fold cross validation based on coefficients of the linear model,
   \item elimination of features with below-mean coefficients of the linear model,
