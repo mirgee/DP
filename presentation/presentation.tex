@@ -112,9 +112,9 @@
             \item<2-> 133 patients
             \item<3-> EEG recordings
               \begin{itemize}
-                \item 19 channels
                 \item 250 Hz or 1000 Hz
                 \item Various duration
+                \item 19 channels
               \end{itemize}
               \item<4-> Metadata
                   \begin{itemize}
@@ -305,7 +305,7 @@ for tree={
 
 %------------------------------------------------
 
-\begin{frame}[t]{Embedding Parameter Estimation}
+\begin{frame}[t]{Estimation of Embedding Parameters}
   \centering{\includegraphics[width=\linewidth]{./Images/75b3.png}}
   \begin{columns}
     \column{0.5\textwidth}
@@ -329,6 +329,51 @@ for tree={
   \centering{\scriptsize{-> automated procedure}}
 \end{frame}
 
+%----------------------------------------------------------------------------------------
+
+\begin{frame}[noframenumbering]{Correlation of DFA with DS}
+  \centering
+  \begin{figure}[tbp]
+    \centering
+    \includegraphics[width=\linewidth]{../Images/dists/dfadepcorr.png}
+    % \caption{Correlation of DFA with DS}
+  \end{figure}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\begin{frame}[noframenumbering]{Correlation of LLE with DS}
+  \centering
+  \begin{figure}[tbp]
+    \centering
+    \includegraphics[width=\linewidth]{../Images/dists/lyapdepcorr.png}
+    % \caption{Correlation of DFA with DS}
+  \end{figure}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\begin{frame}[noframenumbering]{Correlations with DS}
+  \centering
+  \begin{figure}[tbp]
+    \centering
+    \includegraphics[width=\linewidth]{../Images/scalp_corr.png}
+    % \caption{Correlation of DFA with DS}
+  \end{figure}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\begin{frame}[noframenumbering]{Correlations with response}
+  \centering
+  \begin{figure}[tbp]
+    \centering
+    \includegraphics[width=\linewidth]{../Images/scalp_corr_change.png}
+    % \caption{Correlation of DFA with DS}
+  \end{figure}
+\end{frame}
+
+
 %------------------------------------------------
 
 \begin{frame}{Results}
@@ -337,19 +382,19 @@ for tree={
 % \ssmall
 \fontsize{7pt}{10pt}
 \selectfont
-  \parbox{0.495\linewidth}{
+\parbox[t]{0.495\linewidth}{
 \centering
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}[t]{|c|c|c|c|}
 \hline
 \textbf{Measure} & \textbf{Classifier} & \multicolumn{2}{c}{\textbf{Accuracy}} \vline \\ \hline
 & & \textbf{Mean} & \textbf{Std} \\ \hline
-LLE, CD & SVM (lin.) & \textbf{0.74} & 0.04 \\ \hline 
-LLE, SE & SVM (lin.) & 0.75 & 0.10 \\ \hline 
+\textbf{LLE, CD} & SVM (lin.) & \textbf{0.74} & 0.04 \\ \hline 
+\textbf{LLE, SE} & SVM (lin.) & \textbf{0.75} & 0.10 \\ \hline 
 LLE, HE & SVM (lin.) & 0.73 & 0.06 \\ \hline 
 LLE, SE, DFA & SVM (lin.) & 0.73 & 0.09 \\ \hline 
 CD, HD & LR & 0.73 & 0.10 \\ \hhline{=|=|=|=}
-LLE & SVM (lin.) & \textbf{0.72} & 0.04 \\ \hline
-CD & SVM (lin.) & 0.71 & 0.05 \\ \hline 
+\textbf{LLE} & SVM (lin.) & \textbf{0.72} & 0.04 \\ \hline
+\textbf{CD} & SVM (lin.) & \textbf{0.71} & 0.05 \\ \hline 
 SE & LR & 0.68 & 0.12 \\ \hline
 HD & SVM (rbf) & 0.67 & 0.11 \\ \hline
 DFA & LR & 0.67 & 0.16 \\ \hline
@@ -358,22 +403,27 @@ HE & LR & 0.67 & 0.17 \\ \hline
 \subcaption{Current DS}
 }
 \hfill
-  \parbox{0.495\linewidth}{
+\parbox[t]{0.495\linewidth}{
 \centering
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}[t]{|c|c|c|c|}
 \hline
 \textbf{Measure} & \textbf{Classifier} & \multicolumn{2}{c}{\textbf{Accuracy}} \vline \\ \hline
 & & \textbf{Mean} & \textbf{Std} \\ \hline
-LLE, CD & SVM (lin.) & \textbf{0.75} & 0.11 \\ \hline 
-LLE, SE & SVM (lin.) & 0.75 & 0.10 \\ \hhline{=|=|=|=}
-LLE & LR & \textbf{0.71}  & 0.08 \\ \hline 
-CD & LR & 0.67 & 0.09 \\ \hline
+\textbf{LLE, CD} & SVM (lin.) & \textbf{0.75} & 0.11 \\ \hline 
+\textbf{LLE, SE} & SVM (lin.) & \textbf{0.75} & 0.10 \\ \hhline{=|=|=|=}
+\textbf{LLE} & LR & \textbf{0.71}  & 0.08 \\ \hline 
+\textbf{CD} & LR & \textbf{0.67} & 0.09 \\ \hline
 HD & LR & 0.66 & 0.05 \\ \hline
 SE & LR & 0.66 & 0.09 \\ \hline
 DFA & SVM (lin.) & 0.64 & 0.15 \\ \hline
 HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 \end{tabular}
 \subcaption{Response prediction}
+\ssmall
+\begin{itemize}
+  \item 60 s samples
+  \item 5f-CV on 100 recordings
+\end{itemize}
 }
 \end{table}
 \end{frame}
@@ -407,22 +457,22 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 
 %------------------------------------------------
 
-\begin{frame}{Architecture Design - Shallow}
+\begin{frame}[noframenumbering]{Architecture Design - Shallow}
   \centering
   \includegraphics[width=0.6\linewidth]{./Images/shal.png}
 \end{frame}
 
 %------------------------------------------------
 
-\begin{frame}{Architecture Design - Deep}
+\begin{frame}[noframenumbering]{Architecture Design - Deep}
   \centering
-  \includegraphics[width=0.4\linewidth]{./Images/deep.png}
+  \includegraphics[width=0.5\linewidth]{./Images/deep.png}
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}{Results}
-\begin{table}[tbp]
+\begin{table}[t]
 \centering
 \scriptsize
   \parbox{0.495\linewidth}{
@@ -463,6 +513,19 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 % \label{tab:depcl}
 }
 \end{table}
+\begin{table}[t]
+\centering
+\ssmall
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Dataset} & \multicolumn{2}{c}{\textbf{DEP}} \vline & \multicolumn{2}{c}{\textbf{RES}} \vline \\ \hline
+& \textbf{Neg.} & \textbf{Pos.} & \textbf{Neg.} & \textbf{Pos.} \\ \hline
+Training & 3278 & 3230 & 2684 & 2705 \\ \hline 
+Validation & 826 & 802 & 686 & 662 \\ \hline 
+Test & \textbf{1038} & \textbf{997} & \textbf{830} & \textbf{855} \\ \hline 
+\end{tabular}
+\caption{\ssmall{1 s samples}}
+\end{table}
 \end{frame}
 
 %----------------------------------------------------------------------------------------
@@ -476,14 +539,23 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 \begin{frame}{Summary}
     \centering
     \begin{enumerate}
-        \item<1-> NL measures are potentially effective methods for depression diagnosis and prognosis {\scriptsize(despite nonstationarity)}
+        \item<1-> NL measures seem to be effective
+          \begin{enumerate}
+            \item depression biomarkers {\scriptsize(despite nonstationarity)}
+            \item predictors of treatment response 
+          \end{enumerate}
         \item<2-> LLE, CD and SE seem most discriminative {\scriptsize (out of evaluated)}
-        \item<3-> FBCSP-inspired CNN models seem effective
-        % \item<4-> {\scriptsize ILD seems most effective embedding parameters estimation algorithm {\scriptsize(out of evaluated)}}
+        \item<3-> FBCSP-inspired CNN models seem highly effective for
+          \begin{enumerate}
+            \item assesment of depression severity
+            \item prediction of treatment response
+          \end{enumerate}
         \item<4-> {\scriptsize RP and CS do not seem effective data encoding methods for EEG analysis}
+        \item<4-> {\scriptsize \dots}
     \end{enumerate}
     
 \end{frame}
+
 
 %------------------------------------------------
 
@@ -533,6 +605,9 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
         \end{itemize}
   \end{columns}
 \end{frame}
+\appendix
+
+%------------------------------------------------
 
 %------------------------------------------------
 
@@ -551,12 +626,4 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 %----------------------------------------------------------------------------------------
 %	 CLOSING/SUPPLEMENTARY SLIDES
 %----------------------------------------------------------------------------------------
-
-% \appendix
-
-%\begin{frame}{Backup Slides}
-%\end{frame}
-
-%----------------------------------------------------------------------------------------
-
 \end{document}
