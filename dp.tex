@@ -32,7 +32,7 @@
 \usepackage{color}   %May be necessary if you want to color links
 \usepackage{hyperref}
 \hypersetup{%
-    colorlinks,
+    colorlinks=false,
     linktoc=all
     linkcolor={red!50!black},
     citecolor={blue!50!black},
@@ -353,6 +353,8 @@ Artificial Intelligence Center, FEE, CTU Prague
 
 \renewcommand{\nomname}{List of Symbols}
 
+\newcommand{\spatcell}[2][c]{\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
 \mbox{}
 \nomenclature{$A(\tau)$}{Autocorrelation of a time series as a function of time delay.}
 \nomenclature{$\tau$}{Time delay.}
@@ -367,7 +369,7 @@ Artificial Intelligence Center, FEE, CTU Prague
 % \nomenclature{$N_{(m, \tau)}$}{Length of a trajectory in the reconstruction with embedding dimension $m$ and time delay $\tau$} 
 \nomenclature{$R_A$}{Radius of the attractor.}
 \nomenclature{$\Phi$}{Embedding function.}
-\nomenclature{$t_s, \delta t$}{Sampling time.}
+\nomenclature{$t_s, \Delta t$}{Sampling time.}
 \nomenclature{$f_s$}{Sampling frequency.}
 \nomenclature{$N_{(m,\tau)}$}{Number of vectors in time-delay reconstrution with embedding dimension $m$ and time delay $\tau$.}
 
@@ -384,35 +386,41 @@ Artificial Intelligence Center, FEE, CTU Prague
 \pagenumbering{arabic} % restart page numbers at one, now in arabic style
 \chapter{Introduction}
 \section{Depression and its Diagnosis}
+\info[inline]{Does this section say enough on the most important background to understand the focus?}
+
 Depression is one of the most common brain disorders - it affects 121-300 million people worldwide, and this number is expected to increase in the future~\cite{rodriguez2015, whodepression}. It is estimated that over 20 million people in the United States alone have this mood disorder, but only 50\% have been diagnosed~\cite{smith2013diagnosis}. Although effective treatments are known, World Health Organization (WHO) estimates that fewer than half of affected individuals receive those treatments. According to WHO, major barriers include insufficient resources, lack of properly trained practitioners, inaccurate assessment and misdiagnosis~\cite{whodepression}. Moreover, the diagnosis is further complicated by the fact that depressive symptoms often mimic other disorders, and coexisting conditions may confound diagnosis~\cite{smith2013diagnosis}. Indeed, self-assessed questionnaires are often inaccurate, and structured or semi-structured interviews (SDIs) require time and expertise of trained professionals. 
 
 For these reasons, it is important that affordable, fast, accurate, and easy to use methods to aid its diagnosis are developed. Electroencephalography (EEG)\footnote{In this work, we will use the same abreviation for electroencephalography (recording method) and electroencephalographam (the recorded data) where the distinction is apparent from the context.}, a method of recording spatiotemporal evolution of electrical activity in the cortical regions near the scalp, may be one such method thanks to its comparatively low-cost and easy recording process. Unlike SDIs and laboratory methods such as dexamethasone suppression test, it assesses ongoing activity in the responsible organ itself. Moreover, unlike glucose utilization or blood oxygenation, it captures the electrical activity directly~\cite{olbrich2013eeg}. All these properties make EEG excellent tool for development of biomarkers - objectively measurable indicators of the biological state.
 
 \section{Problem Statement and Objective}
+\info[inline]{Does this section say enough on the the focus, value, and objectives?}
 In spite of the aforementioned advantages, EEG signal analysis still remains relatively unpopular method of depression diagnosis aid in contrast with SDIs. This may be, in part, due to insufficient standardization of research, lack of objective interpretation of findings, and relatively small volume of small datasets impeding the possibility of meaningful interpretations or meta-studies~\cite{olbrich2013eeg}. The broad objective of this thesis is to contribute positively to this unfortunate state of an important area by comparing two relatively successful approaches of depression diagnosis using EEG signals on relatively large dataset.
 
-This dataset comprises 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions - before drug administration and, 4 weeks later, after drug administration. Before each recording, patient's mental health status was assessed using standardized questionnaire by a trained professional, and quantified into a depression score. \footnote{For more details about the dataset, see Section \ref{sec:dataset}.} Using these recordings and depression scores, we set out two goals:
+This dataset comprises 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions - before drug administration and, 4 weeks later, after drug administration. Before each recording, patient's mental health status was assessed by a trained professional using standardized questionnaire, and quantified into a depression score.\footnote{For more details about the dataset, see Section \ref{sec:dataset}.} Using these recordings and depression scores, we set out two goals:
+% Maybe clarify we turned it into classification task
 \begin{description}
   \item[diagnosis]: predict the patients depression level based on short EEG signal sample at the time of recording, and
   \item[prognosis]: predict the future depression level based on short EEG signal sample.
 \end{description}
-For this purpose, we used two methods previously shown to be relatively successful in this and similar tasks:
+For this purpose, we used two methods approaches shown to be relatively successful at this and similar tasks:
 \begin{description}
   \item[nonlinear analysis approach]: compute nonlinear measures using nonlinear dynamical system analysis of the EEG signals, and use standard machine learning techniques to predict the patient's current or future depression level, and
   \item[deep learning approach]: use convolutional neural networks to both extract feature representations directly from the EEG signals, and predict the patients current or future depression level.
 \end{description}
+% Maybe add a little detail about that we then evaluated the results and say add \ref{fig:diagram} 
 
 \section{Text Organization}
 In \textbf{Chapter 1}, we present some of the classical theory and methods of nonlinear dynamical analysis and chaos theory, with focus on the concepts relied on in the following chapter.
 
 In \textbf{Chapter 2}, we present the results of our nonlinear dynamical system analysis approach, including estimation of embedding parameters such as embedding dimension and time delay, and classification results.
 
-In \textbf{Chapter 3}, we present the results of our deep learning approach, including short description of convolutional neural networks (CNNs), a method which inspired our choice of CNN architecture called Common Spatial Patterns, and classification results.
+In \textbf{Chapter 3}, we present the results of our deep learning approach, including short description of Convolutional Neural Networks (CNNs), a technique which inspired our choice of CNN architecture called Common Spatial Patterns, and classification results.
 
 In the final chapter, we conclude with summary of our results, and potential avenues and directions for future work.
 
 % \addcontentsline{toc}{chapter}{Introduction}
 
+% Add links to chapters
 \pgfkeys{/forest,
   my rounded corners/.append style={rounded corners=2pt},
 }
@@ -462,24 +470,24 @@ for tree={
         }{}%
       },
   }
-  [EEG Signals with Metadata, 
-    [Nonlinear Analysis
-      [Preprocessing\\\scriptsize{labelling, curation}
-          [State Space Reconstruction\\\scriptsize{embedding dimension, time lag,...}
-            [Computing Measures\\\scriptsize{LLE, CD, DFA, HE, HD, SE}
-              [Classification\\\scriptsize{LR, SVM}]
-            ]
+  [{\hyperref[sec:dataset]{EEG Signals with Metadata}}
+    [{\hyperref[ch:nonlin-approach]{Nonlinear Analysis}}
+      [{\hyperref[sec:nl-preprocess]{Preprocessing}}\\\scriptsize{labelling, curation}
+        [{\hyperref[sec:state-space-reconstruction]{State Space Reconstruction}}\\\scriptsize{embedding dimension, time lag,...}
+          [{\hyperref[sec:estim-nl]{Computing Measures}}\\\scriptsize{LLE, CD, DFA, HE, HD, SE}
+            [{\hyperref[sec:results-nl]{Classification}}\\\scriptsize{LR, SVM}]
           ]
         ]
+      ]
     ]
-    [Deep Learning, 
-      [Preprocessing\\\scriptsize{filtering}
-          [Input Representation\\\scriptsize{RP, CS, raw data}
-            [Architecture Design\\\scriptsize{CSP, FBCSP}
-              [Classification\\\scriptsize{CNN}]
-            ]
+    [{\hyperref[ch:dl]{Deep Learning}}
+      [{\hyperref[sec:dl-preprocess]{Preprocessing}}\\\scriptsize{filtering}
+        [{\hyperref[sec:input-repr]{Input Representation}}\\\scriptsize{RP, CS, raw data}
+          [{\hyperref[sec:dl-arch]{Architecture Design}}\\\scriptsize{CSP, FBCSP}
+            [{\hyperref[sec:dl-results]{Classification}}\\\scriptsize{CNN}]
           ]
         ]
+      ]
     ]
 ]
 \end{forest}
@@ -488,7 +496,7 @@ for tree={
 \end{figure}
 
 
-\chapter{Nonlinear Time Series Analysis}
+\chapter{Nonlinear Time Series Analysis} \label{ch:nonlin}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The simplest of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description. Those examples represent two classes of processes existent before the rise of nonlinear dynamics:
 \begin{description}
   \item[Deterministic processes] are processes for which there is a unique consequent to every state~\cite{dynsys-scholarpedia}. Before advent of nonlinear dynamics, these were thought necessarily periodic (or quasi-periodic), fully describable by its Fourier spectrum~\cite{andreas2000}.
@@ -645,7 +653,7 @@ This technique attempts to approximate a projection of so called \emph{physical 
 \end{align*}
 Roughly speaking, this measure quantifies ``how often'' are different subsets of the state space visited over infinite time. In other words, it gives a probability that a randomly chosen point on a trajectory will happen to belong to a given subset ``after enough time passed''. It is a statistical description of a system in the state space which contains information about all statistical moments~\cite{isliker1993test}, which should be indepent of the trajectory length for a stationary process.
 
-%Since this measure is ergodic \footnote{This means, roughly, that it is not decomposable into several different pieces, each again invariant~\cite{eckmann1985ergodic}.}, the ergodic theorem basically states that the space and time averages using ergodic measures are equal almost everywhere, which in the case of measure $\rho$ translates to
+%Since this measure is ergodic\footnote{This means, roughly, that it is not decomposable into several different pieces, each again invariant~\cite{eckmann1985ergodic}.}, the ergodic theorem basically states that the space and time averages using ergodic measures are equal almost everywhere, which in the case of measure $\rho$ translates to
 %\begin{align*}
 %   \int_{\mathrm{state space}} f(\xi) \rho(\diff \xi) = \lim_{T \rightarrow \infty} \frac{1}{T} \int_0^T f(\xi(t)) \diff t
 % \end{align*}
@@ -801,7 +809,7 @@ From the above, we understand that each of a successful reconstruction should pr
 
 Note that $\sigma^2$ normalizes autocorrelation function to $A(0) = 1$. White noise produced $A(\tau) = 0$ for all $\tau \neq 0$. Filtered noise and chaotic time series can be expected to have $A(\tau)$ slowly decaying to zero with increasing time delay~\cite{andreas2000}.
 
-Computing the autocorrelation function is not only useful for examining the stationarity of the time series, but it also gives a geometrical insight into the shape of the attractor: if we approximate the cloud of reconstructed vectors $\mathbf{x}_n \in \RR^m$ by an ellipsoid, lengths of its semi-axis are given by the square root of the eigenvalues of its auto-covariance matrix. In two dimensions, zero of the covariance matrix corresponds to those eigenvalues being equal, i.e. $x_t$ and $x_{t+\tau}$ being completely uncorrelated~\cite{kantz2004}. An obvious objection is that correlation between $x_t$ and $x_{t+\tau}$ says nothing about correlation between $x_t$ and $x_{t+2\tau}$, etc. Indeed, this method computes correlations only between two successive coordinates, but since it neglects possible correlations between other pairs of coordinates, it is mostly useful for low dimensional systems.
+Computing the autocorrelation function is not only useful for examining the stationarity of the time series, but it also gives a geometrical insight into the shape of the attractor: if we approximate the cloud of reconstructed vectors $\mathbf{x}_n \in \RR^m$ by an ellipsoid, lengths of its semi-axis are given by the square root of the eigenvalues of its auto-covariance matrix. In two dimensions, zero of the covariance matrix corresponds to those eigenvalues being equal, i.e. $x_t$ and $x_{t+\tau}$ being completely uncorrelated~\cite{kantz2004}. An obvious objection is that correlation between $x_t$ and $x_{t+\tau}$ says nothing about correlation between $x_t$ and $x_{t+2\tau}$, etc. Indeed, this method computes correlations only between two successive coordinates, but since it neglects possible correlations between other pairs of coordinates, it is mostly useful for low dimensional systems~\cite{krakovska2015use}.
 
 Autocorrelation also provides a lower bound for $\tau$ in the following sense. If the data is noisy, vectors formed by time delay embedding procedure are practically meaningless, if the variation of the signal in the time covered in the time window $\tau_w = (m-1)\tau$ is less than the variation of noise. This means that $\tau$ should be selected such that $A(\tau) > A(0) - \sigma^2_{\text{noise}}/\sigma^2_{\text{signal}}$~\cite{kantz2004}. Of course, in practice, it may be difficult to estimate variance of noise in the data.
 
@@ -970,7 +978,7 @@ Then, the Lyapunov exponents can be defined as~\cite{grassberger1991nonlinear}
 
 In other words, as the system evolves, $B_r(\mathbf{x})$ expands (or contracts) exponentially in $m$ directions defining semiaxes of a sphere, where length of each semiaxis corresponds to the rate of expansion (or contraction) in the corresponding direction. The average lengths of these semiaxis for $\mathbf{x}$ over the entire state space are exactly Lyapunov exponents. Hence, $m$ dimensional system has exactly $m$ Lyapunov exponents, collectively called its \emph{Lyapunov spectrum}.
 
-Computation of the Lyapunov spectrum for analyticial given $\mathbf{F}$ is straightforward using the definition above. But for dynamics given implicitly in a time series is difficult (although some algorithms, e.g. the one introduced by Eckmann in 1986~\cite{eckmann1986liapunov}). It is commonly agreed that estimating Lyapunov exponents is even more difficult than esimating correlation dimension~\cite{andreas2000}, although they have been successfully employed in EEG analysis~\cite{roschke1995, hosseinifard2013, stam2005}. It has been claimed by P. Grassberger et al. that any application of these measures to physical systems should be interpreted with caution, mainly because all physical measurements are corrupted by noise, and reliable separation of signal is not always possible~\cite{grassberger1991nonlinear}. They suggest that when emplying these techniques, the goal should not be to estabilish to strongest form of determinism, but to use them to ask whether determinism can be ruled out at all.
+Computation of the Lyapunov spectrum for analyticial given $\mathbf{F}$ is straightforward using the definition above. But for dynamics given implicitly in a time series is difficult (although some algorithms, e.g. the one introduced by Eckmann in 1986~\cite{eckmann1986liapunov}). It is commonly agreed that estimating Lyapunov exponents is even more difficult than esimating correlation dimension~\cite{andreas2000}, although they have been successfully employed in EEG analysis~\cite{roschke1995nonlinearschizo, roschke1995nonlineardeppression, hosseinifard2013, stam2005}. It has been claimed by P. Grassberger et al. that any application of these measures to physical systems should be interpreted with caution, mainly because all physical measurements are corrupted by noise, and reliable separation of signal is not always possible~\cite{grassberger1991nonlinear}. They suggest that when emplying these techniques, the goal should not be to estabilish to strongest form of determinism, but to use them to ask whether determinism can be ruled out at all.
 
 Since the direction of the largest Lyapunov exponent dominates growth, we can say that the average rate of separation between two points in the phase space with similar initial conditions can be characterized by the largest Lyapunov exponent. As a consequence, it is unnecessary to compute the entire Lyapunov spectrum - which would require identifying appropriate Lyapunov directions - if our goal is to find a global property of the system characterizing the degree of average instability and unpredictability. It is sufficient to measure the average rate of separation~\cite{Rosenstein1993}. 
 
@@ -1131,7 +1139,7 @@ For large enough $r$, $D_2^{(m)}(r)$ converges to zero. This result, which can b
 where $\rho$ is the maximum error. This implies an exponential increase of minimum required dataset size with embedded dimension. For example, $N_{(m, \tau)} = 5^m$ for $\rho = 5\%$~\cite{andreas2000}.
 
 \subsection{Detrended Fluctuation Analysis} \label{sec:dfa-theory}
-Physiological time series, such as EEG, may exhibit so called statistical self-affine properties. Self-affinity is a special case of self-similarity, which occurs when one or more small parts of a fractal object is exactly or approximately similar to itself. When self-similarity is expressed in terms of statistical properties (e.g. mean value and variance of a part of time series are scaled version of its overall mean and variance), then the object is called statistically self-similar.\footnote{An example of statistically self-similar object are are naval coastlines.} Self-similarity, in turn, differs from self-affinity in that self-affine objects witness similarity anisotropically, i.e. after applying an anisotropic affine transformation. \footnote{The measured property of a self-similar process (e.g. the size of a flower on Romanesco cauliflower) do not follow normal distributions, but power law distributions. Hence, mode and mean of provide a poor representation of this representation. These processes do not have a scale at which to measure these statistics to characterize them, and are therefore called scale-free.}~\cite{hardstone2012detrended} Stated more formally:
+Physiological time series, such as EEG, may exhibit so called statistical self-affine properties. Self-affinity is a special case of self-similarity, which occurs when one or more small parts of a fractal object is exactly or approximately similar to itself. When self-similarity is expressed in terms of statistical properties (e.g. mean value and variance of a part of time series are scaled version of its overall mean and variance), then the object is called statistically self-similar.\footnote{An example of statistically self-similar object are are naval coastlines.} Self-similarity, in turn, differs from self-affinity in that self-affine objects witness similarity anisotropically, i.e. after applying an anisotropic affine transformation.\footnote{The measured property of a self-similar process (e.g. the size of a flower on Romanesco cauliflower) do not follow normal distributions, but power law distributions. Hence, mode and mean of provide a poor representation of this representation. These processes do not have a scale at which to measure these statistics to characterize them, and are therefore called scale-free.}~\cite{hardstone2012detrended} Stated more formally:
 
 \begin{dfn}[\cite{beran2017statistics}] \label{def:self-affin}
   A time series $X$ given by $x_1, x_2, \dots, x_n$ is said to be \textbf{statistically self-affine} if 
@@ -1191,7 +1199,7 @@ Interestingly, if the measured quantites resulted from mutually completely indep
 \begin{equation*}
   R(n) / \sigma(n) \propto 1.25 \sqrt{N},
 \end{equation*}
-as can be easily verified by flipping a set of coins. \footnote{Hurst himself actually made experiments, tossing 10 coins 1000 times. It took him almost 6 hours~\cite{feder2013fractals}.}~\cite{hurst1957suggested} This allows us to recognize stochastic processes with mutually uncorrelated values. The value of Hurst exponent for white noise is $K=1/2$, and many natural processes, such as rainfalls, river water level heights, temperatures and pressures, annual growth of tree rings, and even financial markets have $K > 1/2$, suggesting long-term temporal correlations in the processes. Values of $0 \leq K < 1/2$, on the other hand, suggest long-time negative correlations, i.e. high values being often followed by low values in the future~\cite{hurst1956problem}.
+as can be easily verified by flipping a set of coins.\footnote{Hurst himself actually made experiments, tossing 10 coins 1000 times. It took him almost 6 hours~\cite{feder2013fractals}.}~\cite{hurst1957suggested} This allows us to recognize stochastic processes with mutually uncorrelated values. The value of Hurst exponent for white noise is $K=1/2$, and many natural processes, such as rainfalls, river water level heights, temperatures and pressures, annual growth of tree rings, and even financial markets have $K > 1/2$, suggesting long-term temporal correlations in the processes. Values of $0 \leq K < 1/2$, on the other hand, suggest long-time negative correlations, i.e. high values being often followed by low values in the future~\cite{hurst1956problem}.
 
 \subsection{Higuchi Fractal Dimension} \label{sec:hfd-theory}
 In this section, it will be beneficial to change our usual notation for the purpose of readability. Let us have time series $x(1), x(2), \dots, x(N)$. We select a $k \in \NN$ and construct $k$ new time series, denoted $x_k^m$ for $m=1,2,\dots,k$, as 
@@ -1219,7 +1227,7 @@ For a given embedding dimension $m$ and tolerance parameter $r$, sample entropy 
 \begin{dfn}[\cite{richman2000physiological}]
   Let us have a time series $x_1, x_2, \dots, x_N$, and let $\mathbf{x}_i^{(m)} = \left( x_i, x_{i+1}, \dots, x_{i+m-1} \right)$ be the $i$-th vector in the embedding of dimension $m$, and $\norm{\cdot}_{\infty}$ be the Chebyshev metric\footnote{Any metric can be used, but Chebyshev metric is recommended by the original authors~\cite{richman2000physiological}.}. Then, \textbf{sample entropy} is defined as
   \begin{align*}
-    \mathrm{SampEn}(m, r) = -\ln \frac{A^m(r)}{B^m(r)},
+    \mathrm{SE}(m, r) = -\ln \frac{A^m(r)}{B^m(r)},
   \end{align*}
   where
   \begin{description}
@@ -1283,32 +1291,79 @@ Even this method is not without its drawbacks: due to the final reordering, the 
 \end{enumerate}
 
 \section{Practial applications}
-\subsection{Applications in Disease Diagnosis}\label{sec:applications}
-\add[inline]{This section is probably not sufficiently exhaustive.}
-Although nonlinear dynamical analysis of EEG signal has been successfully applied to many psychological and psychiatric conditions, such as insomnia, schizophrenia, epilepsy, dementia, Alzheimer's disease, the number of studies applying methods of nonlinear time series analysis for clinical depression diagnosis is relatively limited~\cite{rodriguez2015}.
+\subsection{Applications in Depression Diagnosis}\label{sec:applications}
+\subsubsection{Nonlinear Measures}
+Although nonlinear dynamical analysis of EEG signal has been successfully applied to many psychological and psychiatric conditions, such as insomnia, schizophrenia, epilepsy, dementia, Alzheimer's disease, the number of studies applying methods of nonlinear time series analysis for clinical depression diagnosis is still relatively limited~\cite{stam2005, rodriguez2015}. Summary of studies reviewed in this section along with the obtained results can be seen in Table \ref{tab:depsum}. Hereby we present the studies in chronological order.
 
-It has been found that the EEG dynamics of depressed patients exhibit more predictability than those of non-depressed ones, with this indicator receding after treatment~\cite{nandrino1994}.~\cite{pezard1996}
+It has been found that the EEG dynamics of depressed patients exhibit more predictability, and therefore less complexity, than those of non-depressed ones, with this indicator receding after treatment~\cite{nandrino1994, pezard1996}. Instead of measuring compexity using correlation dimension, the authors applied method of nonlinear forecasting of dynamical systems based on the local approximation of neighborhood evolution~\cite{nandrino1994}.
 
-Another study analyzed sleep EEGs of depressed and control subjects, and found significantly decreased values of Lyapunov exponents in a sleep stage IV in depressed relative to control~\cite{roschke1995}.
+Another study analyzed sleep EEGs of depressed and control subjects, and found significantly decreased values of Lyapunov exponents in a sleep stage IV in depressed patients relative to control~\cite{roschke1995nonlineardeppression}.
+
+In 2007, Lee et al. found significant differences between the values of DFA in 11 depressed patients matched with the same number of healthy controls. Moreover, they found signiciant correlation between the values of DFA and depression scores in almost all recorded channels \cite{lee2007detrended}. 
 
 In 2012, Ahmadlou et al. decomposed 5 EEG channels recorded from frontal lobes of healthy and depressed patients using wavelet filter banks, measured their complexity using Higuchi's fractal dimension, subsequently used ANOVA to discover the most meaningful differences between the groups, and trained a probabilistic neural network classifier, achieving 91.3\% classification accuracy on limited amount of data. This research suggested potential of frontal lobe signal assymetry as a measure for depression~\cite{ahmadlou2012}.
 
-In the same year, Hosseinifard et al. extracted Higuchi's correlation dimension, Lyapunov exponents and Higuchi's fractal dimension from 4 EEG channels of 90 patients split evenly between depressed and non-depressed subjects, achieving 90\% accuracy using a logistic regression classifier~\cite{hosseinifard2013}.
+A year later, Hosseinifard et al. extracted Correlation Dimension (CD), the Largest Lyapunov Exponent (LLE) and Higuchi's Fractal Dimension(HFD) from 4 EEG channels of 90 patients split evenly between depressed and non-depressed subjects, achieving 90\% accuracy using a logistic regression classifier and 3-fold leave-one-out cross validation~\cite{hosseinifard2013}.
 
-In 2013, Bachmann et al. compared two nonlinear analysis methods, spectral assymetry index (SASI) and Higuchi's fractal dimension (HFD), for depression diagnosis, on 34 subjects split evenly between depressed and control group. SASI achieved true detection rate in 88\% in depressives and 82\% in the controls, while HFD provided true detection rate of 94\% in the depressives and 76\% in the controls~\cite{bachmann2013}.
+In the same year, Bachmann et al. compared linear measure called Spectral Assymetry index (SASI) and HFD for depression diagnosis on 34 subjects split evenly between depressed and control group. SASI achieved true detection rate in 88\% in depressives and 82\% in the controls, while HFD provided true detection rate of 94\% in the depressives and 76\% in the controls~\cite{bachmann2013}, thus both giving comparable results.
 
+In 2014, sample entropy, approximate entropy, Renyi entropy and bispectral phase entropy were used by Faust et al. in~\cite{faust2014depression} to achieve overall 99.5\% accuracy using 10-fold cross validation on sample of 30 healthy and 30 depressed patients. This study reports the highest accuracy out of the reviewed studies. 
+
+A year later, Acharyia et al. invented a new biomarker based on nonlinear measures called Depression Diagnosis Index (DDI) and also achieved considerable accuracy, but on a small sample of 15 depressed patients matched with healthy controls \cite{acharya2015novel}.
+
+In comparison with depression diagnosis, less research has been dedicated to the problem of treatment outcome prediction using nonlinear measures. The only study we are aware of is~\cite{arns2014non},  where the authors computed LLE using false nearest neighbors and another nonlinear measure called Lempel-Ziv Complexity (LZC) in order to investigate depressed patients' response to treatment with repeated Transcranial Magnetic Stimulation (rTMS). They observed a significant decrease in LZC in nonresponding patients and significant increase in responding patients and healthy controls. 
+
+
+\subsubsection{Other Techniques}
+Most of the results of applications of quantitative methods to EEG analysis of depressed patients were obtained using linear methods, such as extracting band power features to detect assymetries between hemispheres of the brain~\cite{rodriguez2015}. For example, in~\cite{knott2001eeg}, the researchers were able to distinguish between 23 healthy and 70 depressed patients using only linear measures\footnote{Note however the class imbalance in the study.}. Statistically significant differences between depressed patients and healthy controls using anterior $\alpha$ assymetry were found in~\cite{debener2000resting}, followed by~\cite{omel2002changes} with more linear assymetry features and more substantial sample size and similar results. Moreover, statistically significant differences in relative frontal power were found in~\cite{iosifescu2009frontal} between depressive patients responding and nonresponding to treatment. Puthankattil et al. were able to obtain high 98.1\% accuracy using relative wavelet energy and neural networks on a sample of 30 healthy and 30 depressed patients. Each patient was recorded multiple times to increase the size of the training and test sample, which may have introduced correlations between the training and test sets. Nonetheless, these studies, supported by neuroscientific theory, sparked interest in linear assymetry measures in depression diagnosis.
+
+However, many studies cast doubts over validity of these measures, such as~\cite{hinrikus2009electroencephalographic, allen2004stability, ahmadlou2013spatiotemporal} finally followed by~\cite{gold2013validity} in 2013 with more substantial sample size, all either finding no statistically significant differences between depressed patients and healthy controls, or no statistically significant correlations of assymetry measures with depression scores. Moreover, when compared directly to nonlinear measures, linear techniques seem to perform at most comparably to nonlinear ones, or worse. As already mentioned, in~\cite{bachmann2013}, nonlinear measure HFD was comparably discriminative to linear measure of spectral assymetry. In~\cite{hosseinifard2013}, Hosseinifard et al. obtained lower classification accuracy using linear band power features in comparison to CD, LLE, and HFD. 
+
+In attempt to discriminate between MDD patients responding and nonresponding to rTMS treatment, in~\cite{arns2012neurophysiological}, the researchers identified increased frontal $\theta$ power and lower peak $\alpha$ frequency as potential biomarkers for patient's failure to respond to the treatment. 
+
+Considerably more research has been devoted to the problem of treatment outcome prediction using linear measures in comparison with nonlinear measures. However, most of the studies include only small number of samples and tend to limit their focus on a specific biomarkers~\cite{olbrich2013eeg}. For a comprehensive review, see~\cite{olbrich2013eeg}.
+
+\subsubsection{Potentially Related Diseases}
 Sleep disorder diagnosis may also relevant to this work for the very close connection of depression with disturbed sleep and insomnia~\cite{nutt2008}. The first study emplying techniques of nonlinear analysis on human EEG was published in 1985 and dealt with sleep recordings~\cite{babloyantz1985}. This early success sparked intensive research focus on applying nonlinear analysis to sleep data, thus generating relatively large amount of results. 
 
-Many studies focused of extracting Lyapunov exponents of EEGs measured during various sleep stages. The general pattern that emerged was that deep sleep stages exhibit lower complexity evidenced by lower dimensionality lower values of the largest Lyapunov exponent~\cite{stam2005}.
+Many studies focused on extracting Lyapunov exponents of EEGs measured during various sleep stages. The general pattern that emerged was that deep sleep stages exhibit lower complexity evidenced by lower fractal dimensionality and lower values of the largest Lyapunov exponent~\cite{stam2005}.
 
-Recurrence plots, and RQA in particular, have been demonstrated to be effective at decoding neuroscientific physiological time series. For example, they have been suggested as a method of lowering singal-to-noise ratio in analysis of event related potentials in response to a surprising stimulus, where repeated exposure would influence the outcome (and thus classical averaging methods are not viable)~\cite{marwan2007recurrence}. Moreover, they have been successfully employed in detecting epileptic seizures using intracranial recordings~\cite{pijn1997nonlinear}. Simple K-nearest neighbors classifiers achieved surprisingly high accuracies at emotion recognition tasks~\cite{bahari2013eeg}, and convolutional neural networks used recurrence plots for activity recognition~\cite{garcia2018classification}.  Most importantly for our study, recurrence plots of signals in the left hemisphere were observed to qualitatively differ between healthy baseline and depressed patients. The authors suggested that this area is worth further exploration~\cite{acharya2015computer}.
+Recurrence plots, and RQA in particular, have been demonstrated to be effective at decoding neuroscientific physiological time series. For example, they have been suggested as a method of lowering singal-to-noise ratio in analysis of event related potentials in response to a surprising stimulus, where repeated exposure would influence the outcome (and thus classical averaging methods are not viable)~\cite{marwan2007recurrence}. Moreover, they have been successfully employed in detecting epileptic seizures using intracranial recordings~\cite{pijn1997nonlinear}. Simple K-nearest neighbors classifiers achieved surprisingly high accuracies at emotion recognition tasks~\cite{bahari2013eeg}, and convolutional neural networks used recurrence plots for activity recognition~\cite{garcia2018classification}. Most importantly for our study, recurrence plots of signals in the left hemisphere were observed to qualitatively differ between healthy baseline and depressed patients. The authors suggested that this area is worth further exploration~\cite{acharya2015computer}.
+
+\begin{table}[ht]
+\centering
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Measure} & \textbf{Analysis method} & \textbf{\spatcell{Accuracy or\\obtained results}} & \multicolumn{2}{c}{\textbf{Test sample}} \vline & \textbf{\# channels} & \textbf{Rec. length} & \textbf{Reference} & \textbf{Note} \\ \hline
+ & & & \textbf{Healthy} & \textbf{Depressed} & & & & \\ \hline
+ \spatcell{SE and other entropies} & WPD+PNN & 0.99 & 30 & 30 & 9 & 5 min & \cite{faust2014depression} & \spatcell{Evaluated using 10f-CV.}\\ \hline
+ DDI & SVM & 0.98 & 15 & 15 & - & 8 s & \cite{acharya2015novel} & - \\ \hline
+ HFD & EPNN & 0.91 & 3 & 3 & 19 & 1 min & \cite{ahmadlou2012} & - \\ \hline
+ HFD & Statistical analysis & 0.85 & 17 & 17 & 18 & 2 s & \cite{bachmann2013} & Evaluated on training set. \\ \hline
+ LLE, CD, DFA, HD & LR & 0.9 & 45 & 45 & 19 & 5 min & \cite{hosseinifard2013} & - \\ \hline
+ NL forecasting & Measuring predictability & \spatcell{Increased predictability\\in MDD patients} & 8 & 16 & 12 & 40 s & \cite{nandrino1994} & - \\ \hline 
+ LLE & Statistical analysis & Found s.s. diff. & 13 & 15 & 4 & 2.44 min & \cite{roschke1995nonlineardeppression} & - \\ \hline
+ DFA & Statistical analysis & Found s.s. diff. & 11 & 11 & 5 & 5 min & \cite{lee2007detrended} & - \\ \hhline{|=|=|=|=|=|=|=|=|=|}
+ RWE & NN & 0.98 & 40 & 40 & 9 & 5 min & \cite{puthankattil2012classification} & - \\ \hline
+ \spatcell{Power, assymetry,\\coherence measures} & Statistical analysis & 0.91 & 23 & 70 & 21 & 20 min & \cite{knott2001eeg} & - \\ \hline
+ \spatcell{Relative frontal\\$\theta$ power} & Statistical analysis & 0.63 & 45 resp. & 37 nonresp. & 4 & 2 s & \cite{iosifescu2009frontal} & \spatcell{Evaluated response\\to treatment.} \\ \hline
+ Anterior $\alpha$-assymetry & Statistical analysis & Found s.s. differences & 15 & 22 & 19 & 2 s & \cite{debener2000resting} & - \\ \hline
+ Power and assymetry measures & Statistical analysis & Found s.s. differences & 86 & 53 & 8 & - & \cite{omel2002changes} & - \\ \hline
+ SASI & Statistical analysis & No s.s. diff. found & 18 & 18 & 9 & 2.5 s & \cite{hinrikus2009electroencephalographic} & - \\ \hline
+ FAA & Statistical analysis & No s.s. corr. found & - & 30 & 25 & 1 min & \cite{allen2004stability} & \spatcell{FAA is stable in depressed\\patients, but uncorrelated\\with depression level.} \\ \hline
+ STARC & Statistical analysis & No s.s. diff. found & 20 & 22 & 19 & 1 s & \cite{ahmadlou2013spatiotemporal} & \spatcell{Focus is on classification\\ of male and female patients.} \\ \hline
+ FAA & Statistical analysis & No s.s. corr. found & - & 79 & 32 & 2 s & \cite{gold2013validity} & \spatcell{Measured correlations with\\depression scores.} \\ \hline
+\end{tabular}}
+\caption{Overview of reviewed studies analyzing EEG in relation to depression, ordered by obtained classification accuracy (if applicable), otherwise chronological order was used. The first part corresponds to studies using nonlinear dynamical measures.\\Abbreviations: DDI - Depression Diagnosis Index, (EP)NN - (Enhanced Probabilistic) Neural Network, FAA - Frontal Alpha Assymetry, RWE - Relative Wavelet Energy, SASI - Spectral Assymetry Index, STARC - Spatiotemporal Analysis of Relative Convergence, WPD - Wavelet Power Decomposition, kf-CV - k-fold Cross Validation.}
+\label{tab:depsum}
+\end{table}
 
 \subsection{Limitations}
 Some authors suggests that the since most plausible research target for explaining the brain dynamics are the assemblies of coupled and synchronously active neurons, and since majority of those assemblies are describable by nonlinear differential equations, principles derived from nonlinear dynamics are applicable to characterization of these neuronal systems~\cite{kaplan2005}. 
 
 The approach of estimating a finite embedding dimension (see Section \ref{sec:state-space-reconstruction}), however, has been doubted by some of the most prominent figures in the field of nonlinear dynamical analysis, such as the originators of Grassberger-Procaccia algorithm (see Section \ref{sec:corrdim}). There is very little evidence for the seemingly improbable hypothesis that such complex system with many extrinsic influences and interactions, such as the brain, would exhibit a level of comlexity comparable to e.g. a Lorenz system. Presumably, the the observed estimates of low dimension are due to artifacts or limited data size~\cite{grassberger1986climatic, procaccia1988complex}. However, as we will see in Section \ref{sec:applications}, the techniqes derived from these theories still provide some useful information and are successfully applied in many practical situations. Therefore, it seems to be the case that indeed, brain dynamics are much more complex than we are forced to assume based on the theory, but nonlinear dynamical analysis still manages to capture some of its important aspects.
 
-\chapter{Nonlinear Analysis Approach}
+\chapter{Nonlinear Analysis Approach} \label{ch:nonlin-approach}
 \section{Dataset} \label{sec:dataset}
 The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}, and the recording was performed by specialists thereby. It comprises of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58).\footnote{We use the notation $\text{mean} \pm \text{std}$.} Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS)~\cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points~\cite{herrmann1998sunnybrook}: 
 \begin{description}
@@ -1354,7 +1409,7 @@ We should recognize limitations of this dataset:
   \item For a study of treatment effects, patients were assigned different cominations of drugs, making an attempt of finding the singular cause of any observed effects impossible.
   \item Durations of the recordings do not allow us to put sufficiently low bound on the maximum error we can theoretically achieve for computation of the lagest Lyapunov exponent and correlation dimension (see Sections \ref{sec:req-lyap} and \ref{sec:req-corr}). 
 \end{itemize}
-\section{Preprocessing}
+\section{Preprocessing} \label{sec:nl-preprocess}
 Recordings of $f_s = 1000$ Hz were downsampled (decimated) by factor $4$ to $250$ Hz using the Fourier method (also known as trigonometric interpolation), i.e. by performing discrete Fourier transform on the original series, dividing it into $2*1000/250=8$ intervals, removing all but the first and the last intervals (thus removing the highest positive and negative frequencies, corresponding to low-pass filtering), and performing inverse discrete Fourier transform. This procedure assumes that the signal is periodic, and may have some influence on the obtained results. However, it was observed that this effect is almost negligible, even for considerably higher decimation factors~\cite{diab2013effect}.
 
 In further analysis, unless otherwise specified, recordings were shortened to fixed length of 60 s (15 000 timesteps). This measure was taken in order to achieve the the following characteristics on the data:
@@ -1369,7 +1424,7 @@ In~\cite{hosseinifard2013}, band-pass filtering was used to remove frequencies w
 
 To determine the effects of filtering on our datasets, we filtered the data to the 0.5 Hz - 70 Hz range using Butterworth filter of order 3, and then we performed the preliminary analysis described in Section \ref{sec:distanal}. However, we did not find any significant improvement, and therefore we decided to avoid the impact of filtering on the final results.
 
-\section{Estimation of Nonlinear Measures}
+\section{Estimation of Nonlinear Measures} \label{sec:estim-nl}
 \subsection{Our Procedure}
 It is well known that the results of algorithms for estimation of nonlinear measures presented in Section \ref{sec:nonlin-meas} depend not only on the amount of noise in the data, the preprocessing and the choice of the algorithm, but also, to a considerable degree, on the embedding parameters and other input parameters~\cite{fell1994resonance, das2002applicability}. Therefore, selection of the algorithm and its parameters is of substantial importance.
 
@@ -1521,7 +1576,7 @@ With increasing time delay $\tau$, we observe gradually damped oscillation-like 
 \end{align*}
 This means that for a given $y_i$, possible values of $y_{i+\tau}$ are restricted to a line parallel to the direction of the $m$-th basis vector. Analogously, $y_{i+2\tau}$, $y_{i+3\tau}$, \dots, $y_{i+(m-1)\tau}$ are restricted to $2, 3, \dots, m-1$ dimensional hyperplanes in the $m$ dimensional embedding space. As explained in Section \ref{sec:rosenstein}, Rosenstein's algorithm finds pairs of vectors $y_i$ and $y_{n(i,m)}$ with certain properties, and computes the evolution of their distances over time. This means that the possible values of $y_{i+\tau}$ and $y_{n(i,m)+\tau}$ are restricted to lie on two hyperplanes parallel to the $m$-th basis vector. Therefore, if $d_i(0) = \norm{y_i - y_{n(i,m)}}$ is their initial distance, then the maximum possible distance after evolution by $\tau$ timesteps is $\norm{ y_{i+\tau} - y_{k+\tau} } = \sqrt{ (d_i(0))^2 + A_m^2 }$, where $A_m$ is the maximum amplitude $\max_{i \in N(m, \tau)}|x_i|$. However, generally, the maximum distance is $A_m \sqrt{m}$. Thus, we may expect the average distances fluctuate with period $\tau$.
 
-There are several methods for mitigating this effect, but it cannot be evaded completely, since it is a join property of the time delay embedding and the data~\cite{fell1994resonance}. One may choose smaller $\tau$, choose the evolution time $t_e < \tau$ or $t_e \geq \tau m$. Alternatively, one may choose different time delays $\tau_i$ for individual vector coordinates. The benefit of chossing smaller time delay or bounding the evolution time is that these choices still enable using hardware acceleration provided by vectorized operations in the implementation of the algorithm. Lastly, some algorithms, such as a modification of Wolf's algorithm~\cite{roschke1995nonlinear}, attempt to minimize the effect implicitly.
+There are several methods for mitigating this effect, but it cannot be evaded completely, since it is a join property of the time delay embedding and the data~\cite{fell1994resonance}. One may choose smaller $\tau$, choose the evolution time $t_e < \tau$ or $t_e \geq \tau m$. Alternatively, one may choose different time delays $\tau_i$ for individual vector coordinates. The benefit of chossing smaller time delay or bounding the evolution time is that these choices still enable using hardware acceleration provided by vectorized operations in the implementation of the algorithm. Lastly, some algorithms, such as a modification of Wolf's algorithm~\cite{roschke1995nonlineardeppression}, attempt to minimize the effect implicitly.
 
 \unsure[inline]{Can this occur due to measurement projection? Also, even if the largest Lyapunov exponent is positive, in dissipative systems (i.e. those possessing an attractor, see Section \ref{sec:attractor}) the sum of all Lyapunov exponents is negative, and thus, even on average, states will diverge in some directions. These effects can be compensated for by using proper averaging statistics~\cite{kantz2004}.}
 
@@ -1541,7 +1596,7 @@ Using the correlation dimension saturation, the following estimates have been ob
 
 By analyzing records ECT seizures, manually separating them into more and less regular, and inspecting multiple values of LLE as a measure of separation between these classes, 7 was selected as optimal embedding dimension in~\cite{krystal1997largest}.
 
-Remaining studies we evaluated, including some analyzing depression, used embedding dimension 10~\cite{roschke1995nonlinear, fell1993deterministic, roschke1993calculation}. Especially relevant is~\cite{roschke1995nonlineardeppression}, where depression data were analyzed, including the dependence of LLE on the embedding dimension. The authors decided to use various values of time delay depending on the embedding dimension corrdinate (for rationale, see Section \ref{sec:lle-man-anal}). Emotion recognition using LLE from EEG signals was performed in~\cite{aftanas1997non} with embedding dimension $m=10$ and time delay $\tau=3$. No reasoning behind this choice was provided. Summary of the reviewed studies can be seen in Table \ref{tab:litrev-lle}.
+Remaining studies we evaluated, including some analyzing depression, used embedding dimension 10~\cite{roschke1995nonlineardeppression, fell1993deterministic, roschke1993calculation}. Especially relevant is~\cite{roschke1995nonlineardeppression}, where depression data were analyzed, including the dependence of LLE on the embedding dimension. The authors decided to use various values of time delay depending on the embedding dimension corrdinate (for rationale, see Section \ref{sec:lle-man-anal}). Emotion recognition using LLE from EEG signals was performed in~\cite{aftanas1997non} with embedding dimension $m=10$ and time delay $\tau=3$. No reasoning behind this choice was provided. Summary of the reviewed studies can be seen in Table \ref{tab:litrev-lle}.
 
 \begin{table}[tbp]
 \resizebox{\textwidth}{!}{
@@ -1553,7 +1608,7 @@ $\mathbf{m}$ & \textbf{Method of selection of m} & $\mathbf{\tau}$ & \textbf{App
 6-8 & $D_2$ saturation & DMI & measuring variance in $D_2$ during sleep &~\cite{gallez1991predictability} \\ \hline
 7 & - & 10 & measuring regularity during ECT seizures &~\cite{krystal1997largest} \\ \hline
 10 & - & 3 & emotion recognition &~\cite{aftanas1997non}  \\ \hline
-10 & - & zero-crossing of $A(\tau)$ & sleep in schizophrenia &~\cite{roschke1995nonlinear} \\ \hline
+10 & - & zero-crossing of $A(\tau)$ & sleep in schizophrenia &~\cite{roschke1995nonlinearschizo} \\ \hline
 10 & - & zero-crossing of $A(\tau)$ & sleep &~\cite{fell1993deterministic} \\ \hline
 10 & - & random & depression &~\cite{roschke1995nonlineardeppression} \\ \hhline{=|=|=|=|=}
 10 & - & 3 & depression & - \\ \hline
@@ -1842,7 +1897,7 @@ Moreover, we also compared before and after treatment recordings of responding, 
 Of course, analyzing effectivity of treatment is difficult problem, and we realize the many limitations of this analysis. For example, many variables, including age, sex, starting depression score, behavioral changes occuring in the interim period and the kind of treatment, were not accounted for. Moreover, many of the patients selected as nonresponding actually improved their symptoms slightly. In fact, symptoms of only 9 patients of the whole dataset worsened or stayed stagnant. No significant differences between before and after treatment recordings of these ``strictly'' nonresponding patients, were found. Thus, one possibility of strengthening the differences between the responding and nonresponding groups may be to include the after treatment recordings for the ``strictly'' nonresponding group to the nonresponding group. However, we decided against doing this, because some differences in the before and after treatment groups for the ``strictly'' nonresponding patients may have remained insignificant due to small size of this group.
 
 \section{Results} \label{sec:results-nl}
-We used two classifiers: Logistic Regression (LR) and Support Vector Machine (SVM). One third of randomly selected samples was held out as a test set, the rest was used for training and cross validation. Feature selection was performed on LR with regularization strength 1 and SVM with regularization strength 1 and linear kernel (i.e. $k(\vec{x_1}, \vec{x_2}) = \vec{x_1} \cdot \vec{x_2}$) using
+We used two classifiers: Logistic Regression (LR) and Support Vector Machine (SVM). One third of randomly selected samples was held out as a test set, the rest was used for training and cross validation. The following feature selection algorithms were evaluated with LR (regularization strength 1) and SVM (regularization strength 1 and linear kernel, i.e. $k(\vec{x_1}, \vec{x_2}) = \vec{x_1} \cdot \vec{x_2}$):
 \begin{itemize}
   \item recursive feature elimination with 3-fold cross validation based on coefficients of the linear model,
   \item elimination of features with below-mean coefficients of the linear model,
@@ -1850,7 +1905,7 @@ We used two classifiers: Logistic Regression (LR) and Support Vector Machine (SV
   \item genetic algorithm with 5-fold cross validation (scoring models based on ROC AUC, population size 80, 80 generations, crossover probability 0.8, mutation probability 0.2, and tournament size 5),
   \item manual selection of channels with significantly different means of corresponding features between the two considered classes, as reported by the Kolmogorov-Smirnov test.
 \end{itemize}
-Note that from the algorithmic techniques, genetic algorithm was by far the most effective. However, most of the best performing and thus reported classifiers were found by combination of the last two techniques, i.e. by applying genetic selection algorithm to the features marked as having diffening means between the two groups.
+Out of those feature selection techniques, genetic algorithm was by far the most effective. However, most of the best performing and thus reported classifiers were found by combination of the last two techniques, i.e. by applying genetic selection algorithm to the subset of channels marked as having differing means between the two groups.
 
 Evaluation was performed using 5-fold cross-validation. The best performing classifiers (based on accuracy, precision, recall, f-score, and number of features) were selected for each measure and for all measures by varying the maximum number of features considered by the genetic algorithm from 3 to the 1/10 of the corresponding training set size. Then, a brute force grid search with 5-fold cross validation was performed on each classifier to select 
 \begin{itemize}
@@ -1941,13 +1996,13 @@ HE & SVM (rbf) & 0.63 & 0.09 & 0.64 & 0.10 & 0.63 & 0.09 & 0.62 & 0.09 & C3, T6 
 \label{tab:respcl}
 \end{table}
 \subsection{Response Prognosis}
-Let us remind the reader of the definition of response from Section \ref{sec:analrespdif} as the ratio of the depression score reported on the second session (after administration of drugs) to the depression score reported on the first session (before administration of drugs). The recordings were separated into two classes as follows:
+As we mentioned in Section \ref{sec:analrespdif}, response is defined as the ratio of the depression score reported on the second session (after administration of drugs) to the depression score reported on the first session (before administration of drugs). For the task of predicting response to treatment, recordings were separated into two classes as follows:
 \begin{description}
   \item[Nonresponding]: 50 recordings made before administration of drugs with the lowest response.
   \item[Responding]: 50 recordings made before administration of drugs with the highest response.
 \end{description}
 
-The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov exponent was the most predictive nonlinear measure. Unlike for the depression diagnosis, sample entropy and correlation dimension were the only other nonlinear measures which were able to achieve accuracy above $70 \%$ both in combination with other measures and as stand-alone features. Interestingly, F3 channel seems to be preferred considerably more for response prognosis than for depression diagnosis.
+The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov exponent was the most predictive nonlinear measure. Unlike for the depression diagnosis, sample entropy and correlation dimension were the only other nonlinear measures which were able to achieve accuracy above $70 \%$ both in combination with other measures and as stand-alone features. Interestingly, F3 channel seems to be considerably more relevant for response prognosis than for depression diagnosis.
 
 % \begin{figure}
 % \centering
@@ -1969,13 +2024,26 @@ The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov e
 % \end{figure}
 
 \section{Implementation}
-All the code used for this section is publicly available at, as well as on the CD accompanying this text. Used programming language was Python. The plots were produced using \href{https://matplotlib.org/}{matplotlib} library. Other used libraries include \href{http://www.numpy.org/}{numpy} for vectorized computations, \href{https://scipy.org/scipylib/index.html}{scipy} for signal processing algorithms, \href{http://pandas.pydata.org/}{pandas} for data storage and manipulation, and \href{http://ipython.org/}{ipython} for development.
+All the code used for this section is publicly available \href{https://github.com/mirgee/thesis\_project}{online}, as well as on the CD accompanying this text. Used programming language was Python. The plots were produced using \href{https://matplotlib.org/}{Matplotlib} library. Other used libraries include \href{http://www.numpy.org/}{NumPy} for vectorized computations, \href{https://scipy.org/scipylib/index.html}{SciPy} for signal processing algorithms, \href{http://pandas.pydata.org/}{Pandas} for data storage and manipulation, and \href{https://jupyter.org/}{Jupyter} for development.
+ 
+For computation of nonlinear measures, we used slightly modified versions of \href{https://github.com/CSchoel/nolds}{nolds} library by C. Schölzel and published under MIT Licence, and \href{https://github.com/manu-mannattil/nolitsa}{nolitsa} library by M. Mannatil and published under 3-clause BSD licence. 
 
-For computation of nonlinear measures, we used slightly modified versions of \href{https://github.com/CSchoel/nolds}{nolds} library by C. Schölzel and published under MIT Licence, and \href{https://github.com/manu-mannattil/nolitsa}{nolitsa} library by M. Mannatil and published under 3-clause BSD licence.
+Hereby we provide a summary of used software:
+\begin{description}
+  \item[Public availability:] \href{https://github.com/mirgee/thesis\_project}{online}, accompanying CD
+  \item[Main programming language:] Python
+  \item[Plotting library:] \href{https://matplotlib.org/}{Matplotlib}
+  \item[Vectorized computations:] \href{http://www.numpy.org/}{NumPy}
+  \item[Signal processing algorithms:] \href{https://scipy.org/scipylib/index.html}{SciPy} 
+  \item[Data storage and manipulation:] \href{http://pandas.pydata.org/}{Pandas} 
+  \item[Execution environment:] \href{https://jupyter.org/}{Jupyter} 
+  \item[Nonlinear Dynamical Analysis:] modifications of \href{https://github.com/CSchoel/nolds}{nolds} and \href{https://github.com/manu-mannattil/nolitsa}{nolitsa}
+\end{description}
 
-\chapter{Deep Learning Approach}
+\chapter{Deep Learning Approach} \label{ch:dl}
 \section{Convolutional Neural Networks}
 \subsection{Mathematical Background}
+In this section, we aim to make some of essential terms used in this chapter more concrete by providing their mathematical definitions.
 \begin{dfn}
   Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a functional defined as
   \begin{align}
@@ -2059,7 +2127,7 @@ Although the main idea dates back to 1980, when K. Fukushima introduced neocogni
 \label{fig:lenet-5}
 \end{figure}
 
-Bearing resemblence to visual processing in biological organisms \footnote{As early as in 1968, D. H. Hubel and T.N. Wiesel discovered that some cells (called simple cells) in cat's primary visual cortex (V1) with small receptive fields (shared by neighboring neurons) are sensitive to straight lines and edges of light of particular orientation, and other cells (called complex cells) with larger receptive fields further in the visual cortex also respond to straight lines and edges, but with invariance to translation~\cite{Hubel1968}.}, LeNet-5 proposed the following design principles to enforce \emph{shift, scale and distortion invariance}:~\cite{lecun1999}
+Bearing resemblence to visual processing in biological organisms\footnote{As early as in 1968, D. H. Hubel and T.N. Wiesel discovered that some cells (called simple cells) in cat's primary visual cortex (V1) with small receptive fields (shared by neighboring neurons) are sensitive to straight lines and edges of light of particular orientation, and other cells (called complex cells) with larger receptive fields further in the visual cortex also respond to straight lines and edges, but with invariance to translation~\cite{Hubel1968}.}, LeNet-5 proposed the following design principles to enforce \emph{shift, scale and distortion invariance}:~\cite{lecun1999}
 \begin{description}
   \item[local receptive fields:] each neuron in a layer receives input from a small neighborhood in the previous layer,
   \item[shared weights:] each layer is composed of neurons organized in planes within which each neuron have the same weight vector (feature map),
@@ -2110,9 +2178,9 @@ The rationale behind applying a nonlinearity is it makes the network capable of 
 
 \emph{Pooling} operation splits the neural units into sets of multiple adjacent activations and computes a summary statistic, such as the maximum element (max pooling) or the average (average pooling), per such set and outputs the result. If the stride between the sets is greater than one, the spatial dimension of output is decreased relative to input (subsampling).
 
-The purpose of spatial subsampling is to ensure scale and distortion invariance\footnote{Whether it achieves this goal has been famously doubted by Geoffrey Hinton: ``The pooling operation used in convolutional neural networks is a big mistake and the fact that it works so well is a disaster.''~\cite{}} by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance - roughly speaking, an ``approximate'' translation invariance.
+The purpose of spatial subsampling is to ensure scale and distortion invariance by reducing the precision at which a feature is encoded in a feature map by reducing its resolution - when scale and distortion invariance is assumed, the exact location of a feature becomes less important and is allowed to exhibit slight positional variance - roughly speaking, an ``approximate'' translation invariance.
 
-Although the combination of convolution and pooling performs well in many practical situations, it has multiple drawbacks. For example, the learned representations are not rotation invariant and thus, to mitigate this, the capacity of the network has to be increased and the training dataset must be enhanced to contain examples of rotated features, often extending the amount of data necessary and training time. A number of alternative approaches were suggested in the litarature.\footnote{For instance, Hinton's \emph{CapsNet}, described e.g. in~\cite{sabour2017}, is an attempt to transform the manifold of images of similar shape (which is highly nonlinear in the space of pixel intensities) to a space where it is globally linear by the way of using so called capsules instead of traditional convolutional layers.} For another example of a limitation, see Figure \ref{fig:drawbacks}.
+Although the combination of convolution and pooling performs well in many practical situations, it has multiple drawbacks. For example, the learned representations are not rotation invariant and thus, to mitigate this, the capacity of the network has to be increased and the training dataset must be enhanced to contain examples of rotated features, often extending the amount of data necessary and training time. A number of alternative approaches were suggested in the litarature.\footnote{For instance, Hinton's \emph{CapsNet}, described in~\cite{sabour2017}, is an attempt to transform the manifold of images of similar shape (which is highly nonlinear in the space of pixel intensities) to a space where it is globally linear by the way of using so called capsules instead of traditional convolutional layers.} For another example of a limitation, see Figure \ref{fig:drawbacks}.
 
 \begin{figure} 
 \centering
@@ -2186,7 +2254,7 @@ After splitting the recordings, we assigned positive, neutral or negative label 
 
 The threshold values separating these classes were selected such that the classes remained relatively balanced and that enough samples were present in each class to train and evaluate a model of moderate capacity. In the case of depression classification, the amount of inter-class variance is inherently limited by nature of the provided data - patients were not randomly sampled, but visited the institution to seek professional help. In attempt to partially remedy this issue, the depression score threshold was set such that 71 patients remained in each depressed and healthy classes, leaving 124 neutral subjects. This corresponds to depressions score ranges $\langle 0, 17 \rangle $ for healthy, $(17, 27)$ for neutral, and $\langle 27, 34 \rangle$ for depressed. In the case of response classification, our ability to potentially increase inter-class variance in this way is more limited due the amount of available data, since only before treatment recordings are used. Thus, we removed only 14 neutral subjects, leaving 59 nonresponding and 60 responding subjects.
 
-\section{Input Representation}
+\section{Input Representation} \label{sec:input-repr}
 Before applying any machine learning technique to the classification problem at hand, the question of optimal input representation needs to be answered. To this end, multiple factors need to be considered. Firstly, what is the dimensionality of the input relative to the resulting number of samples, and does it allow construction of sufficiently complex architectures compared to complexity of the classification problem? Secondly, does each input sample contain enough information to perform successful classification? Thirdly, is the input representation appropriate for the kind of data, i.e. does it help or hinder successful classification? In our case, for all the methods considered, answer to the first question is a function of recording slice length used to generate the input. Answering the remaining questions, however, is difficult without prior experiments on similar datasets. For this reason, research on applying known techniques to new problems is useful.
 
 Since well designed neural networks are characteristically able to learn feature maps given enough data, one obvious possibility is to use raw data. This approach has multiple benefits. First one, as we will see, is relatively low dimensionality. Global, and local features, no prior bias. Our first choice, then, was then to segment each recording into subrecordings of fixed length $l=256$, and for each subrecording, order all its $C=19$ channels into rows of a $C \times l$ matrix. Each of those matrices was then used as input sample.
@@ -2353,7 +2421,7 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 
 \chapter{Conclusion}
 
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}
 \bibliography{refs}
 
 \appendix
@@ -2419,7 +2487,7 @@ Fz       & 10.356 $\pm$ 0.917 & 10.211 $\pm$ 0.972 & 0.315 &       \\ \hline
 Cz       & 10.287 $\pm$ 0.849 & 10.164 $\pm$ 0.898 & 0.384 &       \\ \hline
 Pz       & 10.584 $\pm$ 0.828 & 10.458 $\pm$ 0.949 & 0.518 &       \\ \hline
 \end{tabular}
-\caption[Mean values of LLE, before and after comparison.]{Mean values of $\lambda_1$ of all patients before and after treatment.}
+\caption[Mean values of LLE, before and after treatment comparison.]{Mean values of $\lambda_1$ of all patients before and after treatment.}
 \label{tab:lleba}
 \end{table}
 
@@ -2450,7 +2518,7 @@ Fz       & 10.366 $\pm$ 1.000 & 10.331 $\pm$ 1.052 & 0.658 &       \\ \hline
 Cz       & 10.335 $\pm$ 1.108 & 10.361 $\pm$ 1.152 & 0.918 &       \\ \hline
 Pz       & 10.124 $\pm$ 1.022 & 10.102 $\pm$ 1.038 & 0.812 &       \\ \hline
 \end{tabular}
-\caption[Mean values of CD, before and after comparison.]{Mean values of $D_2$ of all patients before and after treatment.}
+\caption[Mean values of CD, before and after treatment comparison.]{Mean values of $D_2$ of all patients before and after treatment.}
 \label{tab:d2ba}
 \end{table}
 
@@ -2481,7 +2549,7 @@ Fz       & 0.747 $\pm$ 0.107 & 0.762 $\pm$ 0.124 & 0.583 &       \\ \hline
 Cz       & 0.756 $\pm$ 0.096 & 0.767 $\pm$ 0.110 & 0.672 &       \\ \hline
 Pz       & 0.716 $\pm$ 0.093 & 0.728 $\pm$ 0.113 & 0.806 &       \\ \hline
 \end{tabular}
-\caption[Mean values of SE, before and after comparison.]{Mean values of sample entropy of all patients before and after treatment.}
+\caption[Mean values of SE, before and after treatment comparison.]{Mean values of sample entropy of all patients before and after treatment.}
 \label{tab:seba}
 \end{table}
 
@@ -2661,7 +2729,7 @@ Pz       & 9.991 $\pm$ 1.073 & 10.295 $\pm$ 0.891 & 0.155 &       \\ \hline
 \end{tabular}
 \subcaption{Correlation dimension}
 }
-\caption{Comparison of mean values of measures computed for 50 healthy (depression score $\leq$ 16) and 50 depressed (depression score $\geq$ 28) patients.}
+\caption[Comparison of mean measure values between healthy and depressed patients.]{Comparison of mean values of measures computed for 50 healthy (depression score $\leq$ 16) and 50 depressed (depression score $\geq$ 28) patients.}
 \label{tab:depmeans}
 \end{table}
 
@@ -3208,7 +3276,7 @@ Cz       & 0.744 $\pm$ 0.090 & 0.745 $\pm$ 0.097 & 0.843 &       \\ \hline
 Pz       & 0.705 $\pm$ 0.087 & 0.715 $\pm$ 0.111 & 0.965 &       \\ \hline
 \end{tabular}
 }
-\caption{Mean values of sample entropy of responding / nonresponding patients before and after treatment.}
+\caption{Mean values of SE, responding and nonresponding patients before and after treatment.}
 \label{tab:sebaresp}
 \end{table}
 

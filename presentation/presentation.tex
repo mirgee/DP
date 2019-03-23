@@ -39,7 +39,7 @@
 
 \titlegraphic{\includegraphics[scale=1.25]{Images/lev.pdf}} % Optional title page image, comment this line to remove it
 
-\institute{FJFI}
+\institute{FNSPE, CTU}
 
 \date{\today}
 
@@ -437,18 +437,18 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 %------------------------------------------------
 
 \begin{frame}{Input Representation}
-\begin{figure}
+\begin{figure}[t]
 \centering
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}[t]{.5\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{./Images/chebyshev.png}
   \caption{Recurrence plot (RP)}
   % \label{fig:sub1}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}[t]{.5\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{./Images/cs.png}
-  \caption{Cosine similarity (CS)}
+  \caption{Cosine similarity (CS)\\\tiny{Multivariate GAFs?}}
   % \label{fig:sub2}
 \end{subfigure}
 \end{figure}
@@ -466,7 +466,7 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
 
 \begin{frame}[noframenumbering]{Architecture Design - Deep}
   \centering
-  \includegraphics[width=0.5\linewidth]{./Images/deep.png}
+  \includegraphics[width=0.45\linewidth]{./Images/deep.png}
 \end{frame}
 
 %------------------------------------------------
@@ -566,7 +566,7 @@ Test & \textbf{1038} & \textbf{997} & \textbf{830} & \textbf{855} \\ \hline
     \centering{\textbf{Limitations}}
     \begin{itemize}
       \item Binary output
-      \item Most patients in remission % i.e. the classes may have been artifically balanced, not enough non-remitting patients
+      \item Most patients initially depressed and in remission % i.e. the classes may have been artifically balanced, not enough non-remitting patients
     \end{itemize}
     \centering{\textbf{\footnotesize{NL approach}}}
         \begin{itemize}
@@ -579,7 +579,7 @@ Test & \textbf{1038} & \textbf{997} & \textbf{830} & \textbf{855} \\ \hline
     \centering{\textbf{\footnotesize{DL approach}}}
         \begin{itemize}
           \item Short samples
-          \item Simple models
+          % \item Simple models
         \end{itemize}
 
     \column{0.5\linewidth}
