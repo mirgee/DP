@@ -414,24 +414,22 @@ In this work, our aim is to contribute positively to the state of the art of thi
   \item performing this analysis on relatively large dataset, and, eventually,
   \item implementing a diagnosis-aid software tool which will use the techniques to help asses depression severity and predict treatment responsiveness.
 \end{enumerate}
-\section*{Problem Statement}
+\section*{Problem Statement and Objectives}
 \info[inline]{Does this section say enough on the the objectives?}
 
-We have been kindly provided by \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health} a dataset comprising of 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions - before and, 4 weeks later, after drug administration. Before each recording, patient's mental health status was assessed by a trained professional using standardized questionnaire, and quantified into a depression score.\footnote{For more details about the dataset, see Section \ref{sec:dataset}.} Using these recordings and depression scores, we set out two goals:
+The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}. It comprises of 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions: at the beginning of the treatment and, 4 weeks later, after drug adminstration. On both of those ocassions, patient's depression score (a number quantifying patient's depression severity) was measured by a trained professional using a standardized questionnaire. For more details about the dataset, see Section \ref{sec:dataset}. Using these recordings and depression scores, we aim to solve the following problems:
 % Maybe clarify we turned it into classification task
 \begin{description}
-  \item[diagnosis]: predict the patients depression level based on short EEG signal sample at the time of recording, and
-  \item[prognosis]: predict the future depression level based on short EEG signal sample.
+  \item[diagnosis:] predict the patients depression score range measured \emph{at the time of the recording} based on an EEG signal sample obtained \emph{at the time of the recording}, and
+  \item[prognosis:] predict the patients depression score range measured \emph{during the first visit} based on an EEG signal sample obtained \emph{during the first visit}.
 \end{description}
-For this purpose, we used two methods approaches shown to be relatively successful at this and similar tasks:
+For the purposes of abstraction and tractability, we define these problems as classification tasks. In order to analyze the EEG signals and extract relevant features, we separately use and evaluate two approaches previously evidenced in the literature to be effective at similar tasks:
 \begin{description}
-  \item[nonlinear analysis approach]: compute nonlinear measures using nonlinear dynamical system analysis of the EEG signals, and use standard machine learning techniques to predict the patient's current or future depression level, and
-  \item[deep learning approach]: use convolutional neural networks to both extract feature representations directly from the EEG signals, and predict the patients current or future depression level.
+  \item[nonlinear analysis approach:] compute selected nonlinear measures using nonlinear dynamical system analysis of the EEG signals, and use machine learning techniques to perform classification, and
+  \item[deep learning approach:] use convolutional neural networks to both extract relevant features from an input representation of the EEG signals, and perform the classification.
 \end{description}
-% Maybe add a little detail about that we then evaluated the results and say add \ref{fig:diagram} 
-\section*{Objectives}
-
 \section*{Text Organization}
+The contents of each chapter of this work are hereby summarized. In addition, the overall structure of the thesis is also depicted in Figure \ref{fig:diagram}
 \begin{description}
   \item[Chapter~\ref{ch:nonlin}: \nameref{ch:nonlin}]~\\
     The topic of nonlinear dynamical analysis in relation EEG analysis is presented. The concepts of a dynamical system and its state spaces are introduced, along with methods of describing them used further. State space reconstruction using the method of time delays is discussed in detail, followed by description of algorithms for time delay and embedding dimension selection. Nonlinear dynamical measures and algorithms for computing them are described further, along with algorithms to used to validate the results. This chapter finishes with review of the current state of the literature on the topic of depression diagnosis using both linear techniques and nonlinear dynamical analysis, followed by limitations of this approach to EEG signal analysis.
@@ -1386,7 +1384,7 @@ The approach of estimating a finite embedding dimension (see Section \ref{sec:st
 
 \chapter{Nonlinear Analysis Approach} \label{ch:nonlin-approach}
 \section{Dataset} \label{sec:dataset}
-The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}, and the recording was performed by specialists thereby. It comprises of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58).\footnote{We use the notation $\text{mean} \pm \text{std}$.} Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS)~\cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points~\cite{herrmann1998sunnybrook}: 
+The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}, and the recording was performed by the institution's local specialists. It comprises of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58).\footnote{We use the notation $\text{mean} \pm \text{std}$.} Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS)~\cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points~\cite{herrmann1998sunnybrook}: 
 \begin{description}
   \item[0 - 6]: symptom absent,
   \item[7 - 19]: mild depression,
