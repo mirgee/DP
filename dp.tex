@@ -384,19 +384,40 @@ Artificial Intelligence Center, FEE, CTU Prague
 ~\newpage{}
 
 \pagenumbering{arabic} % restart page numbers at one, now in arabic style
-\chapter{Introduction}
-\section{Depression and its Diagnosis}
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+\section*{Depression and its Diagnosis}
 \info[inline]{Does this section say enough on the most important background to understand the focus?}
 
 Depression is one of the most common brain disorders - it affects 121-300 million people worldwide, and this number is expected to increase in the future~\cite{rodriguez2015, whodepression}. It is estimated that over 20 million people in the United States alone have this mood disorder, but only 50\% have been diagnosed~\cite{smith2013diagnosis}. Although effective treatments are known, World Health Organization (WHO) estimates that fewer than half of affected individuals receive those treatments. According to WHO, major barriers include insufficient resources, lack of properly trained practitioners, inaccurate assessment and misdiagnosis~\cite{whodepression}. Moreover, the diagnosis is further complicated by the fact that depressive symptoms often mimic other disorders, and coexisting conditions may confound diagnosis~\cite{smith2013diagnosis}. Indeed, self-assessed questionnaires are often inaccurate, and structured or semi-structured interviews (SDIs) require time and expertise of trained professionals. 
 
-For these reasons, it is important that affordable, fast, accurate, and easy to use methods to aid its diagnosis are developed. Electroencephalography (EEG)\footnote{In this work, we will use the same abreviation for electroencephalography (recording method) and electroencephalographam (the recorded data) where the distinction is apparent from the context.}, a method of recording spatiotemporal evolution of electrical activity in the cortical regions near the scalp, may be one such method thanks to its comparatively low-cost and easy recording process. Unlike SDIs and laboratory methods such as dexamethasone suppression test, it assesses ongoing activity in the responsible organ itself. Moreover, unlike glucose utilization or blood oxygenation, it captures the electrical activity directly~\cite{olbrich2013eeg}. All these properties make EEG excellent tool for development of biomarkers - objectively measurable indicators of the biological state.
+For these reasons, it is important that affordable, fast, accurate, and easy to use tools to aid its diagnosis are developed. Electroencephalography (EEG)\footnote{In this work, we will use the same abreviation for electroencephalography (recording method) and electroencephalographam (the recorded data) where the distinction is apparent from the context.}, a method of recording spatiotemporal evolution of electrical activity in the cortical regions near the scalp, may be one such tool thanks to its comparatively low cost and easy recording process. Unlike SDIs and laboratory methods such as dexamethasone suppression test, it assesses ongoing activity in the responsible organ itself. Moreover, unlike measurements of glucose utilization or blood oxygenation in the brain, it captures the electrical activity directly~\cite{olbrich2013eeg}. These properties make EEG technology potentially useful as a practical tool to aid depression treatment, which may, for example, improve diagnosis accuracy, predict treatment response, or track development of depression severity over time. Fully realizing this potential would likely require more detailed understanding of brain dynamics~\cite{stam2005}. At present, however, EEG signal analysis still remains relatively unpopular method of depression diagnosis in contrast with SDIs~\cite{smith2013diagnosis}. This may be due to insufficient standardization of research, overly positive interpretation of findings, and relatively small volume of limited datasets, together impeding the possibility of meaningful objective conclusions or meta-studies~\cite{olbrich2013eeg}. 
 
-\section{Problem Statement and Objective}
-\info[inline]{Does this section say enough on the the focus, value, and objectives?}
-In spite of the aforementioned advantages, EEG signal analysis still remains relatively unpopular method of depression diagnosis aid in contrast with SDIs. This may be, in part, due to insufficient standardization of research, lack of objective interpretation of findings, and relatively small volume of small datasets impeding the possibility of meaningful interpretations or meta-studies~\cite{olbrich2013eeg}. The broad objective of this thesis is to contribute positively to this unfortunate state of an important area by comparing two relatively successful approaches of depression diagnosis using EEG signals on relatively large dataset.
+\section*{Research Focus}
+\info[inline]{Is this enough to estabilish the value?}
+For the reasons mentioned above, the first steps toward improving the state of the art in EEG in the field of EEG analysis likely depends on the progress in one or more of (but is not limited to) the following areas \cite{stam2005, olbrich2013eeg}:
+\begin{enumerate}
+  \item development of more effective EEG signal analysis techniques,
+  \item identification of reliable EEG-based biomarkers\footnote{Biomarker is defined as objectively measurable indicator of the biological state of the organism \cite{olbrich2013eeg}.} of depression,
+  \item understanding of the brain dynamics with focus on differences between healthy and diseased states,
+  \item standardization of recording conditions, preprocessing, result analysis and other research procedures,
+  \item enrollment of larger, hypothesis-driven cohort studies,
+  \item successful clinical applications to estabilish trust amongst mental health practitioners.
+\end{enumerate}
 
-This dataset comprises 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions - before drug administration and, 4 weeks later, after drug administration. Before each recording, patient's mental health status was assessed by a trained professional using standardized questionnaire, and quantified into a depression score.\footnote{For more details about the dataset, see Section \ref{sec:dataset}.} Using these recordings and depression scores, we set out two goals:
+In this work, our aim is to contribute positively to the state of the art of this important area by analyzing the limited, but relatively large dataset of depressed patients using two approaches previously advocated as effective~\cite{faust2014depression, acharya2015novel, ahmadlou2012, bachmann2013, hosseinifard2013, nandrino1994, roschke1995nonlineardeppression, lee2007detrended, stam2005}: nonlinear dynamical analysis and deep learning. In the process, we aim to adress the areas mentioned above by:
+\begin{enumerate}
+  \item providing evidence to or against the effectiveness of these techniques,
+  \item providing evidence to or against the status of nonlinear dynamical measures as reliable biomarkers of depression, 
+  \item discover possible relationships of depression severity or future responsiveness to treatment to distributions of these nonlinear measures across the brain regions,
+  \item discovering the most effective procedure for computing the nonlinear measures and evaluate these procedures,
+  \item performing this analysis on relatively large dataset, and, eventually,
+  \item implementing a diagnosis-aid software tool which will use the techniques to help asses depression severity and predict treatment responsiveness.
+\end{enumerate}
+\section*{Problem Statement}
+\info[inline]{Does this section say enough on the the objectives?}
+
+We have been kindly provided by \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health} a dataset comprising of 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions - before and, 4 weeks later, after drug administration. Before each recording, patient's mental health status was assessed by a trained professional using standardized questionnaire, and quantified into a depression score.\footnote{For more details about the dataset, see Section \ref{sec:dataset}.} Using these recordings and depression scores, we set out two goals:
 % Maybe clarify we turned it into classification task
 \begin{description}
   \item[diagnosis]: predict the patients depression level based on short EEG signal sample at the time of recording, and
@@ -408,19 +429,20 @@ For this purpose, we used two methods approaches shown to be relatively successf
   \item[deep learning approach]: use convolutional neural networks to both extract feature representations directly from the EEG signals, and predict the patients current or future depression level.
 \end{description}
 % Maybe add a little detail about that we then evaluated the results and say add \ref{fig:diagram} 
+\section*{Objectives}
 
-\section{Text Organization}
-In \textbf{Chapter 1}, we present some of the classical theory and methods of nonlinear dynamical analysis and chaos theory, with focus on the concepts relied on in the following chapter.
+\section*{Text Organization}
+\begin{description}
+  \item[Chapter~\ref{ch:nonlin}: \nameref{ch:nonlin}]~\\
+    The topic of nonlinear dynamical analysis in relation EEG analysis is presented. The concepts of a dynamical system and its state spaces are introduced, along with methods of describing them used further. State space reconstruction using the method of time delays is discussed in detail, followed by description of algorithms for time delay and embedding dimension selection. Nonlinear dynamical measures and algorithms for computing them are described further, along with algorithms to used to validate the results. This chapter finishes with review of the current state of the literature on the topic of depression diagnosis using both linear techniques and nonlinear dynamical analysis, followed by limitations of this approach to EEG signal analysis.
+  \item[Chapter~\ref{ch:nonlin-approach}: \nameref{ch:nonlin-approach}]~\\
+    Aspects of the dataset and its metadata are described in detail, followed by discussion of the preprocessing step. The process of state space reconstruction is carried out using the algorithms described in the previous chapter, and the results are analyzed and discussed in detail. The procedure of computing each nonlinear measure is described and compared with existing literature. For each nonlinear measure, the obtained results based on input parameters are evaluated, and reasoning behind selection of input parameters used to obtain the final results is provided. Differences between the obtained results in various subgroups of the dataset are analyzed. Finally, the experimental settings for the classification tasks are described, and the obtained results are presented.
+  \item[Chapter~\ref{ch:dl}: \nameref{ch:dl}]~\\
+    Convolutional neural networks are put into historical context and their relevant features are described. A signal processing technique which inspired our final selection of neural network architecture is presented. Possible approaches to input representation are discussed. The most successful architectures are introduced, and the chapter concludes with description of the obtained classification resuts.
+  \item[\nameref{ch:concl}]~\\
+    In the final chapter, the research objectives are reiterated and whether they have been met is discussed. Recommendations for future work are made, contributions and limitations of the work are examined.
+\end{description}
 
-In \textbf{Chapter 2}, we present the results of our nonlinear dynamical system analysis approach, including estimation of embedding parameters such as embedding dimension and time delay, and classification results.
-
-In \textbf{Chapter 3}, we present the results of our deep learning approach, including short description of Convolutional Neural Networks (CNNs), a technique which inspired our choice of CNN architecture called Common Spatial Patterns, and classification results.
-
-In the final chapter, we conclude with summary of our results, and potential avenues and directions for future work.
-
-% \addcontentsline{toc}{chapter}{Introduction}
-
-% Add links to chapters
 \pgfkeys{/forest,
   my rounded corners/.append style={rounded corners=2pt},
 }
@@ -494,7 +516,6 @@ for tree={
 \caption[Diagram of the thesis.]{Diagram of the thesis.}
 \label{fig:diagram}
 \end{figure}
-
 
 \chapter{Nonlinear Time Series Analysis} \label{ch:nonlin}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The simplest of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description. Those examples represent two classes of processes existent before the rise of nonlinear dynamics:
@@ -2419,13 +2440,21 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 \info[inline]{CHanges to number of any parameter, including adding layers made the results worse. Interestingly, simpler models overfit the training set very quickly, and regularization hurt performance. Hence, this model is probably at least close to local optima in hyperparameter space.}
 \info[inline]{Maybe measure shallow model with more traditional activations to see how much performance is due to FCP.}
 
-\chapter{Conclusion}
+\chapter*{Conclusion} \label{ch:concl}
+\addcontentsline{toc}{chapter}{Conclusion}
+\section*{Research Objectives}
+
+\section*{Recommendations for Future Work}
+
+\section*{Contribution}
+
 
 \bibliographystyle{unsrt}
 \bibliography{refs}
 
 \appendix
 \chapter*{Appendix}
+\addcontentsline{toc}{chapter}{Appendix}
 \begin{landscape}
   \begin{figure} 
   \centering
