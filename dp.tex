@@ -393,7 +393,7 @@ Depression is one of the most common brain disorders - it affects 121-300 millio
 
 For these reasons, it is important that affordable, fast, accurate, and easy to use tools to aid its diagnosis are developed. Electroencephalography (EEG)\footnote{In this work, we will use the same abreviation for electroencephalography (recording method) and electroencephalographam (the recorded data) where the distinction is apparent from the context.}, a method of recording spatiotemporal evolution of electrical activity in the cortical regions near the scalp, may be one such tool thanks to its comparatively low cost and easy recording process. Unlike SDIs and laboratory methods such as dexamethasone suppression test, it assesses ongoing activity in the responsible organ itself. Moreover, unlike measurements of glucose utilization or blood oxygenation in the brain, it captures the electrical activity directly~\cite{olbrich2013eeg}. These properties make EEG technology potentially useful as a practical tool to aid depression treatment, which may, for example, improve diagnosis accuracy, predict treatment response, or track development of depression severity over time. Fully realizing this potential would likely require more detailed understanding of brain dynamics~\cite{stam2005}. At present, however, EEG signal analysis still remains relatively unpopular method of depression diagnosis in contrast with SDIs~\cite{smith2013diagnosis}. This may be due to insufficient standardization of research, overly positive interpretation of findings, and relatively small volume of limited datasets, together impeding the possibility of meaningful objective conclusions or meta-studies~\cite{olbrich2013eeg}. 
 
-\section*{Research Focus}
+\section*{Research Objectives}
 \info[inline]{Is this enough to estabilish the value?}
 For the reasons mentioned above, the first steps toward improving the state of the art in EEG in the field of EEG analysis likely depends on the progress in one or more of (but is not limited to) the following areas \cite{stam2005, olbrich2013eeg}:
 \begin{enumerate}
@@ -409,12 +409,12 @@ In this work, our aim is to contribute positively to the state of the art of thi
 \begin{enumerate}
   \item providing evidence to or against the effectiveness of these techniques,
   \item providing evidence to or against the status of nonlinear dynamical measures as reliable biomarkers of depression, 
-  \item discover possible relationships of depression severity or future responsiveness to treatment to distributions of these nonlinear measures across the brain regions,
+  \item discovering possible relationships of depression severity or future responsiveness to treatment to distributions of these nonlinear measures across the brain regions,
   \item discovering the most effective procedure for computing the nonlinear measures and evaluate these procedures,
   \item performing this analysis on relatively large dataset, and, eventually,
   \item implementing a diagnosis-aid software tool which will use the techniques to help asses depression severity and predict treatment responsiveness.
 \end{enumerate}
-\section*{Problem Statement and Objectives}
+\section*{Problem Statement}
 \info[inline]{Does this section say enough on the the objectives?}
 
 The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}. It comprises of 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions: at the beginning of the treatment and, 4 weeks later, after drug adminstration. On both of those ocassions, patient's depression score (a number quantifying patient's depression severity) was measured by a trained professional using a standardized questionnaire. For more details about the dataset, see Section \ref{sec:dataset}. Using these recordings and depression scores, we aim to solve the following problems:
@@ -514,7 +514,6 @@ for tree={
 \caption[Diagram of the thesis.]{Diagram of the thesis.}
 \label{fig:diagram}
 \end{figure}
-
 \chapter{Nonlinear Time Series Analysis} \label{ch:nonlin}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The simplest of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description. Those examples represent two classes of processes existent before the rise of nonlinear dynamics:
 \begin{description}
@@ -573,7 +572,7 @@ EEG signals are known to be \emph{nonstationary and nonlinear}~\cite{kaplan2005,
 Although in this study, we will only consider Euclidean state space $M$, the true state space is needs not necessarily be Euclidean. For example, if some of the state variables are angles, the state space exhibits toroidal topology. However, any topological manifold is locally Euclidean~\cite{lee2010introduction} and, since, in EEG signal analysis both $M$ and $d$ are unknown, we have no other alternative than to work in Euclidean state space $M$.
 
 \begin{dfn}[\cite{andreas2000}]
-  Let $\mathbf{\xi} : \RR \rightarrow \RR^d$ be an $d \in \NN$ dimensional state (phase) space vector dependent on time, and $\mathbf{F}$ a smooth vector field in $\RR^d$. A \textbf{deterministic dynamical system}\footnote{In this work, we are going to assume that the brain is a deterministic dynamical system, and that any stochastic component is small and does not change nonlinear properties of the system. Thus, by the term dynamical system, we will always mean a deterministic dynamical system. This assumption is necessary for nonlinear dynamical analysis. On the other hand, nonlinear dynamical analysis also provides techniques (see Section \ref{sec:surrogate-analysis-theory}) which can partially address (yet not fully answer) justification for this assumption. The question whether the brain is truly deterministic is open~\cite{stam2005, randomness}, but it is often thought to be probable that the brain is a nonlinear, deterministic, dissipative (i.e. exchanging energy with its environment) system~\cite{stam2005}.} is described by a set of $d$ first-order differential equations
+  Let $\mathbf{\xi} : \RR \rightarrow \RR^d$ be an $d \in \NN$ dimensional state (phase) space vector dependent on time, and $\mathbf{F}$ a smooth vector field in $\RR^d$. A \textbf{deterministic dynamical system}\footnote{In this work, we are going to assume that the brain is a deterministic dynamical system, and that any stochastic component is small and does not change nonlinear properties of the system. Thus, by the term dynamical system, we will always mean a deterministic dynamical system. This assumption is necessary for nonlinear dynamical analysis. On the other hand, nonlinear dynamical analysis also provides techniques (see Section \ref{sec:surrogate-analysis-theory}) which can partially adress (yet not fully answer) justification for this assumption. The question whether the brain is truly deterministic is open~\cite{stam2005, randomness}, but it is often thought to be probable that the brain is a nonlinear, deterministic, dissipative (i.e. exchanging energy with its environment) system~\cite{stam2005}.} is described by a set of $d$ first-order differential equations
   \begin{align*}
     \frac{d}{dt}\mathbf{\xi}(t) = \mathbf{F}(\mathbf{\xi}(t)), \qquad t \in \RR^+_0,
   \end{align*}
@@ -717,11 +716,11 @@ A more objective approach to analyzing recurrence plots is an ensemble of techni
 
 \section{State Space Reconstruction} \label{sec:state-space-reconstruction}
 
-Broadly, one possible approach to nonlinear time series analysis consists of the following steps: 
+Broadly, one possible approach to nonlinear time series analysis consists of the following steps~\cite{stam2005}: 
 \begin{enumerate}
   \item reconstruction of the attractor \info{Saying dynamics is not true. We are not reconstructing the vector field $\mathbf{F}$.} of given system from recorded data,
   \item characterization of the reconstructed attractor,
-  \item checking validity of the results with surrogate data testing~\cite{stam2005}.
+  \item checking validity of the results with surrogate data testing.
 \end{enumerate}
 
 \add[inline]{Connect this to the content of this section. Expand on the steps.}
@@ -856,7 +855,7 @@ where $\mathbf{x}_i^{(m, \tau)}$ is the $i$-th vector of time delay embedding wi
 Rosenstein et al. presented multiple methods for quantifying expansion from the diagonal (the identity line of the attractor), and found $\mathrm{ADFD}$ to be the most computationally efficient, robust to noise, and accurate~\cite{rosenstein1994reconstruction}. They also experimentily identified optimal $\tau$ as the one for which the slope of $\mathrm{ADFD}$ drops below 40\% of its initial value.  
 
 \subsubsection{Singular Values Analysis} \label{sec:svd}
-All the approaches described so far address the issue of redundance by attempting to make the coordinates less correlated or expanding the reconstruction from the identity line. The issue of irrelevance however, needs to be addressed as well. In fact, based mostly on empirical, rather than theoretical grounds, most time delay estimation techniques optimize for the following criteria~\cite{kugiumtzis1996state}:
+All the approaches described so far adress the issue of redundance by attempting to make the coordinates less correlated or expanding the reconstruction from the identity line. The issue of irrelevance however, needs to be adressed as well. In fact, based mostly on empirical, rather than theoretical grounds, most time delay estimation techniques optimize for the following criteria~\cite{kugiumtzis1996state}:
 \begin{enumerate}
   \item The reconstructed attractor must be expanded from the diagonal.
   \item The components of the reconstructed vector $\mathbf{x}_n$ must be uncorrelated.
@@ -945,7 +944,7 @@ Also, this method tends to underestimate $m$ for very small $\tau$. Small $\tau$
 Lastly, in presence of measurement noise, the proportion of false neighbors may increase after transition to a higher dimension, since even identical vectors will diverge~\cite{kantz2004}.
 
 \subsubsection{Average False Neighbors} \label{sec:afn}
-This technique by Cao~\cite{Cao1997} addresses one of the drawbacks of false nearest neighbors mentioned in the previous section - the variance of results based on subjective choice of embedding parameters. It does so by defining two parameter free functions dependent only on the embedding parameters.
+This technique by Cao~\cite{Cao1997} adresses one of the drawbacks of false nearest neighbors mentioned in the previous section - the variance of results based on subjective choice of embedding parameters. It does so by defining two parameter free functions dependent only on the embedding parameters.
 
 The first function measures the variation of average ratio of distance of two neighbors in one dimension to the distance of the same neighbors in a higher dimension. More precisely, let
 \begin{align*}
@@ -1860,7 +1859,7 @@ For each group, we performed two-sided Kruskal-Wallis test for the null hypothes
 
 For all measures computed, we found significant differences of mean values between recordings in temporal areas, especially T3. The distributions of largest Lyapunov exponents and sample entropy are also significantly different in the frontal and ``central'' areas. \info{Which are associated with depression, but we want to leave that out in this section.} 
 
-We also analyzed the differences in the before and after treatment recordings in the groups specifically responding and nonresponding to the treatment in Section \ref{sec:analdepdif}. Moreover, we performed unsupervised analysis of before / after groupds using PCA in 2,3, and 4 dimensions, and compared centroids and mean distances between before and after treatment recording for each group. However, the resulting plots and heatmaps are featureless and thus we will leave them out. The mean distances are also uninformative.
+We also analyzed the differences in the before and after treatment recordings in the groups specifically responding and nonresponding to the treatment in Section \ref{sec:analdepdif}. Moreover, we performed unsupervised analysis of before / after groups using PCA in 2,3, and 4 dimensions, and compared centroids and mean distances between before and after treatment recording for each group. However, the resulting plots and heatmaps are featureless and thus we will leave them out. The mean distances are also uninformative.
 
 \subsection{Low and High Depression Score Groups} \label{sec:analdepdif}
 As mentioned in Section \ref{sec:dataset}, studied dataset lacks symptom absent group, which makes the task of creating a generally applicable classifier for depression diagnosis more difficult. The patients, however, still vary in severity of their symptoms, which allows us to study correlation between symptom severity (which may, in turn, inform the task of finding a classifier). To this goal, we explored the differences in distributions of computed nonlinear between groups of the ``healthiest'' and most depressed patients visually and using statistical tests, and in this section, we present some of the results.
@@ -1871,7 +1870,7 @@ First, we looked at histograms of computed measures between the two groups. Ther
 
 Moreover, we investigated the differences in the distributions using Kruskal-Wallis test. Table \ref{tab:depmeans} in the Appendix shows the results. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
 
-Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for all remaining features except for correlation dimension. Of course, these results are expected given the previous observations\unsure{Is this true?}. We also visualized correlations of individual measures to the labels on topographic scalp in Figure \ref{fig:scalp-corrs}.
+Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for Hurst exponent and Higuchi fractal dimension, where, however, DFA shows slightly more significant correlations. Sample entropy values were significantly negatively correlated only on F4 and T6 channels. For correlation dimension, no significant correlation between depression scores was found on any channel. We also visualized correlations of individual measures to the labels on topographic scalp in Figure \ref{fig:scalp-corrs}.
 
 \begin{figure} 
 \centering
@@ -1885,7 +1884,7 @@ Furthermore, we inspected the correlations between the individual measures and c
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/dfadepcorr.png} }
-  \caption[Trends in DFA as a function of depression score.]{Trend of values of DFA as a function of depression score. The correlation is not significantly ($p$ < 0.05) negative for F3, F4, P3, Cz. Similar trend is present in Hurst exponent, Higuchi fractal dimension and sample entropy.}
+  \caption[Trends in DFA as a function of depression score.]{Trend of values of DFA as a function of depression score. The correlation is significantly ($p$ < 0.05) negative for all channels with exception of F3, F4, C3, P3, T3, Cz. Similar trend is present in Hurst exponent, Higuchi fractal dimension and sample entropy. No correlation of correlation dimension with depression score is significant in any channel.}
  \label{fig:dfadepcorr}
 \end{figure}
 
@@ -1893,7 +1892,7 @@ Furthermore, we inspected the correlations between the individual measures and c
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/lyapdepcorr.png} }
-  \caption[Trends in $\lambda_1$ as function of depression score.]{Trends of values of largest Lyapunov exponent as a function of depression score. The correlation is not significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, C3, F7, F8, T3. }
+  \caption[Trends in $\lambda_1$ as function of depression score.]{Trends of values of largest Lyapunov exponent as a function of depression score. The correlation is significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, C3, F7, F8, T3.}
  \label{fig:lyapdepcorr}
 \end{figure}
 
@@ -1905,7 +1904,7 @@ Furthermore, we inspected the correlations between the individual measures and c
 \end{figure}
 
 \subsection{Low and High Response Groups} \label{sec:analrespdif}
-Neurocorrelates of remission, or, in other words, positive response to a treatment, are interesting apart from the neurocorrelates of depression itself. Instead of indicating whether a treatment should be prescribed in the first place, the effects of various drugs on the brain may help in designing more individualized treatments, or in developments of new drugs, even for other conditions. However, as noted in Section \ref{sec:dataset}, in our dataset, different kinds of treatments (including rTMS) are mixed for most patients, thus making the singular causes of any observed changes challenging. Nevertheless, we may still attempt to find discrepancies between the responding and stagnant patients. If we assume that any prescribed treatment was beneficial, we may be able identify traits of patients who are difficult to treat. Indeed, medical literature recognizes entire categories of such patients~\cite{kane1996factors}.
+Neurocorrelates of remission, or, in other words, positive response to a treatment, are interesting apart from the neurocorrelates of depression itself. Instead of indicating whether a treatment should be prescribed in the first place, the effects of various drugs on the brain may help in designing more individualized treatments, or in developments of new drugs, even for other conditions. However, as noted in Section \ref{sec:dataset}, in our dataset, different kinds of treatments (including rTMS) are mixed for most patients, thus make the task of distinguishing the singular causes of any observed changes challenging. Nevertheless, we may still attempt to find discrepancies between the responding and stagnant patients. If we assume that any prescribed treatment was beneficial, we may be able identify traits of patients who are difficult to treat. Indeed, medical literature recognizes entire categories of such patients~\cite{kane1996factors}.
 
 For each patient, we computed a measure of change in depression scores (and, by extension, of effectivity of the treatment) we call \emph{response} (RES). If $\mathrm{DS}_0$ denotes the depression score measured on the first visit and $\mathrm{DS}_4$ denotes the depression score measured on the second visit after 4 weeks, then response is computed as their ratio $\mathrm{RES} = \mathrm{DS}_4 / \mathrm{DS}_0$. Mean response is 2.47, mode 1.66, standard deviation 3.14. Most values range from 1 to 5, with a few outliers improving their symptoms 14 and 16-fold respectively. Only 9 patients stagnated exactly or slightly worsened their symptoms (response $\leq$ 1). Subsequently, we sampled 50 patients with the lowest value of response we call \emph{nonresponding} (nonresponders) and 50 patients with the highest value of response we call \emph{responding} (responders). 
 
@@ -1934,13 +1933,6 @@ Evaluation was performed using 5-fold cross-validation. The best performing clas
 This resulted in slight improvement in accuracy, and correspondingly slight bias of the reported classifiers.
 
 \subsection{Depression Diagnosis}
-The recordings were separated into two classes as follows:
-\begin{description}
-  \item[Healthy]: 50 recordings with associated depression score at most 16.
-  \item[Depressed]: 50 recordings with associated depression score at least 28.
-\end{description}
-These thresholds are visualized on the distribution of depression scores in the dataset in Figure \ref{fig:labels-dep}.
-
 \begin{figure}
 \centering
 \begin{subfigure}{0.45\textwidth}
@@ -1958,8 +1950,12 @@ These thresholds are visualized on the distribution of depression scores in the 
 \caption[Label selection for corresponding tasks.]{Label selection for diagnosis and prognosis tasks. The thresholds were selected such that enough samples was present in each class, and such that the classes remained balanced.}
 \label{fig:labels}
 \end{figure}
-
-The results are shown in Table \ref{tab:depcl}. The best performing classifiers in this section were SVMs. The largest Lyapunov exponent was the most predictive out of all considered nonlinear measures, both achieving the highest accuracy out of the single-measure classifiers ($0.72 \pm 0.04$), and being one of the measures in majority of the best performing combined-measure classifiers. It was followed, perhaps surprisingly considering the results obtained in Section \ref{sec:analdepdif}, by correlation dimension ($0.71 \pm 0.05$). Although the accuracy of the remaining classifiers, whose features were obtained using the Kolmogorov-Smirnov test from Section \ref{sec:analdepdif}, was slightly lower (with higher variance), they are also simpler in terms of the number of selected channels.
+The recordings were separated into two classes as follows:
+\begin{description}
+  \item[Healthy]: 50 recordings with associated depression score at most 16.
+  \item[Depressed]: 50 recordings with associated depression score at least 28.
+\end{description}
+These thresholds are visualized on the distribution of depression scores in the dataset in Figure \ref{fig:labels-dep}. The results are shown in Table \ref{tab:depcl}. The best performing classifiers in this section were SVMs. The largest Lyapunov exponent was the most predictive out of all considered nonlinear measures, both achieving the highest accuracy out of the single-measure classifiers ($0.72 \pm 0.04$), and being one of the measures in majority of the best performing combined-measure classifiers. It was followed, perhaps surprisingly considering the results obtained in Section \ref{sec:analdepdif}, by correlation dimension ($0.71 \pm 0.05$). Although the accuracy of the remaining classifiers, whose features were obtained using the Kolmogorov-Smirnov test from Section \ref{sec:analdepdif}, was slightly lower (with higher variance), they are also simpler in terms of the number of selected channels.
 
 All the channels in the combined-measure classifiers were found using the genetic algorithm, as described in the opening to this section. The best overall accuracy was achieved by combination of the largest Lyapunov exponent and sample entropy ($0.75 \pm 0.10$). However, second to it was a combination of the largest Lyapunov exponent and correlation dimension, which has lower variance ($0.74 \pm 0.04)$. Other measures performing well together with the largest Lyapunov exponent are the Hurst exponent, and sample entropy together with DFA. The best combination not inluding the largest Lyapunov exponent is correlation dimension and Higuchi fractal dimension.
 
@@ -2214,7 +2210,7 @@ The method of Common Spatial Patterns (CSP) was originally proposed for people w
 
 As mentioned repeatedly in the previous text, the task of finding patterns in EEG signal associated with particular mind state or motor action present us with numerous challenges. CSP, and FBCSP in particular, are methods devised in attempt to overcome mainly two of them. Firstly, information about different temporally overlapping brain activities is conveyed in parallel in multiple frequency bands. For example, resting wakeful state comprises distinct idle rhythms over different cortical areas (such as $\alpha$-rhythm characteristic of idling visual cortex in the occipital area), which are overlapping with $\mu$-rhythms produced in sensorimotor areas both during imagined and performed movement. Secondly, the spatial origin of those signals is important for associating them with said mind states or motor actions. For example, different parts of the sensorimotor cortex over the central sulcus map directly to movements of distinct bodyparts. This is further complicated by the fact that EEG apparatus has inherently low spatial resolution due to small number of electrodes and poor volume conduction. 
 
-Spatial filtering, then, is process of addressing this second challenge by accentuating signals from some areas, while attenuating others. And CSP analysis is a data-driven approach of achieving this by mutually maximizing the variance of spatially filtered signal associated with one activity, while minimizing the variance of filtered signal associated with other activity, thus making the signals independent (as Gaussian random processes)~\cite{blankertz2008optimizing}. In the following section, we will explain the process in detail.
+Spatial filtering, then, is process of adressing this second challenge by accentuating signals from some areas, while attenuating others. And CSP analysis is a data-driven approach of achieving this by mutually maximizing the variance of spatially filtered signal associated with one activity, while minimizing the variance of filtered signal associated with other activity, thus making the signals independent (as Gaussian random processes)~\cite{blankertz2008optimizing}. In the following section, we will explain the process in detail.
 
 \subsection{Algorithm} \label{sec:csp}
 Let $C$ be the number of channels, and $\mathbf{x}(t) \in \RR^C$ be a band-passed, de-meaned and scaled multichannel EEG recording. CSP analysis yields a projection of $\mathbf{x}(t)$ of the signal from the original signal space to $\mathbf{x}_{\text{CSP}}(t) \in \RR^C$ by finding a matrix $W \in \RR^{C \times C}$, where
@@ -2440,12 +2436,45 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 
 \chapter*{Conclusion} \label{ch:concl}
 \addcontentsline{toc}{chapter}{Conclusion}
+In this study, we incorporate both thorough review of the theory of nonlinear dynamical systems in relation to EEG analysis along with overview of the relevant algorithms and techniques for nonlinear measures extraction and input parameter estimation, comprehensive literature review, and practical application of those techniques on the available dataset. Furthermore, we also present another approach to feature extraction and classification on the dataset. In this section, we discuss the obtained results in context with our objectives, examine the limitations of our results, make recommendations for avenues of further research, and summarize the contribution to scientific knowledge provided by this work.
 \section*{Research Objectives}
+Will adress the objectives from the introduction in the order mentioned thereby.
+
+All NL measures correlated with depression scores, reasonable accuracy which is not as high as in other studies, but we have larger dataset than many. On the other hand, we lack control group (next Section).
+
+\section*{Limitations}
+\begin{itemize}
+  \item Correlation in CNN samples, also they are too short
+  \item Dataset lacks controls, imbalanced for remission
+  \item 50 Hz noise in some samples
+  \item Patients offered various treatment - e.g. it may be possible that response to rTMS may be different from response to drugs
+  \item Outputs only binary label, doctors may want more precise (e.g. 95\% confidence interval, but it is currently to large)
+\end{itemize}
 
 \section*{Recommendations for Future Work}
-
+\begin{itemize}
+\item Better dataset
+\item Filter 50 Hz
+\item Try compression or encoding so that input to CNN can be longer (other solution voting)
+\item Talk about a method of making more samples from less data from Robin Tibor Shirrmeister, how classification can be made by voting on shorter samples
+\item Implement application to aid treatment
+\item Try combining modalities
+\item With larger dataset, more input parameters like kinds of treatment can be used
+\item Correlations of activations with NL measures could be interesting - do CNNs extract some NL measures? Which ones?
+\item Neuroscience: explain correlations in brain regions
+\item New spatiotemporal NL measures (see Stam) - current are spatially local, temporally global
+\item Compare with FBCSP, with spatial embedding
+\end{itemize}
 \section*{Contribution}
-
+\begin{itemize}
+\item Performance on raw data considerably higher than on RP using DL - RP may not be as good as thought e.g. in \cite{acharya2015computer}
+\item F3 seemed relevant for response
+\item All examined NL measures are correlated with depression severity - the most significant correlation is in \ldots
+\item Used methods of estimating input parameters seem not very effective at fidning parameters whih would make the results discriminative
+\item FBCSP-inspired CNN models perform well especially for prediction 
+\item Neuroscience may be able to draw some conclusions from the observed correlation in brain regions
+\item We selected the input parameters very carefully, may inform other researchers about their proper selection (most studies just estimate them crudely)
+\end{itemize}
 
 \bibliographystyle{unsrt}
 \bibliography{refs}
