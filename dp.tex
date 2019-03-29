@@ -116,29 +116,30 @@
 % \makeglossaries
 \makenoidxglossaries
 
-\newacronym{lle}{LLE}{Largest Lyapunov exponent}
-\newacronym{ect}{ECT}{Electroconvulsive therapy}
-\newacronym{ild}{ILD}{Integral local deformation}
-\newacronym{dmi}{DMI}{Delayed mutual information}
-\newacronym{fnn}{FNN}{False nearest neighbors}
-\newacronym{afn}{AFN}{Average false neighbors}
-\newacronym{aaft}{AAFT}{Amplitude adjusted Fourier transform}
-\newacronym{iaaft}{iAAFT}{Improved amplitude adjusted Fourier transform}
-\newacronym{adfd}{ADFD}{Average displacement from diagonal}
-\newacronym{eeg}{EEG}{Electroencephalography, electroencephalogram}
-\newacronym{hfd}{HFD}{Higuchi fractal dimension}
-\newacronym{pca}{PCA}{Principal components analysis}
-\newacronym{svd}{SVD}{Singular value decomposition}
-\newacronym{ftpr}{FTPR}{Fourier transform phase randomization}
-\newacronym{se}{SE}{Sample entropy}
-\newacronym{he}{HE}{Hurst exponent}
-\newacronym{dfa}{DFA}{Detrended fluctuation analysis}
-\newacronym{fgn}{fGn}{Fractional Gaussian noise}
-\newacronym{fBm}{fBm}{Fractional Brownian motion}
-\newacronym{rp}{RP}{Recurrence plot}
-\newacronym{cs}{CS}{Cosine similarity}
-\newacronym{cd}{CD}{Correlation dimension}
-
+\newacronym{lle}{LLE}{Largest Lyapunov Exponent}
+\newacronym{ect}{ECT}{Electroconvulsive Therapy}
+\newacronym{ild}{ILD}{Integral Local Deformation}
+\newacronym{dmi}{DMI}{Delayed Mutual Information}
+\newacronym{fnn}{FNN}{False Nearest Neighbors}
+\newacronym{afn}{AFN}{Average False Neighbors}
+\newacronym{aaft}{AAFT}{Amplitude Adjusted Fourier Transform}
+\newacronym{iaaft}{iAAFT}{improved Amplitude Adjusted Fourier Transform}
+\newacronym{adfd}{ADFD}{Average Displacement from Diagonal}
+\newacronym{eeg}{EEG}{Electroencephalography, Electroencephalogram}
+\newacronym{hfd}{HFD}{Higuchi Fractal Dimension}
+\newacronym{pca}{PCA}{Principal Components Analysis}
+\newacronym{svd}{SVD}{Singular Value Decomposition}
+\newacronym{ftpr}{FTPR}{Fourier Transform Phase Randomization}
+\newacronym{se}{SE}{Sample Entropy}
+\newacronym{he}{HE}{Hurst Exponent}
+\newacronym{dfa}{DFA}{Detrended Fluctuation Analysis}
+\newacronym{fgn}{fGn}{fractional Gaussian noise}
+\newacronym{fBm}{fBm}{fractional Brownian motion}
+\newacronym{rp}{RP}{Recurrence Plot}
+\newacronym{cs}{CS}{Cosine Similarity}
+\newacronym{cd}{CD}{Correlation Dimension}
+\newacronym{cnn}{CNN}{Convolutional Neural Network}
+\newacronym{gpu}{GPU}{Graphical Processing Unit}
 \usepackage{nomencl}
 \makenomenclature
 
@@ -387,59 +388,48 @@ Artificial Intelligence Center, FEE, CTU Prague
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
 \section*{Depression and its Diagnosis}
-\info[inline]{Does this section say enough on the most important background to understand the focus?}
-
 Depression is one of the most common brain disorders - it affects 121-300 million people worldwide, and this number is expected to increase in the future~\cite{rodriguez2015, whodepression}. It is estimated that over 20 million people in the United States alone have this mood disorder, but only 50\% have been diagnosed~\cite{smith2013diagnosis}. Although effective treatments are known, World Health Organization (WHO) estimates that fewer than half of affected individuals receive those treatments. According to WHO, major barriers include insufficient resources, lack of properly trained practitioners, inaccurate assessment and misdiagnosis~\cite{whodepression}. Moreover, the diagnosis is further complicated by the fact that depressive symptoms often mimic other disorders, and coexisting conditions may confound diagnosis~\cite{smith2013diagnosis}. Indeed, self-assessed questionnaires are often inaccurate, and structured or semi-structured interviews (SDIs) require time and expertise of trained professionals. 
 
-For these reasons, it is important that affordable, fast, accurate, and easy to use tools to aid its diagnosis are developed. Electroencephalography (EEG)\footnote{In this work, we will use the same abreviation for electroencephalography (recording method) and electroencephalographam (the recorded data) where the distinction is apparent from the context.}, a method of recording spatiotemporal evolution of electrical activity in the cortical regions near the scalp, may be one such tool thanks to its comparatively low cost and easy recording process. Unlike SDIs and laboratory methods such as dexamethasone suppression test, it assesses ongoing activity in the responsible organ itself. Moreover, unlike measurements of glucose utilization or blood oxygenation in the brain, it captures the electrical activity directly~\cite{olbrich2013eeg}. These properties make EEG technology potentially useful as a practical tool to aid depression treatment, which may, for example, improve diagnosis accuracy, predict treatment response, or track development of depression severity over time. Fully realizing this potential would likely require more detailed understanding of brain dynamics~\cite{stam2005}. At present, however, EEG signal analysis still remains relatively unpopular method of depression diagnosis in contrast with SDIs~\cite{smith2013diagnosis}. This may be due to insufficient standardization of research, overly positive interpretation of findings, and relatively small volume of limited datasets, together impeding the possibility of meaningful objective conclusions or meta-studies~\cite{olbrich2013eeg}. 
+For these reasons, it is important that affordable, noninvasive, portable and easy to use tools to aid its diagnosis are developed. Electroencephalography (EEG)\footnote{In this work, we will use the same abreviation for electroencephalography (recording method) and electroencephalographam (the recorded data) where the distinction is apparent from the context.}, a method of recording spatiotemporal evolution of electrical activity in the cortical regions near the scalp, may be one such tool thanks to its comparatively low cost and easy recording process. Unlike SDIs and laboratory methods such as dexamethasone suppression test, it assesses ongoing activity in the responsible organ itself. Moreover, unlike measurements of glucose utilization or blood oxygenation in the brain, it captures the electrical activity directly~\cite{olbrich2013eeg}. These properties make EEG technology potentially useful as a practical tool to aid depression treatment, which may, for example, improve diagnosis accuracy, predict treatment response, or track development of depression severity over time. Fully realizing this potential would likely require more detailed understanding of brain dynamics~\cite{stam2005}. At present, however, EEG signal analysis still remains relatively unpopular method of depression diagnosis in contrast with SDIs~\cite{smith2013diagnosis}. This may be due to insufficient standardization of research, overly positive interpretation of findings, and relatively small volume of limited datasets, together impeding the possibility of meaningful objective conclusions or meta-studies~\cite{olbrich2013eeg}. 
 
-\section*{Research Objectives}
-\info[inline]{Is this enough to estabilish the value?}
-For the reasons mentioned above, the first steps toward improving the state of the art in EEG in the field of EEG analysis likely depends on the progress in one or more of (but is not limited to) the following areas \cite{stam2005, olbrich2013eeg}:
+Given this situation, the following areas were previously identified as central to improvement of the state of the art of EEG analysis \cite{stam2005, olbrich2013eeg}:
 \begin{enumerate}
   \item development of more effective EEG signal analysis techniques,
   \item identification of reliable EEG-based biomarkers\footnote{Biomarker is defined as objectively measurable indicator of the biological state of the organism \cite{olbrich2013eeg}.} of depression,
   \item understanding of the brain dynamics with focus on differences between healthy and diseased states,
   \item standardization of recording conditions, preprocessing, result analysis and other research procedures,
-  \item enrollment of larger, hypothesis-driven cohort studies,
+  \item enrollment of larger, hypothesis-driven cohort studies, and
   \item successful clinical applications to estabilish trust amongst mental health practitioners.
 \end{enumerate}
 
-In this work, our aim is to contribute positively to the state of the art of this important area by analyzing the limited, but relatively large dataset of depressed patients using two approaches previously advocated as effective~\cite{faust2014depression, acharya2015novel, ahmadlou2012, bachmann2013, hosseinifard2013, nandrino1994, roschke1995nonlineardeppression, lee2007detrended, stam2005}: nonlinear dynamical analysis and deep learning. In the process, we aim to adress the areas mentioned above by:
+\section*{Research Objectives}
+In this work, our aim is to contribute positively to this state of the art of this important area by analyzing the limited, but relatively large dataset of depressed patients using two approaches previously advocated as effective EEG analysis techniques~\cite{faust2014depression, acharya2015novel, ahmadlou2012, bachmann2013, hosseinifard2013, nandrino1994, roschke1995nonlineardeppression, lee2007detrended, stam2005}: nonlinear dynamical analysis and deep learning. In the process, our objective is to adress the areas mentioned above by:
 \begin{enumerate}
   \item providing evidence to or against the effectiveness of these techniques,
   \item providing evidence to or against the status of nonlinear dynamical measures as reliable biomarkers of depression, 
-  \item discovering possible relationships of depression severity or future responsiveness to treatment to distributions of these nonlinear measures across the brain regions,
-  \item discovering the most effective procedure for computing the nonlinear measures and evaluate these procedures,
+  \item discovering possible relationships of depression severity or future responsiveness to treatment to distributions of these nonlinear measures across brain regions,
+  \item finding an effective procedure for computing the nonlinear measures and evaluate these procedures,
   \item performing this analysis on relatively large dataset, and, eventually,
   \item implementing a diagnosis-aid software tool which will use the techniques to help asses depression severity and predict treatment responsiveness.
 \end{enumerate}
-\section*{Problem Statement}
-\info[inline]{Does this section say enough on the the objectives?}
 
-The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}. It comprises of 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions: at the beginning of the treatment and, 4 weeks later, after drug adminstration. On both of those ocassions, patient's depression score (a number quantifying patient's depression severity) was measured by a trained professional using a standardized questionnaire. For more details about the dataset, see Section \ref{sec:dataset}. Using these recordings and depression scores, we aim to solve the following problems:
-% Maybe clarify we turned it into classification task
+\section*{Problem Statement}
+The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}\footnote{http://www.nudz.cz/en/}. It comprises of 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two ocassions: at the beginning of the treatment and, 4 weeks later, after drug adminstration. On both of those ocassions, patient's depression score (a number quantifying patient's depression severity) was measured by a trained professional using a standardized questionnaire. For more details about the dataset, see Section \ref{sec:dataset}. Using these recordings and depression scores, we aim to solve the following problems:
 \begin{description}
   \item[diagnosis:] predict the patients depression score range measured \emph{at the time of the recording} based on an EEG signal sample obtained \emph{at the time of the recording}, and
   \item[prognosis:] predict the patients depression score range measured \emph{during the first visit} based on an EEG signal sample obtained \emph{during the first visit}.
 \end{description}
-For the purposes of abstraction and tractability, we define these problems as classification tasks. In order to analyze the EEG signals and extract relevant features, we separately use and evaluate two approaches previously evidenced in the literature to be effective at similar tasks:
+For the purposes of abstraction and tractability, we define these problems as classification tasks. In order to analyze the EEG signals and extract relevant features, we separately use and evaluate two approaches previously evidenced in the literature to be effective at distinguishing healthy and diseased patients with depression and other psychiatric disorders:
 \begin{description}
   \item[nonlinear analysis approach:] compute selected nonlinear measures using nonlinear dynamical system analysis of the EEG signals, and use machine learning techniques to perform classification, and
-  \item[deep learning approach:] use convolutional neural networks to both extract relevant features from an input representation of the EEG signals, and perform the classification.
+  \item[deep learning approach:] use convolutional neural networks to both extract relevant features from an input representation of the EEG signals, and perform the classification task.
 \end{description}
-\section*{Text Organization}
-The contents of each chapter of this work are hereby summarized. In addition, the overall structure of the thesis is also depicted in Figure \ref{fig:diagram}
-\begin{description}
-  \item[Chapter~\ref{ch:nonlin}: \nameref{ch:nonlin}]~\\
-    The topic of nonlinear dynamical analysis in relation EEG analysis is presented. The concepts of a dynamical system and its state spaces are introduced, along with methods of describing them used further. State space reconstruction using the method of time delays is discussed in detail, followed by description of algorithms for time delay and embedding dimension selection. Nonlinear dynamical measures and algorithms for computing them are described further, along with algorithms to used to validate the results. This chapter finishes with review of the current state of the literature on the topic of depression diagnosis using both linear techniques and nonlinear dynamical analysis, followed by limitations of this approach to EEG signal analysis.
-  \item[Chapter~\ref{ch:nonlin-approach}: \nameref{ch:nonlin-approach}]~\\
-    Aspects of the dataset and its metadata are described in detail, followed by discussion of the preprocessing step. The process of state space reconstruction is carried out using the algorithms described in the previous chapter, and the results are analyzed and discussed in detail. The procedure of computing each nonlinear measure is described and compared with existing literature. For each nonlinear measure, the obtained results based on input parameters are evaluated, and reasoning behind selection of input parameters used to obtain the final results is provided. Differences between the obtained results in various subgroups of the dataset are analyzed. Finally, the experimental settings for the classification tasks are described, and the obtained results are presented.
-  \item[Chapter~\ref{ch:dl}: \nameref{ch:dl}]~\\
-    Convolutional neural networks are put into historical context and their relevant features are described. A signal processing technique which inspired our final selection of neural network architecture is presented. Possible approaches to input representation are discussed. The most successful architectures are introduced, and the chapter concludes with description of the obtained classification resuts.
-  \item[\nameref{ch:concl}]~\\
-    In the final chapter, the research objectives are reiterated and whether they have been met is discussed. Recommendations for future work are made, contributions and limitations of the work are examined.
-\end{description}
+
+\info[inline]{I think I am just duplicating myself multiple times here, but supervisor thinks something ``more friendly'' description is missing.}
+
+The overall structure of the approaches is depicted in Figure \ref{fig:diagram}. In each approach, we first downsample the signals to common sampling frequency. In the \textbf{nonlinear analysis approach}, we also shorten the recordings to common recording length. Then, we proceed with computing selected nonlinear measures. Since this involves (partial) reconstruction of the state space of the dynamical system in which to embed an attractor, we evaluate, analyze and compare the results of multiple embedding parameter estimation algorithms. After selecting the input parameters and computing the nonlinear measures, the differences in values of those measures across brain regions between various subgroups of the dataset are inspected, as well as the correlations with depression score and treatment response. Finally, the classification task is performed and its results evaluated.
+
+In the \textbf{deep learning approach}, each recording is optionally filtered, and divided into multiple windows to increase the number of samples. Because neural networks are capable of processing various modalities, an appropriate input data representation is selected. Then, we design and evaluate a number of neural network architectures, and finally perform the classification task and evaluate the results.
 
 \pgfkeys{/forest,
   my rounded corners/.append style={rounded corners=2pt},
@@ -492,7 +482,7 @@ for tree={
   }
   [{\hyperref[sec:dataset]{EEG Signals with Metadata}}
     [{\hyperref[ch:nonlin-approach]{Nonlinear Analysis}}
-      [{\hyperref[sec:nl-preprocess]{Preprocessing}}\\\scriptsize{labelling, curation}
+      [{\hyperref[sec:nl-preprocess]{Preprocessing}}\\\scriptsize{downsampling, curation}
         [{\hyperref[sec:state-space-reconstruction]{State Space Reconstruction}}\\\scriptsize{embedding dimension, time lag,...}
           [{\hyperref[sec:estim-nl]{Computing Measures}}\\\scriptsize{LLE, CD, DFA, HE, HD, SE}
             [{\hyperref[sec:results-nl]{Classification}}\\\scriptsize{LR, SVM}]
@@ -501,7 +491,7 @@ for tree={
       ]
     ]
     [{\hyperref[ch:dl]{Deep Learning}}
-      [{\hyperref[sec:dl-preprocess]{Preprocessing}}\\\scriptsize{filtering}
+      [{\hyperref[sec:dl-preprocess]{Preprocessing}}\\\scriptsize{downsampling, filtering}
         [{\hyperref[sec:input-repr]{Input Representation}}\\\scriptsize{RP, CS, raw data}
           [{\hyperref[sec:dl-arch]{Architecture Design}}\\\scriptsize{CSP, FBCSP}
             [{\hyperref[sec:dl-results]{Classification}}\\\scriptsize{CNN}]
@@ -514,6 +504,19 @@ for tree={
 \caption[Diagram of the thesis.]{Diagram of the thesis.}
 \label{fig:diagram}
 \end{figure}
+
+\section*{Content Organization}
+\begin{description}
+  \item[Chapter~\ref{ch:nonlin}: \nameref{ch:nonlin}]~\\
+    The topic of nonlinear dynamical analysis in relation EEG analysis is presented. The concepts of a dynamical system and its state spaces are introduced, along with methods of describing them used further. State space reconstruction using the method of time delays is discussed in detail, followed by description of algorithms for time delay and embedding dimension selection. Nonlinear dynamical measures and algorithms for computing them are described further, along with algorithms to used to validate the results. This chapter finishes with review of the current state of the literature on the topic of depression diagnosis using both linear techniques and nonlinear dynamical analysis, followed by limitations of this approach to EEG signal analysis.
+  \item[Chapter~\ref{ch:nonlin-approach}: \nameref{ch:nonlin-approach}]~\\
+    Aspects of the dataset and its metadata are described in detail, followed by discussion of the preprocessing step. The process of state space reconstruction is carried out using the algorithms described in the previous chapter, and the results are analyzed and discussed in detail. The procedure of computing each nonlinear measure is described and compared with existing literature. For each nonlinear measure, the obtained results based on input parameters are evaluated, and reasoning behind selection of input parameters used to obtain the final results is provided. Differences between the obtained results in various subgroups of the dataset are analyzed. Finally, the experimental settings for the classification tasks are described, and the obtained results are presented.
+  \item[Chapter~\ref{ch:dl}: \nameref{ch:dl}]~\\
+    Convolutional neural networks are put into historical context and their relevant features are described. A signal processing technique which inspired our final selection of neural network architecture is presented. Possible approaches to input representation are discussed. The most successful architectures are introduced, and the chapter concludes with description of the obtained classification resuts.
+  \item[\nameref{ch:concl}]~\\
+    In the final chapter, the research objectives are reiterated and whether they have been met is discussed. Recommendations for future work are made, contributions and limitations of the work are examined.
+\end{description}
+
 \chapter{Nonlinear Time Series Analysis} \label{ch:nonlin}
 The nature is constantly undergoing change. Around us, we can observe many processes evolving in time. Some of the aspects of these processes, we can measure, and attempt to discover apparent patterns in those measurements. The simplest of those patterns are periodicities, probably best exemplified, and first noticed by humans, are the motions of the sun and the moon. Weather, on the other hand, is an example of processes seemingly defying any simple description. Those examples represent two classes of processes existent before the rise of nonlinear dynamics:
 \begin{description}
@@ -715,20 +718,17 @@ The essential drawback of recurrence plot is their size - it is quadratic in the
 A more objective approach to analyzing recurrence plots is an ensemble of techniques group under the term Recurrence Quantification Analysis (RQA). Using these techniques, a number of scalar measures can be used to quantify properties of recurrence plots, such as determinism, periodicity, chaos and stationarity~\cite{marwan2011avoid}. An important ingredient for computation of these measures is the distribution of lengths of diagonal lines in the plot. It can be shown that this distribution is directly related to correlation dimension, which we will cover in Section \ref{sec:corrdim}~\cite{marwan2007recurrence}.
 
 \section{State Space Reconstruction} \label{sec:state-space-reconstruction}
+In the previous section, we have introduced a concept of state space of a dynamical system. In the case of EEG analysis, however, our observations do not directly form a state space object, but a set of time series', one for each electrode. Moreover, it is necessary to deal with the fact that our data, however rich, rarely represent complete information about the studied system. In the case of EEG signals, the complete state of the system at any moment is determined by many variables, and the sensors are only able to collect traces of their cumulative effects (and noise). So we are confronted with a problem: how to convert this data into state space trajectories? This procedure is called \emph{state space reconstruction}.
 
-Broadly, one possible approach to nonlinear time series analysis consists of the following steps~\cite{stam2005}: 
+However, it is not necessary to reconstruct the entire original state state space of the system. In general, we are only interested in the subspace where the attractor of the system evolves. Thus, one possible approach to nonlinear time series analysis consists of the following steps~\cite{stam2005}: 
 \begin{enumerate}
   \item reconstruction of the attractor \info{Saying dynamics is not true. We are not reconstructing the vector field $\mathbf{F}$.} of given system from recorded data,
   \item characterization of the reconstructed attractor,
   \item checking validity of the results with surrogate data testing.
 \end{enumerate}
 
-\add[inline]{Connect this to the content of this section. Expand on the steps.}
-
 \subsection{Embedding} \label{sec:embedding}
-In the previous section, we have introduced a concept of state space of a dynamical system. In the case of EEG analysis, however, our observations do not directly form a state space object, but a set of time series', one for each electrode. Moreover, it is necessary to deal with the fact that our data, however rich, rarely represent complete information about the studied system. In the case of EEG signals, the complete state of the system at any moment is determined by many variables, and the sensors are only able to collect traces of their cumulative effects (and noise). So we are confronted with a problem: how to convert this data into state space trajectories? This procedure is called \emph{state space reconstruction}.
-
-To this goal, let $\mathbf{x}_n$ be the reconstructed vector we are trying to find, and let us have a time series $x$ of scalar measurements $x_1, x_2, \dots, x_N$ of a quantity dependent on the current state of the system. As mentioned in Section \ref{sec:dyn-sys-defs}, we will discard the noise term $\eta_n$ in (\ref{eq:meas-fun}) and assume that the observed value corresponds to the true value.\footnote{For theoretical implications of the noise term one may consult~\cite{kugiumtzis1996state}.} Furthermore, let us consider a function $\Phi: \RR^d \subset M \rightarrow \RR^{m}$, such that $\mathbf{x}_n = \Phi(\xi(n \Delta t))$. Such function is called an \textbf{embedding}, and $m \in \NN$ is called the embedding dimension. What properties does $\Phi$ have to satisfy so that it provides useful information about the true state space trajectories?
+To the goal of state space reconstruction, let $\mathbf{x}_n$ be the reconstructed vector we are trying to find, and let us have a time series $x$ of scalar measurements $x_1, x_2, \dots, x_N$ of a quantity dependent on the current state of the system. As mentioned in Section \ref{sec:dyn-sys-defs}, we will discard the noise term $\eta_n$ in (\ref{eq:meas-fun}) and assume that the observed value corresponds to the true value.\footnote{For theoretical implications of the noise term one may consult~\cite{kugiumtzis1996state}.} Furthermore, let us consider a function $\Phi: \RR^d \subset M \rightarrow \RR^{m}$, such that $\mathbf{x}_n = \Phi(\xi(n \Delta t))$. Such function is called an \textbf{embedding}, and $m \in \NN$ is called the embedding dimension. What properties does $\Phi$ have to satisfy so that it provides useful information about the true state space trajectories?
 
 Firstly, note that we assume the studied dynamical system to be deterministic. If our reconstructed embedded space is to represent the true state space, evolution of any state on every trajectory we observe in the embedded space should depend only on its current state. Therefore, we may reasonably require $\Phi$ to be one-to-one, i.e. contain no intersections~\cite{fraser1989reconstructing}. This will be relevant in Sections \ref{sec:delay} and \ref{sec:ild}.
 
@@ -1308,7 +1308,7 @@ Even this method is not without its drawbacks: due to the final reordering, the 
   \item Apply step 3. to time series obtained in the previous step, or stop if stopping criterion is reached.
 \end{enumerate}
 
-\section{Practial applications}
+\section{Practial Applications}
 \subsection{Applications in Depression Diagnosis}\label{sec:applications}
 \subsubsection{Nonlinear Measures}
 Although nonlinear dynamical analysis of EEG signal has been successfully applied to many psychological and psychiatric conditions, such as insomnia, schizophrenia, epilepsy, dementia, Alzheimer's disease, the number of studies applying methods of nonlinear time series analysis for clinical depression diagnosis is still relatively limited~\cite{stam2005, rodriguez2015}. Summary of studies reviewed in this section along with the obtained results can be seen in Table \ref{tab:depsum}. Hereby we present the studies in chronological order.
@@ -1852,7 +1852,7 @@ An example of a result of such analysis for the largest Lyapunov exponent (embed
 \subsection{Nonstationarity}
 To reduce the effects of possible nonstationarity, we attempted to find the most stationary window of the desired length using the stationarity test described in Section \ref{sec:stationarity}. However, we found that selecting the least stationary window using this test did not improve the results as measured by the surrogate data analysis in Section \ref{sec:surrogate-analysis}. This may be beacause the optimal effectiveness of AAFT and iAAFT the first and last point of the window should have the same value~\cite{andreas2000}. Moreover, selecting a different time window for each channel may result in inaccurate representation of the mental state by the vector of measures computed across channels. Therefore, it may be beneficial to use the same time window for all channels. If the results are dependent on the time during recording, then it would be advisable to select a fixed time window for all samples. Thus, we decided to skip this window selection step and pick a fixed time window for all channels and all recordings.
 \section{Analysis of Measure Distributions between Groups} \label{sec:distanal}
-\subsection{Before and After Treatment Groups}
+\subsection{Before and After Treatment Groups} \label{sec:analbefaft}
 As the first step of our analysis, we conducted an investigation of the differences in the nonlinear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time.\add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient recieved personalized method of treatment, and the methods may have differing impact.
 
 For each group, we performed two-sided Kruskal-Wallis test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for DFA, HE, and HFD, $D_2$ and $\lambda_1$ computed using automatic selection of embedding parameters. Therefore, we include only results for the remaining measures. The results can be seen in Tables \ref{tab:lleba}, \ref{tab:d2ba} and \ref{tab:seba} in the Appendix.\footnote{In all tables, the p-value cutoffs for significance ratings are 0.05, 0.01, 0.005.} Figure \ref{fig:befaft} in the Appendix visualizes the differences in the mean values of each measure in each electrode before and after treatment. Length of the error bars corresponds to two standard deviations. One can notice, for example, that values of LLE tend to be higher before treatment. As we will comment more in Section \ref{sec:analrespdif}, this effect seems especially pronounced in the group responding positively to the treatment. 
@@ -2038,7 +2038,8 @@ The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov e
 % \label{fig:scalp-corrs}
 % \end{figure}
 
-\section{Implementation}
+\section{Limitations}
+\section{Implementation} \label{sec:impl-nl}
 All the code used for this section is publicly available \href{https://github.com/mirgee/thesis\_project}{online}, as well as on the CD accompanying this text. Used programming language was Python. The plots were produced using \href{https://matplotlib.org/}{Matplotlib} library. Other used libraries include \href{http://www.numpy.org/}{NumPy} for vectorized computations, \href{https://scipy.org/scipylib/index.html}{SciPy} for signal processing algorithms, \href{http://pandas.pydata.org/}{Pandas} for data storage and manipulation, and \href{https://jupyter.org/}{Jupyter} for development.
  
 For computation of nonlinear measures, we used slightly modified versions of \href{https://github.com/CSchoel/nolds}{nolds} library by C. Schölzel and published under MIT Licence, and \href{https://github.com/manu-mannattil/nolitsa}{nolitsa} library by M. Mannatil and published under 3-clause BSD licence. 
@@ -2263,7 +2264,17 @@ Using the fact that magnitudes of the CSP eigenvalues are proportional to the am
 
 
 \section{Dataset} \label{sec:dl-dataset}
-For experiments in this chapter, we used the same dataset as in the previous Chapter 1, described in Section \ref{sec:dataset}. However, to increase the number of samples, decided to use the entire recordings, in contrast to our approach in the previous chapter, where we used only the beginning in each recording. This is mainly because the classification algorithms we used in this chapter have larger variance, and thus are easily overfit on small datasets. Thus, each of the recordings, after downsampling to $250$ Hz (see Section \ref{sec:dataset}) was cut into multiple subrecordings of length 256, each subrecording forming a data sample. The subrecording length was selected as a tradeoff between the amount of obtained samples and information\add{Is information the right term? The amount of variance?} contained within each sample. For this sampling frequency, this corresponds to approximately a second of recording, which was shown to contain enough information to classify depression with satisfactory accuracy.\add{Cite this!!!} Moreover, some GPU cards are optimized for working on data chunks multiples of two in size.\add{Make more precise.} We also tried increasing the length to 512, but found no improvement in performance.
+For experiments in this chapter, we used the same dataset as in the previous Chapter 1, described in Section \ref{sec:dataset}. However, to increase the number of samples, decided to use the entire recordings, in contrast to our approach in the previous chapter, where we used only the beginning in each recording. This is mainly because the classification algorithms we used in this chapter have larger variance, and thus are easily overfit on small datasets. Thus, each of the recordings, after downsampling to $250$ Hz (see Section \ref{sec:dataset}) was segmented into disjoint subrecordings of length 256, each subrecording forming a data sample. The subrecording length was selected as a tradeoff between 
+\begin{itemize}
+  \item the number of obtained samples,
+  \item the amount of information contained withing each sample, and
+  \item the size of data batch transferred to the GPU as input to the CNN.
+\end{itemize}
+
+As we will see in Section \ref{sec:input-repr}, we decided to represent the input to the CNNs either as image-encoded signal, where the resulting size of the input is $O(N^2)$ for subrecording length $N$, or using raw data, where the input size is $O(C \times N)$ for constant number of selected channels $C$. Thus, the raw data input representation allows for longer subrecording length for the same data batch size compared to the image-encoded signal representation. However, we decided to use the same subrecording length for both input representations in order to make the results comparable. For the raw data, we did separate experiments increasing the length to 512 or 1024 using overlapping windows to keep the resulting number of samples constant, and obtained similar performance.
+
+For the selected sampling frequency, this subrecording length corresponds to approximately a second of recording, which was shown to contain enough information to identify individuals with satisfactory accuracy using CNNs \cite{ma2015resting}. Moreover, memory operations on data batches power of two bytes in size are easier to coalesce among multiple threads, thus improving runtime \cite{goodfellow2016}. Finally, the reason for keeping the subrecordings disjoint was to minimize the amount of correlation between the samples.
+
 
 After splitting the recordings, we assigned positive, neutral or negative label to each subrecording in order to split the dataset into three groups based on depression score of the subject at the time of the recording for depression classification, or based on the subject's before to after treatment depression score for response classification (in which case only before treatment recordings were further used). The neutral class was then removed and not further considered. 
 
@@ -2272,7 +2283,9 @@ The threshold values separating these classes were selected such that the classe
 \section{Input Representation} \label{sec:input-repr}
 Before applying any machine learning technique to the classification problem at hand, the question of optimal input representation needs to be answered. To this end, multiple factors need to be considered. Firstly, what is the dimensionality of the input relative to the resulting number of samples, and does it allow construction of sufficiently complex architectures compared to complexity of the classification problem? Secondly, does each input sample contain enough information to perform successful classification? Thirdly, is the input representation appropriate for the kind of data, i.e. does it help or hinder successful classification? In our case, for all the methods considered, answer to the first question is a function of recording slice length used to generate the input. Answering the remaining questions, however, is difficult without prior experiments on similar datasets. For this reason, research on applying known techniques to new problems is useful.
 
-Since well designed neural networks are characteristically able to learn feature maps given enough data, one obvious possibility is to use raw data. This approach has multiple benefits. First one, as we will see, is relatively low dimensionality. Global, and local features, no prior bias. Our first choice, then, was then to segment each recording into subrecordings of fixed length $l=256$, and for each subrecording, order all its $C=19$ channels into rows of a $C \times l$ matrix. Each of those matrices was then used as input sample.
+Since well designed neural networks are characteristically able to learn feature maps given enough data, one obvious possibility is to use raw data. This approach has multiple benefits. First one, as we will see, is relatively low dimensionality. Global, and local features, no prior bias. Our first choice, then, was then to segment each recording into subrecordings of fixed length $l=256$, and, for each subrecording, order all its $C=19$ channels into rows of a $C \times l$ matrix. These matrices were then used as input samples. 
+
+To use the results from the previous chapter, we also evaluated the models using only subsets of all the available electrodes. Those subsets were selected from the electrodes in which the mean values of nonlinear measures in Section \ref{sec:distanal} were shown to be significantly different between studied groups, or which were selected during the feature selection step in \ref{sec:results-nl}. However, we found either no notable improvements in performance, or slight deterioration of improvements.
 
 As mentioned in Chapter 1, we consider the brain to be a nonlinear dynamical system. Another possibility, therefore, is to represent the input data as recurrence plots, which have considerable potential for representing properties of the dynamical system, as mentioned in Section \ref{sec:recplot}. The obvious drawbacks are redundancy due to symmetry and high dimensionality, which is quadratic in the trajectory length. On the other hand, recurrence plots are known to capture properties of the system which are difficult to obtain using other methods in some cases~\cite{eckmann1987}. Morever, they have already been applied with success to classification of physical activites using convolutional neural networks~\cite{garcia2018classification}, and even some qualitative differences in recurrence plots have been observed between depressed and healthy patients~\cite{acharya2015computer}. We have discussed more applications in \ref{sec:applications}.
 
@@ -2344,7 +2357,7 @@ In both deep and shallow architectures, the classification is performed by class
 
 We also attempted different configurations: increasing or decreasing the number of layers in the deep network, increasing or decreasing the kernel sizes, ReLU activation functions, and Adam or rmsprop optimizers. However, we found any of these changes leading to degradation in performance. 
 
-For image-encoded data, i.e. recurrence plots and cosine similarities, we also tried the architecture (along with the same hyperparameters) used in~\cite{garcia2018classification}, which resulted in overall accuracy of 0.942 and 0.804 recall on classification task of 6 activies using recurrence plots and CNNs (as mentioned in Section \ref{sec:applications}), evaluated using 10-fold cross validation on over 10 000 samples. However, we were unable to replicate the result. This may be because of the difference in input image sizes, number of used input channels (the authors had only 4 electrodes available, and used all of them as input channels, whereas we used spatial embedding). 
+For image-encoded data, i.e. recurrence plots and cosine similarities, we also tried the architecture (along with the same hyperparameters) used in~\cite{garcia2018classification}, which resulted in overall accuracy of 0.942 and 0.804 recall on classification task of 6 activies using recurrence plots and CNNs (as mentioned in Section \ref{sec:applications}), evaluated using 10-fold cross validation on over 10 000 samples. However, we were unable to replicate the result. This may be because of the difference in input image sizes, number of used input channels - the authors had only 4 electrodes available, and used all of them as input channels, whereas we used spatial embedding (see Section \ref{sec:embedding}).
 
 Moreover, we also evaluated multiple simpler architectures. The best performing (both on image-encoded and raw data) was a VGG-like model with 3 convolution-pooling modules (convolution kernels $(3,3)$, pooling kernels $(2,2)$, ReLU activation functions) with 8, 16 and 16 filters respectively. These were followed by dropout ($p=0.5$), and fully connected sigmoid classification layer. This model, optimized by rmsprop, achieved $73\%$ accuracy on stand-out test set on raw data, and below $60\%$ on the image-encoded data. All attempts of modifying capacity and regularization, i.e. adding batch normalization, adding or removing layers, increasing or decreasing the number of filters, as well as adding weight normalization or changing the optimizer, lead to deterioration of performance.
 
@@ -2364,9 +2377,11 @@ Moreover, we also evaluated multiple simpler architectures. The best performing 
 
 \section{Results} \label{sec:dl-results}
 
-The models were trained for 200 epochs. In each epoch, the current iteration of the model was evaluated using 5-fold cross validation with shuffling. The model which achieved the highest mean accuracy over all iterations was then selected for evaluation on the test set, which was again performed using 5-fold cross validation. Using 5-fold cross validation on the dataset splits we used (see Section \ref{sec:dl-dataset}) results in the number of samples for each of training, validation and test sets shown in Table \ref{tab:setsize}.
+In order to train and evaluate the models, we used 5-fold cross validation performed as follows. Before training and evaluation the models, all the samples were shuffled and split into two parts. The first part, containing 80\% of the samples, was used for training (80\%) and validation (20\%). The second part, containing the remaining 20\% of the samples, was used as test set to evaluate the trained model. This procedure was again performed 5 times, using different initial splits into training with validation and test set. The results in Table \ref{tab:dl-res} report the mean and standard deviation of accuracies obtained on the test sets.
 
-The results can be seen in Table \ref{tab:dl-res}, where we use SHAL to denote the shallow architecture and DEEP to denote the deep architecture (see Section \ref{sec:dl-arch}). The unfiltered input is denoted $0-f_{\text{fin}}$, and $4-f_{\text{fin}}$ signifies that high pass filter with cutoff frequency of $4$ Hz was applied to the input (see Section \ref{sec:dl-preprocess}). Firstly, the shallow architecture performs noticeably better on the prognosis task than the deep architecture. Secondly, filtering has not much effect, but seems to improve the results slightly for the prognosis task, but does not help on the diagnosis task. Finally, both recurrence plots and cosine similarities do not seem to be especially effective effective encoding techniques for convolutional neural networks.
+The models were trained for 200 epochs. In each epoch, the current iteration of the model was evaluated on the validation set. The model which achieved the highest accuracy on the validation set over all iterations was then selected for evaluation on the test set. This procedure, performed on the dataset described in Section \ref{sec:dl-dataset}, results approximately in the number of samples for each of training, validation and test sets shown in Table \ref{tab:setsize}.
+
+In Table \ref{tab:dl-res}, where we use SHAL to denote the shallow architecture and DEEP to denote the deep architecture (see Section \ref{sec:dl-arch}). The unfiltered input is denoted $0-f_{\text{fin}}$, and $4-f_{\text{fin}}$ signifies that high pass filter with cutoff frequency of $4$ Hz was applied to the input (see Section \ref{sec:dl-preprocess}). Firstly, the shallow architecture performs noticeably better on the prognosis task than the deep architecture. Secondly, filtering has not much effect, but seems to improve the results slightly for the prognosis task, but does not help on the diagnosis task. Finally, both recurrence plots and cosine similarities do not seem to be especially effective encoding techniques for convolutional neural networks.
 
 % Conclusions: SHAL has state of the art performance on RES. It would be nice to evaluate against pure FBCSP, and try more traditional configuration to see difference in performance. Combination of CNN and recurrence plots is likely not especially effective.
 
@@ -2434,14 +2449,50 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 \info[inline]{CHanges to number of any parameter, including adding layers made the results worse. Interestingly, simpler models overfit the training set very quickly, and regularization hurt performance. Hence, this model is probably at least close to local optima in hyperparameter space.}
 \info[inline]{Maybe measure shallow model with more traditional activations to see how much performance is due to FCP.}
 
+\section{Limitations}
+As evidenced in Section \ref{sec:analbefaft}, nonlinear measures seem to be relatively stable over time for individual patients. Moreover, it has been observed that EEG signals contain other temporally stable patterns which can be used for individual identification \cite{}. Since the method we used for training and evaluation described in Section \ref{sec:dl-results} involved cross validation over samples instead of patients, the test set includes distinct samples from the same patients. This raises the question whether the models indeed learn to identify the patterns contributing to the label, or whether instead they learn to identify the patterns associated with the patients, and thus they infer the label indirectly.
+
+To investigate this question, we trained and evaluated the models as follows. The patients were split into two sets. The first set was again used for training and validation and containing 80\% of the patients, and the second set, containing the remaing samples, was used for testing. Only either the recordings obtained during the first visit, or recordings obtained during the second visit, were used (this required changing the depression score thresholds to keep the classes balanced). This way, samples from patients used in the test set were never used for training. The first set was then split into training (80\%) and validation (20\%) sets of distinct patients, and the model was trained and evaluated on samples obtained from these distinct patients using the method described in Section \ref{sec:dl-results}. This entire procedure was repeated 5 times, resulting in 5-fold cross validation across patients.
+
+Figure \ref{fig:acc-loss-fixed} shows loss and accuracy on the training and validation sets during one loop of the cross validation using the simpler, shallow model on the recordings obtained during the first session to predict the depression score level. In order to maximize the amount of training data, the thresholds for the classes were set to 26 as upper bound for healthy and 27 as lower bound for depressed. The figure shows that the model fits the training set of small number of patients, but does not generalize to the patients the patients in the validation set. Thus, the number of training epochs before evaluation on test set was decreased. Increasing the probability parameter of dropout, adding regularization to the layers, increasing or shortening the recording length to either increase the amount of information in a sample or simplify the model, or increasing the overlap between samples and shifting more patients to the training set does not improve generalization.
+
+\begin{figure}
+\centering
+\includegraphics[width=1.0\linewidth]{./Images/acc_loss_fixed.png}
+\caption[Accuracy and loss for modified splitting.]{The accuracy and loss obtained for the depression classification task on training and validation sets split across patients. Only recordings acquired during the first session were used, and thus samples in each of training, validation and test sets were acquired from distinct patients. The subrecordings were non-overlapping, and the subrecording length was 256, equal to the subrecording length used for evaluation in Section \ref{sec:dl-results}. We can see that the model overfits the training set during the initial epochs, and fails to generalize to the validation set.}
+\label{fig:acc-loss-fixed}
+\end{figure}
+
+% The evaluation could be done by: average per person. Is not efficient on small number of persons.
+
+% Here add discossion of added table with accuracies. The table should contain: ww, ws, CV accuracy, 
+
+\begin{table}[tbp]
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{WW} & \textbf{WS} & \textbf{Train.} & \textbf{Val.} & \textbf{Test.} & \textbf{Acc.} \\ \hline
+            &             &                 &               &                &               \\ \hline
+            &             &                 &               &                &               \\ \hline
+\end{tabular}
+\caption[]{Table with accuracy as function of subrecording length, subrecording overlap, training, validation, test sizes.}
+\end{table}
+
+A possible explanation for the obsered result is as follows. It seems that the relatively high performance obtained in the previous section was mostly due to small intrapersonal variance and high interpersonal variance of the patterns in the EEG signals resulting in the network being trained to map patient-charactertic patterns to labels, instead of mapping label-characteresic patterns to labels. Hence, the models overfit over a small number of epochs to the training set of small number of patients, and is unable to generalize to another set of patients.
+
+If this hypothesis holds, then the observed lack of generalization may be improved by increasing the number of patients included in the dataset. Assuming that the dataset would then contain large enough aggregate of patients with small variance in patient-charecterstic patterns and, at the same time, high enough variance in depression scores and treatment response, large training accuracy could be achieved by fitting the label-characterstic patterns. Conceivably, models trained on such dataset would generalize to patients not included in the training set.
+
+\info[inline]{When we did the same, restricted only on predicting depression only on the before treatment set, we obtained slightly better results than chance.}
+\section{Implementation}
+For the implementation in this chapter, we used the same software as in Chapter \label{ch:nl}, which was listed in Section \ref{sec:impl-nl}. In additition, to design and evaluate the models, we used the deep learning library \href{https://keras.io/}{Keras}.
+
 \chapter*{Conclusion} \label{ch:concl}
 \addcontentsline{toc}{chapter}{Conclusion}
 In this study, we incorporate both thorough review of the theory of nonlinear dynamical systems in relation to EEG analysis along with overview of the relevant algorithms and techniques for nonlinear measures extraction and input parameter estimation, comprehensive literature review, and practical application of those techniques on the available dataset. Furthermore, we also present another approach to feature extraction and classification on the dataset. In this section, we discuss the obtained results in context with our objectives, examine the limitations of our results, make recommendations for avenues of further research, and summarize the contribution to scientific knowledge provided by this work.
+
 \section*{Research Objectives}
 Will adress the objectives from the introduction in the order mentioned thereby.
 
 All NL measures correlated with depression scores, reasonable accuracy which is not as high as in other studies, but we have larger dataset than many. On the other hand, we lack control group (next Section).
-
 \section*{Limitations}
 \begin{itemize}
   \item Correlation in CNN samples, also they are too short
@@ -2465,16 +2516,27 @@ All NL measures correlated with depression scores, reasonable accuracy which is 
 \item New spatiotemporal NL measures (see Stam) - current are spatially local, temporally global
 \item Compare with FBCSP, with spatial embedding
 \end{itemize}
+
 \section*{Contribution}
-\begin{itemize}
-\item Performance on raw data considerably higher than on RP using DL - RP may not be as good as thought e.g. in \cite{acharya2015computer}
-\item F3 seemed relevant for response
-\item All examined NL measures are correlated with depression severity - the most significant correlation is in \ldots
-\item Used methods of estimating input parameters seem not very effective at fidning parameters whih would make the results discriminative
-\item FBCSP-inspired CNN models perform well especially for prediction 
-\item Neuroscience may be able to draw some conclusions from the observed correlation in brain regions
-\item We selected the input parameters very carefully, may inform other researchers about their proper selection (most studies just estimate them crudely)
-\end{itemize}
+% \begin{itemize}
+% \item Performance on raw data considerably higher than on RP using DL - RP may not be as good as thought e.g. in \cite{acharya2015computer}
+% \item F3 seemed relevant for response
+% \item All examined NL measures are correlated with depression severity - the most significant correlation is in \ldots
+% \item Used methods of estimating input parameters seem not very effective at fidning parameters whih would make the results discriminative
+% \item FBCSP-inspired CNN models perform well especially for prediction 
+% \item Neuroscience may be able to draw some conclusions from the observed correlation in brain regions
+% \item We selected the input parameters very carefully, may inform other researchers about their proper selection (most studies just estimate them crudely)
+% \end{itemize}
+
+\subsection*{Analysis of Spatial Distribution of Nonlinear Measures across Brain Regions in Depression}
+
+\subsection*{Analysis of Correlation between Depression Score and Nonlinear Measures}
+
+\subsection*{Analysis of Nonlinear Measure and Input Parameter Estimation Algorithms and Procedures for EEG Analysis}
+
+\subsection*{Identification of Ineffective Techniques}
+
+\subsection*{Evaluation of FBCSP-inspired Neural Network Architectures for Depression Diagnosis and Prognosis}
 
 \bibliographystyle{unsrt}
 \bibliography{refs}
