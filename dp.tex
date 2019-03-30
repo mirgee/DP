@@ -140,6 +140,8 @@
 \newacronym{cd}{CD}{Correlation Dimension}
 \newacronym{cnn}{CNN}{Convolutional Neural Network}
 \newacronym{gpu}{GPU}{Graphical Processing Unit}
+\newacronym{lr}{LR}{Logistic Regression}
+\newacronym{svm}{SVM}{Support Vector Machine}
 \usepackage{nomencl}
 \makenomenclature
 
@@ -1372,7 +1374,7 @@ Recurrence plots, and RQA in particular, have been demonstrated to be effective 
  STARC & Statistical analysis & No s.s. diff. found & 20 & 22 & 19 & 1 s & \cite{ahmadlou2013spatiotemporal} & \spatcell{Focus is on classification\\ of male and female patients.} \\ \hline
  FAA & Statistical analysis & No s.s. corr. found & - & 79 & 32 & 2 s & \cite{gold2013validity} & \spatcell{Measured correlations with\\depression scores.} \\ \hline
 \end{tabular}}
-\caption{Overview of reviewed studies analyzing EEG in relation to depression, ordered by obtained classification accuracy (if applicable), otherwise chronological order was used. The first part corresponds to studies using nonlinear dynamical measures.\\Abbreviations: DDI - Depression Diagnosis Index, (EP)NN - (Enhanced Probabilistic) Neural Network, FAA - Frontal Alpha Assymetry, RWE - Relative Wavelet Energy, SASI - Spectral Assymetry Index, STARC - Spatiotemporal Analysis of Relative Convergence, WPD - Wavelet Power Decomposition, kf-CV - k-fold Cross Validation.}
+\caption[Overview of reviewed studies.]{Overview of reviewed studies analyzing EEG in relation to depression, ordered by obtained classification accuracy (if applicable), otherwise chronological order was used. The first part corresponds to studies using nonlinear dynamical measures.\\Abbreviations: DDI - Depression Diagnosis Index, (EP)NN - (Enhanced Probabilistic) Neural Network, FAA - Frontal Alpha Assymetry, RWE - Relative Wavelet Energy, SASI - Spectral Assymetry Index, STARC - Spatiotemporal Analysis of Relative Convergence, WPD - Wavelet Power Decomposition, kf-CV - k-fold Cross Validation.}
 \label{tab:depsum}
 \end{table}
 
@@ -1859,18 +1861,20 @@ For each group, we performed two-sided Kruskal-Wallis test for the null hypothes
 
 For all measures computed, we found significant differences of mean values between recordings in temporal areas, especially T3. The distributions of largest Lyapunov exponents and sample entropy are also significantly different in the frontal and ``central'' areas. \info{Which are associated with depression, but we want to leave that out in this section.} 
 
-We also analyzed the differences in the before and after treatment recordings in the groups specifically responding and nonresponding to the treatment in Section \ref{sec:analdepdif}. Moreover, we performed unsupervised analysis of before / after groups using PCA in 2,3, and 4 dimensions, and compared centroids and mean distances between before and after treatment recording for each group. However, the resulting plots and heatmaps are featureless and thus we will leave them out. The mean distances are also uninformative.
+Finally, we analyzed the differences in the before and after treatment recordings in the groups specifically responding and nonresponding to the treatment in Section \ref{sec:analdepdif}. Moreover, we performed unsupervised analysis of before and after groups using PCA in 2,3, and 4 dimensions, and compared centroids and mean distances between before and after treatment recording for each group. However, the resulting plots and heatmaps are featureless and thus we will leave them out. The mean distances are also uninformative.
+
+One notable outcome of these analyses is how relatively stable nonlinear measures are across time for individual patients. In Figure \ref{fig:rel-change}, which shows relative differences between before and after treatment recordings for each patient and mean of each measure across channels, one can see that the relative changes for each measure remain comparatively small. The smallest relative change is observed for LLE and CD, whereas the largest are observed in DFA and SE. The intraindividual specificity of nonlinear measures, especially correlation dimension, has been noted in the literature, and has been suggested as a viable method of personal identification \cite{schmid1996indications, poulos2002person, dunki2000intraindividual}.
 
 \subsection{Low and High Depression Score Groups} \label{sec:analdepdif}
 As mentioned in Section \ref{sec:dataset}, studied dataset lacks symptom absent group, which makes the task of creating a generally applicable classifier for depression diagnosis more difficult. The patients, however, still vary in severity of their symptoms, which allows us to study correlation between symptom severity (which may, in turn, inform the task of finding a classifier). To this goal, we explored the differences in distributions of computed nonlinear between groups of the ``healthiest'' and most depressed patients visually and using statistical tests, and in this section, we present some of the results.
 
 With the goal of analyzing the differences between the lightest and most severe symptoms, we selected two classes of recordings for analysis in this section as follows. The first class, called \emph{healthy}, of 50 recordings with reported depression score $\leq$ 16, and the second class, called \emph{depressed}, of 50 recordings with depression score $\geq$ 28. We should recognize that including after treatment recordings does not control for possible effects of treatment not reflecting in the depression scores but reflecting in the signal, or the inverse. Indeed, all the healthy recordings were made after treatment, and most of the depressed recordings were made before treatment.
 
-First, we looked at histograms of computed measures between the two groups. There were striking trends in the means of the two distributions in almost all channels for all measures except correlation dimension. Means of depressed recordings are typically shifted to the left of the mean of healthy recordings for all measures except for largest Lyapunov exponent, for which the means are shifted to the right. For correlation dimension, the distributions are similar. Figure \ref{fig:lyapdepdist}, which shows the distributions of the largest Lyapunov exponents for both groups, exemplifies the differences. Another observation is that the distributions are, with exceptions, generally approximately normal.
+First, we inspected histograms of computed measures between the two groups. There were striking trends in the means of the two distributions in almost all channels for all measures except correlation dimension. Means of depressed recordings are typically shifted to the left of the mean of healthy recordings for all measures except for largest Lyapunov exponent, for which the means are shifted to the right. For correlation dimension, the distributions are similar. Figure \ref{fig:lyapdepdist}, which shows the distributions of the largest Lyapunov exponents for both groups, exemplifies the differences.  
 
 Moreover, we investigated the differences in the distributions using Kruskal-Wallis test. Table \ref{tab:depmeans} in the Appendix shows the results. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
 
-Furthermore, we inspected the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for Hurst exponent and Higuchi fractal dimension, where, however, DFA shows slightly more significant correlations. Sample entropy values were significantly negatively correlated only on F4 and T6 channels. For correlation dimension, no significant correlation between depression scores was found on any channel. We also visualized correlations of individual measures to the labels on topographic scalp in Figure \ref{fig:scalp-corrs}.
+Furthermore, we looked at the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for Hurst exponent and Higuchi fractal dimension, where, however, DFA shows slightly more significant correlations. Sample entropy values were significantly negatively correlated only on F4 and T6 channels. For correlation dimension, no significant correlation between depression scores was found on any channel. We also visualized correlations of individual measures to the labels on topographic scalp in Figure \ref{fig:scalp-corrs}.
 
 \begin{figure} 
 \centering
@@ -1908,13 +1912,14 @@ Neurocorrelates of remission, or, in other words, positive response to a treatme
 
 For each patient, we computed a measure of change in depression scores (and, by extension, of effectivity of the treatment) we call \emph{response} (RES). If $\mathrm{DS}_0$ denotes the depression score measured on the first visit and $\mathrm{DS}_4$ denotes the depression score measured on the second visit after 4 weeks, then response is computed as their ratio $\mathrm{RES} = \mathrm{DS}_4 / \mathrm{DS}_0$. Mean response is 2.47, mode 1.66, standard deviation 3.14. Most values range from 1 to 5, with a few outliers improving their symptoms 14 and 16-fold respectively. Only 9 patients stagnated exactly or slightly worsened their symptoms (response $\leq$ 1). Subsequently, we sampled 50 patients with the lowest value of response we call \emph{nonresponding} (nonresponders) and 50 patients with the highest value of response we call \emph{responding} (responders). 
 
-We performed Kruskal-Wallis test to see the differences in the computed measures between the two groups in individual channels, considering only the before treatment recordings. The most significant differences found were in Lyapunov exponent, especially in frontal, parietal, and right temporal areas. Aside from the largest Lyapunov exponent, Higuchi fractal dimension then also showed significant differences in frontal areas, and sample entropy in areas above corpus collosum. The results are shown in Table \ref{tab:remmeans} in the Appendix. For completeness, we also decided to include comparison which includes both before and after treatment recordings, which can be seen in Table \ref{tab:remmeansext}.
+We performed Kruskal-Wallis test to see the differences in the computed measures between the two groups in individual channels, considering only the before treatment recordings. The most significant differences found were in Lyapunov exponent, especially in frontal, parietal, and right temporal areas. Aside from the largest Lyapunov exponent, Higuchi fractal dimension then also showed significant differences in frontal areas.. The results are shown in Table \ref{tab:remmeans} in the Appendix. In comparison with Section \ref{sec:analdepdif}, these results suggest that, with exception of LLE, differences in nonlinear measures between responders and nonresponders in the recordings obtained before treatment are considerably less significant than differences in depression score. On the other hand, it is possible that the differences are less significant due to smaller dataset size, since the test is performed on smaller number of samples. For completeness, we also decided to include comparison which includes both before and after treatment recordings, which can be seen in Table \ref{tab:remmeansext}.
 
-Moreover, we also compared before and after treatment recordings of responding, and before and after treatment recordings of nonresponding patients. Significant differences were found only in LLE, CD and SE, for which the results can be seen in the Appendix in Tables \ref{tab:llebaresp}, \ref{tab:d2baresp}, and \ref{tab:sebaresp} respectively. These differences are also visualized in Figures \ref{fig:respnon1}, \ref{fig:respnon2}, and \ref{fig:respnon1auto} in the Appendix. We can see, for example, that the mean values of LLE across channels are higher before treatment for the responding group, but this effect is less pronounced for the nonresponders. This suggests that it is also the decrease in depression score which results in higher values of LLE, and not only the administration of drugs.
+Moreover, we also compared before and after treatment recordings of responding, and before and after treatment recordings of nonresponding patients. Significant differences were found only in LLE, CD and SE, for which the results can be seen in the Appendix in Tables \ref{tab:llebaresp}, \ref{tab:d2baresp}, and \ref{tab:sebaresp} respectively. These differences are also visualized in Figures \ref{fig:respnon1}, \ref{fig:respnon1auto}, and \ref{fig:respnon2} in the Appendix. We can see, for example, that the mean values of LLE across channels are higher before treatment for the responding group, but this effect is less pronounced for the nonresponders. Together with Table \ref{tab:remmeans}, this result adds to the evidence that it is the decrease in depression score which results in higher values of LLE. Since this effect is not observed in the nonresponding group, the relationship between LLE increase and 
 
 Of course, analyzing effectivity of treatment is difficult problem, and we realize the many limitations of this analysis. For example, many variables, including age, sex, starting depression score, behavioral changes occuring in the interim period and the kind of treatment, were not accounted for. Moreover, many of the patients selected as nonresponding actually improved their symptoms slightly. In fact, symptoms of only 9 patients of the whole dataset worsened or stayed stagnant. No significant differences between before and after treatment recordings of these ``strictly'' nonresponding patients, were found. Thus, one possibility of strengthening the differences between the responding and nonresponding groups may be to include the after treatment recordings for the ``strictly'' nonresponding group to the nonresponding group. However, we decided against doing this, because some differences in the before and after treatment groups for the ``strictly'' nonresponding patients may have remained insignificant due to small size of this group.
 
 \section{Results} \label{sec:results-nl}
+\subsection{Methodology}
 We used two classifiers: Logistic Regression (LR) and Support Vector Machine (SVM). One third of randomly selected samples was held out as a test set, the rest was used for training and cross validation. The following feature selection algorithms were evaluated with LR (regularization strength 1) and SVM (regularization strength 1 and linear kernel, i.e. $k(\vec{x_1}, \vec{x_2}) = \vec{x_1} \cdot \vec{x_2}$):
 \begin{itemize}
   \item recursive feature elimination with 3-fold cross validation based on coefficients of the linear model,
@@ -1959,7 +1964,9 @@ These thresholds are visualized on the distribution of depression scores in the 
 
 All the channels in the combined-measure classifiers were found using the genetic algorithm, as described in the opening to this section. The best overall accuracy was achieved by combination of the largest Lyapunov exponent and sample entropy ($0.75 \pm 0.10$). However, second to it was a combination of the largest Lyapunov exponent and correlation dimension, which has lower variance ($0.74 \pm 0.04)$. Other measures performing well together with the largest Lyapunov exponent are the Hurst exponent, and sample entropy together with DFA. The best combination not inluding the largest Lyapunov exponent is correlation dimension and Higuchi fractal dimension.
 
-There seems to be little consistency in the selected features of the same measures across classifiers. A possible explanation is that different measures complement themselves in such a way that different channels are relevant when classification is performed based on single measure as opposed to a combination of measures.
+In Section \ref{sec:analdepdif}, we have seen that correlations of LLE with depression score are the most significant of all measures, which may explain why in this section, we found LLE to be the most discriminative measure. Moreover, we have seen that the differences between depressed and healthy patients are the most significant in the temporal areas for all measures, which may explain the relatively high rate of selection of the T3 and T6 channels.
+
+Consistency in the selected channels for a fixed measure might indicate a relationship between activity captured by the nonlinear measure in the brain region local to the channel and corresponding label. However, the selected features seem inconsistent across classifiers using mixed measures or a single measure included in the mix. One possible explanation is that different measures complement themselves in such a way that different channels are relevant when classification is performed based on single measure as opposed to a combination of measures.
 
 \begin{table}[tbp]
 \centering
@@ -2019,24 +2026,7 @@ As we mentioned in Section \ref{sec:analrespdif}, response is defined as the rat
 
 The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov exponent was the most predictive nonlinear measure. Unlike for the depression diagnosis, sample entropy and correlation dimension were the only other nonlinear measures which were able to achieve accuracy above $70 \%$ both in combination with other measures and as stand-alone features. Interestingly, F3 channel seems to be considerably more relevant for response prognosis than for depression diagnosis.
 
-% \begin{figure}
-% \centering
-% \begin{subfigure}{\textwidth}
-%   \centering
-%   \includegraphics[width=\linewidth]{./Images/scalp_corr.png}
-%   \caption{Correlations with depresssion.}
-%   % \label{fig:sub1}
-% \end{subfigure}%
-% \\
-% \begin{subfigure}{\textwidth}
-%   \centering
-%   \includegraphics[width=\linewidth]{./Images/scalp_corr_change.png}
-%   \caption{Correlations with change.}
-%   % \label{fig:sub2}
-% \end{subfigure}
-% \caption[Scalp plot of correlations.]{\ldots}
-% \label{fig:scalp-corrs}
-% \end{figure}
+In Section \ref{sec:analrespdif}, we have observed the most significant differences between responders and nonresponders in the recordings obtained before treatment for LLE (especially F4 and T6 channels), which may explain that LLE is the most discriminative nonlinear measure for treatment response prediction. Although the differences for other measures remained relatively insignificant, CD, HD, and SE achieve accuracy of approximately 67\%. This may be explained by the fact that in Section \ref{sec:analrespdif}, we tested only for the differences in distributions in values recorded on individual channels, whereas in this section, we perform classification based on combination of multiple channels.
 
 \section{Limitations}
 \section{Implementation} \label{sec:impl-nl}
@@ -2224,7 +2214,7 @@ The matrix $W$ is found under optimization criteria, which we will describe in t
 \begin{align*}
   \Sigma^{(c)} = \frac{1}{|I_c|} \sum_{i \in I_c} X_i X_i^{T}, \qquad c \in \{ +, - \},
 \end{align*}
-where $I_c$ is the set of time indeces matching the two conditions.\footnote{Here we suppose that two separate events happened during a single recording to simplify notation. This is not strictly necessary.} Since variance of band-pass filtered is the power present in the frequency band, the diagonal elements of $\Sigma^{(c)}$ represent the fraction of the total band power in each channel, and the off-diagonal elements represent the fractional covariance~\cite{koles1990spatial}. CSP then performs simultaneous decomposition 
+where $I_c$ is the set of time indeces matching the two conditions.\footnote{Here we suppose that two separate events happened during a single recording to simplify notation.} Since variance of band-pass filtered is the power present in the frequency band, the diagonal elements of $\Sigma^{(c)}$ represent the fraction of the total band power in each channel, and the off-diagonal elements represent the fractional covariance~\cite{koles1990spatial}. CSP then performs simultaneous decomposition 
 \begin{align*}
   W^T \Sigma^{(+)} W &= \Lambda^{(+)}, \\
   W^T \Sigma^{(-)} W &= \Lambda^{(-)}, \qquad \Lambda^{(c)} \, \text{diagonal}
@@ -2376,8 +2366,8 @@ Moreover, we also evaluated multiple simpler architectures. The best performing 
 \end{figure}
 
 \section{Results} \label{sec:dl-results}
-
-In order to train and evaluate the models, we used 5-fold cross validation performed as follows. Before training and evaluation the models, all the samples were shuffled and split into two parts. The first part, containing 80\% of the samples, was used for training (80\%) and validation (20\%). The second part, containing the remaining 20\% of the samples, was used as test set to evaluate the trained model. This procedure was again performed 5 times, using different initial splits into training with validation and test set. The results in Table \ref{tab:dl-res} report the mean and standard deviation of accuracies obtained on the test sets.
+\subsection{Methodology}
+In order to train and evaluate the models, we used 5-fold cross validation performed as follows. Before training and evaluation the models, all the samples were shuffled and split into two parts. The first part, containing 80\% of the samples, was used for training (80\%) and validation (20\%). The second part, containing the remaining 20\% of the samples, was used as test set to evaluate the trained model. This procedure was again performed 5 times, using different initial splits into training with validation and test set. The results in Table \ref{tab:dl-res} report the mean and standard deviation of accuracies obtained on the test sets. Figure \ref{fig:acc-loss-orig} shows evolution of the accuracy and loss of the shallow model on the depression classification task during one cross validation cycle.
 
 The models were trained for 200 epochs. In each epoch, the current iteration of the model was evaluated on the validation set. The model which achieved the highest accuracy on the validation set over all iterations was then selected for evaluation on the test set. This procedure, performed on the dataset described in Section \ref{sec:dl-dataset}, results approximately in the number of samples for each of training, validation and test sets shown in Table \ref{tab:setsize}.
 
@@ -2443,6 +2433,13 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 \label{tab:dl-res}
 \end{table}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=1.0\linewidth]{./Images/acc_loss_orig_dep_all_nonfilt.png}
+  \caption[Accuracy and loss for the original splitting.]{An example of accuracy and loss measured on the validation and test set during one cross validation cycle for the shallow network on the depression classification task.}
+  \label{fig:acc-loss-orig}
+\end{figure}
+
 \add[inline]{We might want to show the missclasifications - how close were they? Are people acting, or is the measurement relatively objective? Or maybe confusing matrices.}
 \add[inline]{How about seeing hidden layer activations typical of particular class?}
 \info[inline]{Batchsize 64 128 doesn't matter. The learning rate was decreased with batch size.}
@@ -2454,7 +2451,7 @@ As evidenced in Section \ref{sec:analbefaft}, nonlinear measures seem to be rela
 
 To investigate this question, we trained and evaluated the models as follows. The patients were split into two sets. The first set was again used for training and validation and containing 80\% of the patients, and the second set, containing the remaing samples, was used for testing. Only either the recordings obtained during the first visit, or recordings obtained during the second visit, were used (this required changing the depression score thresholds to keep the classes balanced). This way, samples from patients used in the test set were never used for training. The first set was then split into training (80\%) and validation (20\%) sets of distinct patients, and the model was trained and evaluated on samples obtained from these distinct patients using the method described in Section \ref{sec:dl-results}. This entire procedure was repeated 5 times, resulting in 5-fold cross validation across patients.
 
-Figure \ref{fig:acc-loss-fixed} shows loss and accuracy on the training and validation sets during one loop of the cross validation using the simpler, shallow model on the recordings obtained during the first session to predict the depression score level. In order to maximize the amount of training data, the thresholds for the classes were set to 26 as upper bound for healthy and 27 as lower bound for depressed. The figure shows that the model fits the training set of small number of patients, but does not generalize to the patients the patients in the validation set. Thus, the number of training epochs before evaluation on test set was decreased. Increasing the probability parameter of dropout, adding regularization to the layers, increasing or shortening the recording length to either increase the amount of information in a sample or simplify the model, or increasing the overlap between samples and shifting more patients to the training set does not improve generalization.
+Figure \ref{fig:acc-loss-fixed} shows loss and accuracy on the training and validation sets during one loop of the cross validation using the simpler, shallow model on the recordings obtained during the first session to predict the depression score level. In order to maximize the amount of training data, the thresholds for the classes were set to 26 as upper bound for healthy and 27 as lower bound for depressed, resulting in 63 and 62 patients in each group respectively. The figure shows that the model fits the training set of small number of patients, but does not generalize to the patients the patients in the validation set. Thus, the number of training epochs before evaluation on test set was decreased. Increasing the probability parameter of dropout, adding regularization to the layers, increasing or shortening the recording length to either increase the amount of information in a sample or simplify the model, or increasing the overlap between samples and shifting more patients to the training set does not improve generalization. Table \ref{tab:res-pat-split} shows accuracies obtained using this procedure with varying subrecording length and width.
 
 \begin{figure}
 \centering
@@ -2465,25 +2462,29 @@ Figure \ref{fig:acc-loss-fixed} shows loss and accuracy on the training and vali
 
 % The evaluation could be done by: average per person. Is not efficient on small number of persons.
 
-% Here add discossion of added table with accuracies. The table should contain: ww, ws, CV accuracy, 
-
 \begin{table}[tbp]
-\begin{tabular}{|l|l|l|l|l|l|}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{WW} & \textbf{WS} & \textbf{Train.} & \textbf{Val.} & \textbf{Test.} & \textbf{Acc.} \\ \hline
-            &             &                 &               &                &               \\ \hline
-            &             &                 &               &                &               \\ \hline
+\multicolumn{2}{|c|}{\textbf{Subrecording}} & \multicolumn{3}{|c|}{\textbf{Dataset sizes}} & \multicolumn{2}{|c|}{\textbf{Accuracy}} \\ \hline
+\textbf{Length} & \textbf{Overlap}(\%) & \textbf{Train.} & \textbf{Val.} & \textbf{Test} & \textbf{Mean} & \textbf{Std}  \\ \hline
+256 & 0 & 5277 & 1453 & 1785 & 0.55 & 0.02 \\ \hline
+512 & 50 & 5202 & 1433 & 1759 & 0.57 & 0.03 \\ \hline
+1024 & 25 & 5052 & 1295 & 1707 & 0.55 & 0.02 \\ \hline
+% 1024 & 50 & 2538 & 702 & 861 & 0.57 & 0.06 \\ \hline
 \end{tabular}
-\caption[]{Table with accuracy as function of subrecording length, subrecording overlap, training, validation, test sizes.}
+\caption[Accuracies obtained using cross validation across samples.]{Accuracy of the shallow model on the depression classification task using raw data representation of recordings obtained before treatment. The dataset contained 63 patients labeled as healthy (depression score below 26) and 62 patients labeled as depressed (depression score above 27).}
+\label{tab:res-pat-split}
 \end{table}
+
+Another modification of the training procedure was evaluated. The split between training with validation and test was again performed across patients. However, the instead of splitting the training with validation set into training and validation sets across patients, we split it across samples. This way, we obtained good performance on the validation set. Nevertheless, the performance on the test set did not noticeably improve.
 
 A possible explanation for the obsered result is as follows. It seems that the relatively high performance obtained in the previous section was mostly due to small intrapersonal variance and high interpersonal variance of the patterns in the EEG signals resulting in the network being trained to map patient-charactertic patterns to labels, instead of mapping label-characteresic patterns to labels. Hence, the models overfit over a small number of epochs to the training set of small number of patients, and is unable to generalize to another set of patients.
 
 If this hypothesis holds, then the observed lack of generalization may be improved by increasing the number of patients included in the dataset. Assuming that the dataset would then contain large enough aggregate of patients with small variance in patient-charecterstic patterns and, at the same time, high enough variance in depression scores and treatment response, large training accuracy could be achieved by fitting the label-characterstic patterns. Conceivably, models trained on such dataset would generalize to patients not included in the training set.
 
-\info[inline]{When we did the same, restricted only on predicting depression only on the before treatment set, we obtained slightly better results than chance.}
 \section{Implementation}
-For the implementation in this chapter, we used the same software as in Chapter \label{ch:nl}, which was listed in Section \ref{sec:impl-nl}. In additition, to design and evaluate the models, we used the deep learning library \href{https://keras.io/}{Keras}.
+For the implementation in this chapter, we used the same software as in Chapter \ref{ch:nonlin-approach}, which was listed in Section \ref{sec:impl-nl}. In additition, to design and evaluate the models, we used the deep learning library \href{https://keras.io/}{Keras}.
 
 \chapter*{Conclusion} \label{ch:concl}
 \addcontentsline{toc}{chapter}{Conclusion}
@@ -2577,6 +2578,14 @@ All NL measures correlated with depression scores, reasonable accuracy which is 
    \label{fig:respnon2}
   \end{figure}
 \end{landscape}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1.0\textwidth]{./Images/rel_change.png} }
+  \caption[Relative changes in nonlinear measures.]{Overview of relative change in each measure for each patient. The relative change is computed for each patient and measure as $(\text{mean after}-\text{mean before})/|\text{mean before}|$, where $\text{mean before}$ is the mean of the nonlinear measure values across channels in the recording obtained before treatment, and $\text{mean after}$ is the analogous mean for the recording obtained after treatment.}
+ \label{fig:rel-change}
+\end{figure}
 
 \begin{table}[tbp]
 \centering
@@ -3028,7 +3037,7 @@ Pz       & 9.964 $\pm$ 0.917 & 10.249 $\pm$ 1.132 & 0.295 &       \\ \hline
 \end{tabular}
 \subcaption{Correlation dimension}
 }
-\caption[Comparison of mean measure values between responding and nonresponding patients.]{Comparison of mean values of measures computed from recordings obtained during the first session (i.e. before drug administration) for 50 patients responding positively to the treatment patients and 50 nonresponding patients, i.e. patients retaining their symptoms and patients worsening their symptoms.}
+\caption[Comparison of mean measure values between responding and nonresponding patients.]{Comparison of mean values of measures computed from recordings obtained during the first session (i.e. before drug administration) for 50 patients responding positively to the treatment and 50 nonresponding patients, i.e. patients retaining their symptoms and patients worsening their symptoms.}
 \label{tab:remmeans}
 \end{table}
 
@@ -3208,7 +3217,7 @@ Pz       & 9.987 $\pm$ 0.987 & 10.220 $\pm$ 1.082 & 0.215 &       \\ \hline
 \end{tabular}
 \subcaption{Correlation dimension}
 }
-\caption[Comparison of mean measure values between responding and nonresponding patients, both sessions included.]{Comparison of mean values of measures computed from recordings obtained during the both sessions (i.e. both before and after drug administration) for 50 patients responding positively to the treatment patients and 50 nonresponding patients.}
+\caption[Comparison of mean measure values between responding and nonresponding patients, both sessions included.]{Comparison of mean values of measures computed from recordings obtained during both sessions (i.e. both before and after drug administration) for 50 patients responding positively to the treatment and 50 nonresponding patients.}
 \label{tab:remmeansext}
 \end{table}
 
