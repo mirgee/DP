@@ -1870,19 +1870,12 @@ As mentioned in Section \ref{sec:dataset}, studied dataset lacks symptom absent 
 
 With the goal of analyzing the differences between the lightest and most severe symptoms, we selected two classes of recordings for analysis in this section as follows. The first class, called \emph{healthy}, of 50 recordings with reported depression score $\leq$ 16, and the second class, called \emph{depressed}, of 50 recordings with depression score $\geq$ 28. We should recognize that including after treatment recordings does not control for possible effects of treatment not reflecting in the depression scores but reflecting in the signal, or the inverse. Indeed, all the healthy recordings were made after treatment, and most of the depressed recordings were made before treatment.
 
-First, we inspected histograms of computed measures between the two groups. There were striking trends in the means of the two distributions in almost all channels for all measures except correlation dimension. Means of depressed recordings are typically shifted to the left of the mean of healthy recordings for all measures except for largest Lyapunov exponent, for which the means are shifted to the right. For correlation dimension, the distributions are similar. Figure \ref{fig:lyapdepdist}, which shows the distributions of the largest Lyapunov exponents for both groups, exemplifies the differences.  
+First, we inspected histograms of computed measures between the two groups. There were striking trends in the means of the two distributions in almost all channels for all measures except correlation dimension. Means of depressed recordings are typically shifted to the left of the mean of healthy recordings for all measures except for largest Lyapunov exponent, for which the means are shifted to the right. For correlation dimension, the distributions in both groups are similar. Figure \ref{fig:lyapdepdist} in the Appendix, which shows the distributions of the largest Lyapunov exponents for both groups, exemplifies the differences.  
 
-Moreover, we investigated the differences in the distributions using Kruskal-Wallis test. Table \ref{tab:depmeans} in the Appendix shows the results. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
+Next, we investigated at the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Correlation dimension shows no significant correlations between depression scores on any channel, whereas the remaining measures are significantly correlated in almost all channels, and all those correlations are negative. Trends similar to the one observed for DFA were observed for Hurst exponent and Higuchi fractal dimension, where, however, DFA shows slightly more significant correlations. Sample entropy values were significantly negatively correlated only on F4 and T6 channels. We also visualized correlations of individual measures to the the depression score and treatment response label on topographic scalp in Figure \ref{fig:scalp-corrs}, and the corresponding p-values in Figure \ref{fig:scalp-corrs-pval}. Interestingly, the patterns in p-values for depression score correlations seem almost centrally symmetrical for DFA, HE, and CD, and centrally symmetrical for LLE and SE.
 
-Furthermore, we looked at the correlations between the individual measures and correlation scores. Figure \ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure \ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Trends similar to the one observed for DFA were observed for Hurst exponent and Higuchi fractal dimension, where, however, DFA shows slightly more significant correlations. Sample entropy values were significantly negatively correlated only on F4 and T6 channels. For correlation dimension, no significant correlation between depression scores was found on any channel. We also visualized correlations of individual measures to the labels on topographic scalp in Figure \ref{fig:scalp-corrs}.
+Finally, we compared the distributions using Kruskal-Wallis test. Tables \ref{tab:lleba}, \ref{tab:d2ba} and \ref{tab:seba} in the Appendix show the results for LLE, CD and SE respectively.\add{FIX! Add all on one page.} We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
 
-\begin{figure} 
-\centering
-\noindent\makebox[\textwidth]{%
-  \includegraphics[width=1\textwidth]{./Images/dists/lyapdepdist.png} }
-  \caption[Distributions of $\lambda_1$ between healthy and depressed patients.]{Distributions of the largest Lyapunov exponents between healthy and depressed patients. Most notable differences can be observed in the left and right temporal areas, T3 and T6. The distributions seem generally normal (however, this is not true for all measures).}
- \label{fig:lyapdepdist}
-\end{figure}
 
 \begin{figure} 
 \centering
@@ -1903,8 +1896,15 @@ Furthermore, we looked at the correlations between the individual measures and c
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{./Images/scalp_corr_all.png}
-  \caption[Topographic correlation map.]{Topographic map of correlation coefficients on a scalp for depression diagnosis and response prognosis respectively. Color at each channel marks the value of Pearson's correlation coefficient between the value of corresponding measure and label across all patients. The colors are then interpolated for smooth transitions.}
+  \caption[Topographic correlation map.]{Topographic map of correlation coefficients on a scalp for depression diagnosis and response prognosis respectively. Color at each channel marks the value of Pearson's correlation coefficient between the value of corresponding measure and either depression score or treatment response label. The colors are then interpolated for smooth transitions. For depression score, all patients were included, whereas for response, only before treatment recordings were included.}
   \label{fig:scalp-corrs}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{./Images/scalp_corr_sig.png}
+  \caption[Topographic map of the correlation p-values.]{Topographic map of correlation coefficients' p-value on a scalp for depression diagnosis and response prognosis respectively. Color at each channel marks the value of Pearson's correlation coefficient's p-value between the value of corresponding measure and either depression score or treatment response label across all patients. The colors are then interpolated for smooth transitions. For depression score, all patients were included, whereas for response, only before treatment recordings were included.}
+  \label{fig:scalp-corrs-pval}
 \end{figure}
 
 \subsection{Low and High Response Groups} \label{sec:analrespdif}
@@ -1914,7 +1914,7 @@ For each patient, we computed a measure of change in depression scores (and, by 
 
 We performed Kruskal-Wallis test to see the differences in the computed measures between the two groups in individual channels, considering only the before treatment recordings. The most significant differences found were in Lyapunov exponent, especially in frontal, parietal, and right temporal areas. Aside from the largest Lyapunov exponent, Higuchi fractal dimension then also showed significant differences in frontal areas.. The results are shown in Table \ref{tab:remmeans} in the Appendix. In comparison with Section \ref{sec:analdepdif}, these results suggest that, with exception of LLE, differences in nonlinear measures between responders and nonresponders in the recordings obtained before treatment are considerably less significant than differences in depression score. On the other hand, it is possible that the differences are less significant due to smaller dataset size, since the test is performed on smaller number of samples. For completeness, we also decided to include comparison which includes both before and after treatment recordings, which can be seen in Table \ref{tab:remmeansext}.
 
-Moreover, we also compared before and after treatment recordings of responding, and before and after treatment recordings of nonresponding patients. Significant differences were found only in LLE, CD and SE, for which the results can be seen in the Appendix in Tables \ref{tab:llebaresp}, \ref{tab:d2baresp}, and \ref{tab:sebaresp} respectively. These differences are also visualized in Figures \ref{fig:respnon1}, \ref{fig:respnon1auto}, and \ref{fig:respnon2} in the Appendix. We can see, for example, that the mean values of LLE across channels are higher before treatment for the responding group, but this effect is less pronounced for the nonresponders. Together with Table \ref{tab:remmeans}, this result adds to the evidence that it is the decrease in depression score which results in higher values of LLE. Since this effect is not observed in the nonresponding group, the relationship between LLE increase and 
+Moreover, we also compared before and after treatment recordings of responding, and before and after treatment recordings of nonresponding patients. Significant differences were found only in LLE, CD and SE, for which the results can be seen in the Appendix in Tables \ref{tab:llebaresp}, \ref{tab:d2baresp}, and \ref{tab:sebaresp} respectively. These differences are also visualized in Figures \ref{fig:respnon1}, \ref{fig:respnon1auto}, and \ref{fig:respnon2} in the Appendix. We can see, for example, that the mean values of LLE across channels are higher before treatment for the responding group, but this effect is less pronounced for the nonresponding group, where depression score also slightly descreased. Since this group also received treatment, the observed higher depression score accompanied by LLE increase is not due to the effects of treatment. Together with Table \ref{tab:remmeans}, this result further supports the hypothesis that it is the decrease in depression score which results in higher values of LLE.
 
 Of course, analyzing effectivity of treatment is difficult problem, and we realize the many limitations of this analysis. For example, many variables, including age, sex, starting depression score, behavioral changes occuring in the interim period and the kind of treatment, were not accounted for. Moreover, many of the patients selected as nonresponding actually improved their symptoms slightly. In fact, symptoms of only 9 patients of the whole dataset worsened or stayed stagnant. No significant differences between before and after treatment recordings of these ``strictly'' nonresponding patients, were found. Thus, one possibility of strengthening the differences between the responding and nonresponding groups may be to include the after treatment recordings for the ``strictly'' nonresponding group to the nonresponding group. However, we decided against doing this, because some differences in the before and after treatment groups for the ``strictly'' nonresponding patients may have remained insignificant due to small size of this group.
 
@@ -2223,7 +2223,7 @@ under the condition that $\Lambda^{(+)} + \Lambda^{(+)} = I$, which is equivalen
 \begin{align*}
   \Sigma^{(+)}\mathbf{w} = \lambda \Sigma^{(-)}\mathbf{w}
 \end{align*}
-for generalized eigenvectors $\mathbf{w}$ and their eigenvalues $\lambda$. The resulting eigenvectors $\mathbf{w}_j$, $j \in \{1, \dots, C \}$ then are the column vectors of $W$, and corresponding eigenvalues $\lambda_j^{(c)} = \mathbf{w}_j^T \Sigma^{(c)} \mathbf{w}_j$ are the diagonal elements of $\Lambda^{(c)}$. Then, $\lambda_j = \lambda_j^{(+)} / \lambda_j^{(-)}$, and $\lambda_j^{(+)} + \lambda_j^{(-)} = 1$. This means that high variance the direction of $\mathbf{w}_j$ of signal in class $+$ results in small variance in signal in class $-$, and vice versa (see Figure \ref{fig:csp})~\cite{blankertz2008optimizing}.
+for generalized eigenvectors $\mathbf{w}$ and their eigenvalues $\lambda$. The resulting eigenvectors $\mathbf{w}_j$, $j \in \{1, \dots, C \}$ then are the column vectors of $W$, and corresponding eigenvalues $\lambda_j^{(c)} = \mathbf{w}_j^T \Sigma^{(c)} \mathbf{w}_j$ are the diagonal elements of $\Lambda^{(c)}$. Then, $\lambda_j = \lambda_j^{(+)} / \lambda_j^{(-)}$, and $\lambda_j^{(+)} + \lambda_j^{(-)} = 1$. This means that high variance in the direction of $\mathbf{w}_j$ of signal in class $+$ results in small variance in signal in class $-$, and vice versa (see Figure \ref{fig:csp})~\cite{blankertz2008optimizing}.
 
 This method, although loosely based on PCA, is better suited for supervised classification, since, unlike PCA, it is guaranteed to find components which are responsible for the maximum differences in variance between the two classes. These eigenvectors are an orthonormal set which spans $\RR^C$, and are optimal for the amount of variance they account for in the least squares sense~\cite{koles1990spatial}.
 
@@ -2231,14 +2231,14 @@ This method, although loosely based on PCA, is better suited for supervised clas
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.7\textwidth]{./Images/csp/csp_merged.png} }
-  \caption[Schema of CSP algorithm.]{CSP.}
+  \caption[Example of CSP algorithm.]{A demonstration of the CSP algorithm on a two classes of 2-dimensional samples generated randomly using different distributions \cite{blankertz2008optimizing}. The dashed lines on the right hand side correspond to the CSP projection vectors $w_1$, $w_2$. Note that although there is a strong correlation for both classes in the original space, correlation for one class is maximized and and minimized for the other class in the projected space.}
 \label{fig:csp}
 \end{figure}
 
 \subsection{Filter Bank Common Spatial Patterns} \label{sec:fbcsp}
-Although CSP usually yields good performance when the signals have been filtered in frequency range carefully tuned for the particular subject and classification problem at hand, its performance rapidly decreases when measurements are either unfiltered or filtered in inappropriate frequency range~\cite{ang2008filter}. Thus, an improvement has been suggested, called Filter Bank Spatial Patterns (FBCSP). It comprises of four stages: frequency filtering, spatial filtering, feature selection and classification (see Figure \ref{fig:fbcsp}). In Stage 1, multiple band-pass filters are applied to split the signal into distanct filter banks. Then, in Stage 2, spatial filters are found for each of the respective filter banks using CSP analysis, as described in Section \ref{sec:csp}. These filters characterize features present in the signal specific to the corresponding frequency band. In Stage 3, a feature selection algorithm is employed to select the most discriminative features of all the filters found in previous step. Finally, in Stage 4, a classification algorithm uses the selected features for classiying the input signal into a class.
+Although CSP usually yields good performance when the signals have been filtered in frequency range carefully tuned for the particular subject and classification problem at hand, its performance rapidly decreases when measurements are either unfiltered or filtered in inappropriate frequency range~\cite{ang2008filter}. Thus, an improvement has been suggested, called Filter Bank Spatial Patterns (FBCSP). It comprises of four stages: frequency filtering, spatial filtering, feature selection and classification (see Figure \ref{fig:fbcsp}). In stage 1, multiple band-pass filters are applied to split the signal into distanct filter banks. Then, in Stage 2, spatial filters are found for each of the respective filter banks using CSP analysis, as described in Section \ref{sec:csp}. These filters characterize features present in the signal specific to the corresponding frequency band. In stage 3, a feature selection algorithm is employed to select the most discriminative features of all the filters found in previous step. Finally, in stage 4, a classification algorithm uses the selected features for classiying the input signal into a class.
 
-Using the fact that magnitudes of the CSP eigenvalues are proportional to the amount of variance explained by corresponding signal in the direction corresponding to the eigenvector, the CSP algorithm in Stage 2 is slightly modified to to order the eigenvectors according to the magnitued of their eigenvalues, and only the first and last $m$ filtered signals are selected for further classification. This means selecting only the first and last $m$ rows from the matrix $X_{\text{CSP} = W^TX}$, yielding a matrix $Z \in (2m) \times T$ with row vectors $Z_j$, $j=1, \dots, 2m$. The final feature vector $\mathbf{f}$ is composed as logarithm of the contribution of variance of each row vector to the total variance as follows:~\cite{ang2008filter}
+Using the fact that magnitudes of the CSP eigenvalues are proportional to the amount of variance explained by corresponding signal in the direction corresponding to the eigenvector, the CSP algorithm in stage 2 is slightly modified to order the eigenvectors according to the magnitude of their eigenvalues, and only the first and last $m$ filtered signals are selected for further classification. This means selecting only the first and last $m$ rows from the matrix $X_{\text{CSP} = W^TX}$, yielding a matrix $Z \in (2m) \times T$ with row vectors $Z_j$, $j=1, \dots, 2m$. The final feature vector $\mathbf{f}$ is composed as logarithm of the contribution of variance of each row vector to the total variance as follows:~\cite{ang2008filter}
 
 \begin{align} \label{eq:logvar}
   f_j = \log \left( \frac{\text{var}(Z_j)}{\sum_{i=1}^{2m} \text{var}(Z_i)} \right).
@@ -2248,10 +2248,9 @@ Using the fact that magnitudes of the CSP eigenvalues are proportional to the am
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{./Images/fbcsp.png} }
-  \caption[Schema of FBCSP algorithm.]{FBCSP}\cite{ang2008filter} 
+  \caption[Schema of FBCSP algorithm.]{A schematic overview of the FBCSP \cite{ang2008filter}. First, the signal is filtered into various bands. Then, CSP algorithm is applied to each band, and thus can maximize variance for class-specific features present in each band. After selecting features from subset of the signals, a classifier uses the features from all bands to perform the classification task.}
 \label{fig:fbcsp}
 \end{figure}
-
 
 \section{Dataset} \label{sec:dl-dataset}
 For experiments in this chapter, we used the same dataset as in the previous Chapter 1, described in Section \ref{sec:dataset}. However, to increase the number of samples, decided to use the entire recordings, in contrast to our approach in the previous chapter, where we used only the beginning in each recording. This is mainly because the classification algorithms we used in this chapter have larger variance, and thus are easily overfit on small datasets. Thus, each of the recordings, after downsampling to $250$ Hz (see Section \ref{sec:dataset}) was segmented into disjoint subrecordings of length 256, each subrecording forming a data sample. The subrecording length was selected as a tradeoff between 
@@ -2268,7 +2267,7 @@ For the selected sampling frequency, this subrecording length corresponds to app
 
 After splitting the recordings, we assigned positive, neutral or negative label to each subrecording in order to split the dataset into three groups based on depression score of the subject at the time of the recording for depression classification, or based on the subject's before to after treatment depression score for response classification (in which case only before treatment recordings were further used). The neutral class was then removed and not further considered. 
 
-The threshold values separating these classes were selected such that the classes remained relatively balanced and that enough samples were present in each class to train and evaluate a model of moderate capacity. In the case of depression classification, the amount of inter-class variance is inherently limited by nature of the provided data - patients were not randomly sampled, but visited the institution to seek professional help. In attempt to partially remedy this issue, the depression score threshold was set such that 71 patients remained in each depressed and healthy classes, leaving 124 neutral subjects. This corresponds to depressions score ranges $\langle 0, 17 \rangle $ for healthy, $(17, 27)$ for neutral, and $\langle 27, 34 \rangle$ for depressed. In the case of response classification, our ability to potentially increase inter-class variance in this way is more limited due the amount of available data, since only before treatment recordings are used. Thus, we removed only 14 neutral subjects, leaving 59 nonresponding and 60 responding subjects.
+The threshold values separating these classes were selected such that the classes remained relatively balanced and that enough samples were present in each class to train and evaluate a model of moderate capacity. In the case of depression classification, the amount of inter-class variance is inherently limited by nature of the provided data - patients were not randomly sampled, but visited the institution to seek professional help. In attempt to partially remedy this issue, the depression score threshold was set such that 71 patients remained in each depressed and healthy classes, leaving 124 neutral subjects. This corresponds to depression score ranges $\langle 0, 17 \rangle $ for healthy, $(17, 27)$ for neutral, and $\langle 27, 34 \rangle$ for depressed. In the case of response classification, our ability to potentially increase inter-class variance in this way is more limited due the amount of available data, since only before treatment recordings are used. Thus, we removed only 14 neutral subjects, leaving 59 nonresponding and 60 responding subjects.
 
 \section{Input Representation} \label{sec:input-repr}
 Before applying any machine learning technique to the classification problem at hand, the question of optimal input representation needs to be answered. To this end, multiple factors need to be considered. Firstly, what is the dimensionality of the input relative to the resulting number of samples, and does it allow construction of sufficiently complex architectures compared to complexity of the classification problem? Secondly, does each input sample contain enough information to perform successful classification? Thirdly, is the input representation appropriate for the kind of data, i.e. does it help or hinder successful classification? In our case, for all the methods considered, answer to the first question is a function of recording slice length used to generate the input. Answering the remaining questions, however, is difficult without prior experiments on similar datasets. For this reason, research on applying known techniques to new problems is useful.
@@ -2488,12 +2487,38 @@ For the implementation in this chapter, we used the same software as in Chapter 
 
 \chapter*{Conclusion} \label{ch:concl}
 \addcontentsline{toc}{chapter}{Conclusion}
-In this study, we incorporate both thorough review of the theory of nonlinear dynamical systems in relation to EEG analysis along with overview of the relevant algorithms and techniques for nonlinear measures extraction and input parameter estimation, comprehensive literature review, and practical application of those techniques on the available dataset. Furthermore, we also present another approach to feature extraction and classification on the dataset. In this section, we discuss the obtained results in context with our objectives, examine the limitations of our results, make recommendations for avenues of further research, and summarize the contribution to scientific knowledge provided by this work.
+Remind of the focus and objective
+In this study, we incorporate both thorough review of the theory of nonlinear dynamical systems in relation to EEG analysis along with overview of the relevant algorithms and techniques for nonlinear measures extraction and input parameter estimation, comprehensive literature review, and practical application of those techniques on the available dataset. Furthermore, we also present another approach to feature extraction and classification on the dataset. 
 
-\section*{Research Objectives}
-Will adress the objectives from the introduction in the order mentioned thereby.
+\section*{Contributions}
+% \begin{itemize}
+% \item Performance on raw data considerably higher than on RP using DL - RP may not be as good as thought e.g. in \cite{acharya2015computer}
+% \item F3 seemed relevant for response
+% \item All examined NL measures are correlated with depression severity - the most significant correlation is in \ldots
+% \item Used methods of estimating input parameters seem not very effective at fidning parameters whih would make the results discriminative
+% \item FBCSP-inspired CNN models perform well especially for prediction 
+% \item Neuroscience may be able to draw some conclusions from the observed correlation in brain regions
+% \item We selected the input parameters very carefully, may inform other researchers about their proper selection (most studies just estimate them crudely)
+% \end{itemize}
+\subsection*{Analysis of Correlation between Depression Score and Nonlinear Measures}
+Investignating the significance of correlations between nonlinear measures and depression scores, we found that LLE, DFA, HE, HD, and SE are significantly correlated with depression score in some cortical areas. The strongest correlations was found for LLE. Although CD showed the weakest correlations with depression score per channel, using it in combination with other nonlinear measures or by combining a number of channels resulted in one of the best depression classifiers evaluated. For selection of channels relevant for classification, a genetic algorithm was far more successful that any other feature selection method evaluated.
 
-All NL measures correlated with depression scores, reasonable accuracy which is not as high as in other studies, but we have larger dataset than many. On the other hand, we lack control group (next Section).
+In \cite{hosseinifard2013}, it was found that CD was the most useful, LLE least.
+
+\subsection*{The Largest Lyapunov Exponents are Significantly Correlated with Positive Treatment Response}
+Positively correlated with depression score, negatively with response. Thus LLE can be . We are not aware of any studies showing a similar result. Other nonlinear measures were not sign. corr., but still good feature for lin. classifiers.
+
+\subsection*{Analysis of Spatial Distribution of Nonlinear Measures across Brain Regions in Depression}
+Although some neuroscientific theories suggest that medical depression is caused by malfuction in the right hemisphere, we found nonlinear measures computed in both hemispheres contribute significantly to high depression score, with slightly stronger contribution from the left hemisphere.
+
+Response: F3 and T6, depression T6.
+
+\subsection*{Analysis of Nonlinear Measure and Input Parameter Estimation Algorithms and Procedures for EEG Analysis}
+In the case of EEG and this problem, the evaluated nonlinear measure embedding parameter selection techniques are do not lead to most discriminative results, although they are widely used.
+
+\subsection*{Evaluation of FBCSP-inspired Neural Network Architectures for Depression Diagnosis and Prognosis}
+Deep learning technique did not work well on this particular problem. To use DL technique: dataset probably must contain more of \dots, or the the architecture  be improved my making use of our finding that NLM's.
+
 \section*{Limitations}
 \begin{itemize}
   \item Correlation in CNN samples, also they are too short
@@ -2501,8 +2526,8 @@ All NL measures correlated with depression scores, reasonable accuracy which is 
   \item 50 Hz noise in some samples
   \item Patients offered various treatment - e.g. it may be possible that response to rTMS may be different from response to drugs
   \item Outputs only binary label, doctors may want more precise (e.g. 95\% confidence interval, but it is currently to large)
+  \item All NL measures correlated with depression scores, reasonable accuracy which is not as high as in other studies, but we have larger dataset than many. On the other hand, we lack control group (next Section).
 \end{itemize}
-
 \section*{Recommendations for Future Work}
 \begin{itemize}
 \item Better dataset
@@ -2518,26 +2543,6 @@ All NL measures correlated with depression scores, reasonable accuracy which is 
 \item Compare with FBCSP, with spatial embedding
 \end{itemize}
 
-\section*{Contribution}
-% \begin{itemize}
-% \item Performance on raw data considerably higher than on RP using DL - RP may not be as good as thought e.g. in \cite{acharya2015computer}
-% \item F3 seemed relevant for response
-% \item All examined NL measures are correlated with depression severity - the most significant correlation is in \ldots
-% \item Used methods of estimating input parameters seem not very effective at fidning parameters whih would make the results discriminative
-% \item FBCSP-inspired CNN models perform well especially for prediction 
-% \item Neuroscience may be able to draw some conclusions from the observed correlation in brain regions
-% \item We selected the input parameters very carefully, may inform other researchers about their proper selection (most studies just estimate them crudely)
-% \end{itemize}
-
-\subsection*{Analysis of Spatial Distribution of Nonlinear Measures across Brain Regions in Depression}
-
-\subsection*{Analysis of Correlation between Depression Score and Nonlinear Measures}
-
-\subsection*{Analysis of Nonlinear Measure and Input Parameter Estimation Algorithms and Procedures for EEG Analysis}
-
-\subsection*{Identification of Ineffective Techniques}
-
-\subsection*{Evaluation of FBCSP-inspired Neural Network Architectures for Depression Diagnosis and Prognosis}
 
 \bibliographystyle{unsrt}
 \bibliography{refs}
@@ -2585,6 +2590,14 @@ All NL measures correlated with depression scores, reasonable accuracy which is 
   \includegraphics[width=1.0\textwidth]{./Images/rel_change.png} }
   \caption[Relative changes in nonlinear measures.]{Overview of relative change in each measure for each patient. The relative change is computed for each patient and measure as $(\text{mean after}-\text{mean before})/|\text{mean before}|$, where $\text{mean before}$ is the mean of the nonlinear measure values across channels in the recording obtained before treatment, and $\text{mean after}$ is the analogous mean for the recording obtained after treatment.}
  \label{fig:rel-change}
+\end{figure}
+
+\begin{figure} 
+\centering
+\noindent\makebox[\textwidth]{%
+  \includegraphics[width=1\textwidth]{./Images/dists/lyapdepdist.png} }
+  \caption[Distributions of $\lambda_1$ between healthy and depressed patients.]{Distributions of the largest Lyapunov exponents between healthy and depressed patients. Most notable differences can be observed in the left and right temporal areas, T3 and T6. The distributions seem generally normal (however, this is not true for all measures).}
+ \label{fig:lyapdepdist}
 \end{figure}
 
 \begin{table}[tbp]
