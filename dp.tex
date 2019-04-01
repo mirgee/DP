@@ -142,6 +142,7 @@
 \newacronym{gpu}{GPU}{Graphical Processing Unit}
 \newacronym{lr}{LR}{Logistic Regression}
 \newacronym{svm}{SVM}{Support Vector Machine}
+\newacronym{bci}{BCI}{Brain Computer Interface}
 \usepackage{nomencl}
 \makenomenclature
 
@@ -366,8 +367,10 @@ Artificial Intelligence Center, FEE, CTU Prague
 \nomenclature{$\mathbf{F}$}{Dynamics of a dynamical system as a vector field.}
 \nomenclature{$I(\tau)$}{Delayed mutual information as a function of time delay.}
 \nomenclature{$D_2(A)$}{Corelation dimension of an attractor $A$.}
+\nomenclature{$D_2^{(m)}(r)$}{Local correlation dimension in embedding space with dimension $m$ as a function of radius $r$.}
 \nomenclature{$x_i$}{i-th point in a univariate time series.}
-\nomenclature{$\mathbf{x}_i$}{i-th point in the embedding space.}
+\nomenclature{$\mathbf{x}_i$}{i-th point of a trajectory in the embedding space given by time series $x$.}
+\nomenclature{$\mathbf{\xi}(t)$}{Position in the original state space as a function of time $t$.}
 \nomenclature{$N$}{Length of a time series.} 
 % \nomenclature{$N_{(m, \tau)}$}{Length of a trajectory in the reconstruction with embedding dimension $m$ and time delay $\tau$} 
 \nomenclature{$R_A$}{Radius of the attractor.}
@@ -375,6 +378,7 @@ Artificial Intelligence Center, FEE, CTU Prague
 \nomenclature{$t_s, \Delta t$}{Sampling time.}
 \nomenclature{$f_s$}{Sampling frequency.}
 \nomenclature{$N_{(m,\tau)}$}{Number of vectors in time-delay reconstrution with embedding dimension $m$ and time delay $\tau$.}
+\nomenclature{$C(r)$}{Correlation sum as function of radius $r$.}
 
 \printnomenclature
 
@@ -1611,7 +1615,7 @@ To estimate the LLE values using automatic selection of proper embedding paramet
 \label{fig:lle-comp}
 \end{figure}
 
-\subsubsection{Literature Review}
+\subsubsection{Literature Review} \label{sec:lle-rev}
 Using the correlation dimension saturation, the following estimates have been obtained: 5~\cite{babloyantz1986low}, 7~\cite{blanco1995stationarity}, 6-8 (depending on sleep stage)~\cite{gallez1991predictability}. We found similar estimates using correlation dimension maximum (as mentioned in Section \ref{sec:embdim-exp}, we observed no saturation) with time delay $\tau=1$.
 
 By analyzing records ECT seizures, manually separating them into more and less regular, and inspecting multiple values of LLE as a measure of separation between these classes, 7 was selected as optimal embedding dimension in~\cite{krystal1997largest}.
@@ -1691,7 +1695,7 @@ Figure \ref{fig:em-corrdim} shows $D_2$ computed this way as a function of the e
 \label{fig:em-corrdim}
 \end{figure}
 
-\subsubsection{Literature Review}
+\subsubsection{Literature Review} \label{sec:corrdim-rev}
 \begin{table}[tbp]
 \resizebox{\textwidth}{!}{
 \begin{tabular}{|c|c|c|c|c|}
@@ -1967,6 +1971,8 @@ All the channels in the combined-measure classifiers were found using the geneti
 In Section \ref{sec:analdepdif}, we have seen that correlations of LLE with depression score are the most significant of all measures, which may explain why in this section, we found LLE to be the most discriminative measure. Moreover, we have seen that the differences between depressed and healthy patients are the most significant in the temporal areas for all measures, which may explain the relatively high rate of selection of the T3 and T6 channels.
 
 Consistency in the selected channels for a fixed measure might indicate a relationship between activity captured by the nonlinear measure in the brain region local to the channel and corresponding label. However, the selected features seem inconsistent across classifiers using mixed measures or a single measure included in the mix. One possible explanation is that different measures complement themselves in such a way that different channels are relevant when classification is performed based on single measure as opposed to a combination of measures.
+
+Although the obtained accuracies are notably lower than those in studies we reviewed in Section \ref{sec:applications}, these results are not directly mutually comparable. Most importantly, all the reviewed studies employed a control group of symptomless, healthy patients, whereas our dataset composed entirely of patients suffering from depression with various degree of symptom severity. Nevertheless, the obtained accuracies are substantial, suggesting possible ``dose-response relantionship'' between depression severity and nonlinear measures recorded in EEG signals obtained from various cortical regions.
 
 \begin{table}[tbp]
 \centering
@@ -2478,9 +2484,9 @@ Figure \ref{fig:acc-loss-fixed} shows loss and accuracy on the training and vali
 
 Another modification of the training procedure was evaluated. The split between training with validation and test was again performed across patients. However, the instead of splitting the training with validation set into training and validation sets across patients, we split it across samples. This way, we obtained good performance on the validation set. Nevertheless, the performance on the test set did not noticeably improve.
 
-A possible explanation for the obsered result is as follows. It seems that the relatively high performance obtained in the previous section was mostly due to small intrapersonal variance and high interpersonal variance of the patterns in the EEG signals resulting in the network being trained to map patient-charactertic patterns to labels, instead of mapping label-characteresic patterns to labels. Hence, the models overfit over a small number of epochs to the training set of small number of patients, and is unable to generalize to another set of patients.
+A possible explanation for the obsered result is as follows. It seems that the relatively high performance obtained in the previous section was mostly due to small intrapersonal variance and high interpersonal variance of the patterns in the EEG signals resulting in the network being trained to map patient-characteristic patterns to labels, instead of mapping label-characteristic patterns to labels. Hence, the models overfit over a small number of epochs to the training set of small number of patients, and is unable to generalize to another set of patients.
 
-If this hypothesis holds, then the observed lack of generalization may be improved by increasing the number of patients included in the dataset. Assuming that the dataset would then contain large enough aggregate of patients with small variance in patient-charecterstic patterns and, at the same time, high enough variance in depression scores and treatment response, large training accuracy could be achieved by fitting the label-characterstic patterns. Conceivably, models trained on such dataset would generalize to patients not included in the training set.
+If this hypothesis holds, then the observed lack of generalization may be improved by increasing the number of patients included in the dataset. Assuming that the dataset would then contain large enough aggregate of patients with small variance in patient-charecterstic patterns and, at the same time, high enough variance in depression scores and treatment response, large training accuracy could be achieved by fitting the label-characteristic patterns. Conceivably, models trained on such dataset would generalize to patients not included in the training set.
 
 \section{Implementation}
 For the implementation in this chapter, we used the same software as in Chapter \ref{ch:nonlin-approach}, which was listed in Section \ref{sec:impl-nl}. In additition, to design and evaluate the models, we used the deep learning library \href{https://keras.io/}{Keras}.
@@ -2501,23 +2507,22 @@ In this study, we incorporate both thorough review of the theory of nonlinear dy
 % \item We selected the input parameters very carefully, may inform other researchers about their proper selection (most studies just estimate them crudely)
 % \end{itemize}
 \subsection*{Analysis of Correlation between Depression Score and Nonlinear Measures}
-Investignating the significance of correlations between nonlinear measures and depression scores, we found that LLE, DFA, HE, HD, and SE are significantly correlated with depression score in some cortical areas. The strongest correlations was found for LLE. Although CD showed the weakest correlations with depression score per channel, using it in combination with other nonlinear measures or by combining a number of channels resulted in one of the best depression classifiers evaluated. For selection of channels relevant for classification, a genetic algorithm was far more successful that any other feature selection method evaluated.
+Investignating the significance of correlations between nonlinear measures and depression scores, we found that LLE, DFA, HE, HD, and SE computed from EEG signals recorded from channels near cetain cortical areas are significantly correlated with depression score. The most statistically significant correlations were found for LLE, which, in \cite{hosseinifard2013} was found as least discriminative in a similar experimental setting. Although CD showed no significant correlations with depression score per channel, using it in combination with other nonlinear measures or by combining a number of channels resulted in one of the most accurate depression classifiers evaluated. For selection of channels relevant for classification, genetic algorithm resulted in substantially more accurate classifiers than any other feature selection method evaluated.
 
-In \cite{hosseinifard2013}, it was found that CD was the most useful, LLE least.
+All the studies reviewed in Section \ref{sec:applications} included a control group of symptomless, clinically healthy patients, whereas our dataset consists exclusively of patients suffering from MDD of various symptom severity. Nevertheless, the accuracies achieved by the classifiers are substantial, indicating possible proportional relationship between depression severity and values of nonlinear measures recorded in EEG signals obtained from various cortical regions.
 
 \subsection*{The Largest Lyapunov Exponents are Significantly Correlated with Positive Treatment Response}
-Positively correlated with depression score, negatively with response. Thus LLE can be . We are not aware of any studies showing a similar result. Other nonlinear measures were not sign. corr., but still good feature for lin. classifiers.
+\info[inline]{Will do this later, have to include review of treatment response, 4 studies. Add commentary to response results.}
+Positively correlated with depression score, negatively with response. Thus LLE can be . We are not aware of any studies showing a similar result. Other nonlinear measures were not sign. corr., but still good feature for lin. classifiers. Although LLE showed significant correlation with depression score in temporal regions, frontal regions seemed to be more important for treatment response (F3 and T6 especially).
 
 \subsection*{Analysis of Spatial Distribution of Nonlinear Measures across Brain Regions in Depression}
-Although some neuroscientific theories suggest that medical depression is caused by malfuction in the right hemisphere, we found nonlinear measures computed in both hemispheres contribute significantly to high depression score, with slightly stronger contribution from the left hemisphere.
-
-Response: F3 and T6, depression T6.
+Although some neuroscientific theories suggest that medical depression is caused by malfuction in the right hemisphere \cite{hecht2010depression, kwon1996right}, in Sections \ref{sec:analdepdif} and \ref{sec:results-nl}, we found nonlinear measures computed in both hemispheres contribute significantly to high depression score. The distributions of correlation significance is notably particular to each measure, possibly indicating that variously distributed and different processes captured by each measure contribute to depression severity.\add{Too speculative? Belongs more to discussion?} For example, DFA and HE show most significant correlations with depression score in right parietal regions, LLE and SE in right temporal regions,  Nevertheless, the most successful depression classifiers made use especially of channels in temporal areas (in particular, T6 for depression). 
 
 \subsection*{Analysis of Nonlinear Measure and Input Parameter Estimation Algorithms and Procedures for EEG Analysis}
-In the case of EEG and this problem, the evaluated nonlinear measure embedding parameter selection techniques are do not lead to most discriminative results, although they are widely used.
+Since computation of nonlinear measures requires laborious selection of input parameters and knowledge of the algorithms in order to interpret the results, these methods often remain inaccessible to practitioners who has not yet become experts in the field of nonlinear dynamical analysis \cite{schmid1996indications}. Therefore, there is a need for automated procedures to ease application of these methods and increase their use and availability. For the purpose of computing LLE and CD, in Section \ref{sec:estim-nl}, we evaluated a range of algorithms for estimation of embedding dimension and time delay parameters, including implementations of automated pipelines for computation of said measures. Although these input parameter estimation algorithms remain widely used (see Sections \ref{sec:lle-rev} and \ref{sec:corrdim-rev}), we found that, for out dataset, their outputs varied widely for each method, and provided only a crude approximation for parameters which produced more discriminative measures. One of the most consistent and informative estimation algorithms was ILD of our own implementation, which, however, suffers from relatively high computational costs.
 
 \subsection*{Evaluation of FBCSP-inspired Neural Network Architectures for Depression Diagnosis and Prognosis}
-Deep learning technique did not work well on this particular problem. To use DL technique: dataset probably must contain more of \dots, or the the architecture  be improved my making use of our finding that NLM's.
+We evaluated two CNN architectures which were previously shown to be successfully applied to decoding task-related information in pathology \cite{schirrmeister2017deep, schirrmeister2017deeppatho} on our dataset. Although the models achieved relatively high accuracy when trained and evaluated using cross validation across samples, when trained and evaluated using cross validation across recordings obtained before treatment from individual, distinct patients, the models achieved only modest accuracy, and did not generalize to the test set. This observation can be explained by low intrapersonal, and high intrapersonal variance of the EEG signals, which results in high correlation of samples corresponding to one patient, and thus in the presence of high number of samples from small number of patients, the model is trained to associate labels to samples based on the patient-charecterstic patterns, instead of label-characteristic patterns. This is a hypothesis supported by the literature, but needs to be tested. If it holds, then the performance of these models may be improved by extending the dataset with enough patients with similar patient-characteritic patterns and different label-characteristic patterns. Such dataset may be obtained easily by tracking patients' depression score across extended time span.
 
 \section*{Limitations}
 \begin{itemize}
@@ -2541,6 +2546,7 @@ Deep learning technique did not work well on this particular problem. To use DL 
 \item Neuroscience: explain correlations in brain regions
 \item New spatiotemporal NL measures (see Stam) - current are spatially local, temporally global
 \item Compare with FBCSP, with spatial embedding
+\item Since we know that NL measures are useful for depression, architecture models inspired by the estimation algorithms or making use of NL algorithms may achieve high accuracy.
 \end{itemize}
 
 
