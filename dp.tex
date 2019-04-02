@@ -143,6 +143,7 @@
 \newacronym{lr}{LR}{Logistic Regression}
 \newacronym{svm}{SVM}{Support Vector Machine}
 \newacronym{bci}{BCI}{Brain Computer Interface}
+\newacronym{gaf}{GAF}{Gramian Angular Field}
 \usepackage{nomencl}
 \makenomenclature
 
@@ -2034,7 +2035,7 @@ The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov e
 
 In Section \ref{sec:analrespdif}, we have observed the most significant differences between responders and nonresponders in the recordings obtained before treatment for LLE (especially F4 and T6 channels), which may explain that LLE is the most discriminative nonlinear measure for treatment response prediction. Although the differences for other measures remained relatively insignificant, CD, HD, and SE achieve accuracy of approximately 67\%. This may be explained by the fact that in Section \ref{sec:analrespdif}, we tested only for the differences in distributions in values recorded on individual channels, whereas in this section, we perform classification based on combination of multiple channels.
 
-\section{Limitations}
+\subsection{Limitations}
 \section{Implementation} \label{sec:impl-nl}
 All the code used for this section is publicly available \href{https://github.com/mirgee/thesis\_project}{online}, as well as on the CD accompanying this text. Used programming language was Python. The plots were produced using \href{https://matplotlib.org/}{Matplotlib} library. Other used libraries include \href{http://www.numpy.org/}{NumPy} for vectorized computations, \href{https://scipy.org/scipylib/index.html}{SciPy} for signal processing algorithms, \href{http://pandas.pydata.org/}{Pandas} for data storage and manipulation, and \href{https://jupyter.org/}{Jupyter} for development.
  
@@ -2376,7 +2377,7 @@ In order to train and evaluate the models, we used 5-fold cross validation perfo
 
 The models were trained for 200 epochs. In each epoch, the current iteration of the model was evaluated on the validation set. The model which achieved the highest accuracy on the validation set over all iterations was then selected for evaluation on the test set. This procedure, performed on the dataset described in Section \ref{sec:dl-dataset}, results approximately in the number of samples for each of training, validation and test sets shown in Table \ref{tab:setsize}.
 
-In Table \ref{tab:dl-res}, where we use SHAL to denote the shallow architecture and DEEP to denote the deep architecture (see Section \ref{sec:dl-arch}). The unfiltered input is denoted $0-f_{\text{fin}}$, and $4-f_{\text{fin}}$ signifies that high pass filter with cutoff frequency of $4$ Hz was applied to the input (see Section \ref{sec:dl-preprocess}). Firstly, the shallow architecture performs noticeably better on the prognosis task than the deep architecture. Secondly, filtering has not much effect, but seems to improve the results slightly for the prognosis task, but does not help on the diagnosis task. Finally, both recurrence plots and cosine similarities do not seem to be especially effective encoding techniques for convolutional neural networks.
+In Table \ref{tab:dl-res}, where we use SHAL to denote the shallow architecture and DEEP to denote the deep architecture (see Section \ref{sec:dl-arch}). The unfiltered input is denoted $0-f_{\text{fin}}$, and $4-f_{\text{fin}}$ signifies that high pass filter with cutoff frequency of $4$ Hz was applied to the input (see Section \ref{sec:dl-preprocess}). Firstly, the shallow architecture performs noticeably better on the prognosis task than the deep architecture. Secondly, filtering has not much effect, but seems to improve the results slightly for the prognosis task, but does not help on the diagnosis task. Finally, although it was suggested in \cite{acharya2015computer} that recurrence plots \dots and GAFs were shown to improve time series classification \cite{wang2015imaging}, both recurrence plots and cosine similarities do not seem to be effective encoding techniques for convolutional neural networks we evaluated on this dataset.
 
 % Conclusions: SHAL has state of the art performance on RES. It would be nice to evaluate against pure FBCSP, and try more traditional configuration to see difference in performance. Combination of CNN and recurrence plots is likely not especially effective.
 
@@ -2451,12 +2452,14 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 \info[inline]{CHanges to number of any parameter, including adding layers made the results worse. Interestingly, simpler models overfit the training set very quickly, and regularization hurt performance. Hence, this model is probably at least close to local optima in hyperparameter space.}
 \info[inline]{Maybe measure shallow model with more traditional activations to see how much performance is due to FCP.}
 
-\section{Limitations}
+\subsection{Limitations}
 As evidenced in Section \ref{sec:analbefaft}, nonlinear measures seem to be relatively stable over time for individual patients. Moreover, it has been observed that EEG signals contain other temporally stable patterns which can be used for individual identification \cite{}. Since the method we used for training and evaluation described in Section \ref{sec:dl-results} involved cross validation over samples instead of patients, the test set includes distinct samples from the same patients. This raises the question whether the models indeed learn to identify the patterns contributing to the label, or whether instead they learn to identify the patterns associated with the patients, and thus they infer the label indirectly.
 
 To investigate this question, we trained and evaluated the models as follows. The patients were split into two sets. The first set was again used for training and validation and containing 80\% of the patients, and the second set, containing the remaing samples, was used for testing. Only either the recordings obtained during the first visit, or recordings obtained during the second visit, were used (this required changing the depression score thresholds to keep the classes balanced). This way, samples from patients used in the test set were never used for training. The first set was then split into training (80\%) and validation (20\%) sets of distinct patients, and the model was trained and evaluated on samples obtained from these distinct patients using the method described in Section \ref{sec:dl-results}. This entire procedure was repeated 5 times, resulting in 5-fold cross validation across patients.
 
 Figure \ref{fig:acc-loss-fixed} shows loss and accuracy on the training and validation sets during one loop of the cross validation using the simpler, shallow model on the recordings obtained during the first session to predict the depression score level. In order to maximize the amount of training data, the thresholds for the classes were set to 26 as upper bound for healthy and 27 as lower bound for depressed, resulting in 63 and 62 patients in each group respectively. The figure shows that the model fits the training set of small number of patients, but does not generalize to the patients the patients in the validation set. Thus, the number of training epochs before evaluation on test set was decreased. Increasing the probability parameter of dropout, adding regularization to the layers, increasing or shortening the recording length to either increase the amount of information in a sample or simplify the model, or increasing the overlap between samples and shifting more patients to the training set does not improve generalization. Table \ref{tab:res-pat-split} shows accuracies obtained using this procedure with varying subrecording length and width.
+
+We also changed the evaluation strategy on the test set to report percentage of successfully classified patients, where each patient was successfully classified if the majority of samples corresponding to the patient's recording was correctly classified. However, the resulting accuracies were similar to the accuracy obtained per sample. This means that the false predictions were evenly distributed across patients.
 
 \begin{figure}
 \centering
@@ -2499,19 +2502,15 @@ In this study, we incorporate both thorough review of the theory of nonlinear dy
 \section*{Contributions}
 % \begin{itemize}
 % \item Performance on raw data considerably higher than on RP using DL - RP may not be as good as thought e.g. in \cite{acharya2015computer}
-% \item F3 seemed relevant for response
 % \item All examined NL measures are correlated with depression severity - the most significant correlation is in \ldots
 % \item Used methods of estimating input parameters seem not very effective at fidning parameters whih would make the results discriminative
-% \item FBCSP-inspired CNN models perform well especially for prediction 
-% \item Neuroscience may be able to draw some conclusions from the observed correlation in brain regions
-% \item We selected the input parameters very carefully, may inform other researchers about their proper selection (most studies just estimate them crudely)
 % \end{itemize}
 \subsection*{Analysis of Correlation between Depression Score and Nonlinear Measures}
 Investignating the significance of correlations between nonlinear measures and depression scores, we found that LLE, DFA, HE, HD, and SE computed from EEG signals recorded from channels near cetain cortical areas are significantly correlated with depression score. The most statistically significant correlations were found for LLE, which, in \cite{hosseinifard2013} was found as least discriminative in a similar experimental setting. Although CD showed no significant correlations with depression score per channel, using it in combination with other nonlinear measures or by combining a number of channels resulted in one of the most accurate depression classifiers evaluated. For selection of channels relevant for classification, genetic algorithm resulted in substantially more accurate classifiers than any other feature selection method evaluated.
 
-All the studies reviewed in Section \ref{sec:applications} included a control group of symptomless, clinically healthy patients, whereas our dataset consists exclusively of patients suffering from MDD of various symptom severity. Nevertheless, the accuracies achieved by the classifiers are substantial, indicating possible proportional relationship between depression severity and values of nonlinear measures recorded in EEG signals obtained from various cortical regions.
+All the studies reviewed in Section \ref{sec:applications} included a control group of symptomless, clinically healthy patients, whereas our dataset consists exclusively of patients suffering from MDD of various symptom severity. Nevertheless, the accuracies achieved by the classifiers are substantial, indicating possible relationship between depression severity and values of nonlinear measures recorded in EEG signals obtained from various cortical regions, and opening a possibility for developing a regression model predicting depression score making use of nonlinear measures.
 
-\subsection*{The Largest Lyapunov Exponents are Significantly Correlated with Positive Treatment Response}
+\subsection*{Largest Lyapunov Exponents are Predictive of Positive Treatment Response}
 \info[inline]{Will do this later, have to include review of treatment response, 4 studies. Add commentary to response results.}
 Positively correlated with depression score, negatively with response. Thus LLE can be . We are not aware of any studies showing a similar result. Other nonlinear measures were not sign. corr., but still good feature for lin. classifiers. Although LLE showed significant correlation with depression score in temporal regions, frontal regions seemed to be more important for treatment response (F3 and T6 especially).
 
@@ -2522,17 +2521,18 @@ Although some neuroscientific theories suggest that medical depression is caused
 Since computation of nonlinear measures requires laborious selection of input parameters and knowledge of the algorithms in order to interpret the results, these methods often remain inaccessible to practitioners who has not yet become experts in the field of nonlinear dynamical analysis \cite{schmid1996indications}. Therefore, there is a need for automated procedures to ease application of these methods and increase their use and availability. For the purpose of computing LLE and CD, in Section \ref{sec:estim-nl}, we evaluated a range of algorithms for estimation of embedding dimension and time delay parameters, including implementations of automated pipelines for computation of said measures. Although these input parameter estimation algorithms remain widely used (see Sections \ref{sec:lle-rev} and \ref{sec:corrdim-rev}), we found that, for out dataset, their outputs varied widely for each method, and provided only a crude approximation for parameters which produced more discriminative measures. One of the most consistent and informative estimation algorithms was ILD of our own implementation, which, however, suffers from relatively high computational costs.
 
 \subsection*{Evaluation of FBCSP-inspired Neural Network Architectures for Depression Diagnosis and Prognosis}
-We evaluated two CNN architectures which were previously shown to be successfully applied to decoding task-related information in pathology \cite{schirrmeister2017deep, schirrmeister2017deeppatho} on our dataset. Although the models achieved relatively high accuracy when trained and evaluated using cross validation across samples, when trained and evaluated using cross validation across recordings obtained before treatment from individual, distinct patients, the models achieved only modest accuracy, and did not generalize to the test set. This observation can be explained by low intrapersonal, and high intrapersonal variance of the EEG signals, which results in high correlation of samples corresponding to one patient, and thus in the presence of high number of samples from small number of patients, the model is trained to associate labels to samples based on the patient-charecterstic patterns, instead of label-characteristic patterns. This is a hypothesis supported by the literature, but needs to be tested. If it holds, then the performance of these models may be improved by extending the dataset with enough patients with similar patient-characteritic patterns and different label-characteristic patterns. Such dataset may be obtained easily by tracking patients' depression score across extended time span.
+We evaluated two CNN architectures which were previously shown to be successfully applied to decoding task-related information in pathology \cite{schirrmeister2017deep, schirrmeister2017deeppatho} on our dataset. Although the models achieved relatively high accuracy when trained and evaluated using cross validation across samples, when trained and evaluated using cross validation across recordings obtained before treatment from individual, distinct patients, the models achieved only modest accuracy, and did not generalize to the test set. This observation can be explained by low intrapersonal, and high intrapersonal variance of the EEG signals, which results in high correlation of samples corresponding to one patient, and thus in the presence of high number of samples from small number of patients, the model is trained to associate labels to samples based on the patient-charecterstic patterns, instead of label-characteristic patterns. This is a hypothesis supported by the literature, but needs to be tested. If it holds, then the performance of these models may be improved by extending the dataset with enough patients with similar patient-characteritic patterns and different label-characteristic patterns. Such dataset may be obtained by tracking patients' depression score across extended time span.
 
-\section*{Limitations}
-\begin{itemize}
-  \item Correlation in CNN samples, also they are too short
-  \item Dataset lacks controls, imbalanced for remission
-  \item 50 Hz noise in some samples
-  \item Patients offered various treatment - e.g. it may be possible that response to rTMS may be different from response to drugs
-  \item Outputs only binary label, doctors may want more precise (e.g. 95\% confidence interval, but it is currently to large)
-  \item All NL measures correlated with depression scores, reasonable accuracy which is not as high as in other studies, but we have larger dataset than many. On the other hand, we lack control group (next Section).
-\end{itemize}
+% \section*{Limitations}
+% \begin{itemize}
+%   \item Correlation in CNN samples, also they are too short
+%   \item Dataset lacks controls, imbalanced for remission
+%   \item 50 Hz noise in some samples
+%   \item Patients offered various treatment - e.g. it may be possible that response to rTMS may be different from response to drugs
+%   \item Outputs only binary label, doctors may want more precise (e.g. 95\% confidence interval, but it is currently to large)
+%   \item All NL measures correlated with depression scores, reasonable accuracy which is not as high as in other studies, but we have larger dataset than many. On the other hand, we lack control group (next Section).
+% \end{itemize}
+
 \section*{Recommendations for Future Work}
 \begin{itemize}
 \item Better dataset
