@@ -410,7 +410,7 @@ Given this situation, the following areas were previously identified as central 
 \end{enumerate}
 
 \section*{Research Objectives}
-In this work, our aim is to contribute positively to this state of the art of this important area by analyzing the limited, but relatively large dataset of depressed patients using two approaches previously advocated as effective EEG analysis techniques~\cite{faust2014depression, acharya2015novel, ahmadlou2012, bachmann2013, hosseinifard2013, nandrino1994, roschke1995nonlineardeppression, lee2007detrended, stam2005}: nonlinear dynamical analysis and deep learning. In the process, our objective is to adress the areas mentioned above by:
+In this work, our aim is to contribute positively to this state of the art of this important area by analyzing the limited, but relatively large dataset of depressed patients using two approaches previously advocated as effective EEG analysis techniques~\cite{faust2014depression, acharya2015novel, ahmadlou2012, bachmann2013, hosseinifard2013, nandrino1994, roschke1995nonlineardeppression, lee2007detrended, stam2005}: nonlinear dynamical analysis and deep learning. In the process, our objective is to address the areas mentioned above by:
 \begin{enumerate}
   \item providing evidence to or against the effectiveness of these techniques,
   \item providing evidence to or against the status of nonlinear dynamical measures as reliable biomarkers of depression, 
@@ -582,7 +582,7 @@ EEG signals are known to be \emph{nonstationary and nonlinear}~\cite{kaplan2005,
 Although in this study, we will only consider Euclidean state space $M$, the true state space is needs not necessarily be Euclidean. For example, if some of the state variables are angles, the state space exhibits toroidal topology. However, any topological manifold is locally Euclidean~\cite{lee2010introduction} and, since, in EEG signal analysis both $M$ and $d$ are unknown, we have no other alternative than to work in Euclidean state space $M$.
 
 \begin{dfn}[\cite{andreas2000}]
-  Let $\mathbf{\xi} : \RR \rightarrow \RR^d$ be an $d \in \NN$ dimensional state (phase) space vector dependent on time, and $\mathbf{F}$ a smooth vector field in $\RR^d$. A \textbf{deterministic dynamical system}\footnote{In this work, we are going to assume that the brain is a deterministic dynamical system, and that any stochastic component is small and does not change nonlinear properties of the system. Thus, by the term dynamical system, we will always mean a deterministic dynamical system. This assumption is necessary for nonlinear dynamical analysis. On the other hand, nonlinear dynamical analysis also provides techniques (see Section \ref{sec:surrogate-analysis-theory}) which can partially adress (yet not fully answer) justification for this assumption. The question whether the brain is truly deterministic is open~\cite{stam2005, randomness}, but it is often thought to be probable that the brain is a nonlinear, deterministic, dissipative (i.e. exchanging energy with its environment) system~\cite{stam2005}.} is described by a set of $d$ first-order differential equations
+  Let $\mathbf{\xi} : \RR \rightarrow \RR^d$ be an $d \in \NN$ dimensional state (phase) space vector dependent on time, and $\mathbf{F}$ a smooth vector field in $\RR^d$. A \textbf{deterministic dynamical system}\footnote{In this work, we are going to assume that the brain is a deterministic dynamical system, and that any stochastic component is small and does not change nonlinear properties of the system. Thus, by the term dynamical system, we will always mean a deterministic dynamical system. This assumption is necessary for nonlinear dynamical analysis. On the other hand, nonlinear dynamical analysis also provides techniques (see Section \ref{sec:surrogate-analysis-theory}) which can partially address (yet not fully answer) justification for this assumption. The question whether the brain is truly deterministic is open~\cite{stam2005, randomness}, but it is often thought to be probable that the brain is a nonlinear, deterministic, dissipative (i.e. exchanging energy with its environment) system~\cite{stam2005}.} is described by a set of $d$ first-order differential equations
   \begin{align*}
     \frac{d}{dt}\mathbf{\xi}(t) = \mathbf{F}(\mathbf{\xi}(t)), \qquad t \in \RR^+_0,
   \end{align*}
@@ -862,7 +862,7 @@ where $\mathbf{x}_i^{(m, \tau)}$ is the $i$-th vector of time delay embedding wi
 Rosenstein et al. presented multiple methods for quantifying expansion from the diagonal (the identity line of the attractor), and found $\mathrm{ADFD}$ to be the most computationally efficient, robust to noise, and accurate~\cite{rosenstein1994reconstruction}. They also experimentily identified optimal $\tau$ as the one for which the slope of $\mathrm{ADFD}$ drops below 40\% of its initial value.  
 
 \subsubsection{Singular Values Analysis} \label{sec:svd}
-All the approaches described so far adress the issue of redundance by attempting to make the coordinates less correlated or expanding the reconstruction from the identity line. The issue of irrelevance however, needs to be adressed as well. In fact, based mostly on empirical, rather than theoretical grounds, most time delay estimation techniques optimize for the following criteria~\cite{kugiumtzis1996state}:
+All the approaches described so far address the issue of redundance by attempting to make the coordinates less correlated or expanding the reconstruction from the identity line. The issue of irrelevance however, needs to be addressed as well. In fact, based mostly on empirical, rather than theoretical grounds, most time delay estimation techniques optimize for the following criteria~\cite{kugiumtzis1996state}:
 \begin{enumerate}
   \item The reconstructed attractor must be expanded from the diagonal.
   \item The components of the reconstructed vector $\mathbf{x}_n$ must be uncorrelated.
@@ -951,7 +951,7 @@ Also, this method tends to underestimate $m$ for very small $\tau$. Small $\tau$
 Lastly, in presence of measurement noise, the proportion of false neighbors may increase after transition to a higher dimension, since even identical vectors will diverge~\cite{kantz2004}.
 
 \subsubsection{Average False Neighbors} \label{sec:afn}
-This technique by Cao~\cite{Cao1997} adresses one of the drawbacks of false nearest neighbors mentioned in the previous section - the variance of results based on subjective choice of embedding parameters. It does so by defining two parameter free functions dependent only on the embedding parameters.
+This technique by Cao~\cite{Cao1997} addresses one of the drawbacks of false nearest neighbors mentioned in the previous section - the variance of results based on subjective choice of embedding parameters. It does so by defining two parameter free functions dependent only on the embedding parameters.
 
 The first function measures the variation of average ratio of distance of two neighbors in one dimension to the distance of the same neighbors in a higher dimension. More precisely, let
 \begin{align*}
@@ -2042,7 +2042,7 @@ HE & SVM (rbf) & 0.63 & 0.09 & 0.64 & 0.10 & 0.63 & 0.09 & 0.62 & 0.09 & C3, T6 
 \caption[Evaluation of response prognosis.]{Evaluation of response classification. Only recordings obtained before drug administration were considered. The two classes consist of the 50 patients with the highest and least improvement in depression score after the drug administration (as measured by ratio of the two depression scores).}
 \label{tab:respcl}
 \end{table}
-\subsection{Response Prognosis}
+\subsection{Response Prognosis} \label{sec:nl-res-prog}
 As we mentioned in Section \ref{sec:analrespdif}, response is defined as the ratio of the depression score reported on the second session (after administration of drugs) to the depression score reported on the first session (before administration of drugs). For the task of predicting response to treatment, recordings were separated into two classes as follows:
 \begin{description}
   \item[Nonresponding]: 50 recordings made before administration of drugs with the lowest response.
@@ -2228,7 +2228,7 @@ The method of Common Spatial Patterns (CSP) was originally proposed for people w
 
 As mentioned repeatedly in the previous text, the task of finding patterns in EEG signal associated with particular mind state or motor action present us with numerous challenges. CSP, and FBCSP in particular, are methods devised in attempt to overcome mainly two of them. Firstly, information about different temporally overlapping brain activities is conveyed in parallel in multiple frequency bands. For example, resting wakeful state comprises distinct idle rhythms over different cortical areas (such as $\alpha$-rhythm characteristic of idling visual cortex in the occipital area), which are overlapping with $\mu$-rhythms produced in sensorimotor areas both during imagined and performed movement. Secondly, the spatial origin of those signals is important for associating them with said mind states or motor actions. For example, different parts of the sensorimotor cortex over the central sulcus map directly to movements of distinct bodyparts. This is further complicated by the fact that EEG apparatus has inherently low spatial resolution due to small number of electrodes and poor volume conduction. 
 
-Spatial filtering, then, is process of adressing this second challenge by accentuating signals from some areas, while attenuating others. And CSP analysis is a data-driven approach of achieving this by mutually maximizing the variance of spatially filtered signal associated with one activity, while minimizing the variance of filtered signal associated with other activity, thus making the signals independent (as Gaussian random processes)~\cite{blankertz2008optimizing}. In the following section, we will explain the process in detail.
+Spatial filtering, then, is process of addressing this second challenge by accentuating signals from some areas, while attenuating others. And CSP analysis is a data-driven approach of achieving this by mutually maximizing the variance of spatially filtered signal associated with one activity, while minimizing the variance of filtered signal associated with other activity, thus making the signals independent (as Gaussian random processes)~\cite{blankertz2008optimizing}. In the following section, we will explain the process in detail.
 
 \subsection{Algorithm} \label{sec:csp}
 Let $C$ be the number of channels, and $\mathbf{x}(t) \in \RR^C$ be a band-passed, de-meaned and scaled multichannel EEG recording. CSP analysis yields a projection of $\mathbf{x}(t)$ of the signal from the original signal space to $\mathbf{x}_{\text{CSP}}(t) \in \RR^C$ by finding a matrix $W \in \RR^{C \times C}$, where
@@ -2516,26 +2516,19 @@ For the implementation in this chapter, we used the same software as in Chapter 
 
 \chapter*{Conclusion} \label{ch:concl}
 \addcontentsline{toc}{chapter}{Conclusion}
-Remind of the focus and objective
 In this study, we incorporate both thorough review of the theory of nonlinear dynamical systems in relation to EEG analysis along with overview of the relevant algorithms and techniques for nonlinear measures extraction and input parameter estimation, comprehensive literature review, and practical application of those techniques on the available dataset. Furthermore, we also present another approach to feature extraction and classification on the dataset. 
 
 \section*{Contributions}
-% \begin{itemize}
-% \item Performance on raw data considerably higher than on RP using DL - RP may not be as good as thought e.g. in \cite{acharya2015computer}
-% \item All examined NL measures are correlated with depression severity - the most significant correlation is in \ldots
-% \item Used methods of estimating input parameters seem not very effective at fidning parameters whih would make the results discriminative
-% \end{itemize}
 \subsection*{Analysis of Correlation between Depression Score and Nonlinear Measures}
 Investignating the significance of correlations between nonlinear measures and depression scores, we found that LLE, DFA, HE, HD, and SE computed from EEG signals recorded from channels near cetain cortical areas are significantly correlated with depression score. The most statistically significant correlations were found for LLE, which, in \cite{hosseinifard2013} was found as least discriminative in a similar experimental setting. Although CD showed no significant correlations with depression score per channel, using it in combination with other nonlinear measures or by combining a number of channels resulted in one of the most accurate depression classifiers evaluated. For selection of channels relevant for classification, genetic algorithm resulted in substantially more accurate classifiers than any other feature selection method evaluated.
 
 All the studies reviewed in Section \ref{sec:applications} included a control group of symptomless, clinically healthy patients, whereas our dataset consists exclusively of patients suffering from MDD of various symptom severity. Nevertheless, the accuracies achieved by the classifiers are substantial, indicating possible relationship between depression severity and values of nonlinear measures recorded in EEG signals obtained from various cortical regions, and opening a possibility for developing a regression model predicting depression score making use of nonlinear measures.
 
 \subsection*{Largest Lyapunov Exponents are Predictive of Positive Treatment Response}
-\info[inline]{Will do this later, have to include review of treatment response, 4 studies. Add commentary to response results.}
-Positively correlated with depression score, negatively with response. Thus LLE can be . We are not aware of any studies showing a similar result. Other nonlinear measures were not sign. corr., but still good feature for lin. classifiers. Although LLE showed significant correlation with depression score in temporal regions, frontal regions seemed to be more important for treatment response (F3 and T6 especially).
+As we outlined in Section \ref{sec:applications-prog}, most of the EEG-based treatment outcome prediction has been focused on quantifying frontal $\theta$ band. This approach leans on strong neuroscientific support. In the analysis performed in Section \ref{sec:analrespdif}, we found significant differences in distributions of LLE estimated from signals recorded in channels across multitude of cortical areas, especially near frontal (F3, F4) and left temporal (T6) areas. Almost no significant differences were found using other nonlinear measures. Interestingly, although LLE were positively correlated depression score, it is negatively correlated treatment response. Indeed, in Section \ref{sec:nl-res-prog}, LLE were shown to be potent feature for treatment outcome prediction classifiers. These results may encourage further exploration of the potential use of nonlinear dynamical measures for treatment outcome prediction, which, to our knowledge, is nonexistent at present.
 
 \subsection*{Analysis of Spatial Distribution of Nonlinear Measures across Brain Regions in Depression}
-Although some neuroscientific theories suggest that medical depression is caused by malfuction in the right hemisphere \cite{hecht2010depression, kwon1996right}, in Sections \ref{sec:analdepdif} and \ref{sec:results-nl}, we found nonlinear measures computed in both hemispheres contribute significantly to high depression score. The distributions of correlation significance is notably particular to each measure, possibly indicating that variously distributed and different processes captured by each measure contribute to depression severity.\add{Too speculative? Belongs more to discussion?} For example, DFA and HE show most significant correlations with depression score in right parietal regions, LLE and SE in right temporal regions,  Nevertheless, the most successful depression classifiers made use especially of channels in temporal areas (in particular, T6 for depression). 
+Although some neuroscientific theories suggest that medical depression is caused by malfuction in the right hemisphere \cite{hecht2010depression, kwon1996right}, in Sections \ref{sec:analdepdif} and \ref{sec:results-nl}, we found nonlinear measures computed in both hemispheres contribute significantly to high depression score. The distributions of correlation significance is notably particular to each measure, possibly indicating that variously distributed and different processes captured by each measure contribute to depression severity.\add{Too speculative? Belongs more to discussion?} For example, DFA and HE show most significant correlations with depression score in right parietal regions, LLE and SE in right temporal regions,  Nevertheless, the most successful depression classifiers made use especially of channels in temporal areas (T6 in particular).
 
 \subsection*{Analysis of Nonlinear Measure and Input Parameter Estimation Algorithms and Procedures for EEG Analysis}
 Since computation of nonlinear measures requires laborious selection of input parameters and knowledge of the algorithms in order to interpret the results, these methods often remain inaccessible to practitioners who has not yet become experts in the field of nonlinear dynamical analysis \cite{schmid1996indications}. Therefore, there is a need for automated procedures to ease application of these methods and increase their use and availability. For the purpose of computing LLE and CD, in Section \ref{sec:estim-nl}, we evaluated a range of algorithms for estimation of embedding dimension and time delay parameters, including implementations of automated pipelines for computation of said measures. Although these input parameter estimation algorithms remain widely used (see Sections \ref{sec:lle-rev} and \ref{sec:corrdim-rev}), we found that, for out dataset, their outputs varied widely for each method, and provided only a crude approximation for parameters which produced more discriminative measures. One of the most consistent and informative estimation algorithms was ILD of our own implementation, which, however, suffers from relatively high computational costs.
@@ -2554,21 +2547,32 @@ We evaluated two CNN architectures which were previously shown to be successfull
 % \end{itemize}
 
 \section*{Recommendations for Future Work}
-\begin{itemize}
-\item Better dataset
-\item Filter 50 Hz
-\item Try compression or encoding so that input to CNN can be longer (other solution voting)
-\item Talk about a method of making more samples from less data from Robin Tibor Shirrmeister, how classification can be made by voting on shorter samples
-\item Implement application to aid treatment
-\item Try combining modalities
-\item With larger dataset, more input parameters like kinds of treatment can be used
-\item Correlations of activations with NL measures could be interesting - do CNNs extract some NL measures? Which ones?
-\item Neuroscience: explain correlations in brain regions
-\item New spatiotemporal NL measures (see Stam) - current are spatially local, temporally global
-\item Compare with FBCSP, with spatial embedding
-\item Since we know that NL measures are useful for depression, architecture models inspired by the estimation algorithms or making use of NL algorithms may achieve high accuracy.
-\end{itemize}
+% \begin{itemize}
+% \item Filter 50 Hz
+% \item Try combining modalities
+% \item New spatiotemporal NL measures (see Stam) - current are spatially local, temporally global
+% \item Compare with FBCSP, with spatial embedding
+% \end{itemize}
 
+% Recommendations addressing limitations (filtering, dataset?)
+
+% Conceptual recommendations (NL measures framework)
+
+% Recommendations based on findings
+% Neuroscientific understanding of observed correlations may improve techniques
+% Explore NLD in prognosis, left temporal area
+% Implement app
+
+The nature of our dataset restricts us to analysis of patients suffering from depressive symptoms to varying degrees. Although obtaining accuracy lower in comparison with studies employing healthy, symptom-free group as well as depressed patients is justifiable, we believe that this accuracy can still be significantly improved with more advanced noise-reduction preprocessing techniques, and recording environment insulated from power-line, electronic devices, and other sources of electromagnetic interference. Moreover, the patients should be advised to keep their eyes closed, an ECG may recorded simulatenously and later used to remove interference from the heart muscle. Potentially, machine learning techniques may be used improve the signal quality by continuously estimating it, and even detecting events such as lost electrode contact \cite{schirrmeister2017deep}.
+
+Due to the fact that computing nonlinear dynamical measures on a nonstationary signal is not theoretically justified (see Section \ref{sec:stationarity}, another possibility for improving the estimation is by acquiring longer recordings, and computing the nonlinear measures on short, overlapping time windows \cite{andreas2000}. In spite of the reduction in estimation accuracy (see Sections \ref{sec:req-lyap} and \ref{sec:req-corr}), it may be beneficial in case of subtantial nonstationarity (which is common in EEG recordings), since over short enough time interval, even severely nonstationary time series may be regarded as stationary \cite{andreas2000}. Although not part of this study, we already initiated this analysis. 
+
+\add[inline]{Finish this paragraph.}
+Nevertheless, the nonlinear dynamical analysis is not conceptually ideal in itself. Development of new measures is desirable \cite{stam2005}.
+
+We hypothesized that generating a dataset containing multiple recordings obtained from the same individuals with different depression scores, e.g. by tracking long-term changes in depression score while recording EEG, may improve classification of simple deep learning models. At the same time, tracking long-term reactions to treatment using carefully recorded EEG signals and depression scores may facilitate development of tools which may advise on the optimal patient-specific treatment method. Another potential avenue for improvement of the deep learning approach may lie in designing deep learning architectures inspired by using modalities from nonlinear measures, their estimation algorithms, and other biomarkers.
+
+Finally, we found significant differences between LLE values for patients responding and nonresponding to treatment, as well as developed simple, yet relatively accurate response prediction models based on nonlinear measures. Our hope is that these findings may spart interest in nonlinear measures for prediction of treatment outcome.
 
 \bibliographystyle{unsrt}
 \bibliography{refs}
