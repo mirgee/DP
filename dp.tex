@@ -1364,14 +1364,13 @@ Recurrence plots, and RQA in particular, have been demonstrated to be effective 
  \spatcell{SE and other entropies} & WPD+PNN & 0.99 & 30 & 30 & 9 & 5 min & \cite{faust2014depression} & \spatcell{Evaluated using 10f-CV.}\\ \hline
  DDI & SVM & 0.98 & 15 & 15 & - & 8 s & \cite{acharya2015novel} & - \\ \hline
  HFD & EPNN & 0.91 & 3 & 3 & 19 & 1 min & \cite{ahmadlou2012} & - \\ \hline
- HFD & Statistical analysis & 0.85 & 17 & 17 & 18 & 2 s & \cite{bachmann2013} & Evaluated on training set. \\ \hline
+ HFD & LDA & 0.85 & 17 & 17 & 18 & 2 s & \cite{bachmann2013} & Evaluated on training set. \\ \hline
  LLE, CD, DFA, HD & LR & 0.9 & 45 & 45 & 19 & 5 min & \cite{hosseinifard2013} & - \\ \hline
  NL forecasting & Measuring predictability & \spatcell{Increased predictability\\in MDD patients} & 8 & 16 & 12 & 40 s & \cite{nandrino1994} & - \\ \hline 
  LLE & Statistical analysis & Found s.s. diff. & 13 & 15 & 4 & 2.44 min & \cite{roschke1995nonlineardeppression} & - \\ \hline
  DFA & Statistical analysis & Found s.s. diff. & 11 & 11 & 5 & 5 min & \cite{lee2007detrended} & - \\ \hhline{|=|=|=|=|=|=|=|=|=|}
  RWE & NN & 0.98 & 40 & 40 & 9 & 5 min & \cite{puthankattil2012classification} & - \\ \hline
  \spatcell{Power, assymetry,\\coherence measures} & Statistical analysis & 0.91 & 23 & 70 & 21 & 20 min & \cite{knott2001eeg} & - \\ \hline
- \spatcell{Relative frontal\\$\theta$ power} & Statistical analysis & 0.63 & 45 resp. & 37 nonresp. & 4 & 2 s & \cite{iosifescu2009frontal} & \spatcell{Evaluated response\\to treatment.} \\ \hline
  Anterior $\alpha$-assymetry & Statistical analysis & Found s.s. differences & 15 & 22 & 19 & 2 s & \cite{debener2000resting} & - \\ \hline
  Power and assymetry measures & Statistical analysis & Found s.s. differences & 86 & 53 & 8 & - & \cite{omel2002changes} & - \\ \hline
  SASI & Statistical analysis & No s.s. diff. found & 18 & 18 & 9 & 2.5 s & \cite{hinrikus2009electroencephalographic} & - \\ \hline
@@ -1379,8 +1378,27 @@ Recurrence plots, and RQA in particular, have been demonstrated to be effective 
  STARC & Statistical analysis & No s.s. diff. found & 20 & 22 & 19 & 1 s & \cite{ahmadlou2013spatiotemporal} & \spatcell{Focus is on classification\\ of male and female patients.} \\ \hline
  FAA & Statistical analysis & No s.s. corr. found & - & 79 & 32 & 2 s & \cite{gold2013validity} & \spatcell{Measured correlations with\\depression scores.} \\ \hline
 \end{tabular}}
-\caption[Overview of reviewed studies.]{Overview of reviewed studies analyzing EEG in relation to depression, ordered by obtained classification accuracy (if applicable), otherwise chronological order was used. The first part corresponds to studies using nonlinear dynamical measures.\\Abbreviations: DDI - Depression Diagnosis Index, (EP)NN - (Enhanced Probabilistic) Neural Network, FAA - Frontal Alpha Assymetry, RWE - Relative Wavelet Energy, SASI - Spectral Assymetry Index, STARC - Spatiotemporal Analysis of Relative Convergence, WPD - Wavelet Power Decomposition, kf-CV - k-fold Cross Validation.}
+\caption[Overview of reviewed depression studies.]{Overview of reviewed studies analyzing EEG in relation to depression, ordered by obtained classification accuracy (if applicable), otherwise chronological order was used. The first part corresponds to studies using nonlinear dynamical measures.\\Abbreviations: DDI - Depression Diagnosis Index, (EP)NN - (Enhanced Probabilistic) Neural Network, FAA - Frontal Alpha Assymetry, RWE - Relative Wavelet Energy, SASI - Spectral Assymetry Index, STARC - Spatiotemporal Analysis of Relative Convergence, WPD - Wavelet Power Decomposition, kf-CV - k-fold Cross Validation.}
 \label{tab:depsum}
+\end{table}
+
+\subsection{Applications in Depression Prognosis} \label{sec:applications-prog}
+In terms of EEG-based treatment outcome prediction, substantial effort has been devoted to examination of frontal $\theta$ frequencies, especially relative to $\alpha$ frequencies. This rationale is supported by several neuroscientific theories \cite{hunter2007promise}. For example, in \cite{iosifescu2009frontal}, the authors developed Antidepressant Treatment Index (ATR), a nonlinear combination of $\alpha$ and $\theta$ powers to predict treatment outcome with 63\% accuracy. The same research group had been examining relative $\theta$ powers for multiple years prior to this study, with the best results achieving 71\% accuracy on a dataset of 52 MDD patients \cite{hunter2007promise}.
+
+In \cite{tenke2011current}, was used frequency principal component analysis derived from current source density waveforms to extract EEG $\alpha$ aplitude, achieving also 63\% accuracy. However, the highest accuracy of all reviewed studies was achieved using more advanced techniques in \cite{khodayari2013machine}, where the authors extracted log Power Spectral Densities (PSD) levels at all frequencies of interest for each electrode, spectral coherence, mutual information, log ratios of left and right hemisphere powers and log ratios of anterior and posterior powers, and then Fisher discriminant ratio for feature selection and mixture of factors machine learning technique based on maximum likelihood for classification, finally achieving 88\% accuracy. Nevertheless, this result was obtained on a relatively small dataset of 22 patients.
+
+\begin{table}[ht]
+\centering
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Measure} & \textbf{Analysis method} & \textbf{\spatcell{Accuracy or\\obtained results}} & \multicolumn{2}{c}{\textbf{Test sample}} \vline & \textbf{\# channels} & \textbf{Rec. length} & \textbf{Reference} & \textbf{Treatment} \\ \hline
+ & & & \textbf{Responding} & \textbf{Nonresponding} & & & & \\ \hline
+ \spatcell{Power, coherence, mutual\\information measures} & MFA & 0.88 & 7 & 15 & 16 & 60 s & \cite{khodayari2013machine} & SSRI \\ \hline
+ Frontal $\theta$ power & ATR & 0.63 & 45 & 37 & 4 & 2 s & \cite{iosifescu2009frontal} & SSRI \\ \hline
+ Average $\alpha$ amplitude & \spatcell{Measure above median\\of controls} & 0.63 & 28 & 13 & 67 & 2 min & \cite{tenke2011current} & SSRI \\ \hline
+\end{tabular}}
+\caption[Overview of reviewed response studies.]{Overview of reviewed studies analyzing EEG in relation to response, ordered by obtained classification accuracy (if applicable), otherwise chronological order was used.\\Abbreviations: ATR - Antidepressant Treatment Index, MFA - Mixture of Factors}
+\label{tab:respsum}
 \end{table}
 
 \subsection{Limitations}
@@ -1973,7 +1991,7 @@ In Section \ref{sec:analdepdif}, we have seen that correlations of LLE with depr
 
 Consistency in the selected channels for a fixed measure might indicate a relationship between activity captured by the nonlinear measure in the brain region local to the channel and corresponding label. However, the selected features seem inconsistent across classifiers using mixed measures or a single measure included in the mix. One possible explanation is that different measures complement themselves in such a way that different channels are relevant when classification is performed based on single measure as opposed to a combination of measures.
 
-Although the obtained accuracies are notably lower than those in studies we reviewed in Section \ref{sec:applications}, these results are not directly mutually comparable. Most importantly, all the reviewed studies employed a control group of symptomless, healthy patients, whereas our dataset composed entirely of patients suffering from depression with various degree of symptom severity. Nevertheless, the obtained accuracies are substantial, suggesting possible ``dose-response relantionship'' between depression severity and nonlinear measures recorded in EEG signals obtained from various cortical regions.
+Although the obtained accuracies are notably lower than those in studies we reviewed in Section \ref{sec:applications}, these results are not directly mutually comparable. Most importantly, all the reviewed studies employed a control group of symptomless, healthy patients, whereas our dataset composed entirely of patients suffering from depression with various degree of symptom severity. Nevertheless, the obtained accuracies are substantial, suggesting possible nonsaturating relationship between depression severity and nonlinear measures recorded in EEG signals obtained from various cortical regions.
 
 \begin{table}[tbp]
 \centering
@@ -2034,6 +2052,8 @@ As we mentioned in Section \ref{sec:analrespdif}, response is defined as the rat
 The results can be seen in Table \ref{tab:respcl}. Again, the largest Lyapunov exponent was the most predictive nonlinear measure. Unlike for the depression diagnosis, sample entropy and correlation dimension were the only other nonlinear measures which were able to achieve accuracy above $70 \%$ both in combination with other measures and as stand-alone features. Interestingly, F3 channel seems to be considerably more relevant for response prognosis than for depression diagnosis.
 
 In Section \ref{sec:analrespdif}, we have observed the most significant differences between responders and nonresponders in the recordings obtained before treatment for LLE (especially F4 and T6 channels), which may explain that LLE is the most discriminative nonlinear measure for treatment response prediction. Although the differences for other measures remained relatively insignificant, CD, HD, and SE achieve accuracy of approximately 67\%. This may be explained by the fact that in Section \ref{sec:analrespdif}, we tested only for the differences in distributions in values recorded on individual channels, whereas in this section, we perform classification based on combination of multiple channels.
+
+By comparing our results to results of studies reviewed in Section \ref{sec:applications-prog}, we can see that our results, obtained using nonlinear dynamical analysis and LLE in particular, is relatively competetive with some results in published literature focusing on relative frontal $\theta$ powers. Our results may therefore encourage effort in examination of nonlinear measures and LLE in relation to treatment response.
 
 \subsection{Limitations}
 \section{Implementation} \label{sec:impl-nl}
