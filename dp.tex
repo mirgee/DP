@@ -2092,57 +2092,56 @@ Hereby we provide a summary of used software:
 
 \chapter{Deep Learning Approach} \label{ch:dl}
 \section{Convolutional Neural Networks}
+\info[inline]{Maybe the history should be presented first as an introduction. Or some broad definition, property, why we talk about it.}
 \subsection{Mathematical Background}
-In this section, we aim to make some of essential terms used in this chapter more concrete by providing their mathematical definitions.
+In this section, we aim to make some of essential terms used in this chapter more concrete by providing their mathematical definitions. The first term requiring a definition is the term convolution, present in the name of the neural network class.
 \begin{dfn}
-  Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a functional defined as
+  Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a linear operation defined as
   \begin{align}
     (I*K)(i,j) = \sum_m \sum_n I(m,n) K(i-m, j-n) \, .
   \end{align}
 \end{dfn}
 
-Note that some machine learning libraries (such as Tensorflow) implement \textbf{cross-correlation} instead of convolution, but preserving the term convolution for the operation. Cross-correlation corresponds to convolution with kernel rotated by 90 degrees:
+Note that some machine learning libraries (such as Tensorflow) implement \textbf{cross-correlation} instead of convolution, but preserve the term convolution for the operation \cite{tfnn2d}. Cross-correlation corresponds to convolution with kernel rotated by 180 degrees:
 \begin{align}
   (I*K)(i,j) = \sum_m \sum_n I(m,n) K(i+m, j+n) \, .
 \end{align}
-Unlike convolution, cross-correlation is not commutative, but this property is not required for neural network applications.
+Unlike convolution, cross-correlation is not commutative, but this property is not necessary for neural network applications \cite{goodfellow2016}.
 
+\add[inline]{Change the definition, define both in one, improve description.}
+When discussing the distinguishing properties of CNNs, we use the the terms invariance and equivariance.
 \begin{dfn}
-  Let $f$ be arbitrary function, and $\mathcal{D}$ its degradation operator. We say $f$ is \textbf{invariant} under $\mathcal{D}$ if
+  Let $f$ be arbitrary function, and $\mathcal{D}$ its degradation (or transformation) operator. We say $f$ is an \textbf{invariant} function under $\mathcal{D}$ if
   \begin{align}
     \mathcal{D}(f) \equiv f \, .
   \end{align}
 \end{dfn}
-
-For the following, the reader needs to understand the term \textbf{equivariance}. 
 \begin{dfn}[\cite{pitts2013}]
-  Let $G$ be a group and $X$, $Y$ its G-sets. Then $F:X \rightarrow Y$ is called an \textbf{equivariant function} if
+  Let $G$ be a group and $X$, $Y$ its G-sets. Then $F:X \rightarrow Y$ is called an \textbf{equivariant} function if
   \begin{align}
     F(g(x)) = g(F(x))
   \end{align}
   for all $G$ actions $g$ and $x \in X$.
 \end{dfn}
 
-For our purposes, we can view $G$ as a group of transformations, and then equivariance as a commutative property of a function with regards to the transformations. In other words, computing the function and then applying the transformation has the same effect as applying the transformation and then computing the function.
+In other words, invariance to a transformation means that the if the transformation is applied to the input of the function, its output remains the sane. As for equivariance, if we view $G$ as a group of transformations, then equivariance is a commutative property of a function with regards to the transformations. In other words, computing the function and then applying the transformation has the same effect as applying the transformation and then computing the function.
 
-\textbf{Gradient descent} is a first order iterative method of finding an extremum a differentiable function $f : \RR \rightarrow \RR^n$, $f \in C^1$, based on continually moving a point in its domain in the direction of negative of its gradient at that point, until the absolute value of the gradient (or the step size) is below a certain threshold. See Algorithm~\ref{alg:gd}.
+A neural network can be viewed as a function approximation model based on and iterative optimization algorithm. There is a number of such algorithms in use, but many of them are variants of \textbf{gradient descent} algorithm. Gradient descent is a first order iterative method of finding an extremum a differentiable function $f : \RR^m \rightarrow \RR^n$, $f \in C^1$, based on continually moving a point in its domain space in the opposite direction of its gradient at that point, until the absolute value of the gradient is below a certain threshold. See Algorithm~\ref{alg:gd}.
 
 \begin{algorithm}
   \caption{Gradient descent algorithm.}
   \label{alg:gd}
 \begin{algorithmic}[1]
-  \State Initialize random $x_0 \in D(f)$
+  \State Initialize random $x_0 \in \RR^n$
   \State $n \gets 0$
   \State step\_size $\gets 1$  
   \While{step\_size $ < \text{threshold}$ and $n < $ iters\_limit}
-  \State $x_{n+1} = x_n - \epsilon \nabla_{x_n} f$
+  \State $x_{n+1} = x_n - \epsilon \nabla f(x_n)$
   \State step\_size $\gets |x_{n+1} - x_n|$ 
   \State $n \gets n + 1$
   \EndWhile
 \end{algorithmic}
 \end{algorithm}
-
-\add[inline]{Add description of stochastic gradient descent, Nesterov and momentum?}
 
 \subsection{History}
 
@@ -2154,7 +2153,7 @@ The classical approach to image pattern recognition consists of the following st
   \item[classification:] categorizing segmented objects based on obtained features into classes.
 \end{description}
 
-The preprocessing step may require additional assumptions about the data or further processing, which are potentially too restrictive or too broad. Getting around this limitation requires dealing with complications such as high dimensionality of the input (number of pixels) and desirability of invariance towards a number of allowable distortions and geometrical transformations.
+The preprocessing step may require additional assumptions about the data or further processing, which are potentially too restrictive or too broad. Getting around this limitation requires dealing with complications such as high dimensionality of the input (number of pixels) and desirability of invariance to a number of allowable distortions and geometrical transformations.
 
 Artificial neural networks in combination with gradient-based learning are one possible solution to the problem. By gradually optimizing a set of weights based on a training data set using a differentiable error function, they provide a framework for learning a suitable set of assumptions automatically from the data.
 
