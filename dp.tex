@@ -128,7 +128,7 @@
 \newacronym{iaaft}{iAAFT}{improved Amplitude Adjusted Fourier Transform}
 \newacronym{adfd}{ADFD}{Average Displacement from Diagonal}
 \newacronym{eeg}{EEG}{Electroencephalography, Electroencephalogram}
-\newacronym{hfd}{HFD}{Higuchi Fractal Dimension}
+\newacronym{hd}{HD}{Higuchi fractal Dimension}
 \newacronym{pca}{PCA}{Principal Components Analysis}
 \newacronym{svd}{SVD}{Singular Value Decomposition}
 \newacronym{ftpr}{FTPR}{Fourier Transform Phase Randomization}
@@ -1242,7 +1242,7 @@ Interestingly, if the measured quantites resulted from mutually completely indep
 \end{equation*}
 as can be easily verified by flipping a set of coins.\footnote{Hurst himself actually made experiments, tossing 10 coins 1000 times. It took him almost 6 hours~\cite{feder2013fractals}.}~\cite{hurst1957suggested} This allows us to recognize stochastic processes with mutually uncorrelated values. The value of Hurst exponent for white noise is $K=1/2$, and many natural processes, such as rainfalls, river water level heights, temperatures and pressures, annual growth of tree rings, and even financial markets have $K > 1/2$, suggesting long-term temporal correlations in the processes. Values of $0 \leq K < 1/2$, on the other hand, suggest long-time negative correlations, i.e. high values being often followed by low values in the future~\cite{hurst1956problem}.
 
-\subsection{Higuchi Fractal Dimension} \label{sec:hfd-theory}
+\subsection{Higuchi's fractal Dimension} \label{sec:hd-theory}
 In this section, it will be beneficial to change our usual notation for the purpose of readability. Let us have time series $x(1), x(2), \dots, x(N)$. We select a $k \in \NN$ and construct $k$ new time series, denoted $x_k^m$ for $m=1,2,\dots,k$, as 
 \begin{align*}
   x(m), x(m+k), x(m+2k), \dots, x(m + \floor{\frac{N-m}{k}} \cdot k), \qquad m=1,2,\dots,k, \qquad m,k \in \NN,
@@ -1253,13 +1253,13 @@ where $m$ is represents the initial time, and $k$ the interval time. In this way
 \end{align*}
 where $\frac{N-1}{\floor{\frac{N-m}{k}} \cdot k}$ is a normalization factor. Length of the original curve as a function of $k$ is then defined as the average $L(k) \coloneqq \langle L_m^k \rangle_m$ over $k$ values of $L_m^k$. If $L(k) \propto k^{-D_H}$ for some value of $D_H$, then the curve can be considered fractal with fractal dimension $D_H$, which can be estimated by least-squares fitting the logarithm of the length $\log{L(k)}$ as a function of $\log{k}$~\cite{higuchi1988approach}.
 
-In summary, Higuchi fractal dimension can be defined, in analogy with correlation dimension and equation (\ref{eq:d2-partial}), as
+In summary, Higuchi's fractal dimension can be defined, in analogy with correlation dimension and equation (\ref{eq:d2-partial}), as
 \begin{align*}
   D_H = -\frac{\partial \log{L(k)}}{\partial \log{k}}.
 \end{align*}
-In other words, one may see Higuchi fractal dimension as measure of irregularity, which in turn is measured as logarithmic rate of average variation of successive points~\cite{ahmadlou2012}. Comparing with equation (\ref{eq:dim-intuitive}), can see that $\mathrm{bulk}$ is corresponds to the mean curve length over multiple subsampled time series $L(k)$ as a function of their $\mathrm{size}$, which is the delay length $k$. 
+In other words, one may see Higuchi's fractal dimension as measure of irregularity, which in turn is measured as logarithmic rate of average variation of successive points~\cite{ahmadlou2012}. Comparing with equation (\ref{eq:dim-intuitive}), can see that $\mathrm{bulk}$ is corresponds to the mean curve length over multiple subsampled time series $L(k)$ as a function of their $\mathrm{size}$, which is the delay length $k$. 
 
-In comparison with correlation dimension, one of the benefits of Higuchi fractal dimension is its relatively fast computation.
+In comparison with correlation dimension, one of the benefits of Higuchi's fractal dimension is its relatively fast computation.
 
 \subsection{Sample Entropy} \label{sec:se-theory}
 Understood in the context of dynamical systems, entropy is the rate at which a given system produces information. It is equal to the sum of all positive Lyapunov exponents of the system's attractor, and positive entropy indicates presence of chaotic dynamics~\cite{andreas2000}. Computing entropy from a physiological time series directly using the information-theoretical definition, is, however, problematic. The time series produced during measurements on biological systems are often short and noisy. Moreover, in EEG analysis, the impact of noise is especially severe. To combat this issue, many methods of computing entropy for such time series has been devised. Sample entropy represents an improvement~\cite{richman2000physiological} on other entropy measure popular in clinical settings, called approximate entropy, which has been successfully applied on EEG to classify diseases such as schizophrenia, epilepsy, and addiction~\cite{yun2012decreased}.
@@ -1346,9 +1346,9 @@ In 2007, Lee et al. found significant differences between the values of DFA in 1
 
 In 2012, Ahmadlou et al. decomposed 5 EEG channels recorded from frontal lobes of healthy and depressed patients using wavelet filter banks, measured their complexity using Higuchi's fractal dimension, subsequently used ANOVA to discover the most meaningful differences between the groups, and trained a probabilistic neural network classifier, achieving 91.3\% classification accuracy on limited amount of data. This research suggested potential of frontal lobe signal assymetry as a measure for depression~\cite{ahmadlou2012}.
 
-A year later, Hosseinifard et al. extracted Correlation Dimension (CD), the Largest Lyapunov Exponent (LLE) and Higuchi's Fractal Dimension(HFD) from 4 EEG channels of 90 patients split evenly between depressed and non-depressed subjects, achieving 90\% accuracy using a logistic regression classifier and 3-fold leave-one-out cross validation~\cite{hosseinifard2013}.
+A year later, Hosseinifard et al. extracted Correlation Dimension (CD), the Largest Lyapunov Exponent (LLE) and Higuchi's fractal Dimension (HD) from 4 EEG channels of 90 patients split evenly between depressed and non-depressed subjects, achieving 90\% accuracy using a logistic regression classifier and 3-fold leave-one-out cross validation~\cite{hosseinifard2013}.
 
-In the same year, Bachmann et al. compared linear measure called Spectral Assymetry index (SASI) and HFD for depression diagnosis on 34 subjects split evenly between depressed and control group. SASI achieved true detection rate in 88\% in depressives and 82\% in the controls, while HFD provided true detection rate of 94\% in the depressives and 76\% in the controls~\cite{bachmann2013}, thus both giving comparable results.
+In the same year, Bachmann et al. compared linear measure called Spectral Assymetry index (SASI) and HD for depression diagnosis on 34 subjects split evenly between depressed and control group. SASI achieved true detection rate in 88\% in depressives and 82\% in the controls, while HD provided true detection rate of 94\% in the depressives and 76\% in the controls~\cite{bachmann2013}, thus both giving comparable results.
 
 In 2014, sample entropy, approximate entropy, Renyi entropy and bispectral phase entropy were used by Faust et al. in~\cite{faust2014depression} to achieve overall 99.5\% accuracy using 10-fold cross validation on sample of 30 healthy and 30 depressed patients. This study reports the highest accuracy out of the reviewed studies. 
 
@@ -1360,7 +1360,7 @@ In comparison with depression diagnosis, less research has been dedicated to the
 \subsubsection{Other Techniques}
 Most of the results of applications of quantitative methods to EEG analysis of depressed patients were obtained using linear methods, such as extracting band power features to detect assymetries between hemispheres of the brain~\cite{rodriguez2015}. For example, in~\cite{knott2001eeg}, the researchers were able to distinguish between 23 healthy and 70 depressed patients using only linear measures\footnote{Note however the class imbalance in the study.}. Statistically significant differences between depressed patients and healthy controls using anterior $\alpha$ assymetry were found in~\cite{debener2000resting}, followed by~\cite{omel2002changes} with more linear assymetry features and more substantial sample size and similar results. Moreover, statistically significant differences in relative frontal power were found in~\cite{iosifescu2009frontal} between depressive patients responding and nonresponding to treatment. Puthankattil et al. were able to obtain high 98.1\% accuracy using relative wavelet energy and neural networks on a sample of 30 healthy and 30 depressed patients. Each patient was recorded multiple times to increase the size of the training and test sample, which may have introduced correlations between the training and test sets. Nonetheless, these studies, supported by neuroscientific theory, sparked interest in linear assymetry measures in depression diagnosis.
 
-However, many studies cast doubts over validity of these measures, such as~\cite{hinrikus2009electroencephalographic, allen2004stability, ahmadlou2013spatiotemporal} finally followed by~\cite{gold2013validity} in 2013 with more substantial sample size, all either finding no statistically significant differences between depressed patients and healthy controls, or no statistically significant correlations of assymetry measures with depression scores. Moreover, when compared directly to nonlinear measures, linear techniques seem to perform at most comparably to nonlinear ones, or worse. As already mentioned, in~\cite{bachmann2013}, nonlinear measure HFD was comparably discriminative to linear measure of spectral assymetry. In~\cite{hosseinifard2013}, Hosseinifard et al. obtained lower classification accuracy using linear band power features in comparison to CD, LLE, and HFD. 
+However, many studies cast doubts over validity of these measures, such as~\cite{hinrikus2009electroencephalographic, allen2004stability, ahmadlou2013spatiotemporal} finally followed by~\cite{gold2013validity} in 2013 with more substantial sample size, all either finding no statistically significant differences between depressed patients and healthy controls, or no statistically significant correlations of assymetry measures with depression scores. Moreover, when compared directly to nonlinear measures, linear techniques seem to perform at most comparably to nonlinear ones, or worse. As already mentioned, in~\cite{bachmann2013}, nonlinear measure HD was comparably discriminative to linear measure of spectral assymetry. In~\cite{hosseinifard2013}, Hosseinifard et al. obtained lower classification accuracy using linear band power features in comparison to CD, LLE, and HD. 
 
 In attempt to discriminate between MDD patients responding and nonresponding to rTMS treatment, in~\cite{arns2012neurophysiological}, the researchers identified increased frontal $\theta$ power and lower peak $\alpha$ frequency as potential biomarkers for patient's failure to respond to the treatment. 
 
@@ -1381,8 +1381,8 @@ Recurrence plots, and RQA in particular, have been demonstrated to be effective 
  & & & \textbf{Healthy} & \textbf{Depressed} & & & & \\ \hline
  \spatcell{SE and other entropies} & WPD+PNN & 0.99 & 30 & 30 & 9 & 5 min &~\cite{faust2014depression} & \spatcell{Evaluated using 10f-CV.}\\ \hline
  DDI & SVM & 0.98 & 15 & 15 & - & 8 s &~\cite{acharya2015novel} & - \\ \hline
- HFD & EPNN & 0.91 & 3 & 3 & 19 & 1 min &~\cite{ahmadlou2012} & - \\ \hline
- HFD & LDA & 0.85 & 17 & 17 & 18 & 2 s &~\cite{bachmann2013} & Evaluated on training set. \\ \hline
+ HD & EPNN & 0.91 & 3 & 3 & 19 & 1 min &~\cite{ahmadlou2012} & - \\ \hline
+ HD & LDA & 0.85 & 17 & 17 & 18 & 2 s &~\cite{bachmann2013} & Evaluated on training set. \\ \hline
  LLE, CD, DFA, HD & LR & 0.9 & 45 & 45 & 19 & 5 min &~\cite{hosseinifard2013} & - \\ \hline
  NL forecasting & Measuring predictability & \spatcell{Increased predictability\\in MDD patients} & 8 & 16 & 12 & 40 s &~\cite{nandrino1994} & - \\ \hline 
  LLE & Statistical analysis & Found s.s. diff. & 13 & 15 & 4 & 2.44 min &~\cite{roschke1995nonlineardeppression} & - \\ \hline
@@ -1781,19 +1781,19 @@ Hurst Exponent (HE) was described in Section~\ref{sec:dfa-theory}. As far as we 
 \label{fig:hurst-fit}
 \end{figure}
 
-\subsection{Higuchi Fractal Dimension} \label{sec:hfd-exp}
+\subsection{Higuchi's Fractal Dimension} \label{sec:hd-exp}
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=\textwidth]{./Images/hfd_anal.png} }
-  \caption[Dependance of HFD on $k_{\mathrm{max}}$ parameter.]{Figure on the left hand side shows values of Higuchi fractal dimension as a function of $k_{\mathrm{max}}$ parameter for all channels of patient number 75, second session. We can see that HFD values plateau for $k_{\mathrm{max}} > 200$ for all channels. On the other hand, variance among channels disappears. Figure on the right hand side shows logarithm of mean curve length $L(k)$ as a function of $\log k$. There is a clear linear trend with slight fluctuations for higher values of $k$.}
-\label{fig:hfd-anal}
+  \caption[Dependance of HD on $k_{\mathrm{max}}$ parameter.]{Figure on the left hand side shows values of Higuchi's fractal dimension as a function of $k_{\mathrm{max}}$ parameter for all channels of patient number 75, second session. We can see that HD values plateau for $k_{\mathrm{max}} > 200$ for all channels. On the other hand, variance among channels disappears. Figure on the right hand side shows logarithm of mean curve length $L(k)$ as a function of $\log k$. There is a clear linear trend with slight fluctuations for higher values of $k$.}
+\label{fig:hd-anal}
 \end{figure}
-The algorithm for estimating Higuchi Fractal Dimension (HFD), as described Section~\ref{sec:hfd-theory}, requires selecting the values $k$ for which $L(k)$ is to be computed. Since this can be done relatively fast, we do this by selecting values equidistant on logarithmic scale $k_1, k_2, \dots, k_{\mathrm{max}}$, where $k_{\mathrm{max}}$ is the single input parameter. Indeed, by using this approach, we follow most of the studies we evaluated.
+The algorithm for estimating Higuchi's fractal Dimension (HD), as described Section~\ref{sec:hd-theory}, requires selecting the values $k$ for which $L(k)$ is to be computed. Since this can be done relatively fast, we do this by selecting values equidistant on logarithmic scale $k_1, k_2, \dots, k_{\mathrm{max}}$, where $k_{\mathrm{max}}$ is the single input parameter. Indeed, by using this approach, we follow most of the studies we evaluated.
 
-It has been suggested that the parameter $k_{\mathrm{max}}$ can be selected by plotting values of HFD as a function of $k_{\mathrm{max}}$, and selecting the value of $k_{\mathrm{max}}$ where the values of HFD plateau. Our results can be seen in Figure~\ref{fig:hfd-anal}. 
+It has been suggested that the parameter $k_{\mathrm{max}}$ can be selected by plotting values of HD as a function of $k_{\mathrm{max}}$, and selecting the value of $k_{\mathrm{max}}$ where the values of HD plateau. Our results can be seen in Figure~\ref{fig:hd-anal}. 
 
-In~\cite{bachmann2013}, the authors computed HFD for each patient as follows. They used 5 second sliding windows with 0.5 second shift and computed local HFD for each of those windows using $k_{\mathrm{max}}=50$, thus obtaining 591 values per recording. The final HFD for each electrode was obtained by averaging all local HFDs. We tried using the same approach. However, the labels obtained in this way were less discriminative in our study. Finally, we computed labels from the entire recording for values $k_{\mathrm{max}}=7, 30, 50, 100, 200$, where $k_{\mathrm{max}}=50$ was shown to be the most discriminative.
+In~\cite{bachmann2013}, the authors computed HD for each patient as follows. They used 5 second sliding windows with 0.5 second shift and computed local HD for each of those windows using $k_{\mathrm{max}}=50$, thus obtaining 591 values per recording. The final HD for each electrode was obtained by averaging all local HDs. We tried using the same approach. However, the labels obtained in this way were less discriminative in our study. Finally, we computed labels from the entire recording for values $k_{\mathrm{max}}=7, 30, 50, 100, 200$, where $k_{\mathrm{max}}=50$ was shown to be the most discriminative.
 
 \add[inline]{Maybe few more studies.}
 
@@ -1806,7 +1806,7 @@ $\mathbf{k_{\mathrm{max}}}$ & \textbf{Sampling Frequency} (Hz) & \textbf{Recordi
 50 & 256 & 5 s & depression &~\cite{bachmann2013} \\ \hline
 48 & 169.55 & 5 min & depression &~\cite{gomez2009use} \\ \hline
 \end{tabular}
-\caption[Literature review of choice for HFD $k_{\mathrm{max}}$ parameter.]{Summary of choices for the $k_{\mathrm{max}}$ parameter for Higuchi fractal dimension applied to EEG we found across literature.}
+\caption[Literature review of choice for HD $k_{\mathrm{max}}$ parameter.]{Summary of choices for the $k_{\mathrm{max}}$ parameter for Higuchi's fractal dimension applied to EEG we found across literature.}
 \end{table}
 
 \subsection{Sample Entropy} \label{sec:se-exp}
@@ -1896,7 +1896,7 @@ To reduce the effects of possible nonstationarity, we attempted to find the most
 \subsection{Before and After Treatment Groups} \label{sec:analbefaft}
 As the first step of our analysis, we conducted an investigation of the differences in the nonlinear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time. \add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient recieved personalized method of treatment, and the methods may have differing impact.
 
-For each group, we performed two-sided Kruskal-Wallis test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for DFA, HE, and HFD, $D_2$ and $\lambda_1$ computed using automatic selection of embedding parameters. Therefore, we include only results for the remaining measures. The results can be seen in Table~\ref{tab:bameans} in the Appendix.\footnote{In all tables, the p-value cutoffs for significance ratings are 0.05, 0.01, 0.005.} No significant differences between the groups are observed in DFA and HE values, and HFD and CD show differences only in left temporal areas (T3, T4). On the other hand, LLE shows signficant differences in frontal (F3, F4), ``central'' (C3, C4) and left temporal (T3) areas, with similar, yet less signficant differences in those areas are observed for SE values.
+For each group, we performed two-sided Kruskal-Wallis test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for DFA, HE, and HD, $D_2$ and $\lambda_1$ computed using automatic selection of embedding parameters. Therefore, we include only results for the remaining measures. The results can be seen in Table~\ref{tab:bameans} in the Appendix.\footnote{In all tables, the p-value cutoffs for significance ratings are 0.05, 0.01, 0.005.} No significant differences between the groups are observed in DFA and HE values, and HD and CD show differences only in left temporal areas (T3, T4). On the other hand, LLE shows signficant differences in frontal (F3, F4), ``central'' (C3, C4) and left temporal (T3) areas, with similar, yet less signficant differences in those areas are observed for SE values.
 
 Differences in the mean values of each measure in each electrode before and after treatment are visualized in Figure~\ref{fig:befaft}. Length of the error bars corresponds to two standard deviations. One can notice, for example, that values of LLE tend to be higher before treatment. As we will comment more in Section~\ref{sec:analrespdif}, this effect seems especially pronounced in the group responding positively to the treatment. 
 
@@ -1911,19 +1911,17 @@ With the goal of analyzing the differences between the lightest and most severe 
 
 First, we inspected histograms of computed measures between the two groups. There were striking trends in the means of the two distributions in almost all channels for all measures except correlation dimension. Means of depressed recordings are typically shifted to the left of the mean of healthy recordings for all measures except for largest Lyapunov exponent, for which the means are shifted to the right. For correlation dimension, the distributions in both groups are similar. Figure~\ref{fig:lyapdepdist} in the Appendix, which shows the distributions of the largest Lyapunov exponents for both groups, exemplifies the differences.  
 
-Next, we investigated at the correlations between the individual measures and correlation scores. Figure~\ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure~\ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Correlation dimension shows no significant correlations between depression scores on any channel, whereas the remaining measures are significantly correlated in almost all channels, and all those correlations are negative. Trends similar to the one observed for DFA were observed for Hurst exponent and Higuchi fractal dimension, where, however, DFA shows slightly more significant correlations. Sample entropy values were significantly negatively correlated only on F4 and T6 channels. We also visualized correlations of individual measures to the the depression score and treatment response label on topographic scalp in Figure~\ref{fig:scalp-corrs}, and the corresponding p-values in Figure~\ref{fig:scalp-corrs-pval}. Interestingly, the patterns in p-values for depression score correlations seem almost centrally symmetrical for DFA, HE, and CD, and centrally symmetrical for LLE and SE.
+Next, we investigated at the correlations between the individual measures and correlation scores. Figure~\ref{fig:dfadepcorr} shows visually clear negative correlation for DFA, and Figure~\ref{fig:lyapdepcorr} shows positive correlation for the largest Lyapunov exponent. Correlation dimension shows no significant correlations between depression scores on any channel, whereas the remaining measures are significantly correlated in almost all channels, and all those correlations are negative. Trends similar to the one observed for DFA were observed for Hurst exponent and Higuchi's fractal dimension, where, however, DFA shows slightly more significant correlations. Sample entropy values were significantly negatively correlated only on F4 and T6 channels. We also visualized correlations of individual measures to the the depression score and treatment response label on topographic scalp in Figure~\ref{fig:scalp-corrs}, and the corresponding p-values in Figure~\ref{fig:scalp-corrs-pval}. Interestingly, the patterns in p-values for depression score correlations seem almost centrally symmetrical for DFA, HE, and CD, and centrally symmetrical for LLE and SE.
 
-\add[inline]{THIS PARAGRAPH IS INCORRECT!!! FIX!!!}
-Finally, we compared the distributions using Kruskal-Wallis test. Table~\ref{tab:depmeans} in the Appendix show the results for LLE, CD and SE respectively. We may observe significant differences in most channels, with the strongest being in the occipital and temporal regions. Very significant differences seem to occur in the largest Lyapunov exponents corresponding to left and right temporal electrodes. 
+Finally, we compared the distributions using Kruskal-Wallis test. Table~\ref{tab:depmeans} in the Appendix show the results. The mean values across all channels are significantly different for DFA, LLE, SE, and HD. The differences in DFA seem to be the most significant over parietal and occipital regions, and right parietal region (P4) in particular. Although LLE also exhibits differences in those areas, in addition, it shows slight differences in frontal (F4) area, and it is the right temporal region (T6) which shows the most pronounced differences. Similar behavior of significant differences across frontal, occipital, parietal, and right temporal region may be observed in SE and HD.
 
 In contrast to previously observed lower EEG complexity (higher predictability) in depression~\cite{nandrino1994}, we find find that depressed patients exhibit slightly higher higher LLE and CD, indicating higher chaoticity and complexity, which implies lower predictibility. However, we used different method from the mentioned study to reach these conclusions.
-
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/dfadepcorr.png} }
-  \caption[Trends in DFA as a function of depression score.]{Trend of values of DFA as a function of depression score. The correlation is significantly ($p$ < 0.05) negative for all channels with exception of F3, F4, C3, P3, T3, Cz. Similar trend is present in Hurst exponent, Higuchi fractal dimension and sample entropy. No correlation of correlation dimension with depression score is significant in any channel.}
+  \caption[Trends in DFA as a function of depression score.]{Trend of values of DFA as a function of depression score. The correlation is significantly ($p$ < 0.05) negative for all channels with exception of F3, F4, C3, P3, T3, Cz. Similar trend is present in Hurst exponent, Higuchi's fractal dimension and sample entropy. No correlation of correlation dimension with depression score is significant in any channel.}
  \label{fig:dfadepcorr}
 \end{figure}
 
@@ -1954,7 +1952,7 @@ Neurocorrelates of remission, or, in other words, positive response to a treatme
 
 For each patient, we computed a measure of change in depression scores (and, by extension, of effectivity of the treatment) we call \emph{response} (RES). If $\mathrm{DS}_0$ denotes the depression score measured on the first visit and $\mathrm{DS}_4$ denotes the depression score measured on the second visit after 4 weeks, then response is computed as their ratio $\mathrm{RES} = \mathrm{DS}_4 / \mathrm{DS}_0$. Mean response is 2.47, mode 1.66, standard deviation 3.14. Most values range from 1 to 5, with a few outliers improving their symptoms 14 and 16-fold respectively. Only 9 patients stagnated exactly or slightly worsened their symptoms (response $\leq$ 1). Subsequently, we sampled 50 patients with the lowest value of response we call \emph{nonresponding} (nonresponders) and 50 patients with the highest value of response we call \emph{responding} (responders). 
 
-We performed Kruskal-Wallis test to see the differences in the computed measures between the two groups in individual channels, considering only the before treatment recordings. The most significant differences found were in Lyapunov exponent, especially in frontal, parietal, and right temporal areas. Aside from the largest Lyapunov exponent, Higuchi fractal dimension then also showed significant differences in frontal areas.. The results are shown in Table~\ref{tab:remmeans} in the Appendix. In comparison with Section~\ref{sec:analdepdif}, these results suggest that, with exception of LLE, differences in nonlinear measures between responders and nonresponders in the recordings obtained before treatment are considerably less significant than differences in depression score. On the other hand, it is possible that the differences are less significant due to smaller dataset size, since the test is performed on smaller number of samples. For completeness, we also decided to include comparison which includes both before and after treatment recordings, which can be seen in Table~\ref{tab:remmeansext}.
+We performed Kruskal-Wallis test to see the differences in the computed measures between the two groups in individual channels, considering only the before treatment recordings. The most significant differences found were in Lyapunov exponent, especially in frontal, parietal, and right temporal areas. Aside from the largest Lyapunov exponent, Higuchi's fractal dimension then also showed significant differences in frontal areas.. The results are shown in Table~\ref{tab:remmeans} in the Appendix. In comparison with Section~\ref{sec:analdepdif}, these results suggest that, with exception of LLE, differences in nonlinear measures between responders and nonresponders in the recordings obtained before treatment are considerably less significant than differences in depression score. On the other hand, it is possible that the differences are less significant due to smaller dataset size, since the test is performed on smaller number of samples. For completeness, we also decided to include comparison which includes both before and after treatment recordings, which can be seen in Table~\ref{tab:remmeansext}.
 
 Moreover, we also compared before and after treatment recordings of responding, and before and after treatment recordings of nonresponding patients. Significant differences were found only in LLE, CD and SE, for which the results can be seen in the Appendix in Tables~\ref{tab:llebaresp},~\ref{tab:d2baresp}, and~\ref{tab:sebaresp} respectively. These differences are also visualized in Figures~\ref{fig:respnon1},~\ref{fig:respnon1auto}, and~\ref{fig:respnon2} in the Appendix. We can see, for example, that the mean values of LLE across channels are higher before treatment for the responding group, but this effect is less pronounced for the nonresponding group, where depression score also slightly descreased. Since this group also received treatment, the observed higher depression score accompanied by LLE increase is not due to the effects of treatment. Together with Table~\ref{tab:remmeans}, this result further supports the hypothesis that it is the decrease in depression score which results in higher values of LLE.
 
@@ -2004,7 +2002,7 @@ The recordings were separated into two classes as follows:
 \end{description}
 These thresholds are visualized on the distribution of depression scores in the dataset in Figure~\ref{fig:labels-dep}. The results are shown in Table~\ref{tab:depcl}. The best performing classifiers in this section were SVMs. The largest Lyapunov exponent was the most predictive out of all considered nonlinear measures, both achieving the highest accuracy out of the single-measure classifiers ($0.72 \pm 0.04$), and being one of the measures in majority of the best performing combined-measure classifiers. It was followed, perhaps surprisingly considering the results obtained in Section~\ref{sec:analdepdif}, by correlation dimension ($0.71 \pm 0.05$). Although the accuracy of the remaining classifiers, whose features were obtained using the Kruskal-Wallis test from Section~\ref{sec:analdepdif}, was slightly lower (with higher variance), they are also simpler in terms of the number of selected channels.
 
-All the channels in the combined-measure classifiers were found using the genetic algorithm, as described in the opening to this section. The best overall accuracy was achieved by combination of the largest Lyapunov exponent and sample entropy ($0.75 \pm 0.10$). However, second to it was a combination of the largest Lyapunov exponent and correlation dimension, which has lower variance ($0.74 \pm 0.04)$. Other measures performing well together with the largest Lyapunov exponent are the Hurst exponent, and sample entropy together with DFA. The best combination not inluding the largest Lyapunov exponent is correlation dimension and Higuchi fractal dimension.
+All the channels in the combined-measure classifiers were found using the genetic algorithm, as described in the opening to this section. The best overall accuracy was achieved by combination of the largest Lyapunov exponent and sample entropy ($0.75 \pm 0.10$). However, second to it was a combination of the largest Lyapunov exponent and correlation dimension, which has lower variance ($0.74 \pm 0.04)$. Other measures performing well together with the largest Lyapunov exponent are the Hurst exponent, and sample entropy together with DFA. The best combination not inluding the largest Lyapunov exponent is correlation dimension and Higuchi's fractal dimension.
 
 In Section~\ref{sec:analdepdif}, we have seen that correlations of LLE with depression score are the most significant of all measures, which may explain why in this section, we found LLE to be the most discriminative measure. Moreover, we have seen that the differences between depressed and healthy patients are the most significant in the temporal areas for all measures, which may explain the relatively high rate of selection of the T3 and T6 channels.
 
@@ -2799,7 +2797,7 @@ Fz       & 1.356 $\pm$ 0.130 & 1.363 $\pm$ 0.136 & 0.743 &       \\ \hline
 Cz       & 1.377 $\pm$ 0.113 & 1.387 $\pm$ 0.122 & 0.656 &       \\ \hline
 Pz       & 1.319 $\pm$ 0.112 & 1.323 $\pm$ 0.120 & 0.971 &       \\ \hline
 \end{tabular}
-\subcaption{Higuchi fractal dimension}
+\subcaption{Higuchi's fractal dimension}
 }
 \hfill
   \parbox{.49\linewidth}{
@@ -2979,7 +2977,7 @@ Fz       & 1.381 $\pm$ 0.137 & 1.340 $\pm$ 0.147 & 0.086 &       \\ \hline
 Cz       & 1.404 $\pm$ 0.115 & 1.356 $\pm$ 0.125 & 0.026 & *     \\ \hline
 Pz       & 1.337 $\pm$ 0.118 & 1.295 $\pm$ 0.118 & 0.064 &       \\ \hline
 \end{tabular}
-\subcaption{Higuchi fractal dimension}
+\subcaption{Higuchi's fractal dimension}
 }
 \hfill
   \parbox{.49\linewidth}{
@@ -3160,7 +3158,7 @@ Fz       & 1.367 $\pm$ 0.123 & 1.330 $\pm$ 0.119 & 0.031 & *     \\ \hline
 Cz       & 1.383 $\pm$ 0.106 & 1.359 $\pm$ 0.103 & 0.171 &       \\ \hline
 Pz       & 1.328 $\pm$ 0.111 & 1.301 $\pm$ 0.106 & 0.089 &       \\ \hline
 \end{tabular}
-\subcaption{Higuchi fractal dimension}
+\subcaption{Higuchi's fractal dimension}
 }
 \hfill
   \parbox{.49\linewidth}{
@@ -3340,7 +3338,7 @@ Fz       & 1.379 $\pm$ 0.134 & 1.331 $\pm$ 0.112 & 0.002 & ***   \\ \hline
 Cz       & 1.396 $\pm$ 0.114 & 1.356 $\pm$ 0.099 & 0.006 & ***   \\ \hline
 Pz       & 1.335 $\pm$ 0.117 & 1.299 $\pm$ 0.104 & 0.011 & **    \\ \hline
 \end{tabular}
-\subcaption{Higuchi fractal dimension}
+\subcaption{Higuchi's fractal dimension}
 }
 \hfill
   \parbox{.49\linewidth}{
