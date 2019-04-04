@@ -31,6 +31,8 @@
 % \usepackage[nomarkers]{endfloat}
 \usepackage{color}   %May be necessary if you want to color links
 \usepackage{hyperref}
+\usepackage{enumitem} % Nested enumerate
+\setlist[enumerate]{label*=\arabic*.}
 \hypersetup{%
     colorlinks=false,
     linktoc=all
@@ -49,7 +51,7 @@
 
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage[x11names, rgb]{xcolor}  % Coloured text etc.
-\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes} % Simply add disable option to disable
 \newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
 \newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
 \newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
@@ -332,9 +334,10 @@ Artificial Intelligence Center, FEE, CTU Prague
 
 
 \noindent \emph{Abstract:}
-Major depressive disorder (MDD) has high population prevalence and significant impact on quality of life, and in its severe form may result in suicide. Hence, substantial amount of suffering may be alleviated by facilitating early diagnosis and accurate prediction of treatment response.
-In this thesis, we apply techniques of nonlinear dynamical analysis (NLDA) and iterative optimization of convolutional neural network models (CNN) to the problem of prediction of depression severity and treatment response on an original dataset of physiological recordings of electrical activity of the brain.
-Using NLDA, we obtain classification accuracy of approximately 75\% on both tasks, and provide evidence that the Largest Lyapunov exponents may be relevant for treatment response prediction. Moreover, we find that larger, more diverse datasets may be needed to develop more complex machine learning models for this problem.
+Major depressive disorder has high population prevalence and significant impact on quality of life, and in its severe form may result in suicide. Hence, substantial amount of suffering may be alleviated by facilitating early diagnosis and accurate prediction of treatment response.
+In this thesis, we apply techniques of nonlinear dynamical analysis and iterative optimization of convolutional neural network models to the problem of prediction of depression severity and treatment response on an original dataset of EEG recordings.
+Using nonlinear measures, we obtain classification accuracy of approximately 75\% on both tasks, and provide evidence that the Largest Lyapunov exponents may be relevant for treatment response prediction. Moreover, we find that larger, more diverse datasets may be needed to develop more complex machine learning models for this problem. 
+In spite of the difficulties of the studied problems, we provide new insights on mental disorder diagnostics and show the potential of nonlinear measures for analysing EEG signals of depresive patients.
 
 \bigskip{}
 
@@ -383,6 +386,14 @@ Using NLDA, we obtain classification accuracy of approximately 75\% on both task
 \nomenclature{$f_s$}{Sampling frequency.}
 \nomenclature{$N_{(m,\tau)}$}{Number of vectors in time-delay reconstrution with embedding dimension $m$ and time delay $\tau$.}
 \nomenclature{$C(r)$}{Correlation sum as function of radius $r$.}
+\nomenclature{$\#\{\dots\}$}{Cardinality of the set $\{\dots\}$.}
+\nomenclature{$\Delta$}{Dirac delta function.}
+\nomenclature{$\mathrm{d}f$}{Total derivative of function $f$.}
+\nomenclature{$\dot{x}(t)$, $\ddot{x}(t)$}{First and second partial derivative of $x$ by $t$, i.e. $\dot{x}(t) = \frac{\partial x}{\partial t}(t)$, $\ddot{x}(t) = \frac{\partial^2 x}{\partial t^2}(t)$.}
+\nomenclature{$e$}{Euler's constant.}
+\nomenclature{$\mathrm{std}$, $\mathrm{var}$}{Standard deviation and variance respectively.}
+\nomenclature{$\mathcal{I}(\tau)$}{Delayed mutual information for time delay $\tau$.}
+\nomenclature{$E_1(m)$, $E_2(m)$, $E^{*}(m)$}{Statistics of the average false neighbors (see Section \ref{sec:afn}).}
 
 \printnomenclature
 
@@ -524,7 +535,9 @@ for tree={
   \item[Chapter~\ref{ch:dl}: \nameref{ch:dl}]~\\
     Convolutional neural networks are put into historical context and their relevant features are described. A signal processing technique which inspired our final selection of neural network architecture is presented. Possible approaches to input representation are discussed. The most successful architectures are introduced, and the chapter concludes with description of the obtained classification resuts.
   \item[\nameref{ch:concl}]~\\
-    In the final chapter, the research objectives are reiterated and whether they have been met is discussed. Recommendations for future work are made, contributions and limitations of the work are examined.
+    In the final chapter, the contributions to scientific knowledge made in this thesis are discussed, and recommendations for future work are made.
+  \item[\nameref{ch:appendix}]~\\
+    The appendix includes figures and tables which were left out of the main text for clarity.
 \end{description}
 
 \chapter{Nonlinear Time Series Analysis} \label{ch:nonlin}
@@ -703,7 +716,7 @@ where $\chi_{[a,b]}$ is the characteristic function of the set $[a,b]$. The dens
   p_k^{\mathrm{all}} = \frac{n_k^{\mathrm{all}}}{\sum_k n_k^{\mathrm{all}}}.
 \end{align*}
 
-If the system is stationary, then the probability distribution for the first half of the time series should be the same as for the entire time series. Hence, this distribution (with the same intervals) is computed for the first half of the time series ($n_k^{\mathrm{half}}$). Then, the two probability distributions are compared using the $\xi^2$ statistical test with the null hypothesis of stationarity. The corresponding Pearson's cumulative test statistic then is
+If the system is stationary, then the probability distribution for the first half of the time series should be the same as for the entire time series. Hence, this distribution (with the same intervals) is computed for the first half of the time series ($n_k^{\mathrm{half}}$). Then, the two probability distributions are compared using the $\chi^2$ statistical test with the null hypothesis of stationarity. The corresponding Pearson's cumulative test statistic then is
 \begin{align*}
   \chi^2 \coloneqq \sum_k \frac{(n_k^{\mathrm{half}} - Zp_k^{\mathrm{all}})^2}{Zp_k^{\mathrm{all}}},
 \end{align*}
@@ -742,7 +755,7 @@ To the goal of state space reconstruction, let $\mathbf{x}_n$ be the reconstruct
 
 Firstly, note that we assume the studied dynamical system to be deterministic. If our reconstructed embedded space is to represent the true state space, evolution of any state on every trajectory we observe in the embedded space should depend only on its current state. Therefore, we may reasonably require $\Phi$ to be one-to-one, i.e. contain no intersections~\cite{fraser1989reconstructing}. This will be relevant in Sections~\ref{sec:delay} and~\ref{sec:ild}.
 
-Secondly, since many of the attractor properties we care about (such as correlation dimensions, Lyapunov exponents, etc.) are only invariant under smooth non-singular transformations~\cite{fraser1989reconstructing}, in order to preserve these properties in the embedded space, we require $\Phi$ to preserve the differential structure of the state space $M$, which corresponds to the tangent map $D \Phi$, which is a $m \times d$ matrix constant for every $\mathbf{\xi}$, also being a one-to-one mapping~\cite{andreas2000}. The proof of Taken's Theorem~\ref{thm:takens} mentioned later also requires this property. 
+Secondly, since many of the attractor properties we care about (such as correlation dimensions, Lyapunov exponents, etc.) are only invariant under smooth non-singular transformations~\cite{fraser1989reconstructing}, in order to preserve these properties in the embedded space, we require $\Phi$ to preserve the differential structure of the state space $M$ (which corresponds to the tangent map $\mathrm{d} \Phi$, which is a $m \times d$ matrix constant for every $\mathbf{\xi}$) also being a one-to-one mapping~\cite{andreas2000}. The proof of Taken's Theorem~\ref{thm:takens} mentioned later also requires this property. 
 
 These two properties together are equivalent of $\Phi$ being a diffeomorphism, and form necessary and sufficient conditions for $\Phi$ being and embedding~\cite{andreas2000} between the state space $M$ and the embedding space $\Phi(M)$. The dynamical system $\mathbf{F}$ on $M$ then induces unique dynamical sytem on $\Phi(M)$~\cite{andreas2000}.
 
@@ -828,18 +841,18 @@ From the above, we understand that each of a successful reconstruction should pr
 \begin{dfn}[\cite{kantz2004}]
   Let $x$ be a scalar time series of measurements $x_1, x_2, \cdots, x_N$. \textbf{Autocorrelation} $A : \NN \rightarrow \RR$ for time delay $\tau$ is given by
   \begin{align*}
-    % A(\tau) = \frac{1}{\sigma^2} \langle (s_n - \langle s_n \rangle )(s_{n-\tau} - \langle s_n \rangle) \rangle \\
-    % A(\tau) = \frac{E[(x_i - \overline{x})(x_{i-\tau} - \overline{x})]}{\sigma^2}, 
-    A(\tau) = \frac{1}{\sigma^2 (N-\tau)}\sum_{i=1}^{N-\tau}(x_i - \overline{x})(x_{i+\tau}+\overline{x})
+    % A(\tau) = \frac{1}{\mathrm{var}} \langle (s_n - \langle s_n \rangle )(s_{n-\tau} - \langle s_n \rangle) \rangle \\
+    % A(\tau) = \frac{E[(x_i - \overline{x})(x_{i-\tau} - \overline{x})]}{\mathrm{var}}, 
+    A(\tau) = \frac{1}{\mathrm{var} (N-\tau)}\sum_{i=1}^{N-\tau}(x_i - \overline{x})(x_{i+\tau}+\overline{x})
   \end{align*}
-  where $\overline{x}$ is the mean of the time series, and $\sigma^2$ is its standard deviation.
+  where $\overline{x}$ is the mean of the time series, and $\mathrm{var}$ is its variance.
 \end{dfn}
 
-Note that $\sigma^2$ normalizes autocorrelation function to $A(0) = 1$. White noise produced $A(\tau) = 0$ for all $\tau \neq 0$. Filtered noise and chaotic time series can be expected to have $A(\tau)$ slowly decaying to zero with increasing time delay~\cite{andreas2000}.
+Note that $\mathrm{var}$ normalizes autocorrelation function to $A(0) = 1$. White noise produced $A(\tau) = 0$ for all $\tau \neq 0$. Filtered noise and chaotic time series can be expected to have $A(\tau)$ slowly decaying to zero with increasing time delay~\cite{andreas2000}.
 
 Computing the autocorrelation function is not only useful for examining the stationarity of the time series, but it also gives a geometrical insight into the shape of the attractor: if we approximate the cloud of reconstructed vectors $\mathbf{x}_n \in \RR^m$ by an ellipsoid, lengths of its semi-axis are given by the square root of the eigenvalues of its auto-covariance matrix. In two dimensions, zero of the covariance matrix corresponds to those eigenvalues being equal, i.e. $x_t$ and $x_{t+\tau}$ being completely uncorrelated~\cite{kantz2004}. An obvious objection is that correlation between $x_t$ and $x_{t+\tau}$ says nothing about correlation between $x_t$ and $x_{t+2\tau}$, etc. Indeed, this method computes correlations only between two successive coordinates, but since it neglects possible correlations between other pairs of coordinates, it is mostly useful for low dimensional systems~\cite{krakovska2015use}.
 
-Autocorrelation also provides a lower bound for $\tau$ in the following sense. If the data is noisy, vectors formed by time delay embedding procedure are practically meaningless, if the variation of the signal in the time covered in the time window $\tau_w = (m-1)\tau$ is less than the variation of noise. This means that $\tau$ should be selected such that $A(\tau) > A(0) - \sigma^2_{\text{noise}}/\sigma^2_{\text{signal}}$~\cite{kantz2004}. Of course, in practice, it may be difficult to estimate variance of noise in the data.
+Autocorrelation also provides a lower bound for $\tau$ in the following sense. If the data is noisy, vectors formed by time delay embedding procedure are practically meaningless, if the variation of the signal in the time covered in the time window $\tau_w = (m-1)\tau$ is less than the variation of noise. This means that $\tau$ should be selected such that $A(\tau) > A(0) - \mathrm{var}_{\text{noise}}/\mathrm{var}_{\text{signal}}$~\cite{kantz2004}. Of course, in practice, it may be difficult to estimate variance of noise in the data.
 
 \subsubsection{Delayed Mutual Information} \label{sec:dmi}
 Another commonly used method is to use the first minimum of the \emph{time delayed mutual information}~\cite{fraser1986independent}. 
@@ -1084,7 +1097,7 @@ The world of mathematics offers numerous definitions of dimension (box-counting 
 \end{align}
 In other words, dimension can be loosely defined as scaling of ``bulk'' (corresponds to mathematical concept of measure) as a function of its linear ``size''. Of course, dimensions of different definitions may not be equal to each other, but for our purposes, we are interested in the most computationally accessible.
 
-Unlike Lyapunov exponents, which measure dynamical properties of the system, (correlation) dimension is a purely geometrical property of the attractor, independent of the ordering of the reconstructed vectors.\unsure{Is this true?}
+Unlike Lyapunov exponents, which measure dynamical properties of the system, (correlation) dimension is a purely geometrical property of the attractor, independent of the ordering of the reconstructed vectors. \unsure{Is this true?}
 
 In this thesis, we are interested in dimension estimation for the following reasons:
 \begin{enumerate}
@@ -1198,11 +1211,11 @@ Long-range temporal correlations, or long-range dependence, is a phenomenon whic
 \subsection{Hurst Exponent} \label{sec:hurst-theory}
 As mentioned in the previous section, similarly to the Hurst parameter in DFA, Hurst exponent is a measure of presence of long-range temporal dependencies in the time series. It was developed from Edwin H. Hurst observation when researching the optimal (or minimal required) storage sizing of river dams. Supposing there is a constant reservoir outflow equal to the mean annual water discharge, required storage size corresponds to the range (i.e. the difference between the maximum and the minimum value) of a cumulative sums of deviations from the mean annual discharge. We shall call this value, as a function of the number of years, $R(n)$~\cite{hurst1956problem}. After manually analyzing about a hundred records of natural phenomena, Hurst was able to demonstrate this value, on average and after normalizing by the standard deviation of the original time series, follows the following trend:
 \begin{equation} \label{eq:resc-range}
-  R(n) / \sigma(n) \propto (n / 2)^K.
+  R(n) / \mathrm{std}(n) \propto (n / 2)^K.
 \end{equation}
-In this equation, $R(n) / \sigma(n)$ is called the rescaled range, and $K$ is called the Hurst exponent~\cite{hurst1957suggested}. Obviously, it is always the case that $0 \leq K \leq 1$.
+In this equation, $R(n) / \mathrm{std}(n)$ is called the rescaled range, and $K$ is called the Hurst exponent~\cite{hurst1957suggested}. Obviously, it is always the case that $0 \leq K \leq 1$.
 
-The algorithm we used for computing estimation of the Hurst exponent is as follows~\cite{weron2002estimating}. Let us have time series $x$, with values $x_1, x_2, \dots, x_N$. The time series is split into $d$ non-overlapping subseries $x^{(m)}$, $m\in 1,2,\dots,d$ of fixed length $n$. Sample mean $\langle x^{(m)} \rangle$ and standard deviation $\sigma(m)$ is computed for each. Each subseries $x^{(m)}$ is then normalized, and cumulative time series is computed as 
+The algorithm we used for computing estimation of the Hurst exponent is as follows~\cite{weron2002estimating}. Let us have time series $x$, with values $x_1, x_2, \dots, x_N$. The time series is split into $d$ non-overlapping subseries $x^{(m)}$, $m\in 1,2,\dots,d$ of fixed length $n$. Sample mean $\langle x^{(m)} \rangle$ and standard deviation $\mathrm{std}(m)$ is computed for each. Each subseries $x^{(m)}$ is then normalized, and cumulative time series is computed as 
 \begin{align*}
   z_k^{(m)} &= \sum_{i=1}^{k} (x_i^{(m)} - \langle x^{(m)} \rangle) \qquad \mathrm{for }\, k=1,\dots,n .
 \end{align*}
@@ -1225,7 +1238,7 @@ The Hurst exponent $K$ then can be obtained using linear regression as slope of 
 
 Interestingly, if the measured quantites resulted from mutually completely independent events (i.e. white noise, with its corresponding cumulative sum, random walk), the relationship in equation (\ref{eq:resc-range}) is replaced with
 \begin{equation*}
-  R(n) / \sigma(n) \propto 1.25 \sqrt{N},
+  R(n) / \mathrm{std}(n) \propto 1.25 \sqrt{N},
 \end{equation*}
 as can be easily verified by flipping a set of coins.\footnote{Hurst himself actually made experiments, tossing 10 coins 1000 times. It took him almost 6 hours~\cite{feder2013fractals}.}~\cite{hurst1957suggested} This allows us to recognize stochastic processes with mutually uncorrelated values. The value of Hurst exponent for white noise is $K=1/2$, and many natural processes, such as rainfalls, river water level heights, temperatures and pressures, annual growth of tree rings, and even financial markets have $K > 1/2$, suggesting long-term temporal correlations in the processes. Values of $0 \leq K < 1/2$, on the other hand, suggest long-time negative correlations, i.e. high values being often followed by low values in the future~\cite{hurst1956problem}.
 
@@ -1259,12 +1272,12 @@ For a given embedding dimension $m$ and tolerance parameter $r$, sample entropy 
   \end{align*}
   where
   \begin{description}
-    \item[$A^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{\mathbf{x}_i^{(m+1)} \mathbf{x}_j^{(m+1)}}_{\infty} < r$, $i \neq j$, and 
-    \item[$B^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{\mathbf{x}_i^{(m)} \mathbf{x}_j^{(m)}}_{\infty} < r$, $i \neq j$.
+    \item[$A^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{\mathbf{x}_i^{(m+1)} - \mathbf{x}_j^{(m+1)}}_{\infty} < r$, $i \neq j$, and 
+    \item[$B^m(r)$] is the number of vector pairs in the embedding satisfying $\norm{\mathbf{x}_i^{(m)} - \mathbf{x}_j^{(m)}}_{\infty} < r$, $i \neq j$.
   \end{description}
   We call the value $r$ \emph{tolerance}.
 \end{dfn}
-Obviously, it is always $A^m(r) \leq B^m(r)$, hence sample entropy is always non-negative. If $A^m(r) = B^m(r)=0$, no regularity has been detected, and $B^m(r) \neq 0$ with $A^m(r)=0$ corresponds to (the above mentioned) conditional probability of 0, and infinite value of sample entropy. The value of tolerance $r$ recommended by the authors is $0.2 * \sigma(x)$, where $\sigma(x)$ is the standard deviation of the original time series~\cite{richman2000physiological}.
+Obviously, it is always $A^m(r) \leq B^m(r)$, hence sample entropy is always non-negative. If $A^m(r) = B^m(r)=0$, no regularity has been detected, and $B^m(r) \neq 0$ with $A^m(r)=0$ corresponds to (the above mentioned) conditional probability of 0, and infinite value of sample entropy. The value of tolerance $r$ recommended by the authors is $0.2 * \mathrm{std}(x)$, where $\mathrm{std}(x)$ is the standard deviation of the original time series~\cite{richman2000physiological}.
 
 The algorithm for computing sample entropy first constructs the embedding vectors for embedding dimensions $m$ and $m+1$. For each embedding dimension, it counts the number of pairs of vectors $\mathbf{x}_i, \mathbf{x}_j$ where $i \neq j$, for which $\norm{ \mathbf{x}_i - \mathbf{x}_j }_{\infty} < r$. The negative natural logarithm of the ratio of number of those pairs for dimension $m+1$ and the number of pairs for dimension $m$ is the result.
 
@@ -1285,9 +1298,9 @@ To this end, we construct a Monte Carlo hypothesis test of nonlinearity. We choo
 
 Here, we use two sided test, and measure of significance is defined as
 \begin{align} \label{eq:sigma}
-  \mathcal{S} \equiv \frac{| Q_{\text{orig}} - \mu_{\text{surr}} |}{\sigma_{\text{surr}}},
+  \mathcal{S} \equiv \frac{| Q_{\text{orig}} - \mu_{\text{surr}} |}{\mathrm{std}_{\text{surr}}},
 \end{align}
-where $Q_{\text{orig}}$ is the statistic computed for the original time series, and $\mu_{\text{surr}}$, $\sigma_{\text{surr}}$ are the mean and variance of the statistic computed for the surrogate time series~\cite{theiler1992testing}. If we assume that distribution of the generated is Gaussian, than $\mathcal{S} \geq 2$ is required for 95 \% significance level. However, validity of this assumption is not always guaranteed. For non-Gaussian distributions, we may require larger $\mathcal{S}$, or, alternatively, use a rank based test, as follows~\cite{kantz2004}.
+where $Q_{\text{orig}}$ is the statistic computed for the original time series, and $\mu_{\text{surr}}$, $\mathrm{std}_{\text{surr}}$ are the mean and standard deviation of the statistic computed for the surrogate time series~\cite{theiler1992testing}. If we assume that distribution of the generated is Gaussian, than $\mathcal{S} \geq 2$ is required for 95 \% significance level. However, validity of this assumption is not always guaranteed. For non-Gaussian distributions, we may require larger $\mathcal{S}$, or, alternatively, use a rank based test, as follows~\cite{kantz2004}.
 
 Using rank-based test, we want to test if $Q_{\text{orig}}$ is smaller or larger than the expected value of estimates produced by the null hypothesis model. If we generate $n_s$ surrogate estimates, then, we have $n_s$ estimates following the null hypothesis, each having a probability $2/n_s$ of being the smallest or largest. A false rejection will happen if $Q_{\text{orig}}$ happens to also follow the null hypothesis and is either the smallest or the largest, which happens with probablity $1 - \alpha \coloneqq 2/(n_s+1)$, where $\alpha$ is the confidence level. Hence, for confidence level $\alpha = 95 \%$, the number of surrogates should be $n_s = 38$~\cite{andreas2000}. Note that, since many of the algorithms used for estimating nonlinear measures are relatively computationally expensive, surrogate analysis with high confidence levels, especially on large datasets of multichannel signals such as EEG, is even more so.
 
@@ -1306,16 +1319,18 @@ Even this method is not without its drawbacks: due to the final reordering, the 
 
 \add[inline]{Maybe talk about the problems, e.g. endpoint mismatch? We will need to refer to them later.}
 
-\begin{enumerate}
+\begin{enumerate}[label*=\arabic*.]
   \item Compute and store the moduli of the original time series.
   \item Create an AAFT surrogate as follows:
-    \subitem Create a set of random numbers with Gaussian distribution.
-    \subitem Rank order the original time series, and reorder the random numbers created in the previous step such that they achieve the same ordering as the original time series.
-    \subitem Randomize the phases Fourier transform of the time series obtained in previous step and apply inverse Fourier transform.
-    \subitem Find the rank ordering of the time series obtained in the previous step, and reorder the original time series so that it assumes the same rank ordering.
+    \begin{enumerate}[label*=\arabic*.]
+      \item Create a set of random numbers with Gaussian distribution.
+      \item Rank order the original time series (or the one obtained in step 5.), and reorder the random numbers created in the previous step such that they achieve the same ordering as the original time series.
+      \item Randomize the phases Fourier transform of the time series obtained in previous step and apply inverse Fourier transform.
+      \item Find the rank ordering of the time series obtained in the previous step, and reorder the original time series so that it assumes the same rank ordering.
+    \end{enumerate}
   \item Replace the moduli of these surrogates by those of the original time series and apply inverse Fourier transform.
   \item Find the rank ordering of the time series obtained in the previous step, and reorder the original time series so that is assumes the same rank ordering.
-  \item Apply step 3. to time series obtained in the previous step, or stop if stopping criterion is reached.
+  \item Apply step 2. to time series obtained in the previous step, or stop if stopping criterion is reached.
 \end{enumerate}
 
 \section{Practial Applications}
@@ -1356,7 +1371,7 @@ Sleep disorder diagnosis may also relevant to this work for the very close conne
 
 Many studies focused on extracting Lyapunov exponents of EEGs measured during various sleep stages. The general pattern that emerged was that deep sleep stages exhibit lower complexity evidenced by lower fractal dimensionality and lower values of the largest Lyapunov exponent~\cite{stam2005}.
 
-Recurrence plots, and RQA in particular, have been demonstrated to be effective at decoding neuroscientific physiological time series. For example, they have been suggested as a method of lowering singal-to-noise ratio in analysis of event related potentials in response to a surprising stimulus, where repeated exposure would influence the outcome (and thus classical averaging methods are not viable)~\cite{marwan2007recurrence}. Moreover, they have been successfully employed in detecting epileptic seizures using intracranial recordings~\cite{pijn1997nonlinear}. Simple K-nearest neighbors classifiers achieved surprisingly high accuracies at emotion recognition tasks~\cite{bahari2013eeg}, and convolutional neural networks used recurrence plots for activity recognition~\cite{garcia2018classification}. Most importantly for our study, recurrence plots of signals in the left hemisphere were observed to qualitatively differ between healthy baseline and depressed patients. The authors suggested that this area is worth further exploration~\cite{acharya2015computer}.
+Recurrence plots, and RQA in particular, have been demonstrated to be effective at decoding neuroscientific physiological time series. For example, they have been suggested as a method of lowering signal-to-noise ratio in analysis of event related potentials in response to a surprising stimulus, where repeated exposure would influence the outcome (and thus classical averaging methods are not viable)~\cite{marwan2007recurrence}. Moreover, they have been successfully employed in detecting epileptic seizures using intracranial recordings~\cite{pijn1997nonlinear}. Simple K-nearest neighbors classifiers achieved surprisingly high accuracies at emotion recognition tasks~\cite{bahari2013eeg}, and convolutional neural networks used recurrence plots for activity recognition~\cite{garcia2018classification}. Most importantly for our study, recurrence plots of signals in the left hemisphere were observed to qualitatively differ between healthy baseline and depressed patients. The authors suggested that this area is worth further exploration~\cite{acharya2015computer}.
 
 \begin{table}[ht]
 \centering
@@ -1411,7 +1426,7 @@ On the other hand, as we will see in Section~\ref{sec:applications}, the techniq
 
 \chapter{Nonlinear Analysis Approach} \label{ch:nonlin-approach}
 \section{Dataset} \label{sec:dataset}
-The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}, and the recording was performed by the institution's local specialists. It comprises of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58).\footnote{We use the notation $\text{mean} \pm \text{std}$.} Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS)~\cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points~\cite{herrmann1998sunnybrook}: 
+The dataset was provided by the \href{http://www.nudz.cz/en/}{Czech National Institute of Mental Health}, and the recording was performed by the institution's local specialists. It comprises of 133 subjects, 104 women and 29 men, ranging in age from 30 to 65 (47.7 $\pm$ 9.58).\footnote{We use the notation $\text{mean} \pm \mathrm{std}$.} Handedness was not recorded. Montgomery-Asberg Depession Rating Scale (MADRS)~\cite{williams2008development} questionnaire assessed by a trained psychologist was used to measure depression severity. This psychometric measurement results in a depression score ranging from 0 (normal) to 40 (severe depression), usually with the following cutoff points~\cite{herrmann1998sunnybrook}: 
 \begin{description}
   \item[0 - 6]: symptom absent,
   \item[7 - 19]: mild depression,
@@ -1480,8 +1495,6 @@ Our procedure for their selection was as follows. For each nonlinear measure, we
   \item[(Algorithm-assisted) manual estimation:] Estimate the optimal embedding parameters by analyzing the algorithm outputs for multiple samples. Use algorithms for estimating the embedding parameters and analyze their results.
   \item[Automatic pipeline:] Create automatic pipeline, which will select the optimal parameters for each sample. This step was performed only for correlation dimension and the largest Lyapunov exponent.
 \end{description}
-
-In the following sections, 
 
 \subsection{State Space Reconstruction}
 \begin{figure} 
@@ -1801,35 +1814,35 @@ $\mathbf{k_{\mathrm{max}}}$ & \textbf{Sampling Frequency} (Hz) & \textbf{Recordi
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=\textwidth]{./Images/se_anal.png} }
-  \caption[Histograms of distances in embedding space.]{Histograms of pairwise distances between vectors in embedding space for gradually increasing embedding dimension $m$. The vertical red line indicates the value of the tolerance parameter $r=0.2*\sigma(x)$. We can see histograms shifting to the right with increasing embedding dimension and progressively overlapping more. This means that for high embedding dimensions, sample entropy will be small for any value of tolerance parameter $r$.}
+  \caption[Histograms of distances in embedding space.]{Histograms of pairwise distances between vectors in embedding space for gradually increasing embedding dimension $m$. The vertical red line indicates the value of the tolerance parameter $r=0.2*\mathrm{std}(x)$. We can see histograms shifting to the right with increasing embedding dimension and progressively overlapping more. This means that for high embedding dimensions, sample entropy will be small for any value of tolerance parameter $r$.}
 \label{fig:se-anal}
 \end{figure}
-The algorithm for computing sample entropy, described in Section~\ref{sec:se-theory}, requires selection of the embedding dimension $m$ and the tolerance parameter $r$. Embedding dimension $m$ is usually set to 1 or 2 and tolerance parameter $r$ is usually set at $0.1*\sigma(x)$ to $0.25*\sigma(x)$~\cite{jie2014emotion}. As can be seen in Table~\ref{tab:se-exp}, in all of the studies we evaluated, in spite of various applications and time series lengths, the same values were selected for $m$ and $\tau$, in particular, $m=2$ and $r=0.2*\sigma(x)$, where $\sigma(x)$ denotes standard deviation of the original time series. In Figure~\ref{fig:se-anal}, we can see why this is a reasonable choice. It shows histograms of pairwise distances in the embedding space for two successive embedding dimensions. With increasing embedding dimension, the histograms gradually overlap more, and for very high embedding dimensions, sample entropy becomes small for any $r$. Moreover, the histograms shift to the right, which requires higher value of $r$, but $r$ is a measure of the degree to which vectors are judged ``similar'', and thus should be kept low - for $r \geq \max_{i\in\{1,2,\dots,N\}} x_i$, all vectors will be counted in both embedding spaces and sample entropy is (approximately) zero.\footnote{The lowest value sample entropy can reach is $-\ln(2/\left( (N-m-1)(N-m)\right))$~\cite{richman2000physiological}.} For these reasons, we decided to follow the general concensus, and selected $m=2$ and $r=0.2*\sigma(x)$~\cite{hauge2011nonlinear, acharya2015novel, jie2014emotion, song2012automatic, acharya2012automated, mahajan2015unsupervised}.
+The algorithm for computing sample entropy, described in Section~\ref{sec:se-theory}, requires selection of the embedding dimension $m$ and the tolerance parameter $r$. Embedding dimension $m$ is usually set to 1 or 2 and tolerance parameter $r$ is usually set at $0.1*\mathrm{std}(x)$ to $0.25*\mathrm{std}(x)$~\cite{jie2014emotion}. As can be seen in Table~\ref{tab:se-exp}, in all of the studies we evaluated, in spite of various applications and time series lengths, the same values were selected for $m$ and $\tau$, in particular, $m=2$ and $r=0.2*\mathrm{std}(x)$, where $\mathrm{std}(x)$ denotes standard deviation of the original time series. In Figure~\ref{fig:se-anal}, we can see why this is a reasonable choice. It shows histograms of pairwise distances in the embedding space for two successive embedding dimensions. With increasing embedding dimension, the histograms gradually overlap more, and for very high embedding dimensions, sample entropy becomes small for any $r$. Moreover, the histograms shift to the right, which requires higher value of $r$, but $r$ is a measure of the degree to which vectors are judged ``similar'', and thus should be kept low - for $r \geq \max_{i\in\{1,2,\dots,N\}} x_i$, all vectors will be counted in both embedding spaces and sample entropy is (approximately) zero.\footnote{The lowest value sample entropy can reach is $-\ln(2/\left( (N-m-1)(N-m)\right))$~\cite{richman2000physiological}.} For these reasons, we decided to follow the general concensus, and selected $m=2$ and $r=0.2*\mathrm{std}(x)$~\cite{hauge2011nonlinear, acharya2015novel, jie2014emotion, song2012automatic, acharya2012automated, mahajan2015unsupervised}.
 
 \begin{table}[tbp]
   \centering
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 $\mathbf{r}$ & $\mathbf{m}$ & \textbf{Sampling Frequency} & \textbf{Recording Time} & \textbf{Application} & \textbf{Reference} \\ \hline
-$0.2 * \sigma(x)$ & 2 & - & 256 min & depression &~\cite{hauge2011nonlinear} \\ \hline
-$0.2 * \sigma(x)$ & 2 & 256 Hz & 5 min  & depression &~\cite{acharya2015novel} \\ \hline
-$0.2 * \sigma(x)$ & 2 & 512 Hz & 63 s & emotion recognition &~\cite{jie2014emotion} \\ \hline
-$0.2 * \sigma(x)$ & 2 & 173.6 Hz & 23.6 s & epilepsy &~\cite{song2012automatic} \\ \hline
-$0.2 * \sigma(x)$ & 2 & 173.6 Hz & 23.6 s & epilepsy &~\cite{acharya2012automated} \\ \hline
-$0.2 * \sigma(x)$ & 2 & 128 Hz & 30 s & denoising &~\cite{mahajan2015unsupervised} \\ \hhline{=|=|=|=|=|=}
-$0.2 * \sigma(x)$ & 2 & 250 Hz & 60 s & depression & - \\ \hline
+$0.2 * \mathrm{std}(x)$ & 2 & - & 256 min & depression &~\cite{hauge2011nonlinear} \\ \hline
+$0.2 * \mathrm{std}(x)$ & 2 & 256 Hz & 5 min  & depression &~\cite{acharya2015novel} \\ \hline
+$0.2 * \mathrm{std}(x)$ & 2 & 512 Hz & 63 s & emotion recognition &~\cite{jie2014emotion} \\ \hline
+$0.2 * \mathrm{std}(x)$ & 2 & 173.6 Hz & 23.6 s & epilepsy &~\cite{song2012automatic} \\ \hline
+$0.2 * \mathrm{std}(x)$ & 2 & 173.6 Hz & 23.6 s & epilepsy &~\cite{acharya2012automated} \\ \hline
+$0.2 * \mathrm{std}(x)$ & 2 & 128 Hz & 30 s & denoising &~\cite{mahajan2015unsupervised} \\ \hhline{=|=|=|=|=|=}
+$0.2 * \mathrm{std}(x)$ & 2 & 250 Hz & 60 s & depression & - \\ \hline
 \end{tabular}
 \caption[Literature review of SE $r$ and $m$ parameters.]{Summary of choices for the embedding dimension $m$ and tolerance $r$ parameters for sample entropy applied to EEG signals we found across literature. Note that all choices for $m$ and $r$ are the same.}
 \label{tab:se-exp}
 \end{table}
 \subsection{Frequency Band Amplitudes} \label{sec:band-ampl}
-We also analyzed mean frequency amplitudes in alpha, beta, gamma, delta and theta frequency bands, and found no differences between the studied groups. See Figure~\ref{fig:mba}.
+Although our focus in this study is to examine the relationship between depression scores, treatment response and nonlinear measures, we also computed the mean frequency amplitudes in alpha, beta, gamma, delta and theta frequency bands using discrete fast Fourier transform by averaging the amplitudes corresponding to the frequencies in the respective bands. Figure \ref{fig:mba} shows an example result for FP1 amplitude of a randomly selected patient. Then, we performed the analysis of differences between various subgroups described in Section \ref{sec:distanal}. No significant differences between any two of the studied subgroups were found, and the mean amplitude values exhibited large variance between individual patients. Therefore, we decided to not pursue this approach of frequency band analysis further in this study.
 
 \begin{figure} 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.7\textwidth]{./Images/mba.png} }
-  \caption[Typical range of mean band amplitudes.]{Typical range of mean band amplitudes in channel FP1.}
+  \caption[An example range of mean band amplitudes.]{An example distribution of mean band amplitudes in channel FP1 of a randomly selected recording.}
 \label{fig:mba}
 \end{figure}
 
@@ -1859,7 +1872,7 @@ DFA              & $n$                & GP on $(4,320)$   \\ \cline{2-3}
 HE               & $n$                & GP on $(0,20)$   \\ \hline
 HD               & $k_{\mathrm{max}}$ & 50   \\ \hline
 SE               & $m$                & 2   \\ \cline{2-3}
-                 & $r$                & $0.2*\sigma(x)$   \\ \hline
+                 & $r$                & $0.2*\mathrm{std}(x)$   \\ \hline
 \end{tabular}
 \caption[Summary of parameters.]{Summary of parameters used for computation of the nonlinear measures. The abbrevation GP refers to geometric progression.}
 \label{tab:paramsum}
@@ -1881,7 +1894,7 @@ An example of a result of such analysis for the largest Lyapunov exponent (embed
 To reduce the effects of possible nonstationarity, we attempted to find the most stationary window of the desired length using the stationarity test described in Section~\ref{sec:stationarity}. However, we found that selecting the least stationary window using this test did not improve the results as measured by the surrogate data analysis in Section~\ref{sec:surrogate-analysis}. This may be beacause the optimal effectiveness of AAFT and iAAFT the first and last point of the window should have the same value~\cite{andreas2000}. Moreover, selecting a different time window for each channel may result in inaccurate representation of the mental state by the vector of measures computed across channels. Therefore, it may be beneficial to use the same time window for all channels. If the results are dependent on the time during recording, then it would be advisable to select a fixed time window for all samples. Thus, we decided to skip this window selection step and pick a fixed time window for all channels and all recordings.
 \section{Analysis of Measure Distributions between Groups} \label{sec:distanal}
 \subsection{Before and After Treatment Groups} \label{sec:analbefaft}
-As the first step of our analysis, we conducted an investigation of the differences in the nonlinear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time.\add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient recieved personalized method of treatment, and the methods may have differing impact.
+As the first step of our analysis, we conducted an investigation of the differences in the nonlinear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time. \add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient recieved personalized method of treatment, and the methods may have differing impact.
 
 For each group, we performed two-sided Kruskal-Wallis test for the null hypothesis that the distributions of values computed for measurements before and after treatment are the same. No significant differences in distributions were found for DFA, HE, and HFD, $D_2$ and $\lambda_1$ computed using automatic selection of embedding parameters. Therefore, we include only results for the remaining measures. The results can be seen in Table~\ref{tab:bameans} in the Appendix.\footnote{In all tables, the p-value cutoffs for significance ratings are 0.05, 0.01, 0.005.} No significant differences between the groups are observed in DFA and HE values, and HFD and CD show differences only in left temporal areas (T3, T4). On the other hand, LLE shows signficant differences in frontal (F3, F4), ``central'' (C3, C4) and left temporal (T3) areas, with similar, yet less signficant differences in those areas are observed for SE values.
 
@@ -1962,7 +1975,7 @@ Out of those feature selection techniques, genetic algorithm was by far the most
 Evaluation was performed using 5-fold cross-validation. The best performing classifiers (based on accuracy, precision, recall, f-score, and number of features) were selected for each measure and for all measures by varying the maximum number of features considered by the genetic algorithm from 3 to the 1/10 of the corresponding training set size. Then, a brute force grid search with 5-fold cross validation was performed on each classifier to select 
 \begin{itemize}
   \item the optimal regularization stength, and norm for LR, and
-  \item the optimal regularization strength and kernel type (linear, polynomial, or radial basis function with coefficients $\gamma = 1/n_f$, where $n_f$ is the number of selected features) for SVM.\unsure{Am I justified in changing the kernel type?}
+  \item the optimal regularization strength and kernel type (linear, polynomial, or radial basis function with coefficients $\gamma = 1/n_f$, where $n_f$ is the number of selected features) for SVM. \unsure{Am I justified in changing the kernel type?}
 \end{itemize}
 This resulted in slight improvement in accuracy, and correspondingly slight bias of the reported classifiers.
 
@@ -2366,7 +2379,7 @@ Since both recurrence plot and cosine similarity matrix are symmetric, we applie
 
 \section{Preprocessing} \label{sec:dl-preprocess}
 % Preprocessing: Filtering, running average and standard deviation.
-Signals were preprocessed before either image-encoding or direct classification. First, the electrode voltages were converted to mV to improve numerical stability. Then, optionally, a high-pass Butterworth filter of order 3 with 4 Hz cutoff frequency was applied. It has been suggested that in some cases, filtering the singals may improve classification performance.\add{Elaborate, cite, mayber refer to discussion in previous chapter.} In image-encoded case, the signals were encoded at this stage. Finally, Welford's algorithm for running mean and standard deviation was used to compute the mean and variance over the whole dataset, and the dataset was then centered and normalized according to the found values.
+Signals were preprocessed before either image-encoding or direct classification. First, the electrode voltages were converted to mV to improve numerical stability. Then, optionally, a high-pass Butterworth filter of order 3 with 4 Hz cutoff frequency was applied. It has been suggested that in some cases, filtering the signals may improve classification performance. \add{Elaborate, cite, mayber refer to discussion in previous chapter.} In image-encoded case, the signals were encoded at this stage. Finally, Welford's algorithm for running mean and standard deviation was used to compute the mean and variance over the whole dataset, and the dataset was then centered and normalized according to the found values.
 
 \section{Architecture} \label{sec:dl-arch}
 Our choice of CNN architectures was heavily inspired by, and almost identical to, those used in~\cite{schirrmeister2017deep}. These architectures, and in particular the second one (in order of description below), were designed by the authors to be analogous to the FBCSP pipeline described in detail in Section~\ref{sec:csp}. 
@@ -2524,11 +2537,11 @@ For the implementation in this chapter, we used the same software as in Chapter~
 
 \chapter*{Conclusion} \label{ch:concl}
 \addcontentsline{toc}{chapter}{Conclusion}
-In this study, we incorporate both thorough review of the theory of nonlinear dynamical systems in relation to EEG analysis along with overview of the relevant algorithms and techniques for nonlinear measures extraction and input parameter estimation, comprehensive literature review, and practical application of those techniques on an original dataset. Furthermore, we also present and evaluate an approach to the same task based on multilayer convolutional neural networks and objective function optimization using gradient descent.
+In this study, we incorporate both thorough review of the theory of nonlinear dynamical systems in relation to EEG analysis along with overview of the relevant algorithms and techniques for nonlinear measures extraction and input parameter estimation, comprehensive literature review, and practical application of those techniques on an original dataset. Furthermore, we develop and evaluate an approach to the same task based on multilayer convolutional neural networks and objective function optimization using iterative optimization.
 
 \section*{Contributions}
 \subsection*{Analysis of Correlation between Depression Score and Nonlinear Measures}
-Investignating the significance of correlations between nonlinear measures and depression scores, we found that LLE, DFA, HE, HD, and SE computed from EEG signals recorded from channels near cetain cortical areas are significantly correlated with depression score. The most statistically significant correlations were found for LLE, which, in~\cite{hosseinifard2013} was found as least discriminative in a similar experimental setting. Although CD showed no significant correlations with depression score per channel, using it in combination with other nonlinear measures or by combining a number of channels resulted in one of the most accurate depression classifiers evaluated. For selection of channels relevant for classification, genetic algorithm resulted in substantially more accurate classifiers than any other feature selection method evaluated.
+Investigating the significance of correlations between nonlinear measures and depression scores, we found that LLE, DFA, HE, HD, and SE computed from EEG signals recorded from channels near certain cortical areas are significantly correlated with depression score. The most statistically significant correlations were found for LLE, which, was found as least discriminative in a similar experimental setting \cite{hosseinifard2013}. Although CD showed no significant correlations with depression score per channel, using it in combination with other nonlinear measures or by combining a number of channels resulted in one of the most accurate depression classifiers evaluated. Out of the feature selection algorithms used for selection of the most discriminative measures and channels, genetic algorithm was shown to be the most effective. 
 
 All the studies reviewed in Section~\ref{sec:applications} included a control group of symptomless, clinically healthy patients, whereas our dataset consists exclusively of patients suffering from MDD of various symptom severity. Nevertheless, the accuracies achieved by the classifiers are substantial, indicating possible relationship between depression severity and values of nonlinear measures recorded in EEG signals obtained from various cortical regions, and opening a possibility for developing a regression model predicting depression score making use of nonlinear measures.
 
@@ -2538,13 +2551,13 @@ As we outlined in Section~\ref{sec:applications-prog}, most of the EEG-based tre
 Indeed, in Section~\ref{sec:nl-res-prog}, LLE was shown to be potent feature for treatment outcome prediction classifiers. These results may encourage further exploration of the potential use of nonlinear dynamical measures for treatment outcome prediction, which, to our knowledge, is nonexistent at present.
 
 \subsection*{Analysis of Spatial Distribution of Nonlinear Measures across Brain Regions in Depression}
-Although some neuroscientific theories suggest that medical depression is caused by malfuction in the right hemisphere~\cite{hecht2010depression, kwon1996right}, in Sections~\ref{sec:analdepdif} and~\ref{sec:results-nl}, we found nonlinear measures computed in both hemispheres contribute significantly to high depression score. The distributions of correlation significance is notably particular to each measure, possibly indicating that variously distributed and different processes captured by each measure contribute to depression severity.\add{Too speculative? Belongs more to discussion?} For example, DFA and HE show most significant correlations with depression score in right parietal regions, LLE and SE in right temporal regions,  Nevertheless, the most successful depression classifiers made use especially of channels in temporal areas (T6 in particular).
+Although some neuroscientific theories suggest that medical depression is caused by malfuction in the right hemisphere~\cite{hecht2010depression, kwon1996right}, in Sections~\ref{sec:analdepdif} and~\ref{sec:results-nl}, we found nonlinear measures computed in both hemispheres contribute significantly to high depression score. The distributions of correlation significance is notably particular to each measure, possibly indicating that variously distributed and different processes captured by each measure contribute to depression severity. \add{Too speculative? Belongs more to discussion?}For example, DFA and HE show most significant correlations with depression score in right parietal regions, LLE and SE in right temporal regions,  Nevertheless, the most successful depression classifiers made use especially of channels in temporal areas (T6 in particular).
 
 \subsection*{Analysis of Nonlinear Measure and Input Parameter Estimation Algorithms and Procedures for EEG Analysis}
-Since computation of nonlinear measures requires laborious selection of input parameters and knowledge of the algorithms in order to interpret the results, these methods often remain inaccessible to practitioners who has not yet become experts in the field of nonlinear dynamical analysis~\cite{schmid1996indications}. Therefore, there is a need for automated procedures to ease application of these methods and increase their use and availability. For the purpose of computing LLE and CD, in Section~\ref{sec:estim-nl}, we evaluated a range of algorithms for estimation of embedding dimension and time delay parameters, including implementations of automated pipelines for computation of said measures. Although these input parameter estimation algorithms remain widely used (see Sections~\ref{sec:lle-rev} and~\ref{sec:corrdim-rev}), we found that, for out dataset, their outputs varied widely for each method, and provided only a crude approximation for parameters which produced more discriminative measures. One of the most consistent and informative estimation algorithms was ILD of our own implementation, which, however, suffers from relatively high computational costs.
+Since computation of nonlinear measures requires laborious selection of input parameters and knowledge of the algorithms in order to interpret the results, these methods often remain inaccessible to practitioners who has not yet become experts in the field of nonlinear dynamical analysis~\cite{schmid1996indications}. Therefore, there is a need for automated procedures to ease application of these methods and increase their use and availability. For the purpose of computing LLE and CD, in Section~\ref{sec:estim-nl}, we evaluated a range of algorithms for estimation of embedding dimension and time delay parameters, including implementations of automated pipelines for computation of said measures. Although these input parameter estimation algorithms remain widely used (see Sections~\ref{sec:lle-rev} and~\ref{sec:corrdim-rev}), we found that, for our dataset, their outputs varied widely for each method, and provided only a crude approximation for parameters which produced more discriminative measures. One of the most consistent and informative estimation algorithms was ILD of our own implementation, which, however, suffers from relatively high computational costs.
 
 \subsection*{Evaluation of FBCSP-inspired Neural Network Architectures for Depression Diagnosis and Prognosis}
-In Section~\ref{sec:dl-results}, we evaluated two CNN architectures which were previously shown to be successfully applied to decoding task-related information~\cite{schirrmeister2017deep, schirrmeister2017deeppatho}. Although the models achieved relatively high accuracy when trained and evaluated using cross validation across samples, when trained and evaluated using cross validation across recordings obtained before treatment from individual, distinct patients, the models achieved only modest accuracy, and did not generalize to the test set (see Section~\ref{sec:dl-limit}). This observation may be explained by low intrapersonal, and high intrapersonal variance of the EEG signals, which results in high correlation of samples corresponding to one patient, and thus in the presence of high number of samples from small number of patients, the model is trained to associate labels to samples based on the patient-charecterstic patterns, instead of label-characteristic patterns. Indeed, a number of studies suggest presence of phenotypic traits in EEG, and personal identification using EEG is a flourishing field~\cite{del2014electroencephalogram} (see Section~\ref{sec:dl-limit}). If this hypothesis holds, then performance of these models may be improved by extending the dataset with enough patients with similar patient-characteritic patterns and different label-characteristic patterns. Such dataset may be obtained by tracking patients' depression score across extended time span.
+In Section~\ref{sec:dl-results}, we evaluated two CNN architectures which were previously shown to be successfully applied to decoding task-related information~\cite{schirrmeister2017deep, schirrmeister2017deeppatho}. The models achieved relatively high accuracy when trained and evaluated using cross validation across samples. However, when trained and evaluated using cross validation across recordings obtained before treatment from individual, distinct patients, the models achieved only modest accuracy, and did not generalize to the test set (see Section~\ref{sec:dl-limit}). This observation may be explained by low intrapersonal, and high intrapersonal variance of the EEG signals, which results in high correlation of samples corresponding to one patient, and thus in the presence of high number of samples from small number of patients, the model is trained to associate labels to samples based on the patient-charecterstic patterns, instead of label-characteristic patterns. Indeed, a number of studies suggest presence of phenotypic traits in EEG, and personal identification using EEG is a flourishing field~\cite{del2014electroencephalogram} (see Section~\ref{sec:dl-limit}). If this hypothesis holds, then performance of these models may be improved by extending the dataset with enough patients with similar patient-characteritic patterns and different label-characteristic patterns. Such dataset may be obtained by tracking patients' depression score across extended time span.
 
 % \section*{Limitations}
 % \begin{itemize}
@@ -2575,19 +2588,21 @@ In Section~\ref{sec:dl-results}, we evaluated two CNN architectures which were p
 
 The nature of our dataset restricts us to analysis of patients suffering from depressive symptoms to varying degrees. Although obtaining accuracy lower in comparison with studies employing healthy, symptom-free group as well as depressed patients is justifiable, we believe that this accuracy can still be significantly improved with more advanced noise-reduction preprocessing techniques, and recording environment insulated from power-line, electronic devices, and other sources of electromagnetic interference. Moreover, the patients should be advised to keep their eyes closed, an ECG may recorded simulatenously and later used to remove interference from the heart muscle. Potentially, machine learning techniques may be used improve the signal quality by continuously estimating it, and even detecting events such as lost electrode contact~\cite{schirrmeister2017deep}.
 
-Due to the fact that computing nonlinear dynamical measures on a nonstationary signal is not theoretically justified (see Section~\ref{sec:stationarity}, another possibility for improving the estimation is by acquiring longer recordings, and computing the nonlinear measures on short, overlapping time windows~\cite{andreas2000}. In spite of the reduction in estimation accuracy (see Sections~\ref{sec:req-lyap} and~\ref{sec:req-corr}), it may be beneficial in case of subtantial nonstationarity (which is common in EEG recordings), since over short enough time interval, even severely nonstationary time series may be regarded as stationary~\cite{andreas2000}. Although not part of this study, we already initiated this analysis. 
+Due to the fact that computing nonlinear dynamical measures on a nonstationary signal is not theoretically justified (see Section~\ref{sec:stationarity}), another possibility for improving the estimation is by acquiring longer recordings, and computing the nonlinear measures on short, overlapping time windows~\cite{andreas2000}. In spite of the reduction in estimation accuracy (see Sections~\ref{sec:req-lyap} and~\ref{sec:req-corr}), it may be beneficial in case of subtantial nonstationarity (which is common in EEG recordings), since over short enough time interval, even severely nonstationary time series may be regarded as stationary~\cite{andreas2000}. Although out of the main scope of study, we already initiated this analysis. 
 
 Nevertheless, the approach to nonlinear dynamical analysis we employed in this study is not conceptually ideal in itself. It has been shown repeatedly that the initial hypothesis of low dimensional attractor explaining braing dynamics is incorrect~\cite{skinner1994low, rapp1995there, andreas2000}.\footnote{With possible exeption of brain dynamics in epileptic seizures~\cite{stam2005}.} Although this does not mean that these measures are meaningless~\cite{albano1993reliability} (see Section~\ref{sec:nl-limit}), development of novel nonlinear measures reflecting the advancements in understanding of brain dynamics is called for~\cite{stam2005}. For example, it has been suggested that measures of nonlinear coupling between time series, reflecting the discovery of generalized synchronization, may be considerably more relevant than local measures studying properties of a low-dimensional attractor~\cite{stam2005}.
 
-We hypothesized that generating a dataset containing multiple recordings obtained from the same individuals with different depression scores, e.g. by tracking long-term changes in depression score while recording EEG, may improve classification of simple deep learning models. At the same time, tracking long-term reactions to treatment using carefully recorded EEG signals and depression scores may facilitate development of tools which may advise on the optimal patient-specific treatment method. Another potential avenue for improvement of the deep learning approach may lie in designing deep learning architectures inspired by using modalities from nonlinear measures, their estimation algorithms, and other biomarkers.
+We hypothesized that generating a dataset containing multiple recordings obtained from the same individuals with different depression scores, e.g. by tracking long-term changes in depression score while recording EEG, may improve classification of deep learning models. At the same time, tracking long-term reactions to treatment using carefully recorded EEG signals and depression scores may facilitate development of tools which advise on the optimal patient-specific treatment method. Moreover, a common problem in treatment of depressive patients is frequent disease relapse. Hence, this may provide further motivation for continuous tracking of depression score using EEG for the purpose of early relapse detection, resulting in positive feedback loop and progressive improvement in accuracy.
 
-Finally, we found significant differences between LLE values for patients responding and nonresponding to treatment, as well as developed simple, yet relatively accurate response prediction models based on nonlinear measures. Our hope is that these findings may spart interest in nonlinear measures for prediction of treatment outcome.
+Another potential avenue for improvement of the deep learning approach may lie in deep learning architectures using modalities from nonlinear measures and other biomarkers, or in architectures inspired by the estimation algorithms of those measures. 
+
+Finally, we found significant differences between LLE values for patients responding and nonresponding to treatment, as well as developed simple, yet relatively accurate response prediction models based on nonlinear measures. Our hope is that these findings may spark interest in nonlinear measures for prediction of treatment outcome.
 
 \bibliographystyle{unsrt}
 \bibliography{refs}
 
 \appendix
-\chapter*{Appendix}
+\chapter*{Appendix} \label{ch:appendix}
 \addcontentsline{toc}{chapter}{Appendix}
 \begin{landscape}
   \begin{figure} 
