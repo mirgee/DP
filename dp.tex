@@ -2091,34 +2091,11 @@ Hereby we provide a summary of used software:
 \end{description}
 
 \chapter{Deep Learning Approach} \label{ch:dl}
-
 \section{Convolutional Neural Networks}
 In this section, we briefly introduce the Convolutional Neural Networks (CNNs), a class of neural network architectures, which we use in this chapter to perform the depression diagnosis and prognosis classification tasks.
 
-\subsection{History}
-The classical approach to image pattern recognition consists of the following stages:
-\begin{description}
-  \item[preprocessing:] supressing unwanted distortions and noise, enhancement beneficient for further processing,
-  \item[object segmetation:] separating disparate objects from the background,
-  \item[feature extraction:] gathering relevant information about the properties of the objects, removing irrelevant variations,
-  \item[classification:] categorizing segmented objects based on obtained features into classes.
-\end{description}
-
-The preprocessing step may require additional assumptions about the data or further processing, which are potentially too restrictive or too broad. Getting around this limitation requires dealing with complications such as high dimensionality of the input (number of pixels) and desirability of invariance to a number of allowable distortions and geometrical transformations.
-
-Artificial neural networks in combination with gradient-based learning are one possible solution to the problem. By gradually optimizing a set of weights based on a training data set using a differentiable error function, they provide a framework for learning a suitable set of assumptions automatically from the data.
-
-One of the oldest neural network architectures, fully connected multi-layer perceptron (FC-MLP), can be theoretically used for image pattern recognition. However, it has at least the following drawbacks \cite{lecun1999object}:
-\begin{description}
-  \item[parameter explosion:] the number of parameters of such network is exponential in the number of layers, increasing the capacity of the network and therefore need for more data,
-  \item[no invariance:] no invariance even with respect to common geometrical transformation such as translation, rotation and scaling,
-  \item[ignoring input topology:] natural images exhibit strong local structure and high correlation between intensities of neighboring pixels, but FC-MLPs are unstructured - inputs can be presented in any order.
-\end{description}
-
-Although the main idea of CNNs dates back to 1980, when K. Fukushima introduced neocognitron~\cite{fukushima1982}, the back-propagation algorithm was not known at the time. The first convolutional architecture successfully applied on an image pattern recognition problem by attempting to solve the aforementioned problems, dubbed LeNet-5, was proposed in 1998 by Y. LeCun, L. Bottou, Y. Bengio and P. Haffner~\cite{LeCun1998}.
-
 \subsection{Mathematical Background}
-In this section, we aim to make some of essential terms used in this chapter more concrete by providing their mathematical definitions. The first term requiring a definition is the term convolution, present in the name of the neural network class.
+In order to make some of the essential terms used in this chapter more concrete, we will provide their definitions in the following text. The first term requiring a definition is the term convolution, which gives the name to convolutional neural networks.
 \begin{dfn}
   Let $I$ be an image function, $K$ a kernel. A (discrete) \textbf{convolution} of $I$ and $K$ is a linear operation defined as
   \begin{align}
@@ -2160,22 +2137,47 @@ When discussing the distinguishing properties of CNNs, we will use the the terms
 
 Invariance to a transformation means that the if the transformation is applied to the input of the function, the output remains the same. Equivariance, on the other hand, means that if the transformation is applied to the input, the output is transformed in the same way. For example, as we will see in Section \ref{sec:pooling}, CNNs are invariant to local translation, but are not invariant to rotation, for example. Furthermore, convolution is an operation equivariant to translation \cite{goodfellow2016}.
 
-A neural network can be viewed as a function approximation model based on an iterative optimization algorithm. There is a number of such algorithms in use, but many of them are variants of \textbf{gradient descent} algorithm. Gradient descent is a first order iterative method of finding an extremum a differentiable function $f : \RR^m \rightarrow \RR^n$, $f \in C^1$, based on continually moving a point in its domain space in the opposite direction of its gradient at that point, until the absolute value of the gradient is below a certain threshold. See Algorithm~\ref{alg:gd}.
+A neural network can be viewed as a function approximation model based on an iterative optimization algorithm. There is a number of such algorithms in use, but many of them are variations of \textbf{gradient descent} algorithm, introduced by Werbos in 1974 \cite{werbos1974beyond}. Gradient descent is a first order iterative method of finding an extremum of a differentiable function $f : \RR^m \rightarrow \RR^n$, $f \in C^1$, based on continually moving a point in its domain space in the opposite direction of its gradient at that point, until the absolute value of the gradient is below a certain threshold. 
 
 \begin{algorithm}
-  \caption{A basic version of gradient descent algorithm.}
+  \caption{A basic version of gradient descent algorithm. The parameter $\alpha$ is called the learning rate.}
   \label{alg:gd}
 \begin{algorithmic}[1]
-  \State Initialize random $x_0 \in \RR^n$
+  \State Initialize random $x_0 \in \RR^n$,
   \State $n \gets 0$
   \State step\_size $\gets 1$  
   \While{step\_size $ < \text{threshold}$ and $n < $ iters\_limit}
-  \State $x_{n+1} = x_n - \epsilon * \mathrm{grad} f(x_n)$
+  \State $x_{n+1} = x_n - \alpha * \mathrm{grad} f(x_n)$
   \State step\_size $\gets |x_{n+1} - x_n|$ 
   \State $n \gets n + 1$
+  \State Optionally update $\alpha$
   \EndWhile
 \end{algorithmic}
 \end{algorithm}
+
+The family of first order optimization methods is vast, including techniques such as stochastic variations of gradient descent \cite{robbins1951stochastic}, gradient descent with momentum \cite{rumelhart1988learning}, RMSProp (Root Mean Squared Propagation) \cite{tieleman2012lecture}, and Adam (Adaptive Moment estimation) \cite{kingma2014adam}. In Algorithm \ref{alg:gd}, we can see that gradient descent consists of two main steps: computation of the gradient $\mathrm{grad} f(x_n)$, and the parameter update. Most of the variations modify one at least one those steps, i.e. the step direction and its magnitude.
+
+\subsection{History}
+The classical approach to image pattern recognition consists, in general, of the following stages:
+\begin{description}
+  \item[preprocessing:] supressing unwanted distortions and noise, enhancement beneficient for further processing,
+  \item[object segmetation:] separating disparate objects from the background,
+  \item[feature extraction:] gathering relevant information about the properties of the objects, removing irrelevant variations,
+  \item[classification:] categorizing segmented objects based on obtained features into classes.
+\end{description}
+
+The preprocessing step may require additional assumptions about the data or further processing, which are potentially too restrictive or too broad. Getting around this limitation requires dealing with complications such as high dimensionality of the input (number of pixels) and desirability of invariance to a number of allowable distortions and geometrical transformations.
+
+Artificial neural networks in combination with gradient-based learning are one possible solution to the problem. By gradually optimizing a set of weights based on a training data set using a differentiable error function, they provide a framework for learning a suitable set of assumptions automatically from the data.
+
+One of the oldest neural network architectures, fully connected multi-layer perceptron (FC-MLP), can be theoretically used for image pattern recognition. However, it has at least the following drawbacks \cite{lecun1999object}:
+\begin{description}
+  \item[parameter explosion:] the number of parameters of such network is exponential in the number of layers, increasing the capacity of the network and therefore need for more data,
+  \item[no invariance:] no invariance even with respect to common geometrical transformation such as translation, rotation and scaling,
+  \item[ignoring input topology:] natural images exhibit strong local structure and high correlation between intensities of neighboring pixels, but FC-MLPs are unstructured - inputs can be presented in any order.
+\end{description}
+
+Although the main idea of CNNs dates back to 1980, when K. Fukushima introduced neocognitron~\cite{fukushima1982}, the back-propagation algorithm was not widely known at the time. The first convolutional architecture successfully applied on an image pattern recognition problem by attempting to solve the aforementioned problems, dubbed LeNet-5, was proposed in 1998 by Y. LeCun, L. Bottou, Y. Bengio and P. Haffner~\cite{LeCun1998}.
 
 \subsection{Properties} \label{sec:properties-cnn}
 \begin{figure} 
@@ -2186,15 +2188,15 @@ A neural network can be viewed as a function approximation model based on an ite
 \label{fig:lenet-5}
 \end{figure}
 
-Bearing resemblence to visual processing in biological organisms\footnote{As early as in 1968, D. H. Hubel and T.N. Wiesel discovered that some cells (called simple cells) in cat's primary visual cortex (V1) with small receptive fields (shared by neighboring neurons) are sensitive to straight lines and edges of light of particular orientation, and other cells (called complex cells) with larger receptive fields further in the visual cortex also respond to straight lines and edges, but with invariance to translation~\cite{Hubel1968}.}, LeNet-5 proposed the following design principles to enforce \emph{shift, scale and distortion invariance}:~\cite{lecun1999}
+Being inspired by visual processing systems in biological organisms\footnote{As early as in 1968, D. H. Hubel and T.N. Wiesel discovered that some cells (called simple cells) in cat's primary visual cortex (V1) with small receptive fields (shared by neighboring neurons) are sensitive to straight lines and edges of light of particular orientation, and other cells (called complex cells) with larger receptive fields further in the visual cortex also respond to straight lines and edges, but with invariance to translation~\cite{Hubel1968}.}, LeNet-5 proposed the following design principles to enforce \emph{shift, scale and distortion invariance}~\cite{lecun1999}:
 \begin{description}
   \item[local receptive fields:] each neuron in a layer receives input from a small neighborhood in the previous layer,
   \item[shared weights:] each layer is composed of neurons organized in planes within which each neuron have the same weight vector (feature map),
-  \item[spatial subsampling:] adding a subsampling layers, which reduce the resolution of the previous layer by averaging or taking the maximal value of neighboring pixels in the previous layer.
+  \item[spatial subsampling:] adding a subsampling layers, which reduce the resolution of the previous layer by averaging or by taking the maximum value of neighboring pixels in the previous layer.
 \end{description}
-
+In the following, we will describe each of these properties and their implications in more detail.
 \subsubsection{Local Receptive Fields} \label{sec:local-rec-fields}
-\emph{Local receptive fields} enable the network to synthesize filters that produce strong response to elementary salient features in the early layers (such as lines, edges and corners in a visual input, and their equivalents in other modalities), and then learn to combine them in the subsequent layers to produce higher-order feature detectors.
+\emph{Local receptive fields} enable the network to synthesize filters that produce strong response to elementary salient features in the early layers (such as lines, edges and corners in a visual input, and their equivalents in other modalities), and then learn to combine them in the subsequent layers to produce higher-order feature detectors. This property enables the models to induce the previously hardcoded filters from data.
 
 \begin{figure} 
 \centering
