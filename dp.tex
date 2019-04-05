@@ -2184,7 +2184,7 @@ Although the main idea of CNNs dates back to 1980, when K. Fukushima introduced 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{./Images/lenet-5.png} }
-  \caption[LeNet-5 architecture diagram.]{LeNet-5 architecture~\cite{lecun1999}.}
+  \caption[LeNet-5 architecture diagram.]{Architecture diagram of LeNet-5, one of the first convolutional neural networks successfully applied to image classification~\cite{lecun1999}.}
 \label{fig:lenet-5}
 \end{figure}
 
@@ -2202,11 +2202,11 @@ In the following, we will describe each of these properties and their implicatio
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{./Images/receptive_field.png} }
-  \caption[Receptive field.]{Receptive field~\cite{goodfellow2016}.}
+  \caption[Receptive field.]{Visual depiction of the concept of a receptive field~\cite{goodfellow2016}. The upper diagram shows the receptive field of $s_3$ unit in case of kernel width of 3, whereas the bottom diagram shows the same receptive field in case of fully connected layers. We can see that the second case will require substantially more parameters stored in memory.}
 \label{fig:receptive_field}
 \end{figure}
 
-For a visual explanation of the concept of receptive field, see Figure~\ref{fig:receptive_field}. The locality of of those receptive fields implies sparser connectivity, and hence more efficient computations in comparison with fully connected neural networks. A fully connected neural network with no hidden layers with $m$ inputs and $n$ outputs has $m \times n$ weight parameters, and the correspoding feed forward pass (matrix multiplication) is of $O(m \times n)$ time complexity per input. If the number of connections per output unit is limited to $k < m$, the achieved runtime is $O(k \times n)$, where $k$ is usally in practice several orders of magintude smaller than $m$~\cite{goodfellow2016}.
+For a visual explanation of the concept of receptive field, see Figure~\ref{fig:receptive_field}. The locality of of those receptive fields implies sparser connectivity, and hence more efficient computations in comparison with fully connected neural networks. A fully connected neural network with no hidden layers with $m$ inputs and $n$ outputs has $m \times n$ weight parameters, and the correspoding feed forward pass (matrix multiplication) is of $O(m \times n)$ time complexity per input. If the number of connections per output unit is limited to $k < m$, the achieved runtime is $O(k \times n)$, where $k$ is usally in practice several orders of magnitude smaller than $m$~\cite{goodfellow2016}.
 
 In shallow neural networks, locality of receptive fields implies locality of ``influence'' of each input unit on the output. In deep neural networks, on the other hand, units in the deeper layers can be indirectly connected to some or all units of the input, thus enabling them to achieve aforementioned effect of combining more complex features from simpler ones.
 
@@ -2224,7 +2224,7 @@ One of the drawbacks of classical CNNs is that although convolution in combinati
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.5\textwidth]{./Images/shared_weights.png} }
-  \caption[Shared weights.]{Shared weights~\cite{goodfellow2016}.}
+  \caption[Shared weights.]{Visual depiction of the concept of shared weights~\cite{goodfellow2016}. Black arrows in both the upper and lower models correspond to connections which use a single shared weight parameter. In the upper model, where the black arrow marks the central unit of a kernel of size 3, a single parameter is reused at all output locations. In the lower, fully connected model without shared weights, each parameter is used only at a single location.}
 \label{fig:shared_weights}
 \end{figure}
 
