@@ -213,7 +213,7 @@
 
 \begin{lyxlist}{MMMMMMMMM}
 \begin{singlespace}
-\item [{Author:}] \textbf{Bc. Miroslav Kovář}
+\item [{Author:}] \textbf{Miroslav Kovář}
 \item [{Supervisor:}] \textbf{M.Sc. M.A. Sebastián Basterrech, Ph.D.}
 \end{singlespace}
 
@@ -256,19 +256,19 @@
 
 \noindent \emph{\Large{}Acknowledgment:}{\Large \par}
 
-\noindent Some acknoledgment here.
+\noindent I would like to thank my supervisor M.Sc. M.A. Sebastián Basterrech, Ph.D. for his support, encouragement and feedback throughout the time of writing the thesis. I consider myself lucky to having been guided by a supervisor who has shown such keen interest in the topic and dedication to the project. 
 
 \vfill
 
 \noindent \emph{\Large{}Author's declaration:}{\Large \par}
 
-\noindent I declare that this research project is entirely
+\noindent I declare that this thesis is entirely
 my own work and I have listed all the used sources in the bibliography.
 
 \bigskip{}
 
 
-\noindent Prague, \documentdate\hfill{}Bc. Miroslav Kovář
+\noindent Prague, \documentdate\hfill{} Miroslav Kovář
 
 \vspace{2cm}
 
@@ -287,7 +287,7 @@ my own work and I have listed all the used sources in the bibliography.
 \bigskip{}
 
 
-\noindent \emph{Autor:} Bc. Miroslav Kovář
+\noindent \emph{Autor:} Miroslav Kovář
 
 \bigskip{}
 
@@ -318,9 +318,14 @@ Artificial Intelligence Center, FEE, CTU Prague
 
 
 \noindent \emph{Abstrakt:} \bigskip{}
+Depresivní porucha je závažným psychiatrickým onemocněním s vysokou globální prevalencí, závažnými dopady na kvalitu života, a v nejvážnější podobě múže vyústit sebevraždou. Brzká diagnóza a přesná předpověď průběhu léčby tedy může vést k podstatné redukci utrpení.
+V této práci aplikujeme techniky nelineární dynamické analýzy a iterativní optimizace konvolučních neuronových sítí na problém predikce vážnosti deprese a reakce na léčbu na datasetu EEG záznamů.
+Pomocí nelineárních metrik jsme obdrželi přesnost předpovědi na obou úkolech okolo 75\% a pozorujeme známky, že největší Lyapunův exponent může být relevantní pro predikci reakce na léčbu.
+Navzdory nesnadnosti studovaných problémů poskytujeme nový pohledy na diagnostiku psychiatrických onemocnění a ukazujeme potenciál nelineárních metrik pro analýzu EEG záznamů depresivních pacientů.
 
 
-\noindent \emph{Klíčová slova:} 
+
+\noindent \emph{Klíčová slova:} strojové učení, nelineární dynamická analýza, konvoluční neuronové sítě, elektroencefalografie, depresivní porucha
 
 \selectlanguage{american}%
 \vfill{}
@@ -335,7 +340,7 @@ Artificial Intelligence Center, FEE, CTU Prague
 \bigskip{}
 
 
-\noindent \emph{Author:} Bc. Miroslav Kovář
+\noindent \emph{Author:} Miroslav Kovář
 
 \bigskip{}
 
@@ -752,7 +757,7 @@ In the previous section, we have introduced a concept of state space of a dynami
 
 However, it is not necessary to reconstruct the entire original state state space of the system. In general, we are only interested in the subspace where the attractor of the system evolves. Thus, one possible approach to nonlinear time series analysis consists of the following steps~\cite{stam2005}: 
 \begin{enumerate}
-  \item reconstruction of the attractor \info{Saying dynamics is not true. We are not reconstructing the vector field $\mathbf{F}$.} of given system from recorded data,
+  \item reconstruction of the attractor \info{Saying dynamics is not true. We are not reconstructing the vector field $\mathbf{F}$.} of a given system from recorded data,
   \item characterization of the reconstructed attractor,
   \item checking validity of the results with surrogate data testing.
 \end{enumerate}
@@ -2555,10 +2560,11 @@ Another modification of the training procedure was evaluated. The split between 
 
 A possible explanation for the observed result is as follows. It seems that the relatively high performance obtained in the previous section was mostly due to small intrapersonal variance and high interpersonal variance of the patterns in the EEG signals resulting in the network being trained to map patient-characteristic patterns to labels, instead of mapping label-characteristic patterns to labels. Hence, the models overfit over a small number of epochs to the training set of small number of patients, and is unable to generalize to another set of patients.
 
-This hypothesis is supported by a considerable amount of research dedicated to finding subject specific traits in EEG~\cite{del2014electroencephalogram}. There is ample evidence that certain aspects of EEG morphology are phenotypic. In~\cite{davis1936action}, the authors concluded that EEG of monozygotic twins are identical, whereas EEG of dizygotic twins show lesser degree of similarity. This result has been replicated multiple times and using various methods. Furthermore, alpha peak frequency and peak frequency in occipital regions seems strongly heritable~\cite{goodfellow2016}. Since then, a number of EEG-based identity verification systems have been proposed~\cite{del2014electroencephalogram}. If this hypothesis holds, then the observed lack of generalization may be improved by increasing the number of patients included in the dataset. Assuming that the dataset would then contain large enough aggregate of patients with small variance in patient-characteristic patterns and, at the same time, high enough variance in depression scores and treatment response, large training accuracy could be achieved by fitting the label-characteristic patterns. Conceivably, models trained on such dataset would generalize to patients not included in the training set.
+This hypothesis is supported by a considerable amount of research dedicated to finding subject specific traits in EEG~\cite{del2014electroencephalogram}. There is ample evidence that certain aspects of EEG morphology are phenotypic. In~\cite{davis1936action}, the authors concluded that EEG of monozygotic twins are identical, whereas EEG of dizygotic twins show lesser degree of similarity. This result has been replicated multiple times and using various methods. Furthermore, alpha peak frequency and peak frequency in occipital regions seems strongly heritable~\cite{goodfellow2016}. Since then, a number of EEG-based identity verification systems have been proposed~\cite{del2014electroencephalogram}. 
 
-\section{Implementation}
-For the implementation in this chapter, we used the same software as in Chapter~\ref{ch:nonlin-approach}, which was listed in Section~\ref{sec:impl-nl}. In addition, to design and evaluate the models, we used the deep learning library \href{https://keras.io/}{Keras}.
+If this hypothesis holds, then the observed lack of generalization may be improved by increasing the number of patients included in the dataset. Assuming that the dataset would then contain large enough aggregate of patients with small variance in patient-characteristic patterns and, at the same time, high enough variance in depression scores and treatment response, large training accuracy could be achieved by fitting the label-characteristic patterns. Conceivably, models trained on such dataset would generalize to patients not included in the training set.
+
+For the \textbf{implementation} in this chapter, we used the same software as in Chapter~\ref{ch:nonlin-approach}, which was listed in Section~\ref{sec:impl-nl}. In addition, to design and evaluate the models, we used the deep learning library \href{https://keras.io/}{Keras}.
 
 \chapter*{Conclusion} \label{ch:concl}
 \addcontentsline{toc}{chapter}{Conclusion}
