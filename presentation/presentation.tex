@@ -452,7 +452,7 @@ HE & SVM (rbf) & 0.63 & 0.09 \\ \hline
   % \label{fig:sub2}
 \end{subfigure}
 \end{figure}
-\centering{\textbf{(c)} Raw}
+\centering{\textbf{(c)} Raw data}
 \end{frame}
 
 %------------------------------------------------
@@ -536,30 +536,45 @@ Test & \textbf{1038} & \textbf{997} & \textbf{830} & \textbf{855} \\ \hline
 
 %------------------------------------------------
 
-\begin{frame}{Summary}
-    \centering
-    \begin{enumerate}
-        \item<1-> NL measures seem to be effective
-          \begin{enumerate}
-            \item depression biomarkers {\scriptsize(despite nonstationarity)}
-            \item predictors of treatment response 
-          \end{enumerate}
-        \item<2-> LLE, CD and SE seem most discriminative {\scriptsize (out of evaluated)}
-        \item<3-> FBCSP-inspired CNN models seem highly effective for
-          \begin{enumerate}
-            \item assesment of depression severity
-            \item prediction of treatment response
-          \end{enumerate}
-        \item<4-> {\scriptsize RP and CS do not seem effective data encoding methods for EEG analysis}
-        \item<4-> {\scriptsize \dots}
-    \end{enumerate}
-    
-\end{frame}
-
+% \begin{frame}{Summary}
+%     \centering
+%     \begin{enumerate}
+%         \item<1-> NL measures seem to be effective
+%           \begin{enumerate}
+%             \item depression biomarkers {\scriptsize(despite nonstationarity)}
+%             \item predictors of treatment response 
+%           \end{enumerate}
+%         \item<2-> LLE, CD and SE seem most discriminative {\scriptsize (out of evaluated)}
+%         \item<3-> FBCSP-inspired CNN models seem highly effective for
+%           \begin{enumerate}
+%             \item assesment of depression severity
+%             \item prediction of treatment response
+%           \end{enumerate}
+%         \item<4-> {\scriptsize RP and CS do not seem effective data encoding methods for EEG analysis}
+%         \item<4-> {\scriptsize \dots}
+%     \end{enumerate}
+% \end{frame}
 
 %------------------------------------------------
 
-\begin{frame}[t]{Summary}
+\begin{frame}{Contributions}
+    \centering
+    \begin{enumerate}
+        \item<1-> Largest Lyapunov exponent seem to be predictive of treatment response.
+        \item<2-> Analysis of correlations between nonlinear measures and
+          \begin{enumerate}
+            \item depression score.
+            \item treatment response.
+          \end{enumerate}
+        \item<3-> Analysis of spatial distribution across brain regions in depression.
+        \item<4-> Analysis of nonlinear measure and input parameter estimation algorithms and procedures for EEG analysis.
+        \item<5-> Evaluation of FBCSP-inspired neural network architectures for depression diagnosis and prognosis.
+    \end{enumerate}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}[t]{Limitations and Future Work}
   \centering
   \begin{columns}[t]
     \column{0.5\linewidth}
@@ -620,7 +635,7 @@ Test & \textbf{1038} & \textbf{997} & \textbf{830} & \textbf{855} \\ \hline
 %------------------------------------------------
 
 \begin{frame}[focus]
-  \textbf{Questions}
+  \textbf{Thank you for attention}
 \end{frame}
 
 %----------------------------------------------------------------------------------------
