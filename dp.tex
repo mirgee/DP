@@ -472,7 +472,7 @@ Depression is one of the most common brain disorders - it affects 121-300 millio
 
 For these reasons, it is important that affordable, noninvasive, portable and easy to use tools to aid its diagnosis are developed. Electroencephalography\footnote{In this work, we will use the same abbreviation for electroencephalography (recording method) and electroencephalographam (the recorded data) where the distinction is apparent from the context.} (EEG), a method of recording spatiotemporal evolution of electrical activity in the cortical regions near the scalp, may be one such tool thanks to its comparatively low cost and easy recording process. Unlike SDIs and laboratory methods such as dexamethasone suppression test, it assesses ongoing activity in the responsible organ itself. Moreover, unlike measurements of glucose utilization or blood oxygenation in the brain, it captures the electrical activity directly~\cite{olbrich2013eeg}. These properties make EEG technology potentially useful as a practical tool to aid depression treatment, which may, for example, improve diagnosis accuracy, predict treatment response, or track development of depression severity over time. Fully realizing this potential would likely require more detailed understanding of brain dynamics~\cite{stam2005}. At present, however, EEG signal analysis still remains relatively unpopular method of depression diagnosis in contrast with SDIs~\cite{smith2013diagnosis}. This may be due to insufficient standardization of research, overly positive interpretation of findings, and relatively small volume of limited datasets, together impeding the possibility of meaningful objective conclusions or meta-studies~\cite{olbrich2013eeg}. 
 
-Given this situation, the following areas were previously identified as central to improvement of the state of the art of EEG analysis~\cite{stam2005, olbrich2013eeg}:
+Given this situation, the following areas were previously identified as central to the improvement of the state of the art of EEG analysis~\cite{stam2005, olbrich2013eeg}:
 \begin{enumerate}
   \item development of more effective EEG signal analysis techniques,
   \item identification of reliable EEG-based biomarkers\footnote{Biomarker is defined as objectively measurable indicator of the biological state of the organism~\cite{olbrich2013eeg}.} of depression,
@@ -494,14 +494,14 @@ In this work, our aim is to contribute positively to the state of the art of thi
 \end{enumerate}
 
 \section*{Problem Statement}
-The dataset was provided by the Czech National Institute of Mental Health\footnote{\url{http://www.nudz.cz/en/}}. It comprises of 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two occasions: at the beginning of the treatment and, 4 weeks later, after drug administration. On both of those occasions, patient's depression score (a number quantifying patient's depression severity) was measured by a trained professional using a standardized questionnaire. For more details about the dataset, see Section~\ref{sec:dataset}. Using these recordings and depression scores, we aim to solve the following problems:
+The dataset was provided by the Czech National Institute of Mental Health\footnote{\url{http://www.nudz.cz/en/}}. It comprises of 266 multivariate EEG signal recordings of various durations and sampling rates obtained from 133 depressed patients, each recorded on two occasions: at the beginning of the treatment and 4 weeks later, after drug administration. On both of those occasions, patient's depression score (a number quantifying patient's depression severity) was measured by a trained professional using a standardized questionnaire. For more details about the dataset, see Section~\ref{sec:dataset}. Using these recordings and depression scores, we aim to solve the following problems:
 \begin{description}
-  \item[diagnosis:] predict patient's depression score range measured \emph{at the time of the recording} based on EEG signal sample obtained \emph{at the time of the recording}, and
-  \item[prognosis:] predict the ratio of patient's depression scores measured \emph{during the first and second visits} based on EEG signal sample obtained \emph{during the first visit}, made 4 weeks before the second visit.
+  \item[diagnosis:] predict patient's depression score range measured \emph{at the time of the recording} based on an EEG signal sample obtained \emph{at the time of the recording}, and
+  \item[prognosis:] predict the ratio of patient's depression scores measured \emph{during the first and second visits} based on an EEG signal sample obtained \emph{during the first visit}, made 4 weeks before the second visit.
 \end{description}
 For the purpose of abstraction and tractability, we define these problems as classification tasks. In order to analyze the EEG signals and extract relevant features, we separately use and evaluate two approaches previously evidenced in the literature to be effective at distinguishing healthy and diseased patients with depression and other psychiatric disorders:
 \begin{description}
-  \item[nonlinear analysis approach:] compute selected nonlinear measures using nonlinear dynamical system analysis of the EEG signals, and use machine learning techniques to perform classification, and
+  \item[nonlinear analysis approach:] compute selected nonlinear measures using nonlinear dynamical system analysis of the EEG signals and use machine learning techniques to perform classification, and
   \item[deep learning approach:] use convolutional neural networks to both extract relevant features from an input representation of the EEG signals, and perform the classification task.
 \end{description}
 
@@ -579,18 +579,18 @@ for tree={
     ]
 ]
 \end{forest}
-\caption[Diagram of the thesis.]{Diagram of the thesis.}
+\caption[Diagram of the thesis.]{Structure of the thesis, represented visually as a tree. At the root is the available dataset, its children are the two approaches of analysis used, corresponding to chapters. Their children, in turn, represent the individual substeps, corresponding to sections of these chapters.}
 \label{fig:diagram}
 \end{figure}
 
 \section*{Content Organization}
 \begin{description}
   \item[Chapter~\ref{ch:nonlin}: \nameref{ch:nonlin}]~\\
-    The topic of nonlinear dynamical analysis in relation EEG analysis is presented. The concepts of a dynamical system and its state spaces are introduced, along with methods of describing them used further. State space reconstruction using the method of time delays is discussed in detail, followed by description of algorithms for time delay and embedding dimension selection. Nonlinear dynamical measures and algorithms for computing them are described further, along with algorithms to used to validate the results. This chapter finishes with review of the current state of the literature on the topic of depression diagnosis using both linear techniques and nonlinear dynamical analysis, followed by limitations of this approach to EEG signal analysis.
+    The topic of nonlinear dynamical analysis in relation EEG analysis is presented. The concepts of a dynamical system and its state spaces are introduced, along with the methods of describing them used further. State space reconstruction using the method of time delays is discussed in detail, followed by description of algorithms for time delay and embedding dimension selection. Nonlinear dynamical measures and algorithms for computing them are described further, along with algorithms used to validate the results. This chapter finishes with a review of the current state of the literature on the topic of depression diagnosis using both linear techniques and nonlinear dynamical analysis, followed by a discussion of the limitations of this approach to EEG signal analysis.
   \item[Chapter~\ref{ch:nonlin-approach}: \nameref{ch:nonlin-approach}]~\\
-    Aspects of the dataset and its metadata are described in detail, followed by discussion of the preprocessing step. The process of state space reconstruction is carried out using the algorithms described in the previous chapter, and the results are analyzed and discussed in detail. The procedure of computing each nonlinear measure is described and compared with existing literature. For each nonlinear measure, the obtained results based on input parameters are evaluated, and reasoning behind selection of input parameters used to obtain the final results is provided. Differences between the obtained results in various subgroups of the dataset are analyzed. Finally, the experimental settings for the classification tasks are described, and the obtained results are presented.
+    Aspects of the dataset and its metadata are described in detail, followed by an examination of the preprocessing step. The process of state space reconstruction is carried out using the algorithms described in the previous chapter, and the results are analyzed and discussed in detail. The procedure of computing each nonlinear measure is described and compared with existing literature. For each nonlinear measure, the obtained results based on input parameters are evaluated, and reasoning behind selection of input parameters used to obtain the final results is provided. Differences between the obtained results in various subgroups of the dataset are analyzed. Finally, the experimental settings for the classification tasks are described, and the obtained results are presented.
   \item[Chapter~\ref{ch:dl}: \nameref{ch:dl}]~\\
-    Convolutional neural networks are put into historical context and their relevant features are described. A signal processing technique which inspired our final selection of neural network architecture is presented. Possible approaches to input representation are discussed. The most successful architectures are introduced, and the chapter concludes with description of the obtained classification results.
+    Convolutional neural networks are put into historical context and their relevant features are described, along with basic mathematical prerequisites. A signal processing technique which inspired our final selection of neural network architecture is presented. Possible approaches to input representation are discussed. The most successful architectures are introduced, and the chapter concludes with description of the obtained classification results.
   \item[\nameref{ch:concl}]~\\
     In the final chapter, the contributions to scientific knowledge made in this thesis are discussed, and recommendations for future work are made.
   \item[\nameref{ch:appendix}]~\\
@@ -603,7 +603,7 @@ The nature is constantly undergoing change. Around us, we can observe many proce
   \item[Deterministic processes] are processes for which there is a unique consequent to every state~\cite{dynsys-scholarpedia}. Before advent of nonlinear dynamics, these were thought necessarily periodic (or quasi-periodic), fully describable by their Fourier spectrum~\cite{andreas2000}.
   \item[Stochastic process] are processes for which there is a probability distribution of possible consequents to each state~\cite{dynsys-scholarpedia}, i.e. they contain pure randomness as driving forces~\cite{andreas2000}.
 \end{description}
-Nonlinear dynamical analysis studies a third class of processes, which are irregular, nonperiodic, yet still deterministic. Every nonperiodic, deterministic process is nonlinear (but not necessarily the other way around). Existence of these processes was known already in mid-19th century to J. C. Maxwell, but the field began fully developing only with the rise of feasibility of complex enough numerical simulations, peaking in 1980s. Majority of new insights was generated precisely using numerical simulations~\cite{andreas2000}.
+Nonlinear dynamical analysis studies a third class of processes, which are irregular, nonperiodic, yet still deterministic. Every nonperiodic, deterministic process is nonlinear (but not necessarily the other way around). Existence of these processes was known already in mid-19th century to J. C. Maxwell, but the field began fully developing only with the rise of feasibility of complex enough numerical simulations, peaking in 1980s. The majority of new insights was generated precisely using numerical simulations~\cite{andreas2000}.
 
 \section{Connection to Electroencephalography} \label{sec:connection-to-eeg}
 Electroencephalography (EEG) is a noninvasive method of measuring fluctuations of electric potentials near the skull caused by synchronized firing of neurons in the upper cortical layers. Electroencephalogram is a record of these fluctuations measured over a period of time measured by 8-256 electrodes placed on patient's head~\cite{nunez2006}.
@@ -708,7 +708,7 @@ For these systems, after sufficient passage of time, all future states will cont
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=0.8\textwidth]{Images/self-similarity.png}}
-  \caption[Illustration of self-similarity.]{Noise-reduced visualization of successive enlargements of highly self-similar attractor~\cite{kantz2004}.}
+  \caption[Illustration of self-similarity.]{Noise-reduced visualization of successive enlargements of a highly self-similar attractor~\cite{kantz2004}.}
 \label{fig:self-similarity}
 \end{figure}
 
@@ -716,15 +716,13 @@ For these systems, after sufficient passage of time, all future states will cont
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{./Images/attractors_examples.png} }
-  \caption[Attractor examples.]{Lorenz, Roessler and Mackey-Glass attractors generated from corresponding systems of differential equations~\cite{strogatz1996nonlinear}. These systems are known to exhibit chaotic dynamics for certain parameter values~\cite{grassberger1983measuring}.}
+  \caption[Attractor examples.]{Lorenz, Roessler and Mackey-Glass attractors generated from the corresponding systems of differential equations~\cite{strogatz1996nonlinear}. These systems are known to exhibit chaotic dynamics for certain parameter values~\cite{grassberger1983measuring}.}
 \label{fig:attractor-examples}
 \end{figure}
 
-Statistical methods can be used to analyze observations of a complex system. Another branch of mathematics providing us with powerful tools to study systems with apparently complex behavior is chaos theory, which studies so called chaotic systems. These systems exhibit dynamics which extend volumes of clusters of initially nearby states in some directions. Although there is mixed evidence on low dimensional chaos in the brain and in the biological systems in general, its techniques have found many successful applications in their analysis~\cite{skinner1994low}. 
+Statistical methods can be used to analyze the observations of a complex system. Another branch of mathematics providing us with powerful tools to study systems with apparently complex behavior is chaos theory, which studies so called chaotic systems. These systems exhibit dynamics which extend volumes of clusters of initially nearby states in some directions. Although there is mixed evidence on low dimensional chaos in the brain and in the biological systems in general, its techniques have found many successful applications in their analysis~\cite{skinner1994low}. 
 
-Attractors of chaotic systems, coined by Ruelle and Takens in 1971 \emph{chaotic} (strange) \emph{attractors}~\cite{ruelle1971nature}, possess interesting properties. Since, as mentioned, attractors are bounded, the divergence of nearby states due to chaos eventually stops and the two trajectories fold together~\cite{kantz2004}. This continuous expansion and folding creates a ``self-similar'', \emph{fractal} object. An example of a strange attractor can be seen in Figure~\ref{fig:self-similarity}.
-
-This self-similarity can be quantified by a class of scalar measures called \emph{fractal dimensions}. Indeed, we will use one of the members of this class - correlation dimension - in our experiments, and will treat it in detail. In addition, let us give another example of a fractal dimension, called box-counting dimension, which be useful for understanding the implications of Takens' embedding Theorem~\ref{thm:takens} in Section~\ref{sec:embedding}:
+Attractors of chaotic systems, coined by Ruelle and Takens in 1971 \emph{chaotic} (strange) \emph{attractors}~\cite{ruelle1971nature}, possess some interesting properties. Since, as mentioned, all attractors are bounded, the divergence of nearby states due to chaos eventually stops and the two trajectories fold together~\cite{kantz2004}. This continuous expansion and folding creates a ``self-similar'', \emph{fractal} object. An example of a strange attractor can be seen in Figure~\ref{fig:self-similarity}. This self-similarity can be quantified by a class of scalar measures called \emph{fractal dimensions}. Indeed, we will use one of the members of this class - correlation dimension - in our experiments, and will treat it in detail. In addition, let us give another example of a fractal dimension, called box-counting dimension, which be useful for understanding the implications of Takens' embedding Theorem~\ref{thm:takens} in Section~\ref{sec:embedding}:
 % Since many physiogenerated signals are chaotic, their analysis is concerned primarily with \emph{chaotic} (strange) \emph{attractors}. These attractors are relatively complex, characteristic of dynamical systems with extending volumes in some directions. This property results fast divergence of two initial states, one of which has nonzero component in the direction of growth, i.e. sensitive dependence on the initial conditions. However, since attractors are bounded, the divergence eventually stops and the two trajectories fold together. This continuous expansion and folding may create an attractor with a \emph{fractal structure}, which, for our purposes, can be understood to mean ``possessing a quantifiable self-similarity'' (an example of such an attractor is shown in Figure~\ref{fig:self-similarity})~\cite{andreas2000}. 
 \begin{dfn}[\cite{falconer2004}] \label{def:box-counting}
   Let $F$ be any non-empty bounded subset of $\RR^n$, and let $N_\epsilon(F)$ be the smallest number of sets of diameter at most $\epsilon$ (``mesh cubes'') which can cover $F$. Then, the \textbf{box-counting dimension} (also known as Minkowski–Bouligand dimension) is defined as
@@ -1155,7 +1153,7 @@ Unlike Lyapunov exponents, which measure dynamical properties of the system, (co
 In this thesis, we are interested in dimension estimation for the following reasons:
 \begin{enumerate}
   \item Even a system with high number of degrees of freedom, such as a brain, may actually evolve in a much lower-dimensional subspace. The number of active degrees of freedom may provide a measure of complexity of the observed system. This information is available in the attractor of the system and it can be shown that this property is preserved by state space reconstruction~\cite{andreas2000}.
-  \item It can help distinguish stochastic and deterministic processes, since stochastic processes, after sufficient passage of time, use all available state space dimensions.
+  \item It can help in distinguishing stochastic and deterministic processes, since stochastic processes, after sufficient passage of time, use all available state space dimensions.
 \end{enumerate}
 Of course, although these expectations can be justified theoretically, the numerical reality may be different.
 
@@ -1463,14 +1461,14 @@ In~\cite{tenke2011current}, was used frequency principal component analysis deri
  Frontal $\theta$ power & ATR & 0.63 & 45 & 37 & 4 & 2 s &~\cite{iosifescu2009frontal} & SSRI \\ \hline
  Average $\alpha$ amplitude & \spatcell{Measure above median\\of controls} & 0.63 & 28 & 13 & 67 & 2 min &~\cite{tenke2011current} & SSRI \\ \hline
 \end{tabular}}
-\caption[Overview of reviewed response studies.]{Overview of reviewed studies analyzing EEG in relation to response, ordered by obtained classification accuracy (if applicable), otherwise chronological order was used.\\Abbreviations: ATR - Antidepressant Treatment Index, MFA - Mixture of Factors, SSRI - Selective Serotonin Reuptake Inhibitor}.
+\caption[Overview of reviewed response studies.]{Overview of reviewed studies analyzing EEG in relation to response, ordered by obtained classification accuracy (if applicable), otherwise chronological order was used.\\Abbreviations: ATR - Antidepressant Treatment Index, MFA - Mixture of Factors, SSRI - Selective Serotonin Reuptake Inhibitor.}
 \label{tab:respsum}
 \end{table}
 
 \subsection{Limitations} \label{sec:nl-limit}
-Some authors suggests that since most plausible research target for explaining the brain dynamics are the assemblies of coupled and synchronously active neurons, and since majority of those assemblies are describable by nonlinear differential equations, principles derived from nonlinear dynamics are applicable to characterization of these neuronal systems~\cite{kaplan2005}. The approach of estimating a finite embedding dimension (see Section~\ref{sec:state-space-reconstruction}), however, has been doubted by some of the most prominent figures in the field of nonlinear dynamical analysis, such as the originators of Grassberger-Procaccia algorithm (see Section~\ref{sec:corrdim})~\cite{grassberger1986climatic, procaccia1988complex}, followed by many others later~\cite{skinner1994low, rapp1995there, andreas2000}. With the exception in the case of epileptic seizures~\cite{stam2005}, there is very little evidence for the seemingly improbable hypothesis that such complex system with many extrinsic influences and interactions, such as the brain, would exhibit a level of complexity comparable to e.g. a Lorenz system. The observed estimates of low dimension may due to artifacts or limited data size~\cite{grassberger1986climatic, procaccia1988complex}. 
+Some authors suggests that since most plausible research target for explaining the brain dynamics are the assemblies of coupled and synchronously active neurons, and since majority of those assemblies are describable by nonlinear differential equations, principles derived from nonlinear dynamics are applicable to characterization of these neuronal systems~\cite{kaplan2005}. The approach of estimating a finite embedding dimension (see Section~\ref{sec:state-space-reconstruction}), however, has been doubted by some of the most prominent figures in the field of nonlinear dynamical analysis, such as the originators of Grassberger-Procaccia algorithm (see Section~\ref{sec:corrdim})~\cite{grassberger1986climatic, procaccia1988complex}, followed by many others later~\cite{skinner1994low, rapp1995there, andreas2000}. With the exception in the case of epileptic seizures~\cite{stam2005}, there is very little evidence for the seemingly improbable hypothesis that such a complex system with many extrinsic influences and interactions as the brain would exhibit a level of complexity comparable to, for example, a Lorenz system. The observed estimates of low dimension may due to artifacts or limited data size~\cite{grassberger1986climatic, procaccia1988complex}. 
 
-On the other hand, as we will see in Section~\ref{sec:applications}, the techniques derived from these theories still provide some useful information and are successfully applied in many practical situations. Therefore, it seems to be the case that indeed, brain dynamics are much more complex than we are forced to assume based on the theory, but nonlinear dynamical analysis still manages to capture some of its important aspects. Some researchers argued that these observations ask for reinterpretation of those results~\cite{albano1993reliability}, whereas others call for development of new measures which would reflect the ongoing progression in understanding of brain dynamics~\cite{stam2005}.
+On the other hand, as we will see in Section~\ref{sec:applications}, the techniques derived from these theories still provide some useful information and are successfully applied in many practical situations. Therefore, it seems to be the case that indeed, brain dynamics are much more complex than we are forced to assume based on the theory, but nonlinear dynamical analysis still manages to capture some of its important aspects. Some researchers argued that these observations ask for reinterpretation of those results~\cite{albano1993reliability}, whereas others call for development of new measures which would reflect the ongoing progression in understanding of the brain dynamics~\cite{stam2005}.
 
 \chapter{Nonlinear Analysis Approach} \label{ch:nonlin-approach}
 \section{Dataset} \label{sec:dataset}
@@ -1506,11 +1504,11 @@ During the EEG recording, 19 electrodes were placed on the scalp in accordance w
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/data.png} }
-  \caption[Example EEG signal recording.]{An example recording for patient 1, first session. Horizontal line shows seconds, vertical line shows voltage scaled for purpose of visualization. }
+  \caption[Example EEG signal recording.]{An example recording for patient 1, first session. Horizontal line shows seconds, vertical line shows voltage scaled for the purpose of visualization. }
 \label{fig:data}
 \end{figure}
 
-We should recognize limitations of this dataset:
+We should recognize the limitations of this dataset:
 \begin{itemize}
   \item The patients were not randomly selected - all the patients entered the study because they were experiencing problems negatively impacting their lives. Thus, as a study of depression biomarkers, the experiment lacks truly symptom absent group. However, the patients did differ significantly in severity of the disease. This makes the design of this study different from almost all research reviewed in Section~\ref{sec:practical-applications}.
   \item For a study of brain regions associated with depression, this study lacks data on patients' handedness, which may be relevant for the distribution of activity in the hemispheres.
@@ -1521,7 +1519,7 @@ We should recognize limitations of this dataset:
 \section{Preprocessing} \label{sec:nl-preprocess}
 Recordings of $f_s = 1000$ Hz were downsampled (decimated) by factor $4$ to $250$ Hz using the Fourier method (also known as trigonometric interpolation), i.e. by performing discrete Fourier transform on the original series, dividing it into $2*1000/250=8$ intervals, removing all but the first and the last intervals (thus removing the highest positive and negative frequencies, corresponding to low-pass filtering), and performing inverse discrete Fourier transform. This procedure assumes that the signal is periodic, and may have some influence on the obtained results. However, it was observed that this effect is almost negligible, even for considerably higher decimation factors~\cite{diab2013effect}.
 
-In further analysis, unless otherwise specified, recordings were shortened to a fixed length of 60 s (15~000 timesteps). This measure was taken in order to achieve the following characteristics on the data:
+In further analysis, unless otherwise specified, all the recordings were shortened to a fixed length of 60 s (15~000 timesteps). This measure was taken in order to achieve the following characteristics on the data:
 \begin{enumerate}
   \item minimize the stationarity effect (see Section~\ref{sec:stationarity}), and, at the same time
   \item include as many timesteps in the recordings (i.e. as high time series length as possible) as possible, while
@@ -1599,7 +1597,7 @@ Integral local deformation & 4                                    \\ \hline
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/recon.png} }
-  \caption[State space reconstructions for varying $\tau$.]{State space reconstruction for embedding dimension $m=3$ for various values of time delay $\tau$. Only the first 40 seconds of the recording were used for purpose of visualization. The axes represent the state vector coordinates. One may observe the increasing complexity and slowly progressing expansion of the attractor from a line to a random cloud of points. }
+  \caption[State space reconstructions for varying $\tau$.]{State space reconstruction for embedding dimension $m=3$ for various values of time delay $\tau$. Only the first 40 seconds of the recording were used for the purpose of visualization. The axes represent the state vector coordinates. One may observe increasing complexity and slowly progressing expansion of the attractor, as it gradual expands from a line to a random cloud of points. }
 \label{fig:recon}
 \end{figure}
 
@@ -1623,7 +1621,7 @@ Integral local deformation & 4                                    \\ \hline
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{Images/pca_svd.png} }
-  \caption[Singular values as functions of $\tau$ for various $m$.]{Plot of singular values as functions of $\tau$ for $m=10$. The two largest singular values corresponding to the main diagonals of the attractor are clearly visible. The singular values are approximately for $\tau=12$ before a collapse in the reconstruction immediately for the following values of $\tau$.}
+  \caption[Singular values as functions of $\tau$ for various $m$.]{Plot of singular values as functions of $\tau$ for $m=10$. The two largest singular values corresponding to the main diagonals of the attractor are clearly visible. The singular values approach around $\tau=12$ before a collapse in the reconstruction immediately for the following values of $\tau$.}
 \label{fig:pca-svd}
 \end{figure}
 
@@ -1699,9 +1697,9 @@ To estimate the LLE values using automatic selection of the proper embedding par
 \end{figure}
 
 \subsubsection{Literature Review} \label{sec:lle-rev}
-Using CD saturation, the following estimates have been obtained: 5~\cite{babloyantz1986low}, 7~\cite{blanco1995stationarity}, 6-8 (depending on sleep stage)~\cite{gallez1991predictability}. We found similar estimates using CD maximum instead of saturation point (as mentioned in Section~\ref{sec:corrdim-anal}, we observed no saturation, instead CD tended to decrease after reaching a maximum) with time delay $8 \leq \tau \leq 10$.
+Using CD saturation, the following estimates have been obtained: 5~\cite{babloyantz1986low}, 7~\cite{blanco1995stationarity}, 6-8 (depending on sleep stage)~\cite{gallez1991predictability}. We found similar estimates using CD maximum instead of saturation point (as mentioned in Section~\ref{sec:corrdim-anal}, we observed no saturation, instead CD tended to decrease after reaching a maximum) with the time delay values of $8 \leq \tau \leq 10$.
 
-By analyzing records ECT seizures, manually separating them into more and less regular, and inspecting multiple values of LLE as a measure of separation between these classes, 7 was selected as optimal embedding dimension in~\cite{krystal1997largest}.
+By analyzing records of ECT seizures, manually separating them into more and less regular, and inspecting multiple values of LLE as a measure of separation between these classes, 7 was selected as the optimal embedding dimension in~\cite{krystal1997largest}.
 
 Remaining studies we evaluated, including some analyzing depression, used embedding dimension 10~\cite{roschke1995nonlineardeppression, fell1993deterministic, roschke1993calculation}. Especially relevant is~\cite{roschke1995nonlineardeppression}, where depression data were analyzed, including the dependence of LLE on the embedding dimension. The authors decided to use various values of time delay depending on the embedding dimension coordinate (for rationale, see Section~\ref{sec:lle-man-anal}). Emotion recognition using LLE from EEG signals was performed in~\cite{aftanas1997non} with embedding dimension $m=10$ and time delay $\tau=3$. No reasoning behind this choice was provided. Summary of the reviewed studies can be seen in Table~\ref{tab:litrev-lle}.
 
@@ -1937,11 +1935,11 @@ An example of a result of such analysis for LLE (embedding dimension 10, time de
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1.0\textwidth]{./Images/surrogate/lyap_10_3_50.png} }
-  \caption[Example distribution of $\lambda_1$.]{Example distribution of the largest Lyapunov exponent (embedding dimension 10, time delay 3) for 19 surrogate samples and the original for all channels. The number next to each channel name represents the confidence in sigma, computed as in equation~(\ref{eq:sigma}).}
+  \caption[Example distribution of $\lambda_1$.]{Example distribution of LLE (embedding dimension 10, time delay 3) for 19 surrogate samples and the original for all channels. The number next to each channel name represents the confidence in sigma, computed as in equation~(\ref{eq:sigma}).}
 \label{fig:surr-lyap}
 \end{figure}
 \subsection{Nonstationarity}
-To reduce the effects of possible nonstationarity, we attempted to find the most stationary window of the desired length using the stationarity test described in Section~\ref{sec:stationarity}. However, we found that selecting the least stationary window using this test did not improve the results as measured by the surrogate data analysis in Section~\ref{sec:surrogate-analysis}. This may be because the optimal effectiveness of AAFT and iAAFT the first and last point of the window should have the same value~\cite{andreas2000}. Moreover, selecting a different time window for each channel may result in an inaccurate representation of the mental state by the vector of measures computed across channels. Therefore, it may be beneficial to use the same time window for all channels. If the results are dependent on the time during recording, then it would be advisable to select a fixed time window for all samples. Thus, we decided to skip this window selection step and pick a fixed time window for all channels and all recordings.
+To reduce the effects of possible nonstationarity, we attempted to find the most stationary window of the desired length using the stationarity test described in Section~\ref{sec:stationarity}. However, we found that selecting the least stationary window using this test did not improve the results as measured by the surrogate data analysis in Section~\ref{sec:surrogate-analysis}. This may be because the optimal effectiveness of AAFT and iAAFT is achieved when the first and last point of the window have the same value~\cite{andreas2000}. Moreover, selecting a different time window for each channel may result in an inaccurate representation of the mental state by the vector of measures computed across channels. Therefore, it may be beneficial to use the same time window for all channels. If the results are dependent on the time during recording, then it would be advisable to select a fixed time window for all samples. Thus, we decided to skip this window selection step and pick a fixed time window for all channels and all recordings.
 \section{Analysis of Measure Distributions between Groups} \label{sec:distanal}
 \subsection{Before and After Treatment Groups} \label{sec:analbefaft}
 As the first step of our analysis, we conducted an investigation of the differences in the nonlinear measures computed from the signals obtained before and after treatment. The purpose of this inquiry is to determine brain regions and measures affected by treatment. This is warranted by the fact that the patterns in EEG signals tend to be relatively stable over time. \add{This should be cited!} On the other hand, we realize the limitations of this attempt in the case of this study, since each patient received personalized method of treatment, and the methods may have differing impact.
@@ -1971,7 +1969,7 @@ In contrast to previously observed lower EEG complexity (higher predictability) 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/dfadepcorr.png} }
-  \caption[Trends in DFA as a function of depression score.]{Trend of values of DFA as a function of depression score. The correlation is significantly ($p$ < 0.05) negative for all channels with exception of F3, F4, C3, P3, T3, Cz. Similar trend is present in the Hurst exponent, Higuchi's fractal dimension and sample entropy. No correlation of correlation dimension with depression score is significant in any channel.}
+  \caption[Trends in DFA as a function of depression score.]{Trends of values of DFA as a function of depression score. The correlation is significantly ($p$ < 0.05) negative for all channels with exception of F3, F4, C3, P3, T3, Cz. Similar trends are present in HE, HD and SE. No correlation of CD with depression score is significant in any channel.}
  \label{fig:dfadepcorr}
 \end{figure}
 
@@ -1979,7 +1977,7 @@ In contrast to previously observed lower EEG complexity (higher predictability) 
 \centering
 \noindent\makebox[\textwidth]{%
   \includegraphics[width=1\textwidth]{./Images/dists/lyapdepcorr.png} }
-  \caption[Trends in $\lambda_1$ as function of depression score.]{Trends of values of the largest Lyapunov exponent as a function of depression score. The correlation is significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, C3, F7, F8, T3.}
+  \caption[Trends in $\lambda_1$ as function of depression score.]{Trends in values of LLE as a function of depression score. The correlation is significantly ($p$ < 0.05) positive for all channels with exception of FP1, FP2, C3, F7, F8, T3.}
  \label{fig:lyapdepcorr}
 \end{figure}
 
@@ -2542,7 +2540,7 @@ Overall & 5142 & 5029 & 4200 & 4222 \\ \hline
 \subcaption{Image-encoded data.}
 % \label{tab:depcl}
 }
-\caption[Evaluation of CNN architectures.]{Evaluation of accuracies of the shallow (SHAL) and deep (DEEP) architectures on the raw and image-encoded data in classification of depression state (DEP) or prediction of response (RES).}
+\caption[Evaluation of CNN architectures.]{Accuracies of the shallow (SHAL) and deep (DEEP) architectures on the classification of depression state (DEP) and prediction of response (RES) tasks using raw and image-encoded data.}
 \label{tab:dl-res}
 \end{table}
 
@@ -2663,7 +2661,7 @@ We hypothesized that generating a dataset containing multiple recordings obtaine
 
 Another potential avenue for improvement of the deep learning approach may lie in deep learning architectures using modalities from nonlinear measures and other biomarkers, or in architectures inspired by the estimation algorithms of those measures. 
 
-Finally, we found significant differences between LLE values for patients responding and nonresponding to treatment, as well as developed simple, yet relatively accurate response prediction models based on nonlinear measures. Our hope is that these findings may spark interest in nonlinear measures for prediction of treatment outcome.
+Finally, we found significant differences between LLE values for patients responding and nonresponding to treatment, as well as developed simple, yet relatively accurate response prediction models based on nonlinear measures. Our hope is that these findings may spark interest in nonlinear measures for prediction of depression treatment outcome.
 
 \bibliographystyle{unsrt}
 \bibliography{refs}
